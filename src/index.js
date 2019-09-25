@@ -1,5 +1,6 @@
 import properties from './object-properties';
 import data from './data';
+import ext from './ext';
 
 import { render, teardown } from './components/root';
 
@@ -13,10 +14,7 @@ export default function supernova(/* env */) {
       mounted(element) {
         this.element = element;
       },
-      render({
-        layout,
-        context,
-      }) {
+      render({ layout, context }) {
         render(this.element, { layout, context });
       },
       resize() {},
@@ -25,5 +23,6 @@ export default function supernova(/* env */) {
       },
       destroy() {},
     },
+    ext: ext(),
   };
 }
