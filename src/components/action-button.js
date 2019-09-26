@@ -1,4 +1,4 @@
-export default function ActionButton({ layout }) {
+export default function ActionButton({ layout, button }) {
   const component = layout.components ? layout.components[0] : null;
   let color = '#ff0000';
   let fontSize = '13px';
@@ -10,9 +10,8 @@ export default function ActionButton({ layout }) {
       color = component.fontColor;
     }
   }
-  const button = document.createElement('button');
   button.setAttribute('style', `color: ${color}; 'font-size': ${fontSize}`);
-  button.appendChild(document.createTextNode('Not React'));
+  button.innerHTML = 'Not React';
   button.onclick = () => {
     // perform action stack
   };

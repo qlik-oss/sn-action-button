@@ -5,6 +5,7 @@ import ext from './ext';
 import { render, teardown } from './components/root';
 
 export default function supernova(/* env */) {
+  const button = document.createElement('button');
   return {
     qae: {
       properties,
@@ -15,7 +16,7 @@ export default function supernova(/* env */) {
         this.element = element;
       },
       render({ layout, context }) {
-        render(this.element, { layout, context });
+        render(this.element, { layout, context, button });
       },
       resize() {},
       willUnmount() {
