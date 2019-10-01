@@ -11,7 +11,7 @@ export default function ActionButton({ layout, button }) {
     }
   }
   button.setAttribute('style', `color: ${color}; 'font-size': ${fontSize}`);
-  button.innerHTML = 'Not React';
+  button.textContent = 'Not React';
   button.onclick = () => {
     // perform action stack
   };
