@@ -4,46 +4,68 @@ export default function ext(/* env */) {
       type: 'items',
       component: 'accordion',
       items: {
+        // actions: {
+        //   type: 'array',
+        //   translation: 'Actions',
+        // },
         settings: {
-          type: 'items',
-          translation: 'Settings',
+          component: 'expandable-items',
+          translation: 'Appearance',
           items: {
-            styling: {
-              component: 'style-editor',
-              translation: 'LayerStyleEditor.component.styling',
-              subtitle: 'LayerStyleEditor.component.styling',
-              resetBtnTranslation: 'LayerStyleEditor.component.resetAll',
-              key: 'content',
-              ref: 'components',
-              defaultValues: {
-                key: 'content',
-                style: {
-                  fontColor: {
-                    color: '#aeaeae',
+            general: {
+              type: 'items',
+              translation: 'General',
+              items: [
+                {
+                  component: 'string',
+                  ref: 'style.label',
+                  translation: 'Label',
+                },
+              ],
+            },
+            font: {
+              grouped: true,
+              type: 'items',
+              translation: 'Font',
+              items: [
+                {
+                  component: 'integer',
+                  ref: 'style.fontSize',
+                  translation: 'Font size',
+                  defaultValue: '13',
+                },
+                {
+                  component: 'color-picker',
+                  type: 'object',
+                  ref: 'style.fontColor',
+                  translation: 'Font color',
+                  dualOutput: true,
+                  show: true,
+                  defaultValue: {
                     index: -1,
-                  },
-                  fontSize: 15,
-                },
-              },
-              items: {
-                content: {
-                  components: 'items',
-                  type: 'items',
-                  items: {
-                    fontColor: {
-                      component: 'color-picker',
-                    },
-                    fontSize: {
-                      show: true,
-                      component: 'slider',
-                      min: 4,
-                      max: 48,
-                      step: 1,
-                      defaultValue: 15,
-                    },
+                    color: null,
                   },
                 },
-              },
+              ],
+            },
+            background: {
+              grouped: true,
+              type: 'items',
+              translation: 'Background',
+              items: [
+                {
+                  component: 'color-picker',
+                  type: 'object',
+                  ref: 'style.backgroundColor',
+                  translation: 'Background color',
+                  dualOutput: true,
+                  show: true,
+                  defaultValue: {
+                    index: -1,
+                    color: null,
+                  },
+                },
+              ],
             },
           },
         },
