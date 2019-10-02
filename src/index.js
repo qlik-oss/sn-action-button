@@ -4,7 +4,8 @@ import ext from './ext';
 
 import { render, teardown } from './components/root';
 
-export default function supernova(/* env */) {
+export default function supernova(env) {
+  const { Theme } = env;
   const button = document.createElement('button');
   return {
     qae: {
@@ -16,7 +17,12 @@ export default function supernova(/* env */) {
         this.element = element;
       },
       render({ layout, context }) {
-        render(this.element, { layout, context, button });
+        render(this.element, {
+          layout,
+          context,
+          button,
+          Theme,
+        });
       },
       resize() {},
       willUnmount() {
