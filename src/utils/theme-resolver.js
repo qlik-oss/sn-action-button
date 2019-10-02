@@ -1,4 +1,4 @@
-// Resolve color from property value, checking if A: single int OR B: object with index
+// Resolve color from a palette. We should open Theme API from sense so we can use same functionality
 const themeResolver = {
   resolveColor: (input, palette) => {
     if (typeof input !== 'undefined' && input !== null) {
