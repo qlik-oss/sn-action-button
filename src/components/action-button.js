@@ -13,7 +13,7 @@ const setStyleColor = (styleString, path, inputColor, defaultColor) => {
   return styleString;
 };
 
-export default function ActionButton({ layout, button, Theme, engineApp }) {
+export default function ActionButton({ layout, button, Theme, engineApp, context }) {
   const { style } = layout;
   palette = Theme.getCurrent().properties.palettes.ui[0].colors;
   let styles = 'width: 100%; height: 100%;';
@@ -27,11 +27,13 @@ export default function ActionButton({ layout, button, Theme, engineApp }) {
   button.setAttribute('style', styles);
   button.textContent = (style && style.label) || 'My Button';
   button.onclick = () => {
-    const { actions } = layout;
-    actions.forEach(action => {
-      const findAction = actionsList.find(act => act.value === action.actionType);
-      findAction && findAction.promise && findAction.promise({ engineApp, bookmarkId: action.bookmark });
-    });
+    if (context.permissions.indexOf('interact') !== -1) {
+      const { actions } = layout;
+      actions.forEach(action => {
+        const findAction = actionsList.find(act => act.value === action.actionType);
+        findAction && findAction.promise && findAction.promise({ engineApp, bookmarkId: action.bookmark });
+      });
+    }
   };
 
   return button;
