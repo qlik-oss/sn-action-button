@@ -20,6 +20,7 @@ export default function ext(/* env */) {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Label',
+                  placeholderTranslation: 'My button',
                 },
               ],
             },
