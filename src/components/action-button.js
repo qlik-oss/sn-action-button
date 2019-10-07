@@ -21,7 +21,7 @@ export default function ActionButton({ layout, button, Theme }) {
     styles = setStyle(styles, 'font-size', style.fontSize ? `${style.fontSize}px` : '13px');
     styles = setStyleColor(styles, 'background-color', style.backgroundColor, '#3F8AB3');
   } else {
-    styles += 'color: #ffffff; font-size: 12px; background-color: #3F8AB3';
+    styles += 'color: #ffffff; font-size: 13px; background-color: #3F8AB3';
   }
   button.setAttribute('style', styles);
   button.textContent = (style && style.label) || 'My Button';
