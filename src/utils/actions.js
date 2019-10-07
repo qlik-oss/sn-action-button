@@ -3,8 +3,8 @@ const actions = [
     value: 'applyBookmark',
     label: 'Apply a bookmark',
     group: 'bookmark',
-    promise: (enigmaApp, bookmarkId) => {
-      enigmaApp.applyBookmark(bookmarkId);
+    promise: ({ engineApp, bookmarkId }) => {
+      engineApp.applyBookmark(bookmarkId);
     },
     requiredInput: ['bookmark'],
   },
@@ -12,8 +12,8 @@ const actions = [
     value: 'clearAll',
     label: 'Clear all selections',
     group: 'selection',
-    promise: enigmaApp => {
-      enigmaApp.clearAll();
+    promise: ({ engineApp }) => {
+      engineApp.clearAll();
     },
     requiredInput: [],
   },

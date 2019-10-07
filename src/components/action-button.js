@@ -30,7 +30,7 @@ export default function ActionButton({ layout, button, Theme, engineApp }) {
     const { actions } = layout;
     actions.forEach(action => {
       const findAction = actionsList.find(act => act.value === action.actionType);
-      findAction && findAction.promise && findAction.promise(engineApp, action.bookmark);
+      findAction && findAction.promise && findAction.promise({ engineApp, bookmarkId: action.bookmark });
     });
   };
 
