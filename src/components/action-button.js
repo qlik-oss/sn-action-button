@@ -12,7 +12,7 @@ const setStyleColor = (styleString, path, inputColor, defaultColor) => {
   return styleString;
 };
 
-export default function ActionButton({ layout, button, Theme }) {
+export default function ActionButton({ layout, button, Theme, context }) {
   const { style } = layout;
   palette = Theme.getCurrent().properties.palettes.ui[0].colors;
   let styles = 'width: 100%; height: 100%;';
@@ -22,6 +22,11 @@ export default function ActionButton({ layout, button, Theme }) {
     styles = setStyleColor(styles, 'background-color', style.backgroundColor || null, '#3F8AB3');
   } else {
     styles += 'color: #ffffff; font-size: 12px; background-color: #3F8AB3';
+  }
+  if (context.permissions.indexOf('interact') === -1) {
+    button.setAttribute('disabled', true);
+  } else {
+    button.removeAttribute('disabled');
   }
   button.setAttribute('style', styles);
   button.textContent = (style && style.label) || 'My Button';
