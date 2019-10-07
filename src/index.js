@@ -7,6 +7,7 @@ import { render, teardown } from './components/root';
 export default function supernova(env) {
   const { Theme } = env;
   const button = document.createElement('button');
+  let engineApp;
   return {
     qae: {
       properties,
@@ -15,6 +16,7 @@ export default function supernova(env) {
     component: {
       mounted(element) {
         this.element = element;
+        engineApp = this.app.engineApp;
       },
       render({ layout, context }) {
         render(this.element, {
@@ -22,6 +24,7 @@ export default function supernova(env) {
           context,
           button,
           Theme,
+          engineApp,
         });
       },
       resize() {},

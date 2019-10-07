@@ -1,4 +1,5 @@
 import themeResolver from '../utils/theme-resolver';
+import actionsList from '../utils/actions';
 
 let palette;
 const setStyle = (styleString, path, setting) => {
@@ -12,7 +13,7 @@ const setStyleColor = (styleString, path, inputColor, defaultColor) => {
   return styleString;
 };
 
-export default function ActionButton({ layout, button, Theme }) {
+export default function ActionButton({ layout, button, Theme, engineApp }) {
   const { style } = layout;
   palette = Theme.getCurrent().properties.palettes.ui[0].colors;
   let styles = 'width: 100%; height: 100%;';
@@ -26,7 +27,11 @@ export default function ActionButton({ layout, button, Theme }) {
   button.setAttribute('style', styles);
   button.textContent = (style && style.label) || 'My Button';
   button.onclick = () => {
-    // perform action stack
+    const { actions } = layout;
+    actions.forEach(action => {
+      const findAction = actionsList.find(act => act.value === action.actionType);
+      findAction && findAction.promise && findAction.promise(engineApp, action.bookmark);
+    });
   };
 
   return button;

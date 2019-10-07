@@ -1,13 +1,49 @@
+import actions from './utils/actions';
+
 export default function ext(/* env */) {
   return {
     definition: {
       type: 'items',
       component: 'accordion',
       items: {
-        // actions: {
-        //   type: 'array',
-        //   translation: 'Actions',
-        // },
+        actions: {
+          type: 'array',
+          label: 'Actions',
+          ref: 'actions',
+          itemTitleRef: (data, index) => {
+            const act = actions.find(action => data.actionType === action.value);
+            return (act && act.label) || `Action ${index + 1}`;
+          },
+          allowAdd: true,
+          allowRemove: true,
+          addTranslation: 'Add Item',
+          items: {
+            actionType: {
+              type: 'string',
+              ref: 'actionType',
+              component: 'dropdown',
+              defaultValue: 'none',
+              options: actions,
+            },
+            bookmark: {
+              type: 'string',
+              ref: 'bookmark',
+              component: 'dropdown',
+              defaultValue: 'none',
+              options: async (action, hyperCubeHandler) => {
+                const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
+                return bms.map(bookmark => ({
+                  label: bookmark.qData.title,
+                  value: bookmark.qInfo.qId,
+                }));
+              },
+              show: data => {
+                const act = actions.find(action => data.actionType === action.value);
+                return act && act.requiredInput && act.requiredInput.indexOf('bookmark') !== -1;
+              },
+            },
+          },
+        },
         settings: {
           component: 'expandable-items',
           translation: 'Appearance',
@@ -20,6 +56,7 @@ export default function ext(/* env */) {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Label',
+                  placeholder: 'My button',
                 },
               ],
             },
