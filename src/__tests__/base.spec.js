@@ -25,19 +25,19 @@ describe('style-formatter', () => {
       expect(formattedStyle).to.equal(defaultStyle);
     });
 
-    it('should return spedified background color', () => {
+    it('should return specified background color', () => {
       style = { backgroundColor: someColor };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
-    it('should return spedified font color', () => {
+    it('should return specified font color', () => {
       style = { fontColor: someColor };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
     });
 
-    it('should return spedified font size', () => {
+    it('should return specified font size', () => {
       style = { fontSize: someSize };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
