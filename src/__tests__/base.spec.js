@@ -5,6 +5,7 @@ describe('style-formatter', () => {
     let style = null;
     const defaultStyle = 'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #3F8AB3';
     const someColor = '#ffff00';
+    const someSize = 24;
     const Theme = {
       getCurrent() {
         const colors = ['none', '#ff0000', '#00ff00', '#0000ff'];
@@ -37,15 +38,9 @@ describe('style-formatter', () => {
     });
 
     it('should return spedified font size', () => {
-      style = { fontSize: someColor };
+      style = { fontSize: someSize };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
-      expect(formattedStyle.includes(`font-size: ${someColor}`)).to.be.true;
-    });
-
-    it('should return changed color', () => {
-      style = { fontSize: someColor };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
-      expect(formattedStyle.includes(`font-size: ${someColor}`)).to.be.true;
+      expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
     });
   });
 });
