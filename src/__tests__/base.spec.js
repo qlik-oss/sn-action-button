@@ -12,7 +12,9 @@ describe('style-formatter', () => {
         const obj = {
           properties: {
             palettes: {
-              ui: [colors],
+              ui: [{
+                colors,
+              }],
             },
           },
         };
@@ -29,6 +31,16 @@ describe('style-formatter', () => {
       style = { backgroundColor: someColor };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
+    });
+
+    it('should return default background color', () => {
+      style = {
+        backgroundColor: {
+          index: 0,
+        }
+      };
+      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      expect(formattedStyle.includes('background-color: #3F8AB3')).to.be.true;
     });
 
     it('should return specified font color', () => {
