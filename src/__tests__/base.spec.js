@@ -33,7 +33,7 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
-    it('should return default background color', () => {
+    it('should return default background color when color is none', () => {
       style = {
         backgroundColor: {
           index: 0,
