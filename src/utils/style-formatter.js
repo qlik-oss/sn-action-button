@@ -25,9 +25,4 @@ export default {
 
     return styles;
   },
-  getLabel(style) {
-    // TODO: strings?
-    // TODO: does not handle empty strings -> cant make button wo label
-    return (style && style.label) || 'My Button';
-  },
 };
