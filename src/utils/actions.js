@@ -22,8 +22,8 @@ const actions = [
     label: 'Clear selections in other fields',
     group: 'selection',
     promise: ({ engineApp, field, softLock }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.clearAllButThis(softLock);
+      const fieldObject = await engineApp.getField(field);
+      await fieldObject.clearAllButThis(softLock);
     },
     requiredInput: ['field', 'softLock'],
   },
@@ -50,8 +50,8 @@ const actions = [
     label: 'Clear selections in field',
     group: 'selection',
     promise: ({ engineApp, field }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.clear();
+      const fieldObject = await engineApp.getField(field);
+      await fieldObject.clear();
     },
     requiredInput: ['field'],
   },
@@ -69,8 +69,8 @@ const actions = [
     label: 'Lock a specific field',
     group: 'selection',
     promise: ({ engineApp, field }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.lock();
+      const fieldObject = await engineApp.getField(field);
+      await fieldObject.lock();
     },
     requiredInput: ['field'],
   },
