@@ -3,8 +3,8 @@ const actions = [
     value: 'applyBookmark',
     label: 'Apply a bookmark',
     group: 'bookmark',
-    promise: ({ engineApp, bookmarkId }) => {
-      engineApp.applyBookmark(bookmarkId);
+    promise: ({ engineApp, bookmark }) => async () => {
+      await engineApp.applyBookmark(bookmark);
     },
     requiredInput: ['bookmark'],
   },
@@ -12,8 +12,8 @@ const actions = [
     value: 'clearAll',
     label: 'Clear all selections',
     group: 'selection',
-    promise: ({ engineApp }) => {
-      engineApp.clearAll();
+    promise: ({ engineApp }) => async () => {
+      await engineApp.clearAll();
     },
     requiredInput: [],
   },
@@ -21,31 +21,58 @@ const actions = [
     value: 'clearOther',
     label: 'Clear selections in other fields',
     group: 'selection',
+    promise: ({ engineApp, field, softLock }) => async () => {
+      const fld = await engineApp.getField(field);
+      await fld.clearAllButThis(softLock);
+    },
+    requiredInput: ['field', 'softLock'],
   },
   {
     value: 'forward',
     label: 'Move forwards (in your selections)',
     group: 'selection',
+    promise: ({ engineApp }) => async () => {
+      await engineApp.forward();
+    },
+    requiredInput: [],
   },
   {
     value: 'back',
     label: 'Move backwards (in your selections)',
     group: 'selection',
+    promise: ({ engineApp }) => async () => {
+      await engineApp.back();
+    },
+    requiredInput: [],
   },
   {
     value: 'clearField',
     label: 'Clear selections in field',
     group: 'selection',
+    promise: ({ engineApp, field }) => async () => {
+      const fld = await engineApp.getField(field);
+      await fld.clear();
+    },
+    requiredInput: ['field'],
   },
   {
     value: 'lockAll',
     label: 'Lock all selections',
     group: 'selection',
+    promise: ({ engineApp }) => async () => {
+      await engineApp.lockAll();
+    },
+    requiredInput: [],
   },
   {
     value: 'lockField',
     label: 'Lock a specific field',
     group: 'selection',
+    promise: ({ engineApp, field }) => async () => {
+      const fld = await engineApp.getField(field);
+      await fld.lock();
+    },
+    requiredInput: ['field'],
   },
   {
     value: 'unlockAll',
@@ -76,7 +103,6 @@ const actions = [
     value: 'selectValues',
     label: 'Select multiple values in a field',
     group: 'selection',
-    // promise: (enigmaApp)=>
   },
   {
     value: 'selectAlternative',

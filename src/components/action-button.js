@@ -13,6 +13,13 @@ const setStyleColor = (styleString, path, inputColor, defaultColor) => {
   return styleString;
 };
 
+const runActions = async actionList => {
+  for (let i = 0; i < actionList.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await actionList[i]();
+  }
+};
+
 export default function ActionButton({ layout, button, Theme, engineApp, context }) {
   const { style } = layout;
   palette = Theme.getCurrent().properties.palettes.ui[0].colors;
@@ -27,11 +34,16 @@ export default function ActionButton({ layout, button, Theme, engineApp, context
   button.setAttribute('style', styles);
   button.textContent = (style && style.label) || 'My Button';
   button.onclick = () => {
+    const actionList = [];
     if (context.permissions.indexOf('interact') !== -1) {
       const { actions } = layout;
       actions.forEach(action => {
         const findAction = actionsList.find(act => act.value === action.actionType);
-        findAction && findAction.promise && findAction.promise({ engineApp, bookmarkId: action.bookmark });
+        actionList.push(findAction.promise({ engineApp, ...action }));
+      });
+      button.setAttribute('disabled', true);
+      runActions(actionList).then(() => {
+        button.removeAttribute('disabled');
       });
     }
   };

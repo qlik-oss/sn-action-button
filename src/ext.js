@@ -1,5 +1,10 @@
 import actions from './utils/actions';
 
+const checkShow = (data, field) => {
+  const act = actions.find(action => data.actionType === action.value);
+  return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
+};
+
 export default function ext(/* env */) {
   return {
     definition: {
@@ -37,10 +42,28 @@ export default function ext(/* env */) {
                   value: bookmark.qInfo.qId,
                 }));
               },
-              show: data => {
-                const act = actions.find(action => data.actionType === action.value);
-                return act && act.requiredInput && act.requiredInput.indexOf('bookmark') !== -1;
+              show: data => checkShow(data, 'bookmark'),
+            },
+            field: {
+              type: 'string',
+              ref: 'field',
+              component: 'dropdown',
+              defaultValue: 'none',
+              options: async (action, hyperCubeHandler) => {
+                const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
+                return fields.map(field => ({
+                  label: field.qName,
+                  value: field.qName,
+                }));
               },
+              show: data => checkShow(data, 'field'),
+            },
+            softLock: {
+              type: 'boolean',
+              ref: 'softLock',
+              label: 'Overwrite locked selections',
+              defaultValue: false,
+              show: data => checkShow(data, 'softLock'),
             },
           },
         },
