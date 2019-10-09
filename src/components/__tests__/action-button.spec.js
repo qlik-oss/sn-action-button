@@ -1,16 +1,11 @@
 import sinon from 'sinon';
+import defaultValues from './default-button-props';
 import actionButton from '../action-button';
 import actions from '../../utils/actions';
 
 let setAttributeSpy;
 let spy1;
 let spy2;
-const defaultValues = {
-  Theme: { getCurrent: () => ({ properties: { palettes: { ui: [{ color: ['color1', 'color2'] }] } } }) },
-  layout: { style: { label: 'testLabel' } },
-  engineApp: {},
-  context: { permissions: ['interact'] },
-};
 
 describe('action button', () => {
   beforeEach(() => {
