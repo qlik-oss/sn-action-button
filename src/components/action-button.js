@@ -1,7 +1,7 @@
 import actionsList from '../utils/actions';
 import styleFormatter from '../utils/style-formatter';
 
-const runActions = async actionList => {
+export const runActions = async actionList => {
   for (let i = 0; i < actionList.length; i++) {
     // eslint-disable-next-line no-await-in-loop
     await actionList[i]();
