@@ -26,6 +26,7 @@ describe('action button', () => {
     it('should call actions when button is clicked', () => {
       const aButton = actionButton(defaultValues);
       aButton.onclick();
+      expect(setAttributeSpy).to.have.been.calledWith('disabled', true);
     });
   });
   describe('runActions', () => {
