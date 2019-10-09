@@ -1,6 +1,6 @@
 import actions from './utils/actions';
 
-const checkShow = (data, field) => {
+export const checkShow = (data, field) => {
   const act = actions.find(action => data.actionType === action.value);
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 };
