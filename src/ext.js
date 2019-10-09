@@ -92,7 +92,7 @@ export default function ext(/* env */) {
                   component: 'integer',
                   ref: 'style.fontSize',
                   translation: 'Font size',
-                  defaultValue: '13',
+                  defaultValue: '12',
                 },
                 {
                   component: 'color-picker',
