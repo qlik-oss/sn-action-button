@@ -14,7 +14,8 @@ describe('root', () => {
       render(element, defaultValues);
       expect(appendSpy).to.have.been.called;
     });
-
+  });
+  describe('teardown', () => {
     it('should tear down component', () => {
       teardown();
     });
