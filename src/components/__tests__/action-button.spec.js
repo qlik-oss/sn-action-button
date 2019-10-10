@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import defaultValues from './default-button-props';
 import actionButton, { runActions } from '../action-button';
 

@@ -63,7 +63,6 @@
     "eslint-plugin-mocha": "6.1.1",
     "husky": "3.0.8",
     "lint-staged": "9.4.1",
-    "mocha-junit-reporter": "1.23.1",
-    "sinon": "^7.5.0"
+    "mocha-junit-reporter": "1.23.1"
   }
 }
