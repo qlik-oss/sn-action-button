@@ -1,7 +1,7 @@
 import actionsList from '../utils/actions';
 import styleFormatter from '../utils/style-formatter';
 
-const runActions = async actionList => {
+export const runActions = async actionList => {
   for (let i = 0; i < actionList.length; i++) {
     // eslint-disable-next-line no-await-in-loop
     await actionList[i]();
@@ -20,6 +20,7 @@ export default function ActionButton({ layout, button, Theme, engineApp, context
       actions.forEach(action => {
         const findAction = actionsList.find(act => act.value === action.actionType);
         findAction && actionList.push(findAction.promise({ engineApp, ...action }));
+        actionList.push(findAction.promise({ engineApp, ...action }));
       });
       button.setAttribute('disabled', true);
       runActions(actionList).then(() => {
