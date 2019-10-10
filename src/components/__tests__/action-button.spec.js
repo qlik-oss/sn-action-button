@@ -35,8 +35,8 @@ describe('action button', () => {
       spy2 = sinon.spy();
       const actionList = [spy1, spy2];
       await runActions(actionList);
-      expect(spy1).to.have.been.called;
-      expect(spy2).to.have.been.called;
+      expect(spy1).to.have.been.calledOnce;
+      expect(spy2).to.have.been.calledOnce;
     });
   });
   describe('all actions', () => {
