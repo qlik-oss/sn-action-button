@@ -1,10 +1,17 @@
+// TODO: put in seperate file for testing. Create util fil for other functions as well?
+function getValueList(values) {
+  return values
+    .split(';')
+    .map(value => (Number.isNaN(value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
+}
+
 const actions = [
   {
     value: 'applyBookmark',
     label: 'Apply a bookmark',
     group: 'bookmark',
     promise: ({ engineApp, bookmark }) => async () => {
-      await engineApp.applyBookmark(bookmark);
+      bookmark && (await engineApp.applyBookmark(bookmark));
     },
     requiredInput: ['bookmark'],
   },
@@ -12,7 +19,7 @@ const actions = [
     value: 'clearAll',
     label: 'Clear all selections',
     group: 'selection',
-    promise: ({ engineApp }) => async () => {
+    call: ({ engineApp }) => async () => {
       await engineApp.clearAll();
     },
     requiredInput: [],
@@ -21,9 +28,11 @@ const actions = [
     value: 'clearOther',
     label: 'Clear selections in other fields',
     group: 'selection',
-    promise: ({ engineApp, field, softLock }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.clearAllButThis(softLock);
+    call: ({ engineApp, field, softLock }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.clearAllButThis(softLock);
+      }
     },
     requiredInput: ['field', 'softLock'],
   },
@@ -31,7 +40,7 @@ const actions = [
     value: 'forward',
     label: 'Move forwards (in your selections)',
     group: 'selection',
-    promise: ({ engineApp }) => async () => {
+    call: ({ engineApp }) => async () => {
       await engineApp.forward();
     },
     requiredInput: [],
@@ -40,7 +49,7 @@ const actions = [
     value: 'back',
     label: 'Move backwards (in your selections)',
     group: 'selection',
-    promise: ({ engineApp }) => async () => {
+    call: ({ engineApp }) => async () => {
       await engineApp.back();
     },
     requiredInput: [],
@@ -49,9 +58,11 @@ const actions = [
     value: 'clearField',
     label: 'Clear selections in field',
     group: 'selection',
-    promise: ({ engineApp, field }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.clear();
+    call: ({ engineApp, field }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.clear();
+      }
     },
     requiredInput: ['field'],
   },
@@ -59,7 +70,7 @@ const actions = [
     value: 'lockAll',
     label: 'Lock all selections',
     group: 'selection',
-    promise: ({ engineApp }) => async () => {
+    call: ({ engineApp }) => async () => {
       await engineApp.lockAll();
     },
     requiredInput: [],
@@ -68,9 +79,11 @@ const actions = [
     value: 'lockField',
     label: 'Lock a specific field',
     group: 'selection',
-    promise: ({ engineApp, field }) => async () => {
-      const fld = await engineApp.getField(field);
-      await fld.lock();
+    call: ({ engineApp, field }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.lock();
+      }
     },
     requiredInput: ['field'],
   },
@@ -78,61 +91,134 @@ const actions = [
     value: 'unlockAll',
     label: 'Unlock all selections',
     group: 'selection',
+    call: ({ engineApp }) => async () => {
+      await engineApp.unlockAll();
+    },
+    requiredInput: [],
   },
   {
     value: 'unlockField',
     label: 'Unlock a specific field',
     group: 'selection',
+    call: ({ engineApp, field }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.unlock();
+      }
+    },
+    requiredInput: ['field'],
   },
   {
     value: 'unlockAllAndClearAll',
     label: 'Unlock all and clear all',
     group: 'selection',
+    call: ({ engineApp }) => async () => {
+      await engineApp.unlockAll();
+      await engineApp.clearAll();
+    },
+    requiredInput: [],
   },
   {
     value: 'selectField',
     label: 'Select a value in a field',
     group: 'selection',
+    call: ({ engineApp, field, value }) => async () => {
+      if (field && value) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.select(value);
+      }
+    },
+    requiredInput: ['field', 'value'],
   },
   {
     value: 'selectAll',
     label: 'Select all values in a field',
     group: 'selection',
+    call: ({ engineApp, field }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.selectAll();
+      }
+    },
+    requiredInput: ['field'],
   },
   {
     value: 'selectValues',
     label: 'Select multiple values in a field',
     group: 'selection',
+    call: ({ engineApp, field, value }) => async () => {
+      if (field && value) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.selectValues(getValueList(value));
+      }
+    },
+    requiredInput: ['field', 'value'],
   },
   {
     value: 'selectAlternative',
     label: 'Select alternatives',
     group: 'selection',
+    call: ({ engineApp, field, softLock }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.selectAlternative(softLock);
+      }
+    },
+    requiredInput: ['field', 'softLock'],
   },
   {
     value: 'selectAndLockField',
     label: 'Select a value and lock field',
     group: 'selection',
+    call: ({ engineApp, field, value }) => async () => {
+      if (field && value) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.select(value);
+        await fieldObj.lock();
+      }
+    },
+    requiredInput: ['field', 'value'],
   },
   {
     value: 'selectExcluded',
     label: 'Select excluded',
     group: 'selection',
+    call: ({ engineApp, field, softLock }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.selectExcluded(softLock);
+      }
+    },
+    requiredInput: ['field', 'softLock'],
   },
   {
     value: 'selectPossible',
     label: 'Select possible values in a field',
     group: 'selection',
+    call: ({ engineApp, field, softLock }) => async () => {
+      if (field) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.selectPossible(softLock);
+      }
+    },
+    requiredInput: ['field', 'softLock'],
   },
-  {
-    value: 'setVariable',
-    label: 'Set variable value',
-    group: 'variables',
-  },
+  // {
+  //   value: 'setVariable',
+  //   label: 'Set variable value',
+  //   group: 'variables',
+  // },
   {
     value: 'toggleSelect',
     label: 'Toggle field selection',
     group: 'selection',
+    call: ({ engineApp, field, value }) => async () => {
+      if (field && value) {
+        const fieldObj = await engineApp.getField(field);
+        await fieldObj.toggleSelect(value);
+      }
+    },
+    requiredInput: ['field', 'value'],
   },
 ];
 

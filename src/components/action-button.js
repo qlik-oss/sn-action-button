@@ -19,7 +19,7 @@ export default function ActionButton({ layout, button, Theme, engineApp, context
       const { actions } = layout;
       actions.forEach(action => {
         const findAction = actionsList.find(act => act.value === action.actionType);
-        actionList.push(findAction.promise({ engineApp, ...action }));
+        findAction && actionList.push(findAction.promise({ engineApp, ...action }));
       });
       button.setAttribute('disabled', true);
       runActions(actionList).then(() => {
