@@ -10,7 +10,7 @@ const actions = [
     value: 'applyBookmark',
     label: 'Apply a bookmark',
     group: 'bookmark',
-    promise: ({ engineApp, bookmark }) => async () => {
+    call: ({ engineApp, bookmark }) => async () => {
       bookmark && (await engineApp.applyBookmark(bookmark));
     },
     requiredInput: ['bookmark'],
