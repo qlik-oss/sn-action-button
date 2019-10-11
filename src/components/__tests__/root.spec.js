@@ -1,4 +1,4 @@
-import defaultValues from './default-button-props';
+import defaultValues from '../../__tests__/default-button-props';
 import { render } from '../root';
 
 describe('root', () => {

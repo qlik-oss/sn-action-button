@@ -1,5 +1,5 @@
 import styleFormatter from '../style-formatter';
-import defaultValues from '../../components/__tests__/default-button-props';
+import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
@@ -26,7 +26,6 @@ describe('style-formatter', () => {
           index: 0,
         },
       };
-      // console.log(Theme);
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes('background-color: #3F8AB3')).to.be.true;
     });
