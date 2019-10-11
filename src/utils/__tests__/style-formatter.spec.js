@@ -1,4 +1,4 @@
-import styleFormatter from '../utils/style-formatter';
+import styleFormatter from '../style-formatter';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
@@ -12,9 +12,11 @@ describe('style-formatter', () => {
         const obj = {
           properties: {
             palettes: {
-              ui: [{
-                colors,
-              }],
+              ui: [
+                {
+                  colors,
+                },
+              ],
             },
           },
         };
@@ -37,7 +39,7 @@ describe('style-formatter', () => {
       style = {
         backgroundColor: {
           index: 0,
-        }
+        },
       };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes('background-color: #3F8AB3')).to.be.true;

@@ -1,4 +1,3 @@
-// TODO: put in seperate file for testing. Create util fil for other functions as well?
 export function getValueList(values) {
   return values
     .split(';')
@@ -122,7 +121,7 @@ const actions = [
   },
   {
     value: 'selectValues',
-    label: 'Select multiple values in a field',
+    label: 'Select value(s) in a field',
     group: 'selection',
     getActionCall: ({ engineApp, field, value, softLock }) => async () => {
       if (field && value) {
