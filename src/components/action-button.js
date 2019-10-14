@@ -8,7 +8,7 @@ export const runActions = async actionList => {
   }
 };
 
-export default function ActionButton({ layout, button, Theme, engineApp, context }) {
+export default function ActionButton({ layout, button, Theme, app, context }) {
   const { style } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
@@ -19,7 +19,7 @@ export default function ActionButton({ layout, button, Theme, engineApp, context
       const { actions } = layout;
       actions.forEach(action => {
         const actionObj = allActions.find(act => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ engineApp, ...action }));
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
       });
       button.setAttribute('disabled', true);
       runActions(actionCallList).then(() => {
