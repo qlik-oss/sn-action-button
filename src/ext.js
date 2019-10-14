@@ -99,6 +99,7 @@ export default function ext(/* env */) {
                   component: 'integer',
                   ref: 'style.fontSize',
                   translation: 'Font size',
+                  defaultValue: '12',
                 },
                 {
                   component: 'color-picker',
@@ -107,6 +108,10 @@ export default function ext(/* env */) {
                   translation: 'Font color',
                   dualOutput: true,
                   show: true,
+                  defaultValue: {
+                    index: -1,
+                    color: null,
+                  },
                 },
               ],
             },
@@ -122,6 +127,10 @@ export default function ext(/* env */) {
                   translation: 'Background color',
                   dualOutput: true,
                   show: true,
+                  defaultValue: {
+                    index: -1,
+                    color: null,
+                  },
                 },
               ],
             },
