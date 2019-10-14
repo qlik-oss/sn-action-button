@@ -55,7 +55,7 @@
     "@babel/preset-env": "7.6.2",
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@nebula.js/cli": "0.1.0-alpha.20",
+    "@nebula.js/cli": "0.1.0-alpha.21",
     "babel-plugin-istanbul": "5.2.0",
     "eslint": "6.5.1",
     "eslint-config-airbnb-base": "14.0.0",
