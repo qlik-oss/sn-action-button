@@ -186,8 +186,12 @@ const actions = [
     group: 'variables',
     getActionCall: ({ app, variable, value }) => async () => {
       if (variable && value) {
-        const variableObj = await app.getVariableByName(variable);
-        await variableObj.setStringValue(value);
+        try {
+          const variableObj = await app.getVariableByName(variable);
+          await variableObj.setStringValue(value);
+        } catch (e) {
+          // no-op
+        }
       }
     },
     requiredInput: ['variable', 'value'],
