@@ -1,4 +1,4 @@
-import actionsList from '../utils/actions';
+import allActions from '../utils/actions';
 import styleFormatter from '../utils/style-formatter';
 
 export const runActions = async actionList => {
@@ -14,15 +14,15 @@ export default function ActionButton({ layout, button, Theme, engineApp, context
   button.setAttribute('style', formattedStyles);
   button.textContent = style && style.label;
   button.onclick = () => {
-    const actionList = [];
+    const actionCallList = [];
     if (context.permissions.indexOf('interact') !== -1) {
       const { actions } = layout;
       actions.forEach(action => {
-        const findAction = actionsList.find(act => act.value === action.actionType);
-        actionList.push(findAction.promise({ engineApp, ...action }));
+        const actionObj = allActions.find(act => act.value === action.actionType);
+        actionObj && actionCallList.push(actionObj.getActionCall({ engineApp, ...action }));
       });
       button.setAttribute('disabled', true);
-      runActions(actionList).then(() => {
+      runActions(actionCallList).then(() => {
         button.removeAttribute('disabled');
       });
     }

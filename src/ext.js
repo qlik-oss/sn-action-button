@@ -27,14 +27,14 @@ export default function ext(/* env */) {
               type: 'string',
               ref: 'actionType',
               component: 'dropdown',
-              defaultValue: 'none',
+              defaultValue: null,
               options: actions,
             },
             bookmark: {
               type: 'string',
               ref: 'bookmark',
               component: 'dropdown',
-              defaultValue: 'none',
+              defaultValue: null,
               options: async (action, hyperCubeHandler) => {
                 const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
                 return bms.map(bookmark => ({
@@ -48,7 +48,7 @@ export default function ext(/* env */) {
               type: 'string',
               ref: 'field',
               component: 'dropdown',
-              defaultValue: 'none',
+              defaultValue: null,
               options: async (action, hyperCubeHandler) => {
                 const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
                 return fields.map(field => ({
@@ -64,6 +64,14 @@ export default function ext(/* env */) {
               label: 'Overwrite locked selections',
               defaultValue: false,
               show: data => checkShow(data, 'softLock'),
+            },
+            value: {
+              // TODO: expressions
+              type: 'string',
+              ref: 'value',
+              component: 'string',
+              label: 'Value',
+              show: data => checkShow(data, 'value'),
             },
           },
         },
