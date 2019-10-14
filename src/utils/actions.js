@@ -180,11 +180,18 @@ const actions = [
     },
     requiredInput: ['field', 'value', 'softLock'],
   },
-  // {
-  //   value: 'setVariable',
-  //   label: 'Set variable value',
-  //   group: 'variables',
-  // },
+  {
+    value: 'setVariable',
+    label: 'Set variable value',
+    group: 'variables',
+    getActionCall: ({ engineApp, variable, value }) => async () => {
+      if (variable && value) {
+        const variableObj = await engineApp.getVariableByName(variable);
+        await variableObj.setStringValue(value);
+      }
+    },
+    requiredInput: ['variable', 'value'],
+  },
 ];
 
 export default actions;

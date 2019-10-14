@@ -58,12 +58,12 @@ export default function ext(/* env */) {
               },
               show: data => checkShow(data, 'field'),
             },
-            softLock: {
-              type: 'boolean',
-              ref: 'softLock',
-              label: 'Overwrite locked selections',
-              defaultValue: false,
-              show: data => checkShow(data, 'softLock'),
+            variable: {
+              type: 'string',
+              ref: 'variable',
+              component: 'string',
+              label: 'Variable name',
+              show: data => checkShow(data, 'variable'),
             },
             value: {
               // TODO: expressions
@@ -73,6 +73,14 @@ export default function ext(/* env */) {
               label: 'Value',
               show: data => checkShow(data, 'value'),
             },
+            softLock: {
+              type: 'boolean',
+              ref: 'softLock',
+              label: 'Overwrite locked selections',
+              defaultValue: false,
+              show: data => checkShow(data, 'softLock'),
+            },
+
           },
         },
         settings: {
