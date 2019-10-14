@@ -1,6 +1,7 @@
 import properties from './object-properties';
 import data from './data';
 import ext from './ext';
+import 'babel-polyfill';
 
 import { render, teardown } from './components/root';
 
