@@ -46,7 +46,8 @@ describe('ext', () => {
     });
 
     describe('options', () => {
-      const items = props.definition.items.actions.items;
+      let options;
+      const actionItems = props.definition.items.actions.items;
       const bookmarks = [
         {
           qData: {
@@ -72,7 +73,6 @@ describe('ext', () => {
           qIsReserved: true,
         },
       ];
-
       const handler = {
         app: {
           getBookmarkList: () => bookmarks,
@@ -81,27 +81,27 @@ describe('ext', () => {
         },
       };
 
-      it('Should return an array with bookmarks', async () => {
-        const bookmarkOptions = await items.bookmark.options(null, handler);
-        expect(bookmarkOptions).to.have.length(1);
-        expect(bookmarkOptions[0]).to.be.an('object');
+      it('Should return an array with a bookmark', async () => {
+        options = await actionItems.bookmark.options(null, handler);
+        expect(options).to.have.length(1);
+        expect(options[0]).to.be.an('object');
       });
 
-      it('Should return an array with fields', async () => {
-        const bookmarkOptions = await items.bookmark.options(null, handler);
-        expect(bookmarkOptions).to.have.length(1);
-        expect(bookmarkOptions[0]).to.be.an('object');
+      it('Should return an array with a field', async () => {
+        options = await actionItems.field.options(null, handler);
+        expect(options).to.have.length(1);
+        expect(options[0]).to.be.an('object');
       });
 
       it('Should return an array with a single non-system variable', async () => {
-        const bookmarkOptions = await items.variable.options({ showSystemVariables: false }, handler);
-        expect(bookmarkOptions).to.have.length(1);
-        expect(bookmarkOptions[0]).to.be.an('object');
+        options = await actionItems.variable.options({ showSystemVariables: false }, handler);
+        expect(options).to.have.length(1);
+        expect(options[0]).to.be.an('object');
       });
 
-      it('Should return an array with a single all variables', async () => {
-        const bookmarkOptions = await items.variable.options({ showSystemVariables: true }, handler);
-        expect(bookmarkOptions).to.have.length(2);
+      it('Should return an array with all variables', async () => {
+        options = await actionItems.variable.options({ showSystemVariables: true }, handler);
+        expect(options).to.have.length(2);
       });
     });
   });
