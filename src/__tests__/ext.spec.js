@@ -23,14 +23,18 @@ describe('ext', () => {
 
   describe('getValue', () => {
     beforeEach(() => {
-      data = { style: { background: { url: 'url' } } };
+      data = { background: { url: 'url' } };
     });
-    it('should return value when it exists', () => {
-      const result = getValue(data, 'style.background.url');
+    it('should return value if reference exists', () => {
+      const result = getValue(data, 'background.url');
       expect(result).to.equal('url');
     });
     it("should return default value if reference doesn't exist", () => {
-      const result = getValue(data, 'style.background.urlb', 'default');
+      const result = getValue(data, 'background.urlb', 'default');
+      expect(result).to.equal('default');
+    });
+    it("should return default value if data doesn't exist", () => {
+      const result = getValue(undefined, 'background.url', 'default');
       expect(result).to.equal('default');
     });
   });

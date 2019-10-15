@@ -150,7 +150,7 @@ export default function ext(/* env */) {
                   },
                 },
                 useBackgroundImage: {
-                  ref: 'style.background.isUsed',
+                  ref: 'background.isUsed',
                   type: 'boolean',
                   translation: 'properties.backgroundImage.use',
                   component: 'switch',
@@ -167,8 +167,8 @@ export default function ext(/* env */) {
                   ],
                 },
                 backgroundUrl: {
-                  ref: 'style.background.url.qStaticContentUrlDef.qUrl',
-                  layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
+                  ref: 'background.url.qStaticContentUrlDef.qUrl',
+                  layoutRef: 'background.url.qStaticContentUrl.qUrl',
                   schemaIgnore: true,
                   translation: 'Common.Image',
                   tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
@@ -176,11 +176,11 @@ export default function ext(/* env */) {
                   component: 'media',
                   defaultValue: '',
                   show(data) {
-                    return getValue(data, 'style.background.isUsed');
+                    return getValue(data, 'background.isUsed');
                   },
                 },
                 backgroundSize: {
-                  ref: 'style.background.size',
+                  ref: 'background.size',
                   translation: 'properties.backgroundImage.size',
                   type: 'string',
                   component: 'dropdown',
@@ -209,26 +209,26 @@ export default function ext(/* env */) {
                   ],
                   show(data) {
                     return (
-                      getValue(data, 'style.background.isUsed')
-                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                      getValue(data, 'background.isUsed')
+                      && getValue(data, 'background.url.qStaticContentUrlDef.qUrl')
                     );
                   },
                 },
                 backgroundPosition: {
-                  ref: 'style.background.position',
+                  ref: 'background.position',
                   translation: 'Common.Position',
                   type: 'string',
                   component: 'align-matrix',
                   defaultValue: 'topLeft',
                   show(data) {
                     return (
-                      getValue(data, 'style.background.isUsed')
-                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
-                      && getValue(data, 'style.background.size') !== 'fill'
+                      getValue(data, 'background.isUsed')
+                      && getValue(data, 'background.url.qStaticContentUrlDef.qUrl')
+                      && getValue(data, 'background.size') !== 'fill'
                     );
                   },
                   currentSize(data) {
-                    return getValue(data, 'style.background.size');
+                    return getValue(data, 'background.size');
                   },
                 },
               },
