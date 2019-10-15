@@ -1,9 +1,25 @@
+const inIframe = () => {
+  try {
+    return window.self !== window.top;
+  } catch (error) {
+    return true;
+  }
+};
+
 const navigationActions = [
+  {
+    label: 'None',
+    value: 'none',
+  },
   {
     label: 'Go to first sheet',
     value: 'firstSheet',
-    navigationCall: async () => {
-      // TODO check if we can have goToFirstSheet exposed in navigation api
+    navigationCall: async ({ senseNavigation }) => {
+      try {
+        await senseNavigation.firstSheet();
+      } catch (error) {
+        // no-op
+      }
     },
   },
   {
@@ -31,43 +47,73 @@ const navigationActions = [
   {
     label: 'Go to last sheet',
     value: 'lastSheet',
-    navigationCall: async () => {
-      // TODO check if we can have goToLastSheet exposed in navigation api
+    navigationCall: async ({ senseNavigation }) => {
+      try {
+        await senseNavigation.lastSheet();
+      } catch (error) {
+        // no-op
+      }
     },
   },
   {
     label: 'Go to a sheet',
     value: 'gotoSheet',
+    navigationCall: async ({ senseNavigation, sheet }) => {
+      try {
+        sheet && (await senseNavigation.goToSheet(sheet));
+      } catch (error) {
+        // no-op
+      }
+    },
+    // TODO replace by searchable dropdown
+    requiredInput: ['sheet'],
   },
   {
     label: 'Go to a sheet (defined by sheet Id)',
     value: 'gotoSheetById',
     navigationCall: async ({ senseNavigation, sheet }) => {
       try {
-        await senseNavigation.goToSheet(sheet);
+        sheet && (await senseNavigation.goToSheet(sheet));
       } catch (error) {
         // no-op
       }
     },
+    // TODO replace by searchable dropdown
+    requiredInput: ['sheetId'],
   },
   {
     label: 'Go to a story',
     value: 'gotoStory',
     navigationCall: async ({ senseNavigation, story }) => {
       try {
-        await senseNavigation.goToStory(story);
+        story && (await senseNavigation.goToStory(story));
       } catch (error) {
         // no-op
       }
     },
+    requiredInput: ['story'],
   },
   {
     label: 'Open a website / eMail',
     value: 'openWebsite',
-  },
-  {
-    label: 'Switch to edit mode',
-    value: 'switchToEdit',
+    navigationCall: async ({ websiteUrl, sameWindow }) => {
+      try {
+        if (websiteUrl) {
+          const url =
+            websiteUrl.startsWith('https://') || websiteUrl.startsWith('http://') || websiteUrl.startsWith('mailto://')
+              ? websiteUrl
+              : `http://${websiteUrl}`;
+          let target = '';
+          if (sameWindow) {
+            target = inIframe() ? '_parent' : '_self';
+          }
+          window.open(url, target);
+        }
+      } catch (error) {
+        // no-op
+      }
+    },
+    requiredInput: ['websiteUrl'],
   },
 ];
 

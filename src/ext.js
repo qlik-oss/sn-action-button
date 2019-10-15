@@ -6,6 +6,11 @@ export const checkShow = (data, field) => {
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 };
 
+export const checkShowNav = (data, field) => {
+  const nav = navigationActions.find(navigation => data.navigation.action === navigation.value);
+  return nav && nav.requiredInput && nav.requiredInput.indexOf(field) !== -1;
+};
+
 export default function ext(/* env */) {
   return {
     definition: {
@@ -84,12 +89,65 @@ export default function ext(/* env */) {
               component: 'expandable-items',
               items: {
                 navigation: {
-                  type: 'string',
-                  ref: 'navigation.action',
-                  label: 'Navigation action',
-                  component: 'dropdown',
-                  defaultValue: null,
-                  options: navigationActions,
+                  label: 'Navigation',
+                  type: 'items',
+                  items: [
+                    {
+                      ref: 'navigation.action',
+                      label: 'Navigation action',
+                      component: 'dropdown',
+                      defaultValue: null,
+                      options: navigationActions,
+                    },
+                    {
+                      // TODO: expressions
+                      type: 'string',
+                      ref: 'navigation.sheet',
+                      label: 'Sheet Id',
+                      show: data => checkShowNav(data, 'sheetId'),
+                    },
+                    {
+                      type: 'string',
+                      ref: 'navigation.sheet',
+                      label: 'Sheet',
+                      component: 'dropdown',
+                      show: data => checkShowNav(data, 'sheet'),
+                      options: async (action, hyperCubeHandler) => {
+                        const sheets = await hyperCubeHandler.app.getSheetList();
+                        return sheets.map(sheet => ({
+                          value: sheet.qInfo.qId,
+                          label: sheet.qMeta.title,
+                        }));
+                      },
+                    },
+                    {
+                      type: 'string',
+                      ref: 'navigation.story',
+                      label: 'Story',
+                      component: 'dropdown',
+                      show: data => checkShowNav(data, 'story'),
+                      options: async (action, hyperCubeHandler) => {
+                        const stories = await hyperCubeHandler.app.getStoryList();
+                        return stories.map(story => ({
+                          value: story.qInfo.qId,
+                          label: story.qMeta.title,
+                        }));
+                      },
+                    },
+                    {
+                      type: 'string',
+                      ref: 'navigation.websiteUrl',
+                      label: 'Website Url',
+                      show: data => checkShowNav(data, 'websiteUrl'),
+                    },
+                    {
+                      type: 'boolean',
+                      ref: 'navigation.sameWindow',
+                      label: 'Open in same window',
+                      show: data => checkShowNav(data, 'websiteUrl'),
+                      defaultValue: false,
+                    },
+                  ],
                 },
               },
             },

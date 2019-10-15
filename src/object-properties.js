@@ -3,6 +3,12 @@ const properties = {
   title: '',
   subtitle: '',
   footnote: '',
+  /**
+   * @typedef {object}
+   */
+  navigation: {
+    action: 'none',
+  },
 };
 
 export default properties;
