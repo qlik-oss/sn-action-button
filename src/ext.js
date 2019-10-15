@@ -1,4 +1,5 @@
 import actions from './utils/actions';
+import navigationActions from './utils/navigation-actions';
 
 export const checkShow = (data, field) => {
   const act = actions.find(action => data.actionType === action.value);
@@ -12,66 +13,85 @@ export default function ext(/* env */) {
       component: 'accordion',
       items: {
         actions: {
-          type: 'array',
+          type: 'items',
           label: 'Actions',
-          ref: 'actions',
-          itemTitleRef: (data, index) => {
-            const act = actions.find(action => data.actionType === action.value);
-            return (act && act.label) || `Action ${index + 1}`;
-          },
-          allowAdd: true,
-          allowRemove: true,
-          addTranslation: 'Add Item',
           items: {
-            actionType: {
-              type: 'string',
-              ref: 'actionType',
-              component: 'dropdown',
-              defaultValue: null,
-              options: actions,
-            },
-            bookmark: {
-              type: 'string',
-              ref: 'bookmark',
-              component: 'dropdown',
-              defaultValue: null,
-              options: async (action, hyperCubeHandler) => {
-                const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
-                return bms.map(bookmark => ({
-                  label: bookmark.qData.title,
-                  value: bookmark.qInfo.qId,
-                }));
+            actions: {
+              type: 'array',
+              label: 'Actions',
+              ref: 'actions',
+              itemTitleRef: (data, index) => {
+                const act = actions.find(action => data.actionType === action.value);
+                return (act && act.label) || `Action ${index + 1}`;
               },
-              show: data => checkShow(data, 'bookmark'),
-            },
-            field: {
-              type: 'string',
-              ref: 'field',
-              component: 'dropdown',
-              defaultValue: null,
-              options: async (action, hyperCubeHandler) => {
-                const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
-                return fields.map(field => ({
-                  label: field.qName,
-                  value: field.qName,
-                }));
+              allowAdd: true,
+              allowRemove: true,
+              addTranslation: 'Add Item',
+              items: {
+                actionType: {
+                  type: 'string',
+                  ref: 'actionType',
+                  component: 'dropdown',
+                  defaultValue: null,
+                  options: actions,
+                },
+                bookmark: {
+                  type: 'string',
+                  ref: 'bookmark',
+                  component: 'dropdown',
+                  defaultValue: null,
+                  options: async (action, hyperCubeHandler) => {
+                    const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
+                    return bms.map(bookmark => ({
+                      label: bookmark.qData.title,
+                      value: bookmark.qInfo.qId,
+                    }));
+                  },
+                  show: data => checkShow(data, 'bookmark'),
+                },
+                field: {
+                  type: 'string',
+                  ref: 'field',
+                  component: 'dropdown',
+                  defaultValue: null,
+                  options: async (action, hyperCubeHandler) => {
+                    const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
+                    return fields.map(field => ({
+                      label: field.qName,
+                      value: field.qName,
+                    }));
+                  },
+                  show: data => checkShow(data, 'field'),
+                },
+                softLock: {
+                  type: 'boolean',
+                  ref: 'softLock',
+                  label: 'Overwrite locked selections',
+                  defaultValue: false,
+                  show: data => checkShow(data, 'softLock'),
+                },
+                value: {
+                  // TODO: expressions
+                  type: 'string',
+                  ref: 'value',
+                  component: 'string',
+                  label: 'Value',
+                  show: data => checkShow(data, 'value'),
+                },
               },
-              show: data => checkShow(data, 'field'),
             },
-            softLock: {
-              type: 'boolean',
-              ref: 'softLock',
-              label: 'Overwrite locked selections',
-              defaultValue: false,
-              show: data => checkShow(data, 'softLock'),
-            },
-            value: {
-              // TODO: expressions
-              type: 'string',
-              ref: 'value',
-              component: 'string',
-              label: 'Value',
-              show: data => checkShow(data, 'value'),
+            navigation: {
+              component: 'expandable-items',
+              items: {
+                navigation: {
+                  type: 'string',
+                  ref: 'navigation.action',
+                  label: 'Navigation action',
+                  component: 'dropdown',
+                  defaultValue: null,
+                  options: navigationActions,
+                },
+              },
             },
           },
         },

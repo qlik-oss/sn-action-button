@@ -5,7 +5,7 @@ import ext from './ext';
 import { render, teardown } from './components/root';
 
 export default function supernova(env) {
-  const { Theme } = env;
+  const { Theme, Sense } = env;
   const button = document.createElement('button');
   let app;
   return {
@@ -25,6 +25,7 @@ export default function supernova(env) {
           button,
           Theme,
           app,
+          Sense,
         });
       },
       resize() {},
