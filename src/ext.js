@@ -70,13 +70,20 @@ export default function ext(/* env */) {
               options: async (action, hyperCubeHandler) => {
                 const variables = await hyperCubeHandler.app.getVariableList();
                 return variables
-                  .filter(variable => !variable.qIsReserved)
-                  .map(variable => ({
-                    label: variable.qName,
-                    value: variable.qName,
+                  .filter(v => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
+                  .map(v => ({
+                    label: v.qName,
+                    value: v.qName,
                   }));
               },
               show: data => checkShow(data, 'variable'),
+            },
+            showSystemVariables: {
+              type: 'boolean',
+              ref: 'showSystemVariables',
+              label: 'showSystemVariables',
+              defaultValue: false,
+              show: data => checkShow(data, 'showSystemVariables'),
             },
             value: {
               type: 'string',
