@@ -65,16 +65,25 @@ export default function ext(/* env */) {
               // TODO: searchable dropdown
               type: 'string',
               ref: 'variable',
-              component: 'string',
-              label: 'Variable name',
+              component: 'dropdown',
+              defaultValue: null,
+              options: async (action, hyperCubeHandler) => {
+                const variables = await hyperCubeHandler.app.enigmaModel.getVariableList();
+                return variables
+                  .filter(variable => !variable.qIsReserved)
+                  .map(variable => ({
+                    label: variable.qName,
+                    value: variable.qName,
+                  }));
+              },
               show: data => checkShow(data, 'variable'),
             },
             value: {
-              // TODO: expressions
               type: 'string',
               ref: 'value',
               component: 'string',
               label: 'Value',
+              expression: 'optional',
               show: data => checkShow(data, 'value'),
             },
             softLock: {
@@ -84,7 +93,6 @@ export default function ext(/* env */) {
               defaultValue: false,
               show: data => checkShow(data, 'softLock'),
             },
-
           },
         },
         settings: {
