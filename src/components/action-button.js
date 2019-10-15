@@ -17,11 +17,10 @@ export default function ActionButton({ layout, button, Theme, app, context }) {
     const actionCallList = [];
     if (context.permissions.indexOf('interact') !== -1) {
       const { actions } = layout;
-      actions &&
-        actions.forEach(action => {
-          const actionObj = allActions.find(act => act.value === action.actionType);
-          actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
-        });
+      actions.forEach(action => {
+        const actionObj = allActions.find(act => act.value === action.actionType);
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
+      });
       button.setAttribute('disabled', true);
       runActions(actionCallList).then(() => {
         button.removeAttribute('disabled');

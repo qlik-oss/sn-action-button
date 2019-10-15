@@ -24,6 +24,10 @@ const properties = {
      */
     label: '',
   },
+  /**
+   * @type {array}
+   */
+  actions: [],
 };
 
 export default properties;
