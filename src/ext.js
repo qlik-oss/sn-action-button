@@ -24,6 +24,7 @@ export default function ext(/* env */) {
           addTranslation: 'Add Item',
           items: {
             actionType: {
+              // TODO: searchable dropdown
               type: 'string',
               ref: 'actionType',
               component: 'dropdown',
@@ -31,6 +32,7 @@ export default function ext(/* env */) {
               options: actions,
             },
             bookmark: {
+              // TODO: searchable dropdown
               type: 'string',
               ref: 'bookmark',
               component: 'dropdown',
@@ -45,6 +47,7 @@ export default function ext(/* env */) {
               show: data => checkShow(data, 'bookmark'),
             },
             field: {
+              // TODO: searchable dropdown
               type: 'string',
               ref: 'field',
               component: 'dropdown',
@@ -58,12 +61,13 @@ export default function ext(/* env */) {
               },
               show: data => checkShow(data, 'field'),
             },
-            softLock: {
-              type: 'boolean',
-              ref: 'softLock',
-              label: 'Overwrite locked selections',
-              defaultValue: false,
-              show: data => checkShow(data, 'softLock'),
+            variable: {
+              // TODO: searchable dropdown
+              type: 'string',
+              ref: 'variable',
+              component: 'string',
+              label: 'Variable name',
+              show: data => checkShow(data, 'variable'),
             },
             value: {
               // TODO: expressions
@@ -73,6 +77,14 @@ export default function ext(/* env */) {
               label: 'Value',
               show: data => checkShow(data, 'value'),
             },
+            softLock: {
+              type: 'boolean',
+              ref: 'softLock',
+              label: 'Overwrite locked selections',
+              defaultValue: false,
+              show: data => checkShow(data, 'softLock'),
+            },
+
           },
         },
         settings: {

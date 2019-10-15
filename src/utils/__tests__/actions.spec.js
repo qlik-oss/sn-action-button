@@ -3,7 +3,9 @@ import actions, { getValueList } from '../actions';
 describe('actions', () => {
   let app;
   let fieldObject;
+  let variableObject;
   let field;
+  let variable;
   let bookmark;
   const value = 'someValue';
   const softLock = true;
@@ -11,6 +13,7 @@ describe('actions', () => {
   beforeEach(() => {
     field = 'someField';
     bookmark = 'someBookmark';
+    variable = 'someVariable';
     fieldObject = {
       clear: sinon.spy(),
       clearAllButThis: sinon.spy(),
@@ -24,12 +27,16 @@ describe('actions', () => {
       selectPossible: sinon.spy(),
       toggleSelect: sinon.spy(),
     };
+    variableObject = {
+      setStringValue: sinon.spy(),
+    };
     app = {
       applyBookmark: sinon.spy(),
       clearAll: sinon.spy(),
       back: sinon.spy(),
       forward: sinon.spy(),
       getField: sinon.stub().resolves(fieldObject),
+      getVariableByName: sinon.stub().resolves(variableObject),
       lockAll: sinon.spy(),
       unlockAll: sinon.spy(),
     };
@@ -197,8 +204,8 @@ describe('actions', () => {
 
   it('should call toggleSelect', async () => {
     const actionObject = actions.find(action => action.value === 'toggleSelect');
-    await actionObject.getActionCall({ app, field, value })();
-    expect(fieldObject.toggleSelect).to.have.been.called;
+    await actionObject.getActionCall({ app, field, value, softLock })();
+    expect(fieldObject.toggleSelect).to.have.been.calledWith(value, softLock);
   });
 
   it('should NOT call toggleSelect when no field', async () => {
@@ -208,20 +215,31 @@ describe('actions', () => {
     expect(fieldObject.toggleSelect).to.not.have.been.called;
   });
 
-  // TODO: test for setVariable when implemented
+  it('should call setVariable', async () => {
+    const actionObject = actions.find(action => action.value === 'setVariable');
+    await actionObject.getActionCall({ app, variable, value })();
+    expect(variableObject.setStringValue).to.have.been.called.calledWith(value);
+  });
+
+  it('should NOT call setVariable when no variable', async () => {
+    const actionObject = actions.find(action => action.value === 'setVariable');
+    variable = null;
+    await actionObject.getActionCall({ app, variable, value })();
+    expect(variableObject.setStringValue).to.not.have.been.called;
+  });
 });
 
 describe('getValueList', () => {
   let valueString = 'valueOne;valueTwo';
-  let ExpectedList = [{ qText: 'valueOne' }, { qText: 'valueTwo' }];
+  let expectedList = [{ qText: 'valueOne' }, { qText: 'valueTwo' }];
 
   it('should return array with values in an array', () => {
-    expect(getValueList(valueString)).to.eql(ExpectedList);
+    expect(getValueList(valueString)).to.eql(expectedList);
   });
 
   it('should return array with numbers in value string', () => {
     valueString = '1;2';
-    ExpectedList = [{ qNumber: 1, qIsNumeric: true }, { qNumber: 2, qIsNumeric: true }];
-    expect(getValueList(valueString)).to.eql(ExpectedList);
+    expectedList = [{ qNumber: 1, qIsNumeric: true }, { qNumber: 2, qIsNumeric: true }];
+    expect(getValueList(valueString)).to.eql(expectedList);
   });
 });
