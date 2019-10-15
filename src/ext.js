@@ -5,6 +5,23 @@ export const checkShow = (data, field) => {
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 };
 
+export const getValue = (data, reference, defaultValue) => {
+  const steps = reference.split('.');
+  let dataContainer = data;
+  let i;
+  if (dataContainer === undefined) {
+    return defaultValue;
+  }
+  for (i = 0; i < steps.length; ++i) {
+    if (typeof dataContainer[steps[i]] === 'undefined') {
+      return defaultValue;
+    }
+    dataContainer = dataContainer[steps[i]];
+  }
+
+  return dataContainer;
+};
+
 export default function ext(/* env */) {
   return {
     definition: {
@@ -119,8 +136,8 @@ export default function ext(/* env */) {
               grouped: true,
               type: 'items',
               translation: 'Background',
-              items: [
-                {
+              items: {
+                colorPicker: {
                   component: 'color-picker',
                   type: 'object',
                   ref: 'style.backgroundColor',
@@ -132,7 +149,89 @@ export default function ext(/* env */) {
                     color: null,
                   },
                 },
-              ],
+                useBackgroundImage: {
+                  ref: 'style.background.isUsed',
+                  type: 'boolean',
+                  translation: 'properties.backgroundImage.use',
+                  component: 'switch',
+                  defaultValue: false,
+                  options: [
+                    {
+                      value: true,
+                      translation: 'properties.on',
+                    },
+                    {
+                      value: false,
+                      translation: 'properties.off',
+                    },
+                  ],
+                },
+                backgroundUrl: {
+                  ref: 'style.background.url.qStaticContentUrlDef.qUrl',
+                  layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
+                  schemaIgnore: true,
+                  translation: 'Common.Image',
+                  tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
+                  type: 'string',
+                  component: 'media',
+                  defaultValue: '',
+                  show(data) {
+                    return getValue(data, 'style.background.isUsed');
+                  },
+                },
+                backgroundSize: {
+                  ref: 'style.background.size',
+                  translation: 'properties.backgroundImage.size',
+                  type: 'string',
+                  component: 'dropdown',
+                  defaultValue: 'auto',
+                  options: [
+                    {
+                      value: 'auto',
+                      translation: 'properties.backgroundImage.originalSize',
+                    },
+                    {
+                      value: 'alwaysFit',
+                      translation: 'properties.backgroundImage.sizeAlwaysFit',
+                    },
+                    {
+                      value: 'fitWidth',
+                      translation: 'properties.backgroundImage.sizeFitWidth',
+                    },
+                    {
+                      value: 'fitHeight',
+                      translation: 'properties.backgroundImage.sizeFitHeight',
+                    },
+                    {
+                      value: 'fill',
+                      translation: 'properties.backgroundImage.sizeStretch',
+                    },
+                  ],
+                  show(data) {
+                    return (
+                      getValue(data, 'style.background.isUsed')
+                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                    );
+                  },
+                },
+                backgroundPosition: {
+                  ref: 'style.background.position',
+                  translation: 'Common.Position',
+                  type: 'string',
+                  component: 'align-matrix',
+                  defaultValue: 'topLeft',
+                  show(data) {
+                    return (
+                      getValue(data, 'style.background.isUsed')
+                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                      && getValue(data, 'style.background.size') !== 'fill'
+                    );
+                  },
+                  currentSize(data) {
+                    return getValue(data, 'style.background.size');
+                  },
+                },
+              },
             },
           },
         },
