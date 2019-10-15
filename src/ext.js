@@ -38,7 +38,7 @@ export default function ext(/* env */) {
               component: 'dropdown',
               defaultValue: null,
               options: async (action, hyperCubeHandler) => {
-                const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
+                const bms = await hyperCubeHandler.app.getBookmarkList();
                 return bms.map(bookmark => ({
                   label: bookmark.qData.title,
                   value: bookmark.qInfo.qId,
@@ -53,7 +53,7 @@ export default function ext(/* env */) {
               component: 'dropdown',
               defaultValue: null,
               options: async (action, hyperCubeHandler) => {
-                const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
+                const fields = await hyperCubeHandler.app.getFieldList();
                 return fields.map(field => ({
                   label: field.qName,
                   value: field.qName,
@@ -68,7 +68,7 @@ export default function ext(/* env */) {
               component: 'dropdown',
               defaultValue: null,
               options: async (action, hyperCubeHandler) => {
-                const variables = await hyperCubeHandler.app.enigmaModel.getVariableList();
+                const variables = await hyperCubeHandler.app.getVariableList();
                 return variables
                   .filter(variable => !variable.qIsReserved)
                   .map(variable => ({
