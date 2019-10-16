@@ -4,6 +4,9 @@ const defaultValues = {
   button: { setAttribute: () => {} },
   app: {},
   context: { permissions: ['interact'] },
+  Sense: {
+    navigation: {},
+  },
 };
 
 export default defaultValues;

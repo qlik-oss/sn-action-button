@@ -14,7 +14,7 @@ export default function ActionButton({ layout, button, Theme, app, context, Sens
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
   button.textContent = style && style.label;
-  button.onclick = () => {
+  button.onclick = async () => {
     const actionCallList = [];
     if (context.permissions.indexOf('interact') !== -1) {
       const { actions } = layout;
@@ -23,18 +23,14 @@ export default function ActionButton({ layout, button, Theme, app, context, Sens
         actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
       });
       button.setAttribute('disabled', true);
-      runActions(actionCallList).then(() => {
-        const { navigation } = layout;
-        const senseNavigation = Sense.navigation;
-        const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
-        if (navigationObject && typeof navigationObject.navigationCall === 'function') {
-          navigationObject.navigationCall({ senseNavigation, app, ...navigation }).then(() => {
-            button.removeAttribute('disabled');
-          });
-        } else {
-          button.removeAttribute('disabled');
-        }
-      });
+      await runActions(actionCallList);
+      const { navigation } = layout;
+      const senseNavigation = Sense.navigation;
+      const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
+      if (navigationObject && typeof navigationObject.navigationCall === 'function') {
+        await navigationObject.navigationCall({ senseNavigation, ...navigation });
+      }
+      button.removeAttribute('disabled');
     }
   };
 
