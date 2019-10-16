@@ -9,8 +9,8 @@ export const runActions = async actionList => {
 };
 
 export default function ActionButton({ layout, button, Theme, app, context }) {
-  const { style, background } = layout;
-  const formattedStyles = styleFormatter.getStyles(style, background, Theme);
+  const { style } = layout;
+  const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
   button.textContent = style && style.label;
   button.onclick = () => {

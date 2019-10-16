@@ -30,7 +30,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 };
 
 export default {
-  getStyles(style, background, Theme) {
+  getStyles(style, Theme) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
 
@@ -39,15 +39,15 @@ export default {
       styles += formatColorProperty('color', style.fontColor, '#ffffff');
       styles += formatProperty('font-size', style.fontSize ? `${style.fontSize}px` : '12px');
       styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
-      if (background && background.isUsed) {
-        let bgUrl = background.url.qStaticContentUrl.qUrl;
+      if (style.background && style.background.isUsed) {
+        let bgUrl = style.background.url.qStaticContentUrl.qUrl;
         bgUrl.replace('http://localhost:4848/', '').replace(/^\.\.\//i, '/');
         bgUrl = bgUrl.replace(/"/g, '\\"');
         bgUrl = bgUrl.replace(/'/g, "\\'");
         const bgImg = `http://localhost:4848/${(bgUrl[0] === '/' ? bgUrl.substr(1) : bgUrl)}`;
         styles += formatProperty('background-image', `url('${bgImg}')`);
-        styles += formatProperty('background-size', backgroundSize[background.size] || backgroundSize.auto);
-        styles += formatProperty('background-position', backgroundPosition[background.position] || backgroundPosition.topLeft);
+        styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
+        styles += formatProperty('background-position', backgroundPosition[style.background.position] || backgroundPosition.topLeft);
         styles += formatProperty('background-repeat', 'no-repeat');
       }
     } else {
