@@ -22,7 +22,7 @@ const backgroundPosition = {
   bottomRight: '100% 100%', // bottom right
 };
 
-const formatProperty = (path, setting) => `${path}: ${setting}; `;
+const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const formatColorProperty = (path, inputColor, defaultColor) => {
   const color = themeResolver.resolveColor(inputColor, palette);
@@ -34,12 +34,12 @@ export default {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
 
-    if (style) {
-      palette = Theme.getCurrent().properties.palettes.ui[0].colors;
-      styles += formatColorProperty('color', style.fontColor, '#ffffff');
-      styles += formatProperty('font-size', style.fontSize ? `${style.fontSize}px` : '12px');
-      styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
-      if (style.background && style.background.isUsed) {
+    palette = themeResolver.getPalette(Theme);
+    styles += formatColorProperty('color', style.fontColor, '#ffffff');
+    styles += formatProperty('font-size', style.fontSize ? `${style.fontSize}px` : '12px');
+    styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
+    
+    if (style && style.background && style.background.isUsed) {
         let bgUrl = style.background.url.qStaticContentUrl.qUrl;
         bgUrl.replace('http://localhost:4848/', '').replace(/^\.\.\//i, '/');
         bgUrl = bgUrl.replace(/"/g, '\\"');
@@ -49,10 +49,7 @@ export default {
         styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
         styles += formatProperty('background-position', backgroundPosition[style.background.position] || backgroundPosition.topLeft);
         styles += formatProperty('background-repeat', 'no-repeat');
-      }
-    } else {
-      styles += 'color: #ffffff;font-size: 12px;background-color: #3F8AB3';
-    }
+     }
 
     return styles;
   },
