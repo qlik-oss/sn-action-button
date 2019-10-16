@@ -1,4 +1,5 @@
 import themeResolver from '../theme-resolver';
+import defaultValues from '../../__tests__/default-button-props';
 
 describe('theme-resolver', () => {
   const palette = ['color1', 'color2', 'color3'];
@@ -18,6 +19,16 @@ describe('theme-resolver', () => {
     it('should return none as default', () => {
       const color = themeResolver.resolveColor();
       expect(color).to.equal('none');
+    });
+  });
+  describe('getPalette', () => {
+    it('should return empty array as default', () => {
+      const result = themeResolver.getPalette();
+      expect(result).to.be.an('array').that.is.empty;
+    });
+    it('should return array from default properties', () => {
+      const result = themeResolver.getPalette(defaultValues.Theme);
+      expect(result).to.include.members(['none', 'color1', 'color2']);
     });
   });
 });

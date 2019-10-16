@@ -12,5 +12,13 @@ const themeResolver = {
     }
     return 'none';
   },
+  getPalette: Theme => {
+    let result = [];
+    if (Theme && Theme.getCurrent) {
+      const current = Theme.getCurrent();
+      result = current && current.properties.palettes.ui[0].colors;
+    }
+    return result;
+  },
 };
 export default themeResolver;
