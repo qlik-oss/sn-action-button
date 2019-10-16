@@ -1,15 +1,5 @@
-import actions from './utils/actions';
-import navigationActions from './utils/navigation-actions';
-
-export const checkShow = (data, field) => {
-  const act = actions.find(action => data.actionType === action.value);
-  return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
-};
-
-export const checkShowNav = (data, field) => {
-  const nav = navigationActions.find(navigation => data.navigation.action === navigation.value);
-  return nav && nav.requiredInput && nav.requiredInput.indexOf(field) !== -1;
-};
+import actions, { checkShowAction } from './utils/actions';
+import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 
 export default function ext(/* env */) {
   return {
@@ -52,7 +42,7 @@ export default function ext(/* env */) {
                       value: bookmark.qInfo.qId,
                     }));
                   },
-                  show: data => checkShow(data, 'bookmark'),
+                  show: data => checkShowAction(data, 'bookmark'),
                 },
                 field: {
                   type: 'string',
@@ -66,14 +56,14 @@ export default function ext(/* env */) {
                       value: field.qName,
                     }));
                   },
-                  show: data => checkShow(data, 'field'),
+                  show: data => checkShowAction(data, 'field'),
                 },
                 softLock: {
                   type: 'boolean',
                   ref: 'softLock',
                   label: 'Overwrite locked selections',
                   defaultValue: false,
-                  show: data => checkShow(data, 'softLock'),
+                  show: data => checkShowAction(data, 'softLock'),
                 },
                 value: {
                   // TODO: expressions
@@ -81,7 +71,7 @@ export default function ext(/* env */) {
                   ref: 'value',
                   component: 'string',
                   label: 'Value',
-                  show: data => checkShow(data, 'value'),
+                  show: data => checkShowAction(data, 'value'),
                 },
               },
             },
@@ -104,14 +94,14 @@ export default function ext(/* env */) {
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet Id',
-                      show: data => checkShowNav(data, 'sheetId'),
+                      show: data => checkShowNavigation(data, 'sheetId'),
                     },
                     {
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet',
                       component: 'dropdown',
-                      show: data => checkShowNav(data, 'sheet'),
+                      show: data => checkShowNavigation(data, 'sheet'),
                       options: async (action, hyperCubeHandler) => {
                         const sheets = await hyperCubeHandler.app.getSheetList();
                         return sheets.map(sheet => ({
@@ -125,7 +115,7 @@ export default function ext(/* env */) {
                       ref: 'navigation.story',
                       label: 'Story',
                       component: 'dropdown',
-                      show: data => checkShowNav(data, 'story'),
+                      show: data => checkShowNavigation(data, 'story'),
                       options: async (action, hyperCubeHandler) => {
                         const stories = await hyperCubeHandler.app.getStoryList();
                         return stories.map(story => ({
@@ -138,13 +128,13 @@ export default function ext(/* env */) {
                       type: 'string',
                       ref: 'navigation.websiteUrl',
                       label: 'Website Url',
-                      show: data => checkShowNav(data, 'websiteUrl'),
+                      show: data => checkShowNavigation(data, 'websiteUrl'),
                     },
                     {
                       type: 'boolean',
                       ref: 'navigation.sameWindow',
                       label: 'Open in same window',
-                      show: data => checkShowNav(data, 'websiteUrl'),
+                      show: data => checkShowNavigation(data, 'websiteUrl'),
                       defaultValue: false,
                     },
                   ],

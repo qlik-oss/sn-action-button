@@ -117,4 +117,9 @@ const navigationActions = [
   },
 ];
 
+export const checkShowNavigation = (data, field) => {
+  const nav = navigationActions.find(navigation => data.navigation.action === navigation.value);
+  return nav && nav.requiredInput && nav.requiredInput.indexOf(field) !== -1;
+};
+
 export default navigationActions;
