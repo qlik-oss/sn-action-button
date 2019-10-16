@@ -103,6 +103,41 @@ export default function ext(/* env */) {
             },
           },
         },
+        enableCondition: {
+          grouped: true,
+          type: 'items',
+          translation: 'Enable condition',
+          items: {
+            useEnableCondition: {
+              ref: 'style.enable.isUsed',
+              type: 'boolean',
+              translation: 'Use enable condition',
+              component: 'switch',
+              defaultValue: false,
+              options: [
+                {
+                  value: true,
+                  translation: 'properties.on',
+                },
+                {
+                  value: false,
+                  translation: 'properties.off',
+                },
+              ],
+            },
+            expression: {
+              ref: 'style.condition',
+              type: 'string',
+              component: 'expression',
+              expressionType: 'ValueExpr',
+              translation: 'Condition',
+              defaultValue: '1',
+              show(data) {
+                return propertyResolver.getValue(data, 'style.enable.isUsed');
+              }
+            },
+          },
+        },
         settings: {
           component: 'expandable-items',
           translation: 'Appearance',
