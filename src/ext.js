@@ -83,7 +83,7 @@ export default function ext(/* env */) {
               ref: 'showSystemVariables',
               label: 'showSystemVariables',
               defaultValue: false,
-              show: data => checkShow(data, 'showSystemVariables'),
+              show: data => checkShow(data, 'variable'),
             },
             value: {
               type: 'string',

@@ -194,7 +194,7 @@ const actions = [
         }
       }
     },
-    requiredInput: ['variable', 'showSystemVariables', 'value'],
+    requiredInput: ['variable', 'value'],
   },
 ];
 
