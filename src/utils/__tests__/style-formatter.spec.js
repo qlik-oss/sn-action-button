@@ -3,8 +3,9 @@ import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
-    let style = null;
-    const defaultStyle = 'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #3F8AB3';
+    let style = {};
+    const defaultStyle =
+      'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #3F8AB3;';
     const someColor = '#ffff00';
     const someSize = 24;
     const { Theme } = defaultValues;
