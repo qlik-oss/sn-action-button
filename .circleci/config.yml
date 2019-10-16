@@ -60,6 +60,9 @@ jobs:
             DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
             APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
 
+      - store_artifacts:
+          path: ./test/integration/__artifacts__
+
       - store_test_results:
           path: coverage/junit
 
