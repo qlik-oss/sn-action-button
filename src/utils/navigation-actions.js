@@ -57,7 +57,7 @@ const navigationActions = [
   },
   {
     label: 'Go to a sheet',
-    value: 'gotoSheet',
+    value: 'goToSheet',
     navigationCall: async ({ senseNavigation, sheet }) => {
       try {
         sheet && (await senseNavigation.goToSheet(sheet));
@@ -70,7 +70,7 @@ const navigationActions = [
   },
   {
     label: 'Go to a sheet (defined by sheet Id)',
-    value: 'gotoSheetById',
+    value: 'goToSheetById',
     navigationCall: async ({ senseNavigation, sheet }) => {
       try {
         sheet && (await senseNavigation.goToSheet(sheet));
@@ -83,7 +83,7 @@ const navigationActions = [
   },
   {
     label: 'Go to a story',
-    value: 'gotoStory',
+    value: 'goToStory',
     navigationCall: async ({ senseNavigation, story }) => {
       try {
         story && (await senseNavigation.goToStory(story));
