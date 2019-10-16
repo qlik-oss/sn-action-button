@@ -1,4 +1,4 @@
-import ext, { checkShow, getValue } from '../ext';
+import ext, { checkShow } from '../ext';
 
 describe('ext', () => {
   let data;
@@ -18,24 +18,6 @@ describe('ext', () => {
       data.actionType = 'notAnAction';
       const result = checkShow(data, 'bookmark');
       expect(result).to.equal(undefined);
-    });
-  });
-
-  describe('getValue', () => {
-    beforeEach(() => {
-      data = { style: { background: { url: 'url' } } };
-    });
-    it('should return value if reference exists', () => {
-      const result = getValue(data, 'style.background.url');
-      expect(result).to.equal('url');
-    });
-    it("should return default value if reference doesn't exist", () => {
-      const result = getValue(data, 'style.background.urlb', 'default');
-      expect(result).to.equal('default');
-    });
-    it("should return default value if data doesn't exist", () => {
-      const result = getValue(undefined, 'style.background.url', 'default');
-      expect(result).to.equal('default');
     });
   });
 

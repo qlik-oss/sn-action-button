@@ -56,7 +56,7 @@ describe('style-formatter', () => {
         }
       };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
-      expect(formattedStyle.includes(`background-image: url('http://localhost:4848${someUrl}')`)).to.be.true;
+      expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
       expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;

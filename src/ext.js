@@ -1,24 +1,9 @@
 import actions from './utils/actions';
+import propertyResolver from './utils/property-resolver';
 
 export const checkShow = (data, field) => {
   const act = actions.find(action => data.actionType === action.value);
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
-};
-
-export const getValue = (dataContainer, reference, defaultValue) => {
-  const steps = reference.split('.');
-  let i;
-  if (dataContainer === undefined) {
-    return defaultValue;
-  }
-  for (i = 0; i < steps.length; ++i) {
-    if (typeof dataContainer[steps[i]] === 'undefined') {
-      return defaultValue;
-    }
-    dataContainer = dataContainer[steps[i]];
-  }
-
-  return dataContainer;
 };
 
 export default function ext(/* env */) {
@@ -178,7 +163,7 @@ export default function ext(/* env */) {
                   component: 'media',
                   defaultValue: '',
                   show(data) {
-                    return getValue(data, 'style.background.isUsed');
+                    return propertyResolver.getValue(data, 'style.background.isUsed');
                   },
                 },
                 backgroundSize: {
@@ -211,8 +196,8 @@ export default function ext(/* env */) {
                   ],
                   show(data) {
                     return (
-                      getValue(data, 'style.background.isUsed')
-                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                      propertyResolver.getValue(data, 'style.background.isUsed')
+                      && propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
                     );
                   },
                 },
@@ -224,13 +209,13 @@ export default function ext(/* env */) {
                   defaultValue: 'topLeft',
                   show(data) {
                     return (
-                      getValue(data, 'style.background.isUsed')
-                      && getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
-                      && getValue(data, 'style.background.size') !== 'fill'
+                      propertyResolver.getValue(data, 'style.background.isUsed')
+                      && propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                      && propertyResolver.getValue(data, 'style.background.size') !== 'fill'
                     );
                   },
                   currentSize(data) {
-                    return getValue(data, 'style.background.size');
+                    return propertyResolver.getValue(data, 'style.background.size');
                   },
                 },
               },
