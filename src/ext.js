@@ -38,7 +38,7 @@ export default function ext(/* env */) {
               component: 'dropdown',
               defaultValue: null,
               options: async (action, hyperCubeHandler) => {
-                const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
+                const bms = await hyperCubeHandler.app.getBookmarkList();
                 return bms.map(bookmark => ({
                   label: bookmark.qData.title,
                   value: bookmark.qInfo.qId,
@@ -53,7 +53,7 @@ export default function ext(/* env */) {
               component: 'dropdown',
               defaultValue: null,
               options: async (action, hyperCubeHandler) => {
-                const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
+                const fields = await hyperCubeHandler.app.getFieldList();
                 return fields.map(field => ({
                   label: field.qName,
                   value: field.qName,
@@ -65,16 +65,32 @@ export default function ext(/* env */) {
               // TODO: searchable dropdown
               type: 'string',
               ref: 'variable',
-              component: 'string',
-              label: 'Variable name',
+              component: 'dropdown',
+              defaultValue: null,
+              options: async (action, hyperCubeHandler) => {
+                const variables = await hyperCubeHandler.app.getVariableList();
+                return variables
+                  .filter(v => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
+                  .map(v => ({
+                    label: v.qName,
+                    value: v.qName,
+                  }));
+              },
+              show: data => checkShow(data, 'variable'),
+            },
+            showSystemVariables: {
+              type: 'boolean',
+              ref: 'showSystemVariables',
+              label: 'showSystemVariables',
+              defaultValue: false,
               show: data => checkShow(data, 'variable'),
             },
             value: {
-              // TODO: expressions
               type: 'string',
               ref: 'value',
               component: 'string',
               label: 'Value',
+              expression: 'optional',
               show: data => checkShow(data, 'value'),
             },
             softLock: {
@@ -84,7 +100,6 @@ export default function ext(/* env */) {
               defaultValue: false,
               show: data => checkShow(data, 'softLock'),
             },
-
           },
         },
         settings: {
