@@ -109,22 +109,22 @@ export default function ext(/* env */) {
                 navigation: {
                   label: 'Navigation',
                   type: 'items',
-                  items: [
-                    {
+                  items: {
+                    action: {
                       ref: 'navigation.action',
                       label: 'Navigation action',
                       component: 'dropdown',
                       defaultValue: null,
                       options: navigationActions,
                     },
-                    {
+                    sheetId: {
                       // TODO: expressions
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet Id',
                       show: data => checkShowNavigation(data, 'sheetId'),
                     },
-                    {
+                    sheet: {
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet',
@@ -138,7 +138,7 @@ export default function ext(/* env */) {
                         }));
                       },
                     },
-                    {
+                    story: {
                       type: 'string',
                       ref: 'navigation.story',
                       label: 'Story',
@@ -152,20 +152,20 @@ export default function ext(/* env */) {
                         }));
                       },
                     },
-                    {
+                    websiteUrl: {
                       type: 'string',
                       ref: 'navigation.websiteUrl',
                       label: 'Website Url',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                     },
-                    {
+                    sameWindow: {
                       type: 'boolean',
                       ref: 'navigation.sameWindow',
                       label: 'Open in same window',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                       defaultValue: false,
                     },
-                  ],
+                  },
                 },
               },
             },
