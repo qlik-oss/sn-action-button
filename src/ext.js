@@ -25,6 +25,7 @@ export default function ext(/* env */) {
               addTranslation: 'Add Item',
               items: {
                 actionType: {
+                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'actionType',
                   component: 'dropdown',
@@ -32,6 +33,7 @@ export default function ext(/* env */) {
                   options: actions,
                 },
                 bookmark: {
+                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'bookmark',
                   component: 'dropdown',
@@ -46,6 +48,7 @@ export default function ext(/* env */) {
                   show: data => checkShowAction(data, 'bookmark'),
                 },
                 field: {
+                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'field',
                   component: 'dropdown',
