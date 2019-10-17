@@ -4,5 +4,5 @@ export function teardown() {}
 
 export function render(element, props) {
   const button = ActionButton(props);
-  element.append(button);
+  element.appendChild(button);
 }

@@ -7,7 +7,7 @@ describe('root', () => {
     let appendSpy;
     beforeEach(() => {
       appendSpy = sinon.spy();
-      element.append = appendSpy;
+      element.appendChild = appendSpy;
     });
 
     it('should render root', () => {
@@ -15,10 +15,4 @@ describe('root', () => {
       expect(appendSpy).to.have.been.called;
     });
   });
-  // Test teardown function when implemented
-  // describe('teardown', () => {
-  //   it('should tear down component', () => {
-  //     teardown();
-  //   });
-  // });
 });
