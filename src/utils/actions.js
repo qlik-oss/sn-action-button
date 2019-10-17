@@ -180,11 +180,22 @@ const actions = [
     },
     requiredInput: ['field', 'value', 'softLock'],
   },
-  // {
-  //   value: 'setVariable',
-  //   label: 'Set variable value',
-  //   group: 'variables',
-  // },
+  {
+    value: 'setVariable',
+    label: 'Set variable value',
+    group: 'variables',
+    getActionCall: ({ app, variable, value }) => async () => {
+      if (variable && value) {
+        try {
+          const variableObj = await app.getVariableByName(variable);
+          await variableObj.setStringValue(value);
+        } catch (e) {
+          // no-op
+        }
+      }
+    },
+    requiredInput: ['variable', 'value'],
+  },
 ];
 
 export function checkShowAction(data, field) {

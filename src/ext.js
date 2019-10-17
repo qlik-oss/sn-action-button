@@ -1,5 +1,6 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
+import propertyResolver from './utils/property-resolver';
 
 export default function ext(/* env */) {
   return {
@@ -36,7 +37,7 @@ export default function ext(/* env */) {
                   component: 'dropdown',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
-                    const bms = await hyperCubeHandler.app.enigmaModel.getBookmarkList();
+                    const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
                       label: bookmark.qData.title,
                       value: bookmark.qInfo.qId,
@@ -50,13 +51,37 @@ export default function ext(/* env */) {
                   component: 'dropdown',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
-                    const fields = await hyperCubeHandler.app.enigmaModel.getFieldList();
+                    const fields = await hyperCubeHandler.app.getFieldList();
                     return fields.map(field => ({
                       label: field.qName,
                       value: field.qName,
                     }));
                   },
                   show: data => checkShowAction(data, 'field'),
+                },
+                variable: {
+                  // TODO: searchable dropdown
+                  type: 'string',
+                  ref: 'variable',
+                  component: 'dropdown',
+                  defaultValue: null,
+                  options: async (action, hyperCubeHandler) => {
+                    const variables = await hyperCubeHandler.app.getVariableList();
+                    return variables
+                      .filter(v => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
+                      .map(v => ({
+                        label: v.qName,
+                        value: v.qName,
+                      }));
+                  },
+                  show: data => checkShowAction(data, 'variable'),
+                },
+                showSystemVariables: {
+                  type: 'boolean',
+                  ref: 'showSystemVariables',
+                  label: 'showSystemVariables',
+                  defaultValue: false,
+                  show: data => checkShowAction(data, 'variable'),
                 },
                 softLock: {
                   type: 'boolean',
@@ -167,7 +192,6 @@ export default function ext(/* env */) {
                   component: 'integer',
                   ref: 'style.fontSize',
                   translation: 'Font size',
-                  defaultValue: '12',
                 },
                 {
                   component: 'color-picker',
@@ -176,10 +200,6 @@ export default function ext(/* env */) {
                   translation: 'Font color',
                   dualOutput: true,
                   show: true,
-                  defaultValue: {
-                    index: -1,
-                    color: null,
-                  },
                 },
               ],
             },
@@ -187,20 +207,98 @@ export default function ext(/* env */) {
               grouped: true,
               type: 'items',
               translation: 'Background',
-              items: [
-                {
+              items: {
+                colorPicker: {
                   component: 'color-picker',
                   type: 'object',
                   ref: 'style.backgroundColor',
                   translation: 'Background color',
                   dualOutput: true,
                   show: true,
-                  defaultValue: {
-                    index: -1,
-                    color: null,
+                },
+                useBackgroundImage: {
+                  ref: 'style.background.isUsed',
+                  type: 'boolean',
+                  translation: 'properties.backgroundImage.use',
+                  component: 'switch',
+                  defaultValue: false,
+                  options: [
+                    {
+                      value: true,
+                      translation: 'properties.on',
+                    },
+                    {
+                      value: false,
+                      translation: 'properties.off',
+                    },
+                  ],
+                },
+                backgroundUrl: {
+                  ref: 'style.background.url.qStaticContentUrlDef.qUrl',
+                  layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
+                  schemaIgnore: true,
+                  translation: 'Common.Image',
+                  tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
+                  type: 'string',
+                  component: 'media',
+                  defaultValue: '',
+                  show(data) {
+                    return propertyResolver.getValue(data, 'style.background.isUsed');
                   },
                 },
-              ],
+                backgroundSize: {
+                  ref: 'style.background.size',
+                  translation: 'properties.backgroundImage.size',
+                  type: 'string',
+                  component: 'dropdown',
+                  defaultValue: 'auto',
+                  options: [
+                    {
+                      value: 'auto',
+                      translation: 'properties.backgroundImage.originalSize',
+                    },
+                    {
+                      value: 'alwaysFit',
+                      translation: 'properties.backgroundImage.sizeAlwaysFit',
+                    },
+                    {
+                      value: 'fitWidth',
+                      translation: 'properties.backgroundImage.sizeFitWidth',
+                    },
+                    {
+                      value: 'fitHeight',
+                      translation: 'properties.backgroundImage.sizeFitHeight',
+                    },
+                    {
+                      value: 'fill',
+                      translation: 'properties.backgroundImage.sizeStretch',
+                    },
+                  ],
+                  show(data) {
+                    return (
+                      propertyResolver.getValue(data, 'style.background.isUsed') &&
+                      propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                    );
+                  },
+                },
+                backgroundPosition: {
+                  ref: 'style.background.position',
+                  translation: 'Common.Position',
+                  type: 'string',
+                  component: 'align-matrix',
+                  defaultValue: 'topLeft',
+                  show(data) {
+                    return (
+                      propertyResolver.getValue(data, 'style.background.isUsed') &&
+                      propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
+                      propertyResolver.getValue(data, 'style.background.size') !== 'fill'
+                    );
+                  },
+                  currentSize(data) {
+                    return propertyResolver.getValue(data, 'style.background.size');
+                  },
+                },
+              },
             },
           },
         },
