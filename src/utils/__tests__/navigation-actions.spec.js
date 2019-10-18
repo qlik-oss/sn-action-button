@@ -1,18 +1,18 @@
-import navigationActions, { checkShowNavigation } from '../navigation-actions';
+import navigationActions, { checkShowNavigation, getOrderedSheets } from '../navigation-actions';
+import defaultValues from '../../__tests__/default-button-props';
 
 describe('navigation actions', () => {
   let senseNavigation;
   const sheet = 'sheetIdHere';
   const story = 'storyIdHere';
   const websiteUrl = 'https://myUrlHere';
+  const { app } = defaultValues;
 
   describe('all navigation actions', () => {
     beforeEach(() => {
       senseNavigation = {
-        firstSheet: sinon.spy(),
         nextSheet: sinon.spy(),
         prevSheet: sinon.spy(),
-        lastSheet: sinon.spy(),
         goToSheet: sinon.spy(),
         goToStory: sinon.spy(),
       };
@@ -26,8 +26,8 @@ describe('navigation actions', () => {
     });
     it('should call firstSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
-      await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.firstSheet).to.have.been.called;
+      await navigationObject.navigationCall({ app, senseNavigation });
+      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
     });
     it('should call nextSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'nextSheet');
@@ -41,8 +41,8 @@ describe('navigation actions', () => {
     });
     it('should call lastSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
-      await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.lastSheet).to.have.been.called;
+      await navigationObject.navigationCall({ app, senseNavigation });
+      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
     });
     it('should call goToSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'goToSheet');
@@ -123,6 +123,24 @@ describe('navigation actions', () => {
     it('should return false when field not in required input', () => {
       const result = checkShowNavigation(data, 'websiteUrl');
       expect(result).to.equal(false);
+    });
+  });
+
+  describe('getOrderedSheets', () => {
+    const sheets = [
+      { qData: { rank: 15 }, qInfo: { qId: 'id15' } },
+      { qData: { rank: 1.5 }, qInfo: { qId: 'id1.5' } },
+      { qData: { rank: 1 }, qInfo: { qId: 'id1' } },
+      { qData: { rank: 7 }, qInfo: { qId: 'id7' } },
+    ];
+    const fakeApp = { getSheetList: () => sheets };
+    it('should return sheets in correct order', async () => {
+      const result = await getOrderedSheets(fakeApp);
+      expect(result).to.have.length(4);
+      expect(result[0].qInfo.qId).to.equal('id1');
+      expect(result[1].qInfo.qId).to.equal('id1.5');
+      expect(result[2].qInfo.qId).to.equal('id7');
+      expect(result[3].qInfo.qId).to.equal('id15');
     });
   });
 });

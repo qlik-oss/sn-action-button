@@ -25,10 +25,10 @@ export default function ActionButton({ layout, button, Theme, app, context, Sens
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
       const { navigation } = layout;
-      const senseNavigation = Sense.navigation;
+      const senseNavigation = Sense && Sense.navigation;
       const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
-      if (navigationObject && typeof navigationObject.navigationCall === 'function') {
-        await navigationObject.navigationCall({ senseNavigation, ...navigation });
+      if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
+        await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
       }
       button.removeAttribute('disabled');
     }

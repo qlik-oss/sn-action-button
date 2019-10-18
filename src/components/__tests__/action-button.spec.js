@@ -14,12 +14,10 @@ describe('action button', () => {
       defaultValues.button = button;
       defaultValues.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaultValues.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
-      defaultValues.app = {
-        clearAll: sinon.spy(),
-      };
+      defaultValues.app.clearAll = sinon.spy();
       defaultValues.context.permissions = ['interact'];
       defaultValues.Sense.navigation = {
-        firstSheet: sinon.spy(),
+        goToSheet: sinon.spy(),
       };
     });
     it('should render action button', () => {
@@ -34,7 +32,7 @@ describe('action button', () => {
       await aButton.onclick();
       expect(button.setAttribute).to.have.been.calledWith('disabled', true);
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
-      expect(defaultValues.Sense.navigation.firstSheet).to.have.been.called;
+      expect(defaultValues.Sense.navigation.goToSheet).to.have.been.called;
     });
 
     it('should not act on click when permissions not present', async () => {

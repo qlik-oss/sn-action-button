@@ -6,6 +6,11 @@ const inIframe = () => {
   }
 };
 
+export const getOrderedSheets = async app => {
+  const sheets = await app.getSheetList();
+  return sheets.sort((current, next) => current.qData.rank - next.qData.rank);
+};
+
 const navigationActions = [
   {
     label: 'None',
@@ -14,56 +19,38 @@ const navigationActions = [
   {
     label: 'Go to first sheet',
     value: 'firstSheet',
-    navigationCall: async ({ senseNavigation }) => {
-      try {
-        await senseNavigation.firstSheet();
-      } catch (error) {
-        // no-op
-      }
+    navigationCall: async ({ app, senseNavigation }) => {
+      const sheets = await getOrderedSheets(app);
+      await senseNavigation.goToSheet(sheets[0].qInfo.qId);
     },
   },
   {
     label: 'Go to next sheet',
     value: 'nextSheet',
     navigationCall: async ({ senseNavigation }) => {
-      try {
-        await senseNavigation.nextSheet();
-      } catch (error) {
-        // no-op
-      }
+      await senseNavigation.nextSheet();
     },
   },
   {
     label: 'Go to previous sheet',
     value: 'prevSheet',
     navigationCall: async ({ senseNavigation }) => {
-      try {
-        await senseNavigation.prevSheet();
-      } catch (error) {
-        // no-op
-      }
+      await senseNavigation.prevSheet();
     },
   },
   {
     label: 'Go to last sheet',
     value: 'lastSheet',
-    navigationCall: async ({ senseNavigation }) => {
-      try {
-        await senseNavigation.lastSheet();
-      } catch (error) {
-        // no-op
-      }
+    navigationCall: async ({ app, senseNavigation }) => {
+      const sheets = await getOrderedSheets(app);
+      await senseNavigation.goToSheet(sheets[sheets.length - 1].qInfo.qId);
     },
   },
   {
     label: 'Go to a sheet',
     value: 'goToSheet',
     navigationCall: async ({ senseNavigation, sheet }) => {
-      try {
-        sheet && (await senseNavigation.goToSheet(sheet));
-      } catch (error) {
-        // no-op
-      }
+      sheet && (await senseNavigation.goToSheet(sheet));
     },
     // TODO replace by searchable dropdown
     requiredInput: ['sheet'],
@@ -72,11 +59,7 @@ const navigationActions = [
     label: 'Go to a sheet (defined by sheet Id)',
     value: 'goToSheetById',
     navigationCall: async ({ senseNavigation, sheet }) => {
-      try {
-        sheet && (await senseNavigation.goToSheet(sheet));
-      } catch (error) {
-        // no-op
-      }
+      sheet && (await senseNavigation.goToSheet(sheet));
     },
     // TODO replace by searchable dropdown
     requiredInput: ['sheetId'],
@@ -85,11 +68,7 @@ const navigationActions = [
     label: 'Go to a story',
     value: 'goToStory',
     navigationCall: async ({ senseNavigation, story }) => {
-      try {
-        story && (await senseNavigation.goToStory(story));
-      } catch (error) {
-        // no-op
-      }
+      story && (await senseNavigation.goToStory(story));
     },
     requiredInput: ['story'],
   },
@@ -99,10 +78,7 @@ const navigationActions = [
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
         if (websiteUrl) {
-          const url =
-            websiteUrl.startsWith('https://') || websiteUrl.startsWith('http://') || websiteUrl.startsWith('mailto://')
-              ? websiteUrl
-              : `http://${websiteUrl}`;
+          const url = websiteUrl.match(/^(https?|mailto):\/\//) ? websiteUrl : `http://${websiteUrl}`;
           let target = '';
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
