@@ -12,7 +12,7 @@ export default function ActionButton({ layout, button, Theme, app, context }) {
   const { style } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
-  if (style.useEnabledCondition && style.enabledCondition === 0) {
+  if (style.useEnabledCondition && style.enabledCondition === 0 && context.permissions.indexOf('interact') !== -1) {
     button.setAttribute('disabled', true);
   } else {
     button.removeAttribute('disabled');
