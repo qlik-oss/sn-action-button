@@ -93,5 +93,14 @@ describe('style-formatter', () => {
       const formattedStyle = styleFormatter.getStyles(style, Theme);
       expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
     });
+
+    it('should have set opacity for disabled button', () => {
+      style = {
+        useEnabledCondition: true,
+        enabledCondition: 0
+      };
+      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
+    });
   });
 });
