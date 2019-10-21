@@ -12,6 +12,7 @@ export default function ActionButton({ layout, button, Theme, app, context }) {
   const { style } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
+  // button.setAttribute('disabled', layout.enabledCondition === 0 ? true: false);
   button.textContent = style && style.label;
   button.onclick = () => {
     const actionCallList = [];
