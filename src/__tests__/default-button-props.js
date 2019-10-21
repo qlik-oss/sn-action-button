@@ -7,9 +7,7 @@ const defaultValues = {
     clearAll: () => {},
   },
   context: { permissions: ['interact'] },
-  Sense: {
-    navigation: {},
-  },
+  senseNavigation: {},
 };
 
 export default defaultValues;
