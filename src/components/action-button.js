@@ -9,7 +9,7 @@ export const runActions = async actionList => {
   }
 };
 
-export default function ActionButton({ layout, button, Theme, app, context, Sense }) {
+export default function ActionButton({ layout, button, Theme, app, context, senseNavigation }) {
   const { style } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
@@ -25,7 +25,6 @@ export default function ActionButton({ layout, button, Theme, app, context, Sens
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
       const { navigation } = layout;
-      const senseNavigation = Sense && Sense.navigation;
       const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
       if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
         await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
