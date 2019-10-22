@@ -34,7 +34,6 @@ export default {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
     const fontSize = style.fontSize && !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px';
-    console.log(!isNaN(style.fontSize));
 
     palette = themeResolver.getPalette(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
