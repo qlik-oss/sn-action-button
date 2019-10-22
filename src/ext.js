@@ -171,6 +171,34 @@ export default function ext(/* env */) {
             },
           },
         },
+        enableCondition: {
+          type: 'items',
+          label: 'Enable condition',
+          items: {
+            usecondition: {
+              type: 'boolean',
+              component: 'switch',
+              label: 'Use enable condition',
+              ref: 'style.useEnabledCondition',
+              options: [{
+                value: true,
+                label: 'On'
+              }, {
+                value: false,
+                label: 'Off'
+              }]
+            },
+            condition: {
+              ref: 'style.enabledCondition',
+              label: 'Enable condition',
+              type: 'integer',
+              expression: 'optional',
+              show(data) {
+                return data.style.useEnabledCondition === true;
+              },
+            },
+          },
+        },
         settings: {
           component: 'expandable-items',
           translation: 'Appearance',

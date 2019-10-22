@@ -59,4 +59,17 @@ describe('action button', () => {
       expect(actionList[1]).to.have.been.calledOnce;
     });
   });
+  describe('disabledButton', () => {
+    button = {
+      setAttribute: sinon.spy(),
+    };
+    defaultValues.button = button;
+    defaultValues.layout.style.useEnabledCondition = true;
+    defaultValues.layout.style.enabledCondition = 0;
+    it('should render disabled button', () => {
+      const aButton = actionButton(defaultValues);
+      expect(aButton).to.be.an('object');
+      expect(defaultValues.button.setAttribute).to.have.been.calledWith('disabled', true);
+    });
+  });
 });
