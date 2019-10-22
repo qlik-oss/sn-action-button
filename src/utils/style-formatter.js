@@ -29,15 +29,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
-const checkDisabled = (style) => {
-  if (style.useEnabledCondition) {
-    const EC = style.enabledCondition;
-    if (EC === 0) {
-      return true;
-    }
-  }
-  return false;
-};
+const checkDisabled = (style) => style.useEnabledCondition && style.enabledCondition === 0;
 
 export default {
   getStyles(style, Theme) {
@@ -48,7 +40,7 @@ export default {
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
     styles += formatProperty('font-size', style.fontSize ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
-    if (checkDisabled(style)) styles += formatProperty('opacity', 0.4);
+    checkDisabled(style) && (styles += formatProperty('opacity', 0.4));
     if (style && style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       bgUrl.replace(/^\.\.\//i, '/');
