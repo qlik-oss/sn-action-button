@@ -33,10 +33,12 @@ export default {
   getStyles(style, Theme) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
+    const fontSize = style.fontSize && !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px';
+    console.log(!isNaN(style.fontSize));
 
     palette = themeResolver.getPalette(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
-    styles += formatProperty('font-size', style.fontSize ? `${style.fontSize}px` : '12px');
+    styles += formatProperty('font-size', fontSize);
     styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
     if (style && style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
@@ -45,7 +47,10 @@ export default {
       bgUrl = bgUrl.replace(/'/g, "\\'");
       styles += formatProperty('background-image', `url('${bgUrl}')`);
       styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
-      styles += formatProperty('background-position', backgroundPosition[style.background.position] || backgroundPosition.topLeft);
+      styles += formatProperty(
+        'background-position',
+        backgroundPosition[style.background.position] || backgroundPosition.topLeft
+      );
       styles += formatProperty('background-repeat', 'no-repeat');
     }
 

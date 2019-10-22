@@ -99,6 +99,7 @@ export default function ext(/* env */) {
                   ref: 'value',
                   component: 'string',
                   label: 'Value',
+                  expression: 'optional',
                   show: data => checkShowAction(data, 'value'),
                 },
               },
@@ -183,6 +184,7 @@ export default function ext(/* env */) {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Label',
+                  expression: 'optional',
                 },
               ],
             },
@@ -192,9 +194,11 @@ export default function ext(/* env */) {
               translation: 'Font',
               items: [
                 {
-                  component: 'integer',
+                  component: 'string',
+                  type: 'string',
                   ref: 'style.fontSize',
                   translation: 'Font size',
+                  expression: 'optional',
                 },
                 {
                   component: 'color-picker',
