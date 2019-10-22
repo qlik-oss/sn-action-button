@@ -18,6 +18,9 @@ const properties = {
   /**
    * @typedef {object}
    */
+  navigation: {
+    action: 'none',
+  },
   style: {
     /**
      * @type {string}
