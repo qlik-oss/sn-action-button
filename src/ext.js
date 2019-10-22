@@ -112,7 +112,6 @@ export default function ext(/* env */) {
               component: 'switch',
               label: 'Use enable condition',
               ref: 'style.useEnabledCondition',
-              defaultValue: false,
               options: [{
                 value: true,
                 label: 'On'
@@ -125,7 +124,6 @@ export default function ext(/* env */) {
               ref: 'style.enabledCondition',
               label: 'Enable condition',
               type: 'integer',
-              defaultValue: 1,
               expression: 'optional',
               show(data) {
                 return data.style.useEnabledCondition === true;
