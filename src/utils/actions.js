@@ -198,4 +198,9 @@ const actions = [
   },
 ];
 
+export function checkShowAction(data, field) {
+  const act = actions.find(action => data.actionType === action.value);
+  return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
+}
+
 export default actions;

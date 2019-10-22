@@ -1,4 +1,5 @@
 import allActions from '../utils/actions';
+import navigationActions from '../utils/navigation-actions';
 import styleFormatter from '../utils/style-formatter';
 
 export const runActions = async actionList => {
@@ -8,12 +9,12 @@ export const runActions = async actionList => {
   }
 };
 
-export default function ActionButton({ layout, button, Theme, app, context }) {
+export default function ActionButton({ layout, button, Theme, app, context, senseNavigation }) {
   const { style } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
   button.textContent = style && style.label;
-  button.onclick = () => {
+  button.onclick = async () => {
     const actionCallList = [];
     if (context.permissions.indexOf('interact') !== -1) {
       const { actions } = layout;
@@ -22,9 +23,13 @@ export default function ActionButton({ layout, button, Theme, app, context }) {
         actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
       });
       button.setAttribute('disabled', true);
-      runActions(actionCallList).then(() => {
-        button.removeAttribute('disabled');
-      });
+      await runActions(actionCallList);
+      const { navigation } = layout;
+      const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
+      if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
+        await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
+      }
+      button.removeAttribute('disabled');
     }
   };
 

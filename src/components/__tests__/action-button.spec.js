@@ -1,41 +1,62 @@
 import defaultValues from '../../__tests__/default-button-props';
 import actionButton, { runActions } from '../action-button';
 
-let setAttributeSpy;
-let spy1;
-let spy2;
+let actionList;
+let button;
 
 describe('action button', () => {
   describe('ActionButton', () => {
     beforeEach(() => {
-      setAttributeSpy = sinon.spy();
-      const button = {
-        setAttribute: setAttributeSpy,
+      button = {
+        setAttribute: sinon.spy(),
+        removeAttribute: sinon.spy(),
       };
       defaultValues.button = button;
       defaultValues.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
+      defaultValues.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
+      defaultValues.app.clearAll = sinon.spy();
+      defaultValues.context.permissions = ['interact'];
+      defaultValues.senseNavigation = {
+        goToSheet: sinon.spy(),
+      };
     });
     it('should render action button', () => {
       const aButton = actionButton(defaultValues);
       expect(aButton).to.be.an('object');
       expect(aButton.textContent).to.equal('testLabel');
-      expect(setAttributeSpy).to.have.been.called;
+      expect(defaultValues.button.setAttribute).to.have.been.called;
     });
 
-    it('should call actions when button is clicked', () => {
+    it('should disable action button on click and enable again', async () => {
       const aButton = actionButton(defaultValues);
-      aButton.onclick();
-      expect(setAttributeSpy).to.have.been.calledWith('disabled', true);
+      await aButton.onclick();
+      expect(button.setAttribute).to.have.been.calledWith('disabled', true);
+      expect(button.removeAttribute).to.have.been.calledWith('disabled');
+      expect(defaultValues.senseNavigation.goToSheet).to.have.been.called;
+    });
+
+    it('should not act on click when permissions not present', async () => {
+      defaultValues.context.permissions = ['notInteract'];
+      const aButton = actionButton(defaultValues);
+      await aButton.onclick();
+      expect(defaultValues.button.setAttribute).to.not.have.been.calledWith('disabled', true);
+    });
+
+    it('should run without navigation', async () => {
+      defaultValues.layout.navigation = {};
+      const aButton = actionButton(defaultValues);
+      await aButton.onclick();
+      expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
   });
   describe('runActions', () => {
+    beforeEach(() => {
+      actionList = [sinon.spy(), sinon.spy()];
+    });
     it('should call all functions in array', async () => {
-      spy1 = sinon.spy();
-      spy2 = sinon.spy();
-      const actionList = [spy1, spy2];
       await runActions(actionList);
-      expect(spy1).to.have.been.calledOnce;
-      expect(spy2).to.have.been.calledOnce;
+      expect(actionList[0]).to.have.been.calledOnce;
+      expect(actionList[1]).to.have.been.calledOnce;
     });
   });
 });
