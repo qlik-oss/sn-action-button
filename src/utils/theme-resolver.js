@@ -20,5 +20,13 @@ const themeResolver = {
     }
     return result;
   },
+  getDefaultColor: Theme => {
+    let result = '';
+    if (Theme && Theme.getCurrent) {
+      const current = Theme.getCurrent();
+      result = current && current.properties.dataColors && current.properties.dataColors.primaryColor;
+    }
+    return result || '#4477aa';
+  }
 };
 export default themeResolver;

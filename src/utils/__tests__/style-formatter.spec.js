@@ -5,7 +5,7 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style = {};
     const defaultStyle =
-      'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #3F8AB3;';
+      'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #4477aa;';
     const someColor = '#ffff00';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
@@ -29,7 +29,7 @@ describe('style-formatter', () => {
         },
       };
       const formattedStyle = styleFormatter.getStyles(style, Theme);
-      expect(formattedStyle.includes('background-color: #3F8AB3')).to.be.true;
+      expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
     });
 
     it('should return specified font color', () => {
