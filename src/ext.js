@@ -176,27 +176,27 @@ export default function ext(/* env */) {
         },
         enableCondition: {
           type: 'items',
-          label: 'Enable condition',
+          translation: 'properties.enableConditionSection',
           items: {
             usecondition: {
               type: 'boolean',
               component: 'switch',
-              label: 'Use enable condition',
+              translation: 'properties.enableToggle',
               ref: 'style.useEnabledCondition',
               options: [
                 {
                   value: true,
-                  label: 'On',
+                  translation: 'properties.on',
                 },
                 {
                   value: false,
-                  label: 'Off',
+                  translation: 'properties.off',
                 },
               ],
             },
             condition: {
               ref: 'style.enabledCondition',
-              label: 'Enable condition',
+              translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
               show(data) {

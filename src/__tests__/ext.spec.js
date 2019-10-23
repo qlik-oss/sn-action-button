@@ -154,7 +154,7 @@ describe('ext', () => {
       const result = background.items.backgroundUrl.show(data);
       expect(result).to.equal(true);
     });
-    it('should return false  for backgroundSize when background is not used', () => {
+    it('should return false for backgroundSize when background is not used', () => {
       data.style.background.isUsed = false;
       const result = background.items.backgroundUrl.show(data);
       expect(result).to.equal(false);
