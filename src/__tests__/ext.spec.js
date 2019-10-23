@@ -14,13 +14,15 @@ describe('ext', () => {
     it('Should return action label', () => {
       data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.equal('Apply a bookmark');
+      expect(itemTitle).to.be.an('object');
+      expect(itemTitle.translation).to.equal('Object.ActionButton.ApplyBookmark');
     });
 
     it('Should return default action label when no act.label', () => {
       data = { actionType: 'someAction' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.equal('Action 1');
+      expect(itemTitle).to.be.an('object');
+      expect(itemTitle.translation).to.equal('Object.ActionButton.NewAction');
     });
   });
 
