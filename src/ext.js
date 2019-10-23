@@ -10,19 +10,21 @@ export default function ext(/* env */) {
       items: {
         actions: {
           type: 'items',
-          label: 'Actions',
+          translation: 'Object.ActionButton.Actions',
           items: {
             actions: {
               type: 'array',
-              label: 'Actions',
+              translation: 'Object.ActionButton.Actions',
               ref: 'actions',
-              itemTitleRef: (data, index) => {
+              itemTitleRef: data => {
                 const act = actions.find(action => data.actionType === action.value);
-                return (act && act.label) || `Action ${index + 1}`;
+                return {
+                  translation: (act && act.translation) || 'Object.ActionButton.NewAction',
+                };
               },
               allowAdd: true,
               allowRemove: true,
-              addTranslation: 'Add Item',
+              addTranslation: 'Object.ActionButton.AddAction',
               items: {
                 actionType: {
                   // TODO: searchable dropdown
@@ -82,14 +84,14 @@ export default function ext(/* env */) {
                 showSystemVariables: {
                   type: 'boolean',
                   ref: 'showSystemVariables',
-                  label: 'showSystemVariables',
+                  translation: 'ExpressionEditor.SystemVariables',
                   defaultValue: false,
                   show: data => checkShowAction(data, 'variable'),
                 },
                 softLock: {
                   type: 'boolean',
                   ref: 'softLock',
-                  label: 'Overwrite locked selections',
+                  translation: 'Object.ActionButton.Softlock',
                   defaultValue: false,
                   show: data => checkShowAction(data, 'softLock'),
                 },
@@ -98,7 +100,7 @@ export default function ext(/* env */) {
                   type: 'string',
                   ref: 'value',
                   component: 'string',
-                  label: 'Value',
+                  translation: 'properties.value',
                   show: data => checkShowAction(data, 'value'),
                 },
               },
@@ -107,12 +109,12 @@ export default function ext(/* env */) {
               component: 'expandable-items',
               items: {
                 navigation: {
-                  label: 'Navigation',
+                  translation: 'Object.ActionButton.Navigation',
                   type: 'items',
                   items: {
                     action: {
                       ref: 'navigation.action',
-                      label: 'Navigation action',
+                      translation: 'Object.ActionButton.Navigation',
                       component: 'dropdown',
                       defaultValue: null,
                       options: navigationActions,
@@ -121,13 +123,13 @@ export default function ext(/* env */) {
                       // TODO: expressions
                       type: 'string',
                       ref: 'navigation.sheet',
-                      label: 'Sheet Id',
+                      translation: 'properties.sheet',
                       show: data => checkShowNavigation(data, 'sheetId'),
                     },
                     sheet: {
                       type: 'string',
                       ref: 'navigation.sheet',
-                      label: 'Sheet',
+                      translation: 'properties.sheet',
                       component: 'dropdown',
                       show: data => checkShowNavigation(data, 'sheet'),
                       options: async (action, hyperCubeHandler) => {
@@ -141,7 +143,7 @@ export default function ext(/* env */) {
                     story: {
                       type: 'string',
                       ref: 'navigation.story',
-                      label: 'Story',
+                      translation: 'properties.story',
                       component: 'dropdown',
                       show: data => checkShowNavigation(data, 'story'),
                       options: async (action, hyperCubeHandler) => {
@@ -155,13 +157,13 @@ export default function ext(/* env */) {
                     websiteUrl: {
                       type: 'string',
                       ref: 'navigation.websiteUrl',
-                      label: 'Website Url',
+                      translation: 'properties.website',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                     },
                     sameWindow: {
                       type: 'boolean',
                       ref: 'navigation.sameWindow',
-                      label: 'Open in same window',
+                      translation: 'properties.sameWindow',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                       defaultValue: false,
                     },
@@ -173,34 +175,34 @@ export default function ext(/* env */) {
         },
         settings: {
           component: 'expandable-items',
-          translation: 'Appearance',
+          translation: 'Common.Appearance',
           items: {
             general: {
               type: 'items',
-              translation: 'General',
+              translation: 'properties.general',
               items: [
                 {
                   component: 'string',
                   ref: 'style.label',
-                  translation: 'Label',
+                  translation: 'Common.Label',
                 },
               ],
             },
             font: {
               grouped: true,
               type: 'items',
-              translation: 'Font',
+              translation: 'properties.font',
               items: [
                 {
                   component: 'integer',
                   ref: 'style.fontSize',
-                  translation: 'Font size',
+                  translation: 'properties.fontSize',
                 },
                 {
                   component: 'color-picker',
                   type: 'object',
                   ref: 'style.fontColor',
-                  translation: 'Font color',
+                  translation: 'properties.fontColor',
                   dualOutput: true,
                   show: true,
                 },
@@ -209,13 +211,13 @@ export default function ext(/* env */) {
             background: {
               grouped: true,
               type: 'items',
-              translation: 'Background',
+              translation: 'properties.background',
               items: {
                 colorPicker: {
                   component: 'color-picker',
                   type: 'object',
                   ref: 'style.backgroundColor',
-                  translation: 'Background color',
+                  translation: 'AppDetails.SheetBackgroundColor',
                   dualOutput: true,
                   show: true,
                 },

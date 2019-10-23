@@ -13,11 +13,11 @@ export const getOrderedSheets = async app => {
 
 const navigationActions = [
   {
-    label: 'None',
+    translation: 'Object.ActionButton.NoNavigation',
     value: 'none',
   },
   {
-    label: 'Go to first sheet',
+    translation: 'Object.ActionButton.GoToFirstSheet',
     value: 'firstSheet',
     navigationCall: async ({ app, senseNavigation }) => {
       const sheets = await getOrderedSheets(app);
@@ -25,21 +25,21 @@ const navigationActions = [
     },
   },
   {
-    label: 'Go to next sheet',
+    translation: 'Object.ActionButton.GoToNextSheet',
     value: 'nextSheet',
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.nextSheet();
     },
   },
   {
-    label: 'Go to previous sheet',
+    translation: 'Object.ActionButton.GoToPreviousSheet',
     value: 'prevSheet',
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.prevSheet();
     },
   },
   {
-    label: 'Go to last sheet',
+    translation: 'Object.ActionButton.GoToLastSheet',
     value: 'lastSheet',
     navigationCall: async ({ app, senseNavigation }) => {
       const sheets = await getOrderedSheets(app);
@@ -47,7 +47,7 @@ const navigationActions = [
     },
   },
   {
-    label: 'Go to a sheet',
+    translation: 'Object.ActionButton.GoToASheet',
     value: 'goToSheet',
     navigationCall: async ({ senseNavigation, sheet }) => {
       sheet && (await senseNavigation.goToSheet(sheet));
@@ -56,7 +56,7 @@ const navigationActions = [
     requiredInput: ['sheet'],
   },
   {
-    label: 'Go to a sheet (defined by sheet Id)',
+    translation: 'Object.ActionButton.GoToSheetById',
     value: 'goToSheetById',
     navigationCall: async ({ senseNavigation, sheet }) => {
       sheet && (await senseNavigation.goToSheet(sheet));
@@ -65,7 +65,7 @@ const navigationActions = [
     requiredInput: ['sheetId'],
   },
   {
-    label: 'Go to a story',
+    translation: 'Object.ActionButton.GoToStory',
     value: 'goToStory',
     navigationCall: async ({ senseNavigation, story }) => {
       story && (await senseNavigation.goToStory(story));
@@ -73,7 +73,7 @@ const navigationActions = [
     requiredInput: ['story'],
   },
   {
-    label: 'Open a website / eMail',
+    translation: 'Object.ActionButton.OpenWebsiteEmail',
     value: 'openWebsite',
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
