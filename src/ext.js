@@ -258,7 +258,6 @@ export default function ext(/* env */) {
                   translation: 'properties.backgroundImage.size',
                   type: 'string',
                   component: 'dropdown',
-                  defaultValue: 'auto',
                   options: [
                     {
                       value: 'auto',
@@ -293,7 +292,6 @@ export default function ext(/* env */) {
                   translation: 'Common.Position',
                   type: 'string',
                   component: 'align-matrix',
-                  defaultValue: 'topLeft',
                   show(data) {
                     return (
                       propertyResolver.getValue(data, 'style.background.isUsed') &&
