@@ -101,6 +101,7 @@ export default function ext(/* env */) {
                   ref: 'value',
                   component: 'string',
                   translation: 'properties.value',
+                  expression: 'optional',
                   show: data => checkShowAction(data, 'value'),
                 },
               },
@@ -173,6 +174,37 @@ export default function ext(/* env */) {
             },
           },
         },
+        enableCondition: {
+          type: 'items',
+          label: 'Enable condition',
+          items: {
+            usecondition: {
+              type: 'boolean',
+              component: 'switch',
+              label: 'Use enable condition',
+              ref: 'style.useEnabledCondition',
+              options: [
+                {
+                  value: true,
+                  label: 'On',
+                },
+                {
+                  value: false,
+                  label: 'Off',
+                },
+              ],
+            },
+            condition: {
+              ref: 'style.enabledCondition',
+              label: 'Enable condition',
+              type: 'integer',
+              expression: 'optional',
+              show(data) {
+                return data.style.useEnabledCondition === true;
+              },
+            },
+          },
+        },
         settings: {
           component: 'expandable-items',
           translation: 'Common.Appearance',
@@ -185,6 +217,7 @@ export default function ext(/* env */) {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Common.Label',
+                  expression: 'optional',
                 },
               ],
             },
@@ -194,9 +227,11 @@ export default function ext(/* env */) {
               translation: 'properties.font',
               items: [
                 {
-                  component: 'integer',
+                  component: 'string',
+                  type: 'string',
                   ref: 'style.fontSize',
                   translation: 'properties.fontSize',
+                  expression: 'optional',
                 },
                 {
                   component: 'color-picker',
@@ -256,7 +291,6 @@ export default function ext(/* env */) {
                   translation: 'properties.backgroundImage.size',
                   type: 'string',
                   component: 'dropdown',
-                  defaultValue: 'auto',
                   options: [
                     {
                       value: 'auto',
@@ -291,7 +325,6 @@ export default function ext(/* env */) {
                   translation: 'Common.Position',
                   type: 'string',
                   component: 'align-matrix',
-                  defaultValue: 'topLeft',
                   show(data) {
                     return (
                       propertyResolver.getValue(data, 'style.background.isUsed') &&
