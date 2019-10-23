@@ -33,13 +33,12 @@ export default {
   getStyles(style, Theme) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
-    const fontSize = style.fontSize && !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px';
 
     palette = themeResolver.getPalette(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
-    styles += formatProperty('font-size', fontSize);
+    styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
-    if (style && style.background && style.background.isUsed) {
+    if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       bgUrl.replace(/^\.\.\//i, '/');
       bgUrl = bgUrl.replace(/"/g, '\\"');
