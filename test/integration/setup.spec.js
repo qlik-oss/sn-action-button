@@ -7,6 +7,7 @@ before(async function run() {
   s = await serve({
     build: false,
     open: false,
+    type: 'action-button'
   });
 
   process.testServer = s;
