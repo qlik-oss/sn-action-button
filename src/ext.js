@@ -2,7 +2,7 @@ import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
 
-export default function ext(/* env */) {
+export default function ext({ translator }) {
   return {
     definition: {
       type: 'items',
@@ -18,9 +18,7 @@ export default function ext(/* env */) {
               ref: 'actions',
               itemTitleRef: data => {
                 const act = actions.find(action => data.actionType === action.value);
-                return {
-                  translation: (act && act.translation) || 'Object.ActionButton.NewAction',
-                };
+                return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
               },
               allowAdd: true,
               allowRemove: true,

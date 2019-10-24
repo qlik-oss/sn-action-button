@@ -5,7 +5,7 @@ import ext from './ext';
 import { render, teardown } from './components/root';
 
 export default function supernova(env) {
-  const { Theme, sense } = env;
+  const { Theme, sense, translator } = env;
   const senseNavigation = sense && sense.navigation;
   const button = document.createElement('button');
   let app;
@@ -35,6 +35,6 @@ export default function supernova(env) {
       },
       destroy() {},
     },
-    ext: ext(),
+    ext: ext({ translator }),
   };
 }

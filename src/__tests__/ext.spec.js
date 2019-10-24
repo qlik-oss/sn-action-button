@@ -1,8 +1,11 @@
 import ext from '../ext';
 
 describe('ext', () => {
+  const translator = {
+    get: someString => someString,
+  };
   let data;
-  const props = ext();
+  const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
   const { background } = props.definition.items.settings.items;
@@ -17,15 +20,13 @@ describe('ext', () => {
     it('Should return action label', () => {
       data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.be.an('object');
-      expect(itemTitle.translation).to.equal('Object.ActionButton.ApplyBookmark');
+      expect(itemTitle).to.equal('Object.ActionButton.ApplyBookmark');
     });
 
     it('Should return default action label when no act.label', () => {
       data = { actionType: 'someAction' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.be.an('object');
-      expect(itemTitle.translation).to.equal('Object.ActionButton.NewAction');
+      expect(itemTitle).to.equal('Object.ActionButton.NewAction');
     });
   });
 
