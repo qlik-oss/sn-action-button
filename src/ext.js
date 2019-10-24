@@ -181,13 +181,16 @@ export default function ext(/* env */) {
               component: 'switch',
               label: 'Use enable condition',
               ref: 'style.useEnabledCondition',
-              options: [{
-                value: true,
-                label: 'On'
-              }, {
-                value: false,
-                label: 'Off'
-              }]
+              options: [
+                {
+                  value: true,
+                  label: 'On',
+                },
+                {
+                  value: false,
+                  label: 'Off',
+                },
+              ],
             },
             condition: {
               ref: 'style.enabledCondition',
@@ -203,10 +206,10 @@ export default function ext(/* env */) {
         settings: {
           component: 'expandable-items',
           translation: 'Appearance',
+          uses: 'settings',
           items: {
             general: {
               type: 'items',
-              translation: 'General',
               items: [
                 {
                   component: 'string',
