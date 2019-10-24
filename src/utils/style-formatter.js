@@ -1,6 +1,7 @@
 import themeResolver from './theme-resolver';
 
 let palette;
+let primaryColor;
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -37,9 +38,10 @@ export default {
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
 
     palette = themeResolver.getPalette(Theme);
+    primaryColor = themeResolver.getDefaultColor(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
+    styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
     checkDisabled(style) && (styles += formatProperty('opacity', 0.4));
 
     if (style.background && style.background.isUsed) {
