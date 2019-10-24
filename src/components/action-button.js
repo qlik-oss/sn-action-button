@@ -10,7 +10,7 @@ export const runActions = async actionList => {
 };
 
 export default function ActionButton({ layout, button, Theme, app, context, senseNavigation }) {
-  const { style } = layout;
+  const { style, qStateName } = layout;
   const formattedStyles = styleFormatter.getStyles(style, Theme);
   button.setAttribute('style', formattedStyles);
   if (style.useEnabledCondition && style.enabledCondition === 0 && context.permissions.indexOf('interact') !== -1) {
@@ -25,7 +25,7 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
       const { actions } = layout;
       actions.forEach(action => {
         const actionObj = allActions.find(act => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, ...action }));
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action }));
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
