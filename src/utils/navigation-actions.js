@@ -23,6 +23,7 @@ const navigationActions = [
       const sheets = await getOrderedSheets(app);
       await senseNavigation.goToSheet(sheets[0].qInfo.qId);
     },
+    requiredInput: [],
   },
   {
     translation: 'Object.ActionButton.GoToNextSheet',
@@ -30,6 +31,7 @@ const navigationActions = [
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.nextSheet();
     },
+    requiredInput: [],
   },
   {
     translation: 'Object.ActionButton.GoToPreviousSheet',
@@ -37,6 +39,7 @@ const navigationActions = [
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.prevSheet();
     },
+    requiredInput: [],
   },
   {
     translation: 'Object.ActionButton.GoToLastSheet',
@@ -45,6 +48,7 @@ const navigationActions = [
       const sheets = await getOrderedSheets(app);
       await senseNavigation.goToSheet(sheets[sheets.length - 1].qInfo.qId);
     },
+    requiredInput: [],
   },
   {
     translation: 'Object.ActionButton.GoToASheet',
