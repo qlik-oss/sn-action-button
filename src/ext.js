@@ -118,7 +118,6 @@ export default function ext(/* env */) {
                       options: navigationActions,
                     },
                     sheetId: {
-                      // TODO: expressions
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet Id',
