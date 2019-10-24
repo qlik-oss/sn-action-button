@@ -45,10 +45,6 @@ describe('actions', () => {
       };
     });
 
-    // afterEach(() => {
-
-    // });
-
     it('should call applyBookmark', async () => {
       const actionObj = actions.find(action => action.value === 'applyBookmark');
       await actionObj.getActionCall({ app, bookmark })();
