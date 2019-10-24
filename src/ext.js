@@ -94,7 +94,6 @@ export default function ext(/* env */) {
                   show: data => checkShowAction(data, 'softLock'),
                 },
                 value: {
-                  // TODO: expressions
                   type: 'string',
                   ref: 'value',
                   component: 'string',
@@ -119,10 +118,10 @@ export default function ext(/* env */) {
                       options: navigationActions,
                     },
                     sheetId: {
-                      // TODO: expressions
                       type: 'string',
                       ref: 'navigation.sheet',
                       label: 'Sheet Id',
+                      expression: 'optional',
                       show: data => checkShowNavigation(data, 'sheetId'),
                     },
                     sheet: {
