@@ -94,7 +94,6 @@ export default function ext(/* env */) {
                   show: data => checkShowAction(data, 'softLock'),
                 },
                 value: {
-                  // TODO: expressions
                   type: 'string',
                   ref: 'value',
                   component: 'string',
@@ -130,6 +129,7 @@ export default function ext(/* env */) {
                       ref: 'navigation.sheet',
                       label: 'Sheet',
                       component: 'dropdown',
+                      expression: 'optional',
                       show: data => checkShowNavigation(data, 'sheet'),
                       options: async (action, hyperCubeHandler) => {
                         const sheets = await hyperCubeHandler.app.getSheetList();
