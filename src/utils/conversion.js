@@ -1,4 +1,4 @@
-function convertAction(action, newProperties) {
+export function convertAction(action, newProperties) {
   const newAction = {
     actionType: action.actionType,
     bookmark: action.selectedBookmark,
@@ -22,7 +22,7 @@ function convertAction(action, newProperties) {
       newAction.actionType = 'selectValues';
       break;
     case 'selectAndLockField':
-      newProperties.actions.push({ ...newAction, cId: 'test', actionType: 'selectValues' });
+      newProperties.actions.push({ ...newAction, cId: `${newAction.cId}1`, actionType: 'selectValues' });
       newAction.actionType = 'lockField';
       break;
     default:
@@ -31,7 +31,7 @@ function convertAction(action, newProperties) {
   return newProperties.actions.push(newAction);
 }
 
-function convertNavigation(oldType) {
+export function convertNavigation(oldType) {
   switch (oldType) {
     case 'gotoSheet':
       return 'goToSheet';
