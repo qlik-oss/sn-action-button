@@ -1,6 +1,7 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
+import importProperties from './utils/conversion';
 
 export default function ext(/* env */) {
   return {
@@ -339,6 +340,7 @@ export default function ext(/* env */) {
         },
       },
     },
+    importProperties,
     support: {
       export: !1,
       exportData: !1,
