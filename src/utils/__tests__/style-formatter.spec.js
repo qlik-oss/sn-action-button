@@ -55,8 +55,6 @@ describe('style-formatter', () => {
       style = {
         background: {
           isUsed: true,
-          size: 'auto',
-          position: 'topLeft',
           url: {
             qStaticContentUrl: {
               qUrl: someUrl,

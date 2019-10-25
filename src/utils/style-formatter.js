@@ -48,10 +48,10 @@ export default {
       bgUrl = bgUrl.replace(/"/g, '\\"');
       bgUrl = bgUrl.replace(/'/g, "\\'");
       styles += formatProperty('background-image', `url('${bgUrl}')`);
-      styles += formatProperty('background-size', backgroundSize[style.background.size]);
+      styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
       styles += formatProperty(
         'background-position',
-        backgroundPosition[style.background.position]
+        backgroundPosition[style.background.position] || backgroundPosition.topLeft
       );
       styles += formatProperty('background-repeat', 'no-repeat');
     }
