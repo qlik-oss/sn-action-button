@@ -30,10 +30,8 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
-const checkDisabled = (style) => style.useEnabledCondition && style.enabledCondition === 0;
-
 export default {
-  getStyles(style, Theme) {
+  getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
 
@@ -42,7 +40,7 @@ export default {
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
-    checkDisabled(style) && (styles += formatProperty('opacity', 0.4));
+    disabled && (styles += formatProperty('opacity', 0.4));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
@@ -50,10 +48,10 @@ export default {
       bgUrl = bgUrl.replace(/"/g, '\\"');
       bgUrl = bgUrl.replace(/'/g, "\\'");
       styles += formatProperty('background-image', `url('${bgUrl}')`);
-      styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
+      styles += formatProperty('background-size', backgroundSize[style.background.size]);
       styles += formatProperty(
         'background-position',
-        backgroundPosition[style.background.position] || backgroundPosition.topLeft
+        backgroundPosition[style.background.position]
       );
       styles += formatProperty('background-repeat', 'no-repeat');
     }
