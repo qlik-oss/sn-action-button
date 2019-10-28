@@ -179,7 +179,7 @@ export default function ext(/* env */) {
               type: 'boolean',
               component: 'switch',
               label: 'Use enable condition',
-              ref: 'style.useEnabledCondition',
+              ref: 'useEnabledCondition',
               options: [
                 {
                   value: true,
@@ -192,12 +192,12 @@ export default function ext(/* env */) {
               ],
             },
             condition: {
-              ref: 'style.enabledCondition',
+              ref: 'enabledCondition',
               label: 'Enable condition',
               type: 'integer',
               expression: 'optional',
               show(data) {
-                return data.style.useEnabledCondition === true;
+                return data.useEnabledCondition === true;
               },
             },
           },

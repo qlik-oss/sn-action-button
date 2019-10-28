@@ -16,6 +16,14 @@ const properties = {
    */
   footnote: '',
   /**
+   * @type {boolean}
+   */
+  useEnabledCondition: false,
+  /**
+   * @type {number}
+   */
+  enabledCondition: 1,
+  /**
    * @typedef {object}
    */
   navigation: {
@@ -26,14 +34,6 @@ const properties = {
      * @type {string}
      */
     label: '',
-    /**
-      * @type {boolean}
-      */
-    useEnabledCondition: false,
-    /**
-     * @type {number}
-     */
-    enabledCondition: 1,
   },
   /**
    * @type {array}
