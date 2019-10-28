@@ -46,16 +46,14 @@ export function convertNavigation(oldType) {
 
 const importProperties = (exportedFmt, initialProperties) => {
   const newPropertyTree = { qChildren: [] };
-  // Adding props to avoid errors from old navigation button. Converting to any other chart will still give these errors
   const newProperties = {
     actions: [],
+    // Adding props to avoid errors from old navigation button. Converting to any other chart will still give these errors
     props: { useEnabledCondition: null, fullWidth: 'auto' },
+    qLayoutExclude: { disabled: {} },
     ...initialProperties,
   };
-  if (!newProperties.qLayoutExclude) {
-    newProperties.qLayoutExclude = {};
-  }
-  newProperties.qLayoutExclude.disabled = {};
+
   if (exportedFmt && exportedFmt.properties.visualization === 'qlik-button-for-navigation') {
     Object.keys(exportedFmt.properties).forEach(key => {
       let props;
@@ -72,9 +70,10 @@ const importProperties = (exportedFmt, initialProperties) => {
           };
           newProperties.useEnabledCondition = props.useEnabledCondition;
           newProperties.enabledCondition = props.enabledCondition;
-          props.actionItems.forEach(actionItem => {
-            convertAction(actionItem, newProperties);
-          });
+          props.actionItems &&
+            props.actionItems.forEach(actionItem => {
+              convertAction(actionItem, newProperties);
+            });
           newProperties.navigation = {
             action: convertNavigation(props.navigationAction),
             // Need to convert sheet from expression

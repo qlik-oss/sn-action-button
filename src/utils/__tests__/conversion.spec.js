@@ -1,4 +1,4 @@
-import { convertNavigation, convertAction } from '../conversion';
+import importProperties, { convertNavigation, convertAction } from '../conversion';
 
 describe('conversion', () => {
   describe('convertNavigation', () => {
@@ -104,6 +104,106 @@ describe('conversion', () => {
       expect(newProperties.actions[1].value).to.equal(action.value);
       expect(newProperties.actions[1].softLock).to.equal(action.softLock);
       expect(newProperties.actions[1].cId).to.equal(action.cId);
+    });
+  });
+
+  describe('importProperties', () => {
+    let exportedFmt;
+    let initialProperties;
+    beforeEach(() => {
+      exportedFmt = { properties: { visualization: 'qlik-button-for-navigation' } };
+      initialProperties = {
+        showTitle: false,
+        title: '',
+        subtitle: '',
+        footnote: '',
+        navigation: { action: 'none' },
+        style: { label: '', useEnabledCondition: false, enabledCondition: 1 },
+        action: [],
+      };
+    });
+    it('should return default newPropertyTree', () => {
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result).to.be.an('object');
+      expect(result.qChildren).to.be.an('array').that.is.empty;
+      expect(result.qProperty.actions).to.be.an('array').that.is.empty;
+      expect(result.qProperty.props.useEnabledCondition).to.equal(null);
+      expect(result.qProperty.props.fullWidth).to.equal('auto');
+      expect(result.qProperty.showTitle).to.equal(false);
+      expect(result.qProperty.title).to.equal('');
+      expect(result.qProperty.footnote).to.equal('');
+      expect(result.qProperty.navigation.action).to.equal('none');
+      expect(result.qProperty.qLayoutExclude.disabled.visualization).to.equal('qlik-button-for-navigation');
+    });
+
+    it('should not convert qLayoutExclude', () => {
+      exportedFmt.properties.qLayoutExclude = { someProperty: 'withAValue' };
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.qLayoutExclude.disabled).to.not.have.any.keys('someProperty');
+    });
+
+    it('should convert props from exported properties and overwrite initalprops', () => {
+      exportedFmt.properties.props = {
+        buttonLabel: 'myButton',
+        buttonShowIcon: false,
+        buttonIconLui: 'thisIcon',
+        buttonTextAlign: 'left',
+        navigationAction: 'thisNavigationAction',
+        selectedSheet: 'thisSheet',
+        selectedStory: 'thisStory',
+        websiteUrl: 'thisUrl',
+        sameWindow: false,
+        actionItems: [
+          {
+            actionType: 'someAction',
+          },
+          {
+            actionType: 'someAction2',
+          },
+        ],
+      };
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.actions).to.have.length(2);
+      expect(result.qProperty.style).to.deep.equal({
+        label: 'myButton',
+        showIcon: false,
+        icon: 'thisIcon',
+        textAlign: 'left',
+      });
+      expect(result.qProperty.navigation).to.deep.equal({
+        action: 'thisNavigationAction',
+        sameWindow: false,
+        sheet: 'thisSheet',
+        story: 'thisStory',
+        websiteUrl: 'thisUrl',
+      });
+    });
+
+    it('should pick sheet based on navigation action gotoSheetId', () => {
+      exportedFmt.properties.props = {
+        navigationAction: 'gotoSheetById',
+        selectedSheet: 'notThisSheet',
+        sheetId: 'thisId',
+      };
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.navigation.sheet).to.equal('thisId');
+    });
+
+    it('should convert qStateName', () => {
+      exportedFmt.properties.qStateName = 'thisState';
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.qStateName).to.equal('thisState');
+    });
+
+    it('should exclude unknown key', () => {
+      exportedFmt.properties.excludeKey = 'excludeThisValue';
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.qLayoutExclude.disabled.excludeKey).to.equal('excludeThisValue');
+    });
+
+    it('no exportedFmt', () => {
+      const result = importProperties(undefined, initialProperties);
+      expect(result).to.include.all.keys('qChildren', 'qProperty');
     });
   });
 });
