@@ -10,7 +10,7 @@ describe('style-formatter', () => {
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
-    let disabled = false;
+    const disabled = false;
 
     it('should return default styling', () => {
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
@@ -102,13 +102,11 @@ describe('style-formatter', () => {
     });
 
     it('should have set opacity for disabled button', () => {
-      disabled = true;
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, true, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
     });
 
     it('should not have set opacity for enabled button', () => {
-      disabled = false;
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
     });
