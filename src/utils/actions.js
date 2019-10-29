@@ -27,9 +27,9 @@ const actions = [
     value: 'clearAllButThis',
     translation: 'Object.ActionButton.ClearAllButThis',
     group: 'selection',
-    getActionCall: ({ app, field, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, softLock }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.clearAllButThis(softLock);
       }
     },
@@ -57,9 +57,9 @@ const actions = [
     value: 'clearField',
     translation: 'Object.ActionButton.ClearSelectionInField',
     group: 'selection',
-    getActionCall: ({ app, field }) => async () => {
+    getActionCall: ({ app, qStateName, field }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.clear();
       }
     },
@@ -78,9 +78,9 @@ const actions = [
     value: 'lockField',
     translation: 'Object.ActionButton.LockField',
     group: 'selection',
-    getActionCall: ({ app, field }) => async () => {
+    getActionCall: ({ app, qStateName, field }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.lock();
       }
     },
@@ -99,9 +99,9 @@ const actions = [
     value: 'unlockField',
     translation: 'Object.ActionButton.UnlockAField',
     group: 'selection',
-    getActionCall: ({ app, field }) => async () => {
+    getActionCall: ({ app, qStateName, field }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.unlock();
       }
     },
@@ -111,9 +111,9 @@ const actions = [
     value: 'selectAll',
     translation: 'Object.ActionButton.SelectAllInField',
     group: 'selection',
-    getActionCall: ({ app, field, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, softLock }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.selectAll(softLock);
       }
     },
@@ -123,9 +123,9 @@ const actions = [
     value: 'selectValues',
     translation: 'Object.ActionButton.SelectValuesInField',
     group: 'selection',
-    getActionCall: ({ app, field, value, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
       if (field && value) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         const valueList = getValueList(value);
         await fieldObj.selectValues(valueList, false, softLock);
       }
@@ -136,9 +136,9 @@ const actions = [
     value: 'selectAlternative',
     translation: 'Object.ActionButton.SelectAlternatives',
     group: 'selection',
-    getActionCall: ({ app, field, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, softLock }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.selectAlternative(softLock);
       }
     },
@@ -148,9 +148,9 @@ const actions = [
     value: 'selectExcluded',
     translation: 'Object.ActionButton.SelectExcluded',
     group: 'selection',
-    getActionCall: ({ app, field, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, softLock }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.selectExcluded(softLock);
       }
     },
@@ -160,9 +160,9 @@ const actions = [
     value: 'selectPossible',
     translation: 'Object.ActionButton.SelectPossibleValues',
     group: 'selection',
-    getActionCall: ({ app, field, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, softLock }) => async () => {
       if (field) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.selectPossible(softLock);
       }
     },
@@ -172,9 +172,9 @@ const actions = [
     value: 'toggleSelect',
     translation: 'Object.ActionButton.ToggleFieldSelection',
     group: 'selection',
-    getActionCall: ({ app, field, value, softLock }) => async () => {
+    getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
       if (field && value) {
-        const fieldObj = await app.getField(field);
+        const fieldObj = await app.getField(field, qStateName);
         await fieldObj.toggleSelect(value, softLock);
       }
     },

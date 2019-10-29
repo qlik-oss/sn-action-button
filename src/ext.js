@@ -94,7 +94,6 @@ export default function ext({ translator }) {
                   show: data => checkShowAction(data, 'softLock'),
                 },
                 value: {
-                  // TODO: expressions
                   type: 'string',
                   ref: 'value',
                   component: 'string',
@@ -119,10 +118,10 @@ export default function ext({ translator }) {
                       options: navigationActions,
                     },
                     sheetId: {
-                      // TODO: expressions
                       type: 'string',
                       ref: 'navigation.sheet',
                       translation: 'properties.sheet',
+                      expression: 'optional',
                       show: data => checkShowNavigation(data, 'sheetId'),
                     },
                     sheet: {
@@ -180,7 +179,7 @@ export default function ext({ translator }) {
               type: 'boolean',
               component: 'switch',
               translation: 'properties.enableToggle',
-              ref: 'style.useEnabledCondition',
+              ref: 'useEnabledCondition',
               options: [
                 {
                   value: true,
@@ -193,12 +192,12 @@ export default function ext({ translator }) {
               ],
             },
             condition: {
-              ref: 'style.enabledCondition',
+              ref: 'enabledCondition',
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
               show(data) {
-                return data.style.useEnabledCondition === true;
+                return data.useEnabledCondition === true;
               },
             },
           },
@@ -206,6 +205,7 @@ export default function ext({ translator }) {
         settings: {
           component: 'expandable-items',
           translation: 'Common.Appearance',
+          uses: 'settings',
           items: {
             general: {
               type: 'items',

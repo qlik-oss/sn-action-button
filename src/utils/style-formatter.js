@@ -1,6 +1,7 @@
 import themeResolver from './theme-resolver';
 
 let palette;
+let primaryColor;
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -29,18 +30,17 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
-const checkDisabled = (style) => style.useEnabledCondition && style.enabledCondition === 0;
-
 export default {
-  getStyles(style, Theme) {
+  getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
 
     palette = themeResolver.getPalette(Theme);
+    primaryColor = themeResolver.getDefaultColor(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty('background-color', style.backgroundColor, '#3F8AB3');
-    checkDisabled(style) && (styles += formatProperty('opacity', 0.4));
+    styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
+    disabled && (styles += formatProperty('opacity', 0.4));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;

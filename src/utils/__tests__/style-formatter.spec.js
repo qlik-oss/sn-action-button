@@ -5,20 +5,21 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style = {};
     const defaultStyle =
-      'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #3F8AB3;';
+      'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;color: #ffffff;font-size: 12px;background-color: #4477aa;';
     const someColor = '#ffff00';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
+    const disabled = false;
 
     it('should return default styling', () => {
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle).to.equal(defaultStyle);
     });
 
     it('should return specified background color', () => {
       style = { backgroundColor: someColor };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
@@ -28,25 +29,25 @@ describe('style-formatter', () => {
           index: 0,
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
-      expect(formattedStyle.includes('background-color: #3F8AB3')).to.be.true;
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
     });
 
     it('should return specified font color', () => {
       style = { fontColor: someColor };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
     });
 
     it('should return specified font size', () => {
       style = { fontSize: someSize };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
     });
 
     it('should return default font size for incorrect value', () => {
       style = { fontSize: 'someSize' };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('font-size: 12px')).to.be.true;
     });
 
@@ -61,7 +62,7 @@ describe('style-formatter', () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
       expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
@@ -80,7 +81,7 @@ describe('style-formatter', () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('background-size: 100% 100%')).to.be.true;
     });
 
@@ -96,25 +97,17 @@ describe('style-formatter', () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
     });
 
     it('should have set opacity for disabled button', () => {
-      style = {
-        useEnabledCondition: true,
-        enabledCondition: 0
-      };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, true, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
     });
 
     it('should not have set opacity for enabled button', () => {
-      style = {
-        useEnabledCondition: true,
-        enabledCondition: 1
-      };
-      const formattedStyle = styleFormatter.getStyles(style, Theme);
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
     });
   });
