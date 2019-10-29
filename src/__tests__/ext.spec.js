@@ -148,8 +148,8 @@ describe('ext', () => {
               },
             },
           },
-          useEnabledCondition: true,
         },
+        useEnabledCondition: true,
       };
     });
 
@@ -244,7 +244,7 @@ describe('ext', () => {
     });
 
     it('should return false when enableCondition should not show', () => {
-      data.style.useEnabledCondition = false;
+      data.useEnabledCondition = false;
       const result = props.definition.items.enableCondition.items.condition.show(data);
       expect(result).to.equal(false);
     });
