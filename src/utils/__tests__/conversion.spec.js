@@ -60,7 +60,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].cId).to.equal(action.cId);
     });
 
-    it('should convert clearOther', () => {
+    it('should convert unlockAllAndClearAll', () => {
       action.actionType = 'unlockAllAndClearAll';
       convertAction(action, newProperties);
       expect(newProperties.actions).to.have.length(1);
@@ -73,7 +73,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].cId).to.equal(action.cId);
     });
 
-    it('should convert clearOther', () => {
+    it('should convert selectField', () => {
       action.actionType = 'selectField';
       convertAction(action, newProperties);
       expect(newProperties.actions).to.have.length(1);
@@ -86,7 +86,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].cId).to.equal(action.cId);
     });
 
-    it('should convert clearOther', () => {
+    it('should convert selectAndLockField', () => {
       action.actionType = 'selectAndLockField';
       convertAction(action, newProperties);
       expect(newProperties.actions).to.have.length(2);
@@ -96,7 +96,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].variable).to.equal(action.variable);
       expect(newProperties.actions[0].value).to.equal(action.value);
       expect(newProperties.actions[0].softLock).to.equal(action.softLock);
-      expect(newProperties.actions[0].cId).to.equal('cId1');
+      expect(newProperties.actions[0].cId).to.equal(null);
       expect(newProperties.actions[1].actionType).to.equal('lockField');
       expect(newProperties.actions[1].bookmark).to.equal(action.selectedBookmark);
       expect(newProperties.actions[1].field).to.equal(action.selectedField);

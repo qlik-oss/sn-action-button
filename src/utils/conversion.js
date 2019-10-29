@@ -22,7 +22,7 @@ export function convertAction(action, newProperties) {
       newAction.actionType = 'selectValues';
       break;
     case 'selectAndLockField':
-      newProperties.actions.push({ ...newAction, cId: `${newAction.cId}1`, actionType: 'selectValues' });
+      newProperties.actions.push({ ...newAction, cId: null, actionType: 'selectValues' });
       newAction.actionType = 'lockField';
       break;
     default:
