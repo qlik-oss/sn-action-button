@@ -238,6 +238,59 @@ export default function ext(/* env */) {
                   dualOutput: true,
                   show: true,
                 },
+                {
+                  component: 'item-selection-list',
+                  type: 'string',
+                  ref: 'style.textStyle',
+                  translation: 'Text Style',
+                  horizontal: true,
+                  multipleSelect: true,
+                  items: [
+                    {
+                      component: 'icon-item',
+                      icon: 'bold',
+                      value: 'bold',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'italic',
+                      value: 'italic',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'underline',
+                      value: 'underline',
+                    },
+                  ],
+                  defaultValue: {
+                    bold: true,
+                  },
+                },
+                {
+                  component: 'item-selection-list',
+                  type: 'string',
+                  ref: 'style.textAlign',
+                  translation: 'properties.Alignment',
+                  horizontal: true,
+                  items: [
+                    {
+                      component: 'icon-item',
+                      icon: 'align_left',
+                      value: 'left',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'align_center',
+                      value: 'center',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'align_right',
+                      value: 'right',
+                    },
+                  ],
+                  defaultValue: 'center',
+                },
               ],
             },
             background: {
@@ -344,6 +397,11 @@ export default function ext(/* env */) {
       exportData: !1,
       snapshot: !1,
       viewData: !1,
+    },
+    randomFunction: {
+      keyboardNavigation: $element => {
+        $element.find('button')[0].onclick();
+      },
     },
   };
 }

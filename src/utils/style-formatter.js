@@ -33,12 +33,16 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
+    let styles = 'width: 100%;height: 100%;cursor:pointer;border:none;';
 
     palette = themeResolver.getPalette(Theme);
     primaryColor = themeResolver.getDefaultColor(Theme);
     styles += formatColorProperty('color', style.fontColor, '#ffffff');
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
+    styles += formatProperty('text-align', style.textAlign || 'center');
+    style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+    style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
+    style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
     styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
     disabled && (styles += formatProperty('opacity', 0.4));
 
