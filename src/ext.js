@@ -398,10 +398,5 @@ export default function ext(/* env */) {
       snapshot: !1,
       viewData: !1,
     },
-    randomFunction: {
-      keyboardNavigation: $element => {
-        $element.find('button')[0].onclick();
-      },
-    },
   };
 }
