@@ -1,4 +1,4 @@
-import themeResolver from './theme-resolver';
+import colorResolver from './color-resolver';
 
 let palette;
 let primaryColor;
@@ -25,19 +25,22 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (path, inputColor, defaultColor) => {
-  const color = themeResolver.resolveColor(inputColor, palette);
+const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
+  const color = isExpression
+    ? colorResolver.resolveExpression(inputColor)
+    : colorResolver.resolveColor(inputColor, palette);
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor: pointer;border: none;';
+    const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
 
-    palette = themeResolver.getPalette(Theme);
-    primaryColor = themeResolver.getDefaultColor(Theme);
-    styles += formatColorProperty('color', style.fontColor, '#ffffff');
+    palette = colorResolver.getPalette(Theme);
+    primaryColor = colorResolver.getDefaultColor(Theme);
+    styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
     disabled && (styles += formatProperty('opacity', 0.4));

@@ -232,12 +232,46 @@ export default function ext({ translator }) {
                   expression: 'optional',
                 },
                 {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.fontColor',
-                  translation: 'properties.fontColor',
-                  dualOutput: true,
-                  show: true,
+                  type: 'items',
+                  items: {
+                    useFontColorExporesison: {
+                      ref: 'style.useFontColorExpression',
+                      type: 'boolean',
+                      translation: 'Font color expression',
+                      component: 'switch',
+                      defaultValue: false,
+                      options: [
+                        {
+                          value: true,
+                          translation: 'On',
+                        },
+                        {
+                          value: false,
+                          translation: 'Off',
+                        },
+                      ],
+                    },
+                    fontColorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.fontColorExpression',
+                      translation: 'Expression',
+                      expression: 'optional',
+                      show(data) {
+                        return data.style.useFontColorExpression;
+                      },
+                    },
+                    fontColorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.fontColor',
+                      translation: 'Font color',
+                      dualOutput: true,
+                      show(data) {
+                        return !data.style.useFontColorExpression;
+                      },
+                    },
+                  },
                 },
               ],
             },
