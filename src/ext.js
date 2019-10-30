@@ -196,9 +196,7 @@ export default function ext({ translator }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              show(data) {
-                return data.useEnabledCondition === true;
-              },
+              show: data => data.useEnabledCondition,
             },
           },
         },
@@ -223,15 +221,15 @@ export default function ext({ translator }) {
               grouped: true,
               type: 'items',
               translation: 'properties.font',
-              items: [
-                {
+              items: {
+                fontSize: {
                   component: 'string',
                   type: 'string',
                   ref: 'style.fontSize',
                   translation: 'properties.fontSize',
                   expression: 'optional',
                 },
-                {
+                fontColor: {
                   type: 'items',
                   items: {
                     useFontColorExpression: {
@@ -251,29 +249,25 @@ export default function ext({ translator }) {
                         },
                       ],
                     },
-                    fontColorExpression: {
+                    colorExpression: {
                       component: 'string',
                       type: 'string',
                       ref: 'style.fontColorExpression',
                       translation: 'Expression',
                       expression: 'optional',
-                      show(data) {
-                        return data.style.useFontColorExpression;
-                      },
+                      show: data => data.style.useFontColorExpression,
                     },
-                    fontColorPicker: {
+                    colorPicker: {
                       component: 'color-picker',
                       type: 'object',
                       ref: 'style.fontColor',
                       translation: 'Font color',
                       dualOutput: true,
-                      show(data) {
-                        return !data.style.useFontColorExpression;
-                      },
+                      show: data => !data.style.useFontColorExpression,
                     },
                   },
                 },
-              ],
+              },
             },
             background: {
               grouped: true,
@@ -283,7 +277,7 @@ export default function ext({ translator }) {
                 backgroundColor: {
                   type: 'items',
                   items: {
-                    useBackgroundColorExpression: {
+                    useColorExpression: {
                       ref: 'style.useBackgroundColorExpression',
                       type: 'boolean',
                       translation: 'Use color expression',
@@ -300,7 +294,7 @@ export default function ext({ translator }) {
                         },
                       ],
                     },
-                    backgroundColorExpression: {
+                    colorExpression: {
                       component: 'string',
                       type: 'string',
                       ref: 'style.backgroundColorExpression',
@@ -310,7 +304,7 @@ export default function ext({ translator }) {
                         return data.style.useBackgroundColorExpression;
                       },
                     },
-                    backgroundColorPicker: {
+                    colorPicker: {
                       component: 'color-picker',
                       type: 'object',
                       ref: 'style.backgroundColor',

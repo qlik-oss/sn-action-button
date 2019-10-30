@@ -23,7 +23,8 @@ const colorUtils = {
     // css color
     const color = CSSColors[input.toLowerCase()];
     if (color) {
-      return `rgba(${color.r},${color.g},${color.b},${color.a || 1})`;
+      const a = color.a !== undefined ? color.a : 1;
+      return `rgba(${color.r},${color.g},${color.b},${a})`;
     }
     // invalid
     return 'none';
