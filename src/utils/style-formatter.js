@@ -37,12 +37,20 @@ export default {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;cursor: pointer;border: none;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
+    const backgroundColor = style.useBackgroundColorExpression
+      ? style.backgroundColorExpression
+      : style.backgroundColor;
 
     palette = colorResolver.getPalette(Theme);
     primaryColor = colorResolver.getDefaultColor(Theme);
     styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
+    styles += formatColorProperty(
+      'background-color',
+      backgroundColor,
+      primaryColor,
+      style.useBackgroundColorExpression
+    );
     disabled && (styles += formatProperty('opacity', 0.4));
 
     if (style.background && style.background.isUsed) {

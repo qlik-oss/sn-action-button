@@ -234,10 +234,10 @@ export default function ext({ translator }) {
                 {
                   type: 'items',
                   items: {
-                    useFontColorExporesison: {
+                    useFontColorExpression: {
                       ref: 'style.useFontColorExpression',
                       type: 'boolean',
-                      translation: 'Font color expression',
+                      translation: 'Use color expression',
                       component: 'switch',
                       defaultValue: false,
                       options: [
@@ -280,13 +280,47 @@ export default function ext({ translator }) {
               type: 'items',
               translation: 'properties.background',
               items: {
-                colorPicker: {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.backgroundColor',
-                  translation: 'AppDetails.SheetBackgroundColor',
-                  dualOutput: true,
-                  show: true,
+                backgroundColor: {
+                  type: 'items',
+                  items: {
+                    useBackgroundColorExpression: {
+                      ref: 'style.useBackgroundColorExpression',
+                      type: 'boolean',
+                      translation: 'Use color expression',
+                      component: 'switch',
+                      defaultValue: false,
+                      options: [
+                        {
+                          value: true,
+                          translation: 'On',
+                        },
+                        {
+                          value: false,
+                          translation: 'Off',
+                        },
+                      ],
+                    },
+                    backgroundColorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.backgroundColorExpression',
+                      translation: 'Expression',
+                      expression: 'optional',
+                      show(data) {
+                        return data.style.useBackgroundColorExpression;
+                      },
+                    },
+                    backgroundColorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.backgroundColor',
+                      translation: 'Font color',
+                      dualOutput: true,
+                      show(data) {
+                        return !data.style.useBackgroundColorExpression;
+                      },
+                    },
+                  },
                 },
                 useBackgroundImage: {
                   ref: 'style.background.isUsed',
