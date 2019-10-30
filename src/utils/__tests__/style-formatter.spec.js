@@ -7,6 +7,7 @@ describe('style-formatter', () => {
     const defaultStyle =
       'width: 100%;height: 100%;font-weight: bold;cursor: pointer;border: none;color: #ffffff;font-size: 12px;background-color: #4477aa;';
     const someColor = '#ffff00';
+    const someColorExpression = 'rgb(255,255,0)';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
@@ -21,6 +22,15 @@ describe('style-formatter', () => {
       style = { backgroundColor: someColor };
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
+    });
+
+    it('should return specified background color from expression', () => {
+      style = {
+        backgroundColorExpression: someColorExpression,
+        useBackgroundColorExpression: true,
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).to.be.true;
     });
 
     it('should return default background color when color is none', () => {

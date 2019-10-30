@@ -1,4 +1,4 @@
-import colorResolver from './color-resolver';
+import colorUtils from './color-utils';
 
 let palette;
 let primaryColor;
@@ -27,8 +27,8 @@ const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
   const color = isExpression
-    ? colorResolver.resolveExpression(inputColor)
-    : colorResolver.resolveColor(inputColor, palette);
+    ? colorUtils.resolveExpression(inputColor)
+    : colorUtils.resolveColor(inputColor, palette);
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
@@ -41,8 +41,8 @@ export default {
       ? style.backgroundColorExpression
       : style.backgroundColor;
 
-    palette = colorResolver.getPalette(Theme);
-    primaryColor = colorResolver.getDefaultColor(Theme);
+    palette = colorUtils.getPalette(Theme);
+    primaryColor = colorUtils.getDefaultColor(Theme);
     styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty(

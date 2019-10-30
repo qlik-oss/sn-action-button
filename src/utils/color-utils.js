@@ -2,7 +2,7 @@
 import CSSColors from './css-colors';
 
 // Resolve color from a palette. We should open Theme API from sense so we can use same functionality
-const colorResolver = {
+const colorUtils = {
   resolveExpression: input => {
     // rgb
     let matches = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i.exec(input);
@@ -58,4 +58,4 @@ const colorResolver = {
   },
 };
 
-export default colorResolver;
+export default colorUtils;
