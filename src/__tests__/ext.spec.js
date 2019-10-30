@@ -252,7 +252,6 @@ describe('ext', () => {
     });
 
     it('should return false for expression and true for picker when useFontColorExpression is false', () => {
-      console.log(data.style.useFontColorExpression);
       const resultExpression = font.items.fontColor.items.colorExpression.show(data);
       const resultPicker = font.items.fontColor.items.colorPicker.show(data);
       expect(resultExpression).to.equal(false);

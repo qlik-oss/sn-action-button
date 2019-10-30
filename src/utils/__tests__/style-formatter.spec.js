@@ -49,6 +49,15 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
     });
 
+    it('should return specified font color from expression', () => {
+      style = {
+        fontColorExpression: someColorExpression,
+        useFontColorExpression: true,
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes(`color: ${someColorExpression}`)).to.be.true;
+    });
+
     it('should return specified font size', () => {
       style = { fontSize: someSize };
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
