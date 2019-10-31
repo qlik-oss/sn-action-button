@@ -133,7 +133,6 @@ describe('conversion', () => {
       expect(result.qProperty.title).to.equal('');
       expect(result.qProperty.footnote).to.equal('');
       expect(result.qProperty.navigation.action).to.equal('none');
-      expect(result.qProperty.qLayoutExclude.disabled.visualization).to.equal('qlik-button-for-navigation');
     });
 
     it('should not convert qLayoutExclude', () => {
@@ -193,12 +192,6 @@ describe('conversion', () => {
       exportedFmt.properties.qStateName = 'thisState';
       const result = importProperties(exportedFmt, initialProperties);
       expect(result.qProperty.qStateName).to.equal('thisState');
-    });
-
-    it('should exclude unknown key', () => {
-      exportedFmt.properties.excludeKey = 'excludeThisValue';
-      const result = importProperties(exportedFmt, initialProperties);
-      expect(result.qProperty.qLayoutExclude.disabled.excludeKey).to.equal('excludeThisValue');
     });
 
     it('no exportedFmt', () => {

@@ -87,7 +87,6 @@ const importProperties = (exportedFmt, initialProperties) => {
           newProperties[key] = exportedFmt.properties[key];
           break;
         default:
-          newProperties.qLayoutExclude.disabled[key] = exportedFmt.properties[key];
           break;
       }
     });
