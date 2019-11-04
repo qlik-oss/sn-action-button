@@ -106,6 +106,11 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
     });
 
+    it('should not have set cursor for disabled button', () => {
+      const formattedStyle = styleFormatter.getStyles(style, true, Theme);
+      expect(formattedStyle.includes('cursor: pointer')).to.be.false;
+    });
+
     it('should not have set opacity for enabled button', () => {
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
