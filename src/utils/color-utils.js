@@ -21,7 +21,7 @@ const colorUtils = {
       return input;
     }
     // css color
-    const color = CSSColors[input.toLowerCase()];
+    const color = input && CSSColors[input.toLowerCase()];
     if (color) {
       const a = color.a !== undefined ? color.a : 1;
       return `rgba(${color.r},${color.g},${color.b},${a})`;
