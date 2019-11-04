@@ -24,16 +24,28 @@ const properties = {
    */
   enabledCondition: 1,
   /**
-   * @typedef {object}
+   * @type {object}
    */
   navigation: {
     action: 'none',
   },
+  /**
+   * @type {object}
+   */
   style: {
     /**
      * @type {string}
      */
     label: '',
+    /**
+     * @type {object}
+     */
+    border: {
+      borderColor: {
+        index: -1,
+        color: null,
+      },
+    },
   },
   /**
    * @type {array}

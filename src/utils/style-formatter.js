@@ -33,7 +33,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;';
 
     palette = themeResolver.getPalette(Theme);
     primaryColor = themeResolver.getDefaultColor(Theme);
@@ -54,6 +54,12 @@ export default {
         backgroundPosition[style.background.position] || backgroundPosition.topLeft
       );
       styles += formatProperty('background-repeat', 'no-repeat');
+    }
+    if (style.border && style.border.isUsed) {
+      styles += `border: ${style.border.width}px solid ${themeResolver.resolveColor(style.border.color, palette)};`;
+      styles += style.border.radius ? `border-radius: ${style.border.radius}px` : undefined;
+    } else {
+      styles += 'border: none;';
     }
 
     return styles;
