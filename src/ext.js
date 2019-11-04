@@ -341,6 +341,7 @@ export default function ext(/* env */) {
       },
     },
     importProperties,
+    exportProperties: null,
     support: {
       export: !1,
       exportData: !1,
