@@ -33,7 +33,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;border:none;';
 
     palette = themeResolver.getPalette(Theme);
     primaryColor = themeResolver.getDefaultColor(Theme);
@@ -41,6 +41,7 @@ export default {
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
     disabled && (styles += formatProperty('opacity', 0.4));
+    !disabled && (styles += formatProperty('cursor', 'pointer'));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;

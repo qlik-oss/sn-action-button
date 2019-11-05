@@ -5,7 +5,7 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style = {};
     const defaultStyle =
-      'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;color: #ffffff;font-size: 12px;background-color: #4477aa;';
+      'width: 100%;height: 100%;font-weight: bold;border:none;color: #ffffff;font-size: 12px;background-color: #4477aa;cursor: pointer;';
     const someColor = '#ffff00';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
@@ -104,6 +104,11 @@ describe('style-formatter', () => {
     it('should have set opacity for disabled button', () => {
       const formattedStyle = styleFormatter.getStyles(style, true, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
+    });
+
+    it('should not have set cursor for disabled button', () => {
+      const formattedStyle = styleFormatter.getStyles(style, true, Theme);
+      expect(formattedStyle.includes('cursor: pointer')).to.be.false;
     });
 
     it('should not have set opacity for enabled button', () => {
