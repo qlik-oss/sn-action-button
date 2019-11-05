@@ -210,14 +210,18 @@ export default function ext({ translator }) {
             general: {
               type: 'items',
               translation: 'properties.general',
-              items: [
-                {
+              items: {
+                showTitles: {},
+                details: {
+                  show: false,
+                },
+                label: {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Common.Label',
                   expression: 'optional',
                 },
-              ],
+              },
             },
             font: {
               grouped: true,
