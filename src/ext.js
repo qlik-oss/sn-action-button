@@ -357,19 +357,26 @@ export default function ext({ translator }) {
                     },
                   ],
                 },
+                borderRadius: {
+                  type: 'items',
+                  items: {
+                    slider: {
+                      component: 'slider',
+                      translation: 'properties.borderRadius',
+                      type: 'number',
+                      ref: 'style.border.radius',
+                      min: 0,
+                      max: 100,
+                      step: 1,
+                      show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
+                    },
+                  },
+                },
                 borderWidth: {
-                  component: 'string',
-                  type: 'string',
+                  component: 'number',
+                  type: 'number',
                   ref: 'style.border.width',
                   translation: 'properties.borderWidth',
-                  expression: 'optional',
-                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
-                },
-                borderRadius: {
-                  component: 'string',
-                  type: 'string',
-                  ref: 'style.border.radius',
-                  translation: 'properties.borderRadius',
                   expression: 'optional',
                   show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
                 },
@@ -394,7 +401,7 @@ export default function ext({ translator }) {
                   component: 'color-picker',
                   type: 'object',
                   ref: 'style.border.color',
-                  translation: 'bordercolor',
+                  translation: 'properties.color',
                   dualOutput: true,
                   show: data =>
                     propertyResolver.getValue(data, 'style.border.isUsed') &&
@@ -404,7 +411,7 @@ export default function ext({ translator }) {
                   component: 'string',
                   type: 'string',
                   ref: 'style.border.colorByExpression',
-                  translation: 'Expression',
+                  translation: 'Common.Expression',
                   show: data =>
                     propertyResolver.getValue(data, 'style.border.isUsed') &&
                     propertyResolver.getValue(data, 'style.border.useExpression'),

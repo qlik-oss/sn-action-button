@@ -3,7 +3,7 @@ import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
-    let style = {};
+    let style;
     const defaultStyle =
       'width: 100%;height: 100%;font-weight: bold;cursor:pointer;color: #ffffff;font-size: 12px;background-color: #4477aa;border: none;';
     const someColor = '#ffff00';
@@ -11,58 +11,61 @@ describe('style-formatter', () => {
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
     const disabled = false;
+    let button;
+
+    beforeEach(() => {
+      style = { border: { isUsed: false } };
+      button = {
+        clientHeight: 200,
+        clientWidth: 100,
+      };
+    });
 
     it('should return default styling', () => {
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle).to.equal(defaultStyle);
     });
 
     it('should return specified background color', () => {
-      style = { backgroundColor: someColor };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      style.backgroundColor = someColor;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
     it('should return default background color when color is none', () => {
-      style = {
-        backgroundColor: {
-          index: 0,
-        },
-      };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      style.backgroundColor = { index: 0 };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
     });
 
     it('should return specified font color', () => {
-      style = { fontColor: someColor };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      style.fontColor = someColor;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
     });
 
     it('should return specified font size', () => {
-      style = { fontSize: someSize };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      style.fontSize = someSize;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
     });
 
     it('should return default font size for incorrect value', () => {
-      style = { fontSize: 'someSize' };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      style.fontSize = 'someSize';
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('font-size: 12px')).to.be.true;
     });
 
     it('should return specified image url and default image settings', () => {
-      style = {
-        background: {
-          isUsed: true,
-          url: {
-            qStaticContentUrl: {
-              qUrl: someUrl,
-            },
+      style.background = {
+        isUsed: true,
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
       expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
@@ -70,45 +73,78 @@ describe('style-formatter', () => {
     });
 
     it('should return specified image size', () => {
-      style = {
-        background: {
-          isUsed: true,
-          size: 'fill',
-          url: {
-            qStaticContentUrl: {
-              qUrl: someUrl,
-            },
+      style.background = {
+        isUsed: true,
+        size: 'fill',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('background-size: 100% 100%')).to.be.true;
     });
 
     it('should return specified image position', () => {
-      style = {
-        background: {
-          isUsed: true,
-          position: 'centerCenter',
-          url: {
-            qStaticContentUrl: {
-              qUrl: someUrl,
-            },
+      style.background = {
+        isUsed: true,
+        position: 'centerCenter',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
     });
 
     it('should have set opacity for disabled button', () => {
-      const formattedStyle = styleFormatter.getStyles(style, true, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, Theme });
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
     });
 
     it('should not have set opacity for enabled button', () => {
-      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
+    });
+
+    it('should set border color and width', () => {
+      style.border = {
+        isUsed: true,
+        width: 10,
+        color: {
+          index: 2,
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      expect(formattedStyle.includes('border: 10px solid color2')).to.be.true;
+    });
+
+    it('should set border radius', () => {
+      style.border = {
+        isUsed: true,
+        radius: 20,
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      expect(formattedStyle.includes('border-radius: 10px')).to.be.true;
+    });
+
+    it('should set border radius for smaller height', () => {
+      button.clientHeight = 50;
+      style.border = {
+        isUsed: true,
+        radius: 20,
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      console.log(formattedStyle);
+      expect(formattedStyle.includes('border-radius: 5px')).to.be.true;
+    });
+
+    it('should not set a border', () => {
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('border: none')).to.be.true;
     });
   });
 });

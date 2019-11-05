@@ -41,10 +41,33 @@ const properties = {
      * @type {object}
      */
     border: {
-      borderColor: {
+      /**
+       * @type {boolean}
+       */
+      isUsed: false,
+      /**
+       * @type {number}
+       */
+      radius: null,
+      /**
+       * @type {number}
+       */
+      width: 0,
+      /**
+       * @type {boolean}
+       */
+      useExpression: false,
+      /**
+       * @type {object}
+       */
+      color: {
         index: -1,
         color: null,
       },
+      /**
+       * @type {object}
+       */
+      colorByExpression: '',
     },
   },
   /**

@@ -31,7 +31,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 };
 
 export default {
-  getStyles(style, disabled, Theme) {
+  getStyles({ style, disabled, Theme, button }) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;';
 
@@ -55,9 +55,11 @@ export default {
       );
       styles += formatProperty('background-repeat', 'no-repeat');
     }
-    if (style.border && style.border.isUsed) {
+    if (style.border.isUsed) {
+      // TODO add color resolver for expression
       styles += `border: ${style.border.width}px solid ${themeResolver.resolveColor(style.border.color, palette)};`;
-      styles += style.border.radius ? `border-radius: ${style.border.radius}px` : undefined;
+      const lengthShortSide = button.clientHeight < button.clientWidth ? button.clientHeight : button.clientWidth;
+      styles += formatProperty('border-radius', `${((style.border.radius / 100) * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
     }
