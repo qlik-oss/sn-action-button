@@ -3,9 +3,11 @@ import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
-    let style = {};
+    let style = {
+      textAlign: 'center',
+    };
     const defaultStyle =
-      'width: 100%;height: 100%;font-weight: bold;border:none;color: #ffffff;font-size: 12px;background-color: #4477aa;cursor: pointer;';
+      'width: 100%;height: 100%;border: none;padding: 4px;color: #ffffff;font-size: 12px;text-align: center;background-color: #4477aa;cursor: pointer;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
     const someSize = 24;
@@ -133,6 +135,33 @@ describe('style-formatter', () => {
     it('should not have set opacity for enabled button', () => {
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
+    });
+    it('should return font-weight: bold when bold is selected', () => {
+      style = {
+        textStyle: {
+          bold: true,
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes('font-weight: bold')).to.be.true;
+    });
+    it('should return font-style: italic when italic is selected', () => {
+      style = {
+        textStyle: {
+          italic: true,
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes('font-style: italic')).to.be.true;
+    });
+    it('should return text-decoration: underline when underline is selected', () => {
+      style = {
+        textStyle: {
+          underline: true,
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes('text-decoration: underline')).to.be.true;
     });
   });
 });

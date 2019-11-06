@@ -32,8 +32,7 @@ const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
 
 export default {
   getStyles(style, disabled, Theme) {
-    // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;cursor:pointer;border:none;';
+    let styles = 'width: 100%;height: 100%;border: none;padding: 4px;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
     const backgroundColor = style.useBackgroundColorExpression
       ? style.backgroundColorExpression
@@ -43,10 +42,12 @@ export default {
     primaryColor = colorUtils.getDefaultColor(Theme);
     styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatProperty('text-align', style.textAlign || 'center');
-    style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
-    style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
-    style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
+    styles += formatProperty('text-align', style.textAlign);
+    if (style.textStyle) {
+      style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+      style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
+      style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
+    }
     styles += formatColorProperty(
       'background-color',
       backgroundColor,
