@@ -5,8 +5,9 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;font-weight: bold;cursor:pointer;color: #ffffff;font-size: 12px;background-color: #4477aa;border: none;';
+      'width: 100%;height: 100%;font-weight: bold;color: #ffffff;font-size: 12px;background-color: #4477aa;cursor: pointer;border: none;';
     const someColor = '#ffff00';
+    const someColorExpression = 'rgb(255,255,0)';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
@@ -32,6 +33,13 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
+    it('should return specified background color from expression', () => {
+      style.backgroundColorExpression = someColorExpression;
+      style.useBackgroundColorExpression = true;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).to.be.true;
+    });
+
     it('should return default background color when color is none', () => {
       style.backgroundColor = { index: 0 };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
@@ -42,6 +50,13 @@ describe('style-formatter', () => {
       style.fontColor = someColor;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
+    });
+
+    it('should return specified font color from expression', () => {
+      style.fontColorExpression = someColorExpression;
+      style.useFontColorExpression = true;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes(`color: ${someColorExpression}`)).to.be.true;
     });
 
     it('should return specified font size', () => {
@@ -105,6 +120,11 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
     });
 
+    it('should not have set cursor for disabled button', () => {
+      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, Theme });
+      expect(formattedStyle.includes('cursor: pointer')).to.be.false;
+    });
+
     it('should not have set opacity for enabled button', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
@@ -138,7 +158,6 @@ describe('style-formatter', () => {
         radius: 20,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
-      console.log(formattedStyle);
       expect(formattedStyle.includes('border-radius: 5px')).to.be.true;
     });
 

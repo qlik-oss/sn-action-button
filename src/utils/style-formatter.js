@@ -1,4 +1,4 @@
-import themeResolver from './theme-resolver';
+import colorUtils from './color-utils';
 
 let palette;
 let primaryColor;
@@ -25,22 +25,32 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (path, inputColor, defaultColor) => {
-  const color = themeResolver.resolveColor(inputColor, palette);
+const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
+  const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
 export default {
   getStyles({ style, disabled, Theme, button }) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;';
+    const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
+    const backgroundColor = style.useBackgroundColorExpression
+      ? style.backgroundColorExpression
+      : style.backgroundColor;
 
-    palette = themeResolver.getPalette(Theme);
-    primaryColor = themeResolver.getDefaultColor(Theme);
-    styles += formatColorProperty('color', style.fontColor, '#ffffff');
+    palette = colorUtils.getPalette(Theme);
+    primaryColor = colorUtils.getDefaultColor(Theme);
+    styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
+    styles += formatColorProperty(
+      'background-color',
+      backgroundColor,
+      primaryColor,
+      style.useBackgroundColorExpression
+    );
     disabled && (styles += formatProperty('opacity', 0.4));
+    !disabled && (styles += formatProperty('cursor', 'pointer'));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
@@ -57,7 +67,7 @@ export default {
     }
     if (style.border.isUsed) {
       // TODO add color resolver for expression
-      styles += `border: ${style.border.width}px solid ${themeResolver.resolveColor(style.border.color, palette)};`;
+      styles += `border: ${style.border.width}px solid ${colorUtils.resolveColor(style.border.color, palette)};`;
       const { clientHeight, clientWidth } = button;
       const lengthShortSide = clientHeight < clientWidth ? clientHeight : clientWidth;
       styles += formatProperty('border-radius', `${((style.border.radius / 100) * lengthShortSide) / 2}px`);

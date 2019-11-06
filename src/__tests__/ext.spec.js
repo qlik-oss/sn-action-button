@@ -8,7 +8,7 @@ describe('ext', () => {
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
-  const { background, borders } = props.definition.items.settings.items;
+  const { font, background, borders } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -140,6 +140,8 @@ describe('ext', () => {
     beforeEach(() => {
       data = {
         style: {
+          useFontColorExpression: false,
+          useBackgroundColorExpression: false,
           background: {
             isUsed: true,
             url: {
@@ -251,6 +253,36 @@ describe('ext', () => {
       data.useEnabledCondition = false;
       const result = props.definition.items.enableCondition.items.condition.show(data);
       expect(result).to.equal(false);
+    });
+
+    it('should return false for expression and true for picker when useFontColorExpression is false', () => {
+      const resultExpression = font.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = font.items.fontColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(false);
+      expect(resultPicker).to.equal(true);
+    });
+
+    it('should return true for expression and false for picker when useFontColorExpression is true', () => {
+      data.style.useFontColorExpression = true;
+      const resultExpression = font.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = font.items.fontColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(true);
+      expect(resultPicker).to.equal(false);
+    });
+
+    it('should return false for expression and true for picker when useBackgroundColorExpression is false', () => {
+      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
+      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(false);
+      expect(resultPicker).to.equal(true);
+    });
+
+    it('should return true for expression and false for picker when useBackgroundColorExpression is true', () => {
+      data.style.useBackgroundColorExpression = true;
+      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
+      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(true);
+      expect(resultPicker).to.equal(false);
     });
 
     it('should return true when background is used', () => {

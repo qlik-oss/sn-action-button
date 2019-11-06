@@ -2,6 +2,17 @@ import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
 
+const colorOptions = [
+  {
+    value: false,
+    translation: 'properties.colorMode.primary',
+  },
+  {
+    value: true,
+    translation: 'properties.colorMode.byExpression',
+  },
+];
+
 export default function ext({ translator }) {
   return {
     definition: {
@@ -196,9 +207,7 @@ export default function ext({ translator }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              show(data) {
-                return data.useEnabledCondition === true;
-              },
+              show: data => data.useEnabledCondition,
             },
           },
         },
@@ -210,49 +219,97 @@ export default function ext({ translator }) {
             general: {
               type: 'items',
               translation: 'properties.general',
-              items: [
-                {
+              items: {
+                showTitles: {},
+                details: {
+                  show: false,
+                },
+                label: {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Common.Label',
                   expression: 'optional',
                 },
-              ],
+              },
             },
             font: {
               grouped: true,
               type: 'items',
               translation: 'properties.font',
-              items: [
-                {
+              items: {
+                fontSize: {
                   component: 'string',
                   type: 'string',
                   ref: 'style.fontSize',
                   translation: 'properties.fontSize',
                   expression: 'optional',
                 },
-                {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.fontColor',
-                  translation: 'properties.fontColor',
-                  dualOutput: true,
-                  show: true,
+                fontColor: {
+                  type: 'items',
+                  items: {
+                    useFontColorExpression: {
+                      ref: 'style.useFontColorExpression',
+                      type: 'boolean',
+                      translation: 'properties.fontColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.fontColorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => data.style.useFontColorExpression,
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.fontColor',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => !data.style.useFontColorExpression,
+                    },
+                  },
                 },
-              ],
+              },
             },
             background: {
               grouped: true,
               type: 'items',
               translation: 'properties.background',
               items: {
-                colorPicker: {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.backgroundColor',
-                  translation: 'AppDetails.SheetBackgroundColor',
-                  dualOutput: true,
-                  show: true,
+                backgroundColor: {
+                  type: 'items',
+                  items: {
+                    useColorExpression: {
+                      ref: 'style.useBackgroundColorExpression',
+                      type: 'boolean',
+                      translation: 'AppDetails.SheetBackgroundColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.backgroundColorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show(data) {
+                        return data.style.useBackgroundColorExpression;
+                      },
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.backgroundColor',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show(data) {
+                        return !data.style.useBackgroundColorExpression;
+                      },
+                    },
+                  },
                 },
                 useBackgroundImage: {
                   ref: 'style.background.isUsed',
