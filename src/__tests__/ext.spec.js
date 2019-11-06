@@ -8,7 +8,7 @@ describe('ext', () => {
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
-  const { background } = props.definition.items.settings.items;
+  const { background, borders } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -148,6 +148,10 @@ describe('ext', () => {
               },
             },
           },
+          border: {
+            isUsed: true,
+            useExpression: false,
+          },
         },
         useEnabledCondition: true,
       };
@@ -285,6 +289,39 @@ describe('ext', () => {
       data.style.background.size = 'fill';
       const result = background.items.backgroundPosition.show(data);
       expect(result).to.equal(false);
+    });
+    it('should return true for borderRadius, borderWidth, colorDropdown when border is used', () => {
+      const borderRadius = borders.items.borderRadius.show(data);
+      expect(borderRadius).to.equal(true);
+      const borderWidth = borders.items.borderWidth.show(data);
+      expect(borderWidth).to.equal(true);
+      const colorDropdown = borders.items.colorDropdown.show(data);
+      expect(colorDropdown).to.equal(true);
+    });
+
+    it('should return false for borderRadius, borderWidth, colorDropdown when border is used', () => {
+      data.style.border.isUsed = false;
+      const borderRadius = borders.items.borderRadius.show(data);
+      expect(borderRadius).to.equal(false);
+      const borderWidth = borders.items.borderWidth.show(data);
+      expect(borderWidth).to.equal(false);
+      const colorDropdown = borders.items.colorDropdown.show(data);
+      expect(colorDropdown).to.equal(false);
+    });
+
+    it('should show borderColor when no expression is used', () => {
+      const borderColor = borders.items.borderColor.show(data);
+      expect(borderColor).to.equal(true);
+      const borderColorExpression = borders.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(false);
+    });
+
+    it('should show borderColorExpression when expression is used', () => {
+      data.style.border.useExpression = true;
+      const borderColor = borders.items.borderColor.show(data);
+      expect(borderColor).to.equal(false);
+      const borderColorExpression = borders.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(true);
     });
   });
 

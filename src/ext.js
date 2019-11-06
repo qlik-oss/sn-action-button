@@ -358,19 +358,14 @@ export default function ext({ translator }) {
                   ],
                 },
                 borderRadius: {
-                  type: 'items',
-                  items: {
-                    slider: {
-                      component: 'slider',
-                      translation: 'properties.borderRadius',
-                      type: 'number',
-                      ref: 'style.border.radius',
-                      min: 0,
-                      max: 100,
-                      step: 1,
-                      show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
-                    },
-                  },
+                  component: 'slider',
+                  translation: 'properties.borderRadius',
+                  type: 'number',
+                  ref: 'style.border.radius',
+                  min: 0,
+                  max: 100,
+                  step: 1,
+                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
                 },
                 borderWidth: {
                   component: 'number',
