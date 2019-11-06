@@ -395,80 +395,85 @@ export default function ext({ translator }) {
             },
             borders: {
               type: 'items',
+              grouped: true,
               translation: 'properties.border',
               items: {
                 useBorders: {
-                  ref: 'style.border.isUsed',
-                  type: 'boolean',
-                  translation: 'properties.border.use',
-                  component: 'switch',
-                  defaultValue: false,
-                  options: [
-                    {
-                      value: true,
-                      translation: 'properties.on',
+                  type: 'items',
+                  items: {
+                    useBorders: {
+                      ref: 'style.border.isUsed',
+                      type: 'boolean',
+                      translation: 'properties.border.use',
+                      component: 'switch',
+                      defaultValue: false,
+                      options: [
+                        {
+                          value: true,
+                          translation: 'properties.on',
+                        },
+                        {
+                          value: false,
+                          translation: 'properties.off',
+                        },
+                      ],
                     },
-                    {
-                      value: false,
-                      translation: 'properties.off',
-                    },
-                  ],
+                  },
                 },
-                borderRadius: {
-                  component: 'slider',
-                  translation: 'properties.borderRadius',
-                  type: 'number',
-                  ref: 'style.border.radius',
-                  min: 0,
-                  max: 100,
-                  step: 1,
+                borderSettings: {
+                  type: 'items',
                   show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
-                },
-                borderWidth: {
-                  component: 'slider',
-                  type: 'number',
-                  ref: 'style.border.width',
-                  translation: 'properties.borderWidth',
-                  min: 0,
-                  max: 100,
-                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
-                },
-                colorDropdown: {
-                  type: 'string',
-                  component: 'dropdown',
-                  translation: 'properties.border.color',
-                  ref: 'style.border.useExpression',
-                  options: [
-                    {
-                      value: false,
-                      translation: 'properties.colorMode.primary',
+                  items: {
+                    borderRadius: {
+                      component: 'slider',
+                      translation: 'properties.border.radius',
+                      type: 'number',
+                      ref: 'style.border.radius',
+                      min: 0,
+                      max: 100,
+                      step: 1,
                     },
-                    {
-                      value: true,
-                      translation: 'properties.colorMode.byExpression',
+                    borderWidth: {
+                      component: 'slider',
+                      type: 'number',
+                      ref: 'style.border.width',
+                      translation: 'properties.border.width',
+                      min: 0,
+                      max: 100,
                     },
-                  ],
-                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
-                },
-                borderColor: {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.border.color',
-                  translation: 'properties.color',
-                  dualOutput: true,
-                  show: data =>
-                    propertyResolver.getValue(data, 'style.border.isUsed') &&
-                    !propertyResolver.getValue(data, 'style.border.useExpression'),
-                },
-                borderColorExpression: {
-                  component: 'string',
-                  type: 'string',
-                  ref: 'style.border.colorByExpression',
-                  translation: 'Common.Expression',
-                  show: data =>
-                    propertyResolver.getValue(data, 'style.border.isUsed') &&
-                    propertyResolver.getValue(data, 'style.border.useExpression'),
-                  expression: 'optional',
+                    colorDropdown: {
+                      type: 'string',
+                      component: 'dropdown',
+                      translation: 'properties.border.color',
+                      ref: 'style.border.useExpression',
+                      options: [
+                        {
+                          value: false,
+                          translation: 'properties.colorMode.primary',
+                        },
+                        {
+                          value: true,
+                          translation: 'properties.colorMode.byExpression',
+                        },
+                      ],
+                    },
+                    borderColor: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.border.color',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => !propertyResolver.getValue(data, 'style.border.useExpression'),
+                    },
+                    borderColorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.border.colorByExpression',
+                      translation: 'Common.Expression',
+                      show: data => propertyResolver.getValue(data, 'style.border.useExpression'),
+                      expression: 'optional',
+                    },
+                  },
                 },
               },
             },

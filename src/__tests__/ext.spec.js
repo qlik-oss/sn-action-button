@@ -322,37 +322,29 @@ describe('ext', () => {
       const result = background.items.backgroundPosition.show(data);
       expect(result).to.equal(false);
     });
-    it('should return true for borderRadius, borderWidth, colorDropdown when border is used', () => {
-      const borderRadius = borders.items.borderRadius.show(data);
-      expect(borderRadius).to.equal(true);
-      const borderWidth = borders.items.borderWidth.show(data);
-      expect(borderWidth).to.equal(true);
-      const colorDropdown = borders.items.colorDropdown.show(data);
-      expect(colorDropdown).to.equal(true);
+    it('should return true and show when border is used', () => {
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(true);
     });
 
     it('should return false for borderRadius, borderWidth, colorDropdown when border is used', () => {
       data.style.border.isUsed = false;
-      const borderRadius = borders.items.borderRadius.show(data);
-      expect(borderRadius).to.equal(false);
-      const borderWidth = borders.items.borderWidth.show(data);
-      expect(borderWidth).to.equal(false);
-      const colorDropdown = borders.items.colorDropdown.show(data);
-      expect(colorDropdown).to.equal(false);
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(false);
     });
 
     it('should show borderColor when no expression is used', () => {
-      const borderColor = borders.items.borderColor.show(data);
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
       expect(borderColor).to.equal(true);
-      const borderColorExpression = borders.items.borderColorExpression.show(data);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
       expect(borderColorExpression).to.equal(false);
     });
 
     it('should show borderColorExpression when expression is used', () => {
       data.style.border.useExpression = true;
-      const borderColor = borders.items.borderColor.show(data);
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
       expect(borderColor).to.equal(false);
-      const borderColorExpression = borders.items.borderColorExpression.show(data);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
       expect(borderColorExpression).to.equal(true);
     });
   });
