@@ -425,11 +425,12 @@ export default function ext({ translator }) {
                   show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
                 },
                 borderWidth: {
-                  component: 'number',
+                  component: 'slider',
                   type: 'number',
                   ref: 'style.border.width',
                   translation: 'properties.borderWidth',
-                  expression: 'optional',
+                  min: 0,
+                  max: 100,
                   show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
                 },
                 colorDropdown: {

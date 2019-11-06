@@ -17,8 +17,8 @@ describe('style-formatter', () => {
     beforeEach(() => {
       style = { border: { isUsed: false } };
       button = {
-        clientHeight: 200,
-        clientWidth: 100,
+        offsetHeight: 200,
+        offsetWidth: 100,
       };
     });
 
@@ -139,7 +139,7 @@ describe('style-formatter', () => {
         },
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
-      expect(formattedStyle.includes('border: 10px solid color2')).to.be.true;
+      expect(formattedStyle.includes('border: 5px solid color2')).to.be.true;
     });
 
     it('should set a border based on expression', () => {
@@ -150,7 +150,7 @@ describe('style-formatter', () => {
         colorByExpression: 'rebeccapurple',
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
-      expect(formattedStyle.includes('border: 10px solid rgba(102,51,153,1)')).to.be.true;
+      expect(formattedStyle.includes('border: 5px solid rgba(102,51,153,1)')).to.be.true;
     });
 
     it('should set border radius', () => {
@@ -163,7 +163,7 @@ describe('style-formatter', () => {
     });
 
     it('should set border radius for smaller height', () => {
-      button.clientHeight = 50;
+      button.offsetHeight = 50;
       style.border = {
         isUsed: true,
         radius: 20,

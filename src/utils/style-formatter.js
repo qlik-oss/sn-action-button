@@ -66,9 +66,12 @@ export default {
     if (style.border.isUsed) {
       const { width, useExpression, radius, color, colorByExpression } = style.border;
       const borderColor = useExpression ? colorByExpression : color;
-      styles += formatProperty('border', `${width}px solid ${formatColorProperty(borderColor, 'none', useExpression)}`);
-      const { clientHeight, clientWidth } = button;
-      const lengthShortSide = clientHeight < clientWidth ? clientHeight : clientWidth;
+      const { offsetHeight, offsetWidth } = button;
+      const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
+      styles += formatProperty(
+        'border',
+        `${((width / 100) * lengthShortSide) / 2}px solid ${formatColorProperty(borderColor, 'none', useExpression)}`
+      );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
