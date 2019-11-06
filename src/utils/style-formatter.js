@@ -58,7 +58,8 @@ export default {
     if (style.border.isUsed) {
       // TODO add color resolver for expression
       styles += `border: ${style.border.width}px solid ${themeResolver.resolveColor(style.border.color, palette)};`;
-      const lengthShortSide = button.clientHeight < button.clientWidth ? button.clientHeight : button.clientWidth;
+      const { clientHeight, clientWidth } = button;
+      const lengthShortSide = clientHeight < clientWidth ? clientHeight : clientWidth;
       styles += formatProperty('border-radius', `${((style.border.radius / 100) * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
