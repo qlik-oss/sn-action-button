@@ -25,18 +25,20 @@ export default function ext(/* env */) {
               addTranslation: 'Add Item',
               items: {
                 actionType: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'actionType',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   defaultValue: null,
                   options: actions,
+                  itemTitleRef: (data) => {
+                    const act = actions.find(action => data.actionType === action.value);
+                    return (act && act.label) || '';
+                  },
                 },
                 bookmark: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'bookmark',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
@@ -48,10 +50,9 @@ export default function ext(/* env */) {
                   show: data => checkShowAction(data, 'bookmark'),
                 },
                 field: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'field',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
@@ -63,10 +64,9 @@ export default function ext(/* env */) {
                   show: data => checkShowAction(data, 'field'),
                 },
                 variable: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'variable',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
