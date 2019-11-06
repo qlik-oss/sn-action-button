@@ -33,7 +33,7 @@ const properties = {
     /**
      * @type {string}
      */
-    label: '',
+    label: 'Button',
   },
   /**
    * @type {array}

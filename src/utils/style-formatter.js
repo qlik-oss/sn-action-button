@@ -26,16 +26,14 @@ const backgroundPosition = {
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
-  const color = isExpression
-    ? colorUtils.resolveExpression(inputColor)
-    : colorUtils.resolveColor(inputColor, palette);
+  const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
   return `${path}: ${color === 'none' ? defaultColor : color};`;
 };
 
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor: pointer;border: none;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;border:none;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
     const backgroundColor = style.useBackgroundColorExpression
       ? style.backgroundColorExpression
@@ -52,6 +50,7 @@ export default {
       style.useBackgroundColorExpression
     );
     disabled && (styles += formatProperty('opacity', 0.4));
+    !disabled && (styles += formatProperty('cursor', 'pointer'));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
