@@ -7,6 +7,7 @@ describe('style-formatter', () => {
     const defaultStyle =
       'width: 100%;height: 100%;font-weight: bold;border:none;color: #ffffff;font-size: 12px;background-color: #4477aa;cursor: pointer;';
     const someColor = '#ffff00';
+    const someColorExpression = 'rgb(255,255,0)';
     const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
@@ -23,6 +24,15 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
     });
 
+    it('should return specified background color from expression', () => {
+      style = {
+        backgroundColorExpression: someColorExpression,
+        useBackgroundColorExpression: true,
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).to.be.true;
+    });
+
     it('should return default background color when color is none', () => {
       style = {
         backgroundColor: {
@@ -37,6 +47,15 @@ describe('style-formatter', () => {
       style = { fontColor: someColor };
       const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
+    });
+
+    it('should return specified font color from expression', () => {
+      style = {
+        fontColorExpression: someColorExpression,
+        useFontColorExpression: true,
+      };
+      const formattedStyle = styleFormatter.getStyles(style, disabled, Theme);
+      expect(formattedStyle.includes(`color: ${someColorExpression}`)).to.be.true;
     });
 
     it('should return specified font size', () => {
