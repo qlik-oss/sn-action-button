@@ -12,11 +12,11 @@ describe('style-formatter', () => {
     const someUrl = '/media/Logo/qlik.png';
     const { Theme } = defaultValues;
     const disabled = false;
-    let button;
+    let element;
 
     beforeEach(() => {
       style = { border: { isUsed: false } };
-      button = {
+      element = {
         offsetHeight: 200,
         offsetWidth: 100,
       };
@@ -138,7 +138,7 @@ describe('style-formatter', () => {
           index: 2,
         },
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border: 5px solid color2')).to.be.true;
     });
 
@@ -149,7 +149,7 @@ describe('style-formatter', () => {
         useExpression: true,
         colorByExpression: 'rebeccapurple',
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border: 5px solid rgba(102,51,153,1)')).to.be.true;
     });
 
@@ -158,17 +158,17 @@ describe('style-formatter', () => {
         isUsed: true,
         radius: 20,
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border-radius: 10px')).to.be.true;
     });
 
     it('should set border radius for smaller height', () => {
-      button.offsetHeight = 50;
+      element.offsetHeight = 50;
       style.border = {
         isUsed: true,
         radius: 20,
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border-radius: 5px')).to.be.true;
     });
 

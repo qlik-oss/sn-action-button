@@ -9,10 +9,10 @@ export const runActions = async actionList => {
   }
 };
 
-export default function ActionButton({ layout, button, Theme, app, context, senseNavigation }) {
+export default function ActionButton({ layout, button, Theme, app, context, senseNavigation, element }) {
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, button });
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
   if (disabled && context.permissions.indexOf('interact') !== -1) {
     button.setAttribute('disabled', true);

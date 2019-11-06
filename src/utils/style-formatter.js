@@ -31,7 +31,7 @@ const formatColorProperty = (inputColor, defaultColor, isExpression) => {
 };
 
 export default {
-  getStyles({ style, disabled, Theme, button }) {
+  getStyles({ style, disabled, Theme, element }) {
     // TODO: use constants for default values?
     let styles = 'width: 100%;height: 100%;font-weight: bold;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
@@ -66,7 +66,7 @@ export default {
     if (style.border.isUsed) {
       const { width, useExpression, radius, color, colorByExpression } = style.border;
       const borderColor = useExpression ? colorByExpression : color;
-      const { offsetHeight, offsetWidth } = button;
+      const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       styles += formatProperty(
         'border',
