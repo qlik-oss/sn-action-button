@@ -327,7 +327,7 @@ describe('ext', () => {
       expect(result).to.equal(true);
     });
 
-    it('should return false for borderRadius, borderWidth, colorDropdown when border is used', () => {
+    it('should return false and not show when border is not used', () => {
       data.style.border.isUsed = false;
       const result = borders.items.borderSettings.show(data);
       expect(result).to.equal(false);
