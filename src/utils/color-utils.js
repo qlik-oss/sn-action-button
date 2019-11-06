@@ -1,7 +1,6 @@
 /* eslint-disable no-cond-assign */
 import CSSColors from './css-colors';
 
-// Resolve color from a palette. We should open Theme API from sense so we can use same functionality
 const colorUtils = {
   resolveExpression: input => {
     // rgb
@@ -30,6 +29,7 @@ const colorUtils = {
     return 'none';
   },
   resolveColor: (input, palette) => {
+    // Resolve color from a palette. We should open Theme API from sense so we can use same functionality
     if (typeof input !== 'undefined' && input !== null) {
       if (input.index !== undefined && input.index !== -1 && palette[input.index]) {
         return palette[input.index];
