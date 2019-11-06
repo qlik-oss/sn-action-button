@@ -25,9 +25,9 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
+const formatColorProperty = (inputColor, defaultColor, isExpression) => {
   const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
-  return `${path}: ${color === 'none' ? defaultColor : color};`;
+  return `${color === 'none' ? defaultColor : color}`;
 };
 
 export default {
@@ -41,13 +41,11 @@ export default {
 
     palette = colorUtils.getPalette(Theme);
     primaryColor = colorUtils.getDefaultColor(Theme);
-    styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
+    styles += formatProperty('color', formatColorProperty(fontColor, '#ffffff', style.useFontColorExpression));
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty(
+    styles += formatProperty(
       'background-color',
-      backgroundColor,
-      primaryColor,
-      style.useBackgroundColorExpression
+      formatColorProperty(backgroundColor, primaryColor, style.useBackgroundColorExpression)
     );
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
@@ -66,11 +64,12 @@ export default {
       styles += formatProperty('background-repeat', 'no-repeat');
     }
     if (style.border.isUsed) {
-      // TODO add color resolver for expression
-      styles += `border: ${style.border.width}px solid ${colorUtils.resolveColor(style.border.color, palette)};`;
+      const { width, useExpression, radius, color, colorByExpression } = style.border;
+      const borderColor = useExpression ? colorByExpression : color;
+      styles += formatProperty('border', `${width}px solid ${formatColorProperty(borderColor, 'none', useExpression)}`);
       const { clientHeight, clientWidth } = button;
       const lengthShortSide = clientHeight < clientWidth ? clientHeight : clientWidth;
-      styles += formatProperty('border-radius', `${((style.border.radius / 100) * lengthShortSide) / 2}px`);
+      styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
     }

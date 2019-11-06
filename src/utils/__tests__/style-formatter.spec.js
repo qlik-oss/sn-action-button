@@ -142,6 +142,17 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('border: 10px solid color2')).to.be.true;
     });
 
+    it('should set a border based on expression', () => {
+      style.border = {
+        isUsed: true,
+        width: 10,
+        useExpression: true,
+        colorByExpression: 'rebeccapurple',
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, button });
+      expect(formattedStyle.includes('border: 10px solid rgba(102,51,153,1)')).to.be.true;
+    });
+
     it('should set border radius', () => {
       style.border = {
         isUsed: true,
