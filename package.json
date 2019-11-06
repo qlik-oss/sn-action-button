@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-action-button",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Supernova action button",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -46,16 +46,16 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "0.1.0-alpha.23"
+    "@nebula.js/supernova": "0.1.0-alpha.25"
   },
   "devDependencies": {
-    "@after-work.js/aw": "6.0.8",
+    "@after-work.js/aw": "6.0.10",
     "@babel/cli": "7.6.4",
     "@babel/core": "7.6.4",
     "@babel/preset-env": "7.6.3",
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@nebula.js/cli": "0.1.0-alpha.23",
+    "@nebula.js/cli": "0.1.0-alpha.25",
     "babel-plugin-istanbul": "5.2.0",
     "eslint": "6.6.0",
     "eslint-config-airbnb-base": "14.0.0",
