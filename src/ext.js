@@ -276,7 +276,7 @@ export default function ext({ translator }) {
                   component: 'item-selection-list',
                   type: 'string',
                   ref: 'style.textStyle',
-                  translation: 'Text Style',
+                  translation: 'properties.textStyle',
                   horizontal: true,
                   multipleSelect: true,
                   items: [
