@@ -32,8 +32,7 @@ const getColor = (inputColor, defaultColor, isExpression) => {
 
 export default {
   getStyles({ style, disabled, Theme, element }) {
-    // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;';
+    let styles = 'width: 100%;height: 100%;padding: 4px;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
     const backgroundColor = style.useBackgroundColorExpression
       ? style.backgroundColorExpression
@@ -43,6 +42,12 @@ export default {
     primaryColor = colorUtils.getDefaultColor(Theme);
     styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
+    styles += formatProperty('text-align', style.textAlign);
+    if (style.textStyle) {
+      style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+      style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
+      style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
+    }
     styles += formatProperty(
       'background-color',
       getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
