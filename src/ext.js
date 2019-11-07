@@ -446,16 +446,7 @@ export default function ext({ translator }) {
                       component: 'dropdown',
                       translation: 'properties.border.color',
                       ref: 'style.border.useExpression',
-                      options: [
-                        {
-                          value: false,
-                          translation: 'properties.colorMode.primary',
-                        },
-                        {
-                          value: true,
-                          translation: 'properties.colorMode.byExpression',
-                        },
-                      ],
+                      options: colorOptions,
                     },
                     borderColor: {
                       component: 'color-picker',
