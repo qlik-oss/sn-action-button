@@ -1,6 +1,7 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
+import importProperties from './utils/conversion';
 
 const colorOptions = [
   {
@@ -472,6 +473,8 @@ export default function ext({ translator }) {
         },
       },
     },
+    importProperties,
+    exportProperties: null,
     support: {
       export: !1,
       exportData: !1,
