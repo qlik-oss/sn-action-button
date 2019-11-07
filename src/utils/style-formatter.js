@@ -25,7 +25,7 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (inputColor, defaultColor, isExpression) => {
+const getColor = (inputColor, defaultColor, isExpression) => {
   const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
   return `${color === 'none' ? defaultColor : color}`;
 };
@@ -41,11 +41,11 @@ export default {
 
     palette = colorUtils.getPalette(Theme);
     primaryColor = colorUtils.getDefaultColor(Theme);
-    styles += formatProperty('color', formatColorProperty(fontColor, '#ffffff', style.useFontColorExpression));
+    styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatProperty(
       'background-color',
-      formatColorProperty(backgroundColor, primaryColor, style.useBackgroundColorExpression)
+      getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
     );
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
@@ -70,7 +70,7 @@ export default {
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       styles += formatProperty(
         'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${formatColorProperty(borderColor, 'none', useExpression)}`
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(borderColor, 'none', useExpression)}`
       );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {
