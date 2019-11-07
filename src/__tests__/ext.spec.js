@@ -8,7 +8,7 @@ describe('ext', () => {
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
-  const { font, background } = props.definition.items.settings.items;
+  const { font, background, borders } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -149,6 +149,10 @@ describe('ext', () => {
                 qUrl: 'myUrl',
               },
             },
+          },
+          border: {
+            isUsed: true,
+            useExpression: false,
           },
         },
         useEnabledCondition: true,
@@ -317,6 +321,31 @@ describe('ext', () => {
       data.style.background.size = 'fill';
       const result = background.items.backgroundPosition.show(data);
       expect(result).to.equal(false);
+    });
+    it('should return true and show when border is used', () => {
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(true);
+    });
+
+    it('should return false and not show when border is not used', () => {
+      data.style.border.isUsed = false;
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(false);
+    });
+
+    it('should show borderColor when no expression is used', () => {
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
+      expect(borderColor).to.equal(true);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(false);
+    });
+
+    it('should show borderColorExpression when expression is used', () => {
+      data.style.border.useExpression = true;
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
+      expect(borderColor).to.equal(false);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(true);
     });
   });
 
