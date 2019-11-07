@@ -1,7 +1,6 @@
 import colorUtils from './color-utils';
 
 let palette;
-let primaryColor;
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -25,57 +24,50 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = (inputColor, defaultColor, isExpression) => {
-  const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
-  return `${color === 'none' ? defaultColor : color}`;
+const getColor = (type, defaultColor) => {
+  const color = type.useColorExpression
+    ? colorUtils.resolveExpression(type.colorExpression)
+    : colorUtils.resolveColor(type.color, palette);
+  return color === 'none' ? defaultColor : color;
 };
 
 export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
-    const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
-    const backgroundColor = style.useBackgroundColorExpression
-      ? style.backgroundColorExpression
-      : style.backgroundColor;
-
+    const primaryColor = colorUtils.getDefaultColor(Theme);
     palette = colorUtils.getPalette(Theme);
-    primaryColor = colorUtils.getDefaultColor(Theme);
-    styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
-    styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatProperty('text-align', style.textAlign);
-    if (style.textStyle) {
-      style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
-      style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
-      style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
-    }
-    styles += formatProperty(
-      'background-color',
-      getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
-    );
+    // enable
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
-
-    if (style.background && style.background.isUsed) {
+    // font
+    styles += formatProperty('font-size', !isNaN(style.font.size) ? `${style.font.size}px` : '12px');
+    styles += formatProperty('color', getColor(style.font, '#ffffff'));
+    styles += formatProperty('text-align', style.font.align);
+    if (style.font.style) {
+      style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
+      style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
+      style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
+    }
+    // background
+    styles += formatProperty('background-color', getColor(style.background, primaryColor));
+    if (style.background.useImage && style.background.url) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       bgUrl.replace(/^\.\.\//i, '/');
       bgUrl = bgUrl.replace(/"/g, '\\"');
       bgUrl = bgUrl.replace(/'/g, "\\'");
       styles += formatProperty('background-image', `url('${bgUrl}')`);
-      styles += formatProperty('background-size', backgroundSize[style.background.size] || backgroundSize.auto);
-      styles += formatProperty(
-        'background-position',
-        backgroundPosition[style.background.position] || backgroundPosition.topLeft
-      );
+      styles += formatProperty('background-size', backgroundSize[style.background.size]);
+      styles += formatProperty('background-position', backgroundPosition[style.background.position]);
       styles += formatProperty('background-repeat', 'no-repeat');
     }
-    if (style.border.isUsed) {
-      const { width, useExpression, radius, color, colorExpression } = style.border;
-      const borderColor = useExpression ? colorExpression : color;
+    // border
+    if (style.border.useBorder) {
+      const { width, radius } = style.border;
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       styles += formatProperty(
         'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(borderColor, 'none', useExpression)}`
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, 'none')}`
       );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {

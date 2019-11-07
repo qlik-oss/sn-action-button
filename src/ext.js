@@ -241,7 +241,7 @@ export default function ext({ translator }) {
                 fontSize: {
                   component: 'string',
                   type: 'string',
-                  ref: 'style.fontSize',
+                  ref: 'style.font.size',
                   translation: 'properties.fontSize',
                   expression: 'optional',
                 },
@@ -249,34 +249,34 @@ export default function ext({ translator }) {
                   type: 'items',
                   items: {
                     useFontColorExpression: {
-                      ref: 'style.useFontColorExpression',
+                      ref: 'style.font.useColorExpression',
                       type: 'boolean',
                       translation: 'properties.fontColor',
                       component: 'dropdown',
                       options: colorOptions,
                     },
-                    colorExpression: {
-                      component: 'string',
-                      type: 'string',
-                      ref: 'style.fontColorExpression',
-                      translation: 'Common.Expression',
-                      expression: 'optional',
-                      show: data => data.style.useFontColorExpression,
-                    },
                     colorPicker: {
                       component: 'color-picker',
                       type: 'object',
-                      ref: 'style.fontColor',
+                      ref: 'style.font.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data => !data.style.useFontColorExpression,
+                      show: data => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.font.colorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                   },
                 },
                 fontStyling: {
                   component: 'item-selection-list',
                   type: 'string',
-                  ref: 'style.textStyle',
+                  ref: 'style.font.style',
                   translation: 'properties.textStyle',
                   horizontal: true,
                   multipleSelect: true,
@@ -303,16 +303,11 @@ export default function ext({ translator }) {
                       labelPlacement: 'bottom',
                     },
                   ],
-                  defaultValue: {
-                    bold: true,
-                    italic: false,
-                    underline: false,
-                  },
                 },
                 textAlign: {
                   component: 'item-selection-list',
                   type: 'string',
-                  ref: 'style.textAlign',
+                  ref: 'style.font.align',
                   translation: 'properties.Alignment',
                   horizontal: true,
                   items: [
@@ -338,7 +333,6 @@ export default function ext({ translator }) {
                       labelPlacement: 'bottom',
                     },
                   ],
-                  defaultValue: 'center',
                 },
               },
             },
@@ -351,40 +345,35 @@ export default function ext({ translator }) {
                   type: 'items',
                   items: {
                     useColorExpression: {
-                      ref: 'style.useBackgroundColorExpression',
+                      ref: 'style.background.useColorExpression',
                       type: 'boolean',
                       translation: 'AppDetails.SheetBackgroundColor',
                       component: 'dropdown',
                       options: colorOptions,
                     },
-                    colorExpression: {
-                      component: 'string',
-                      type: 'string',
-                      ref: 'style.backgroundColorExpression',
-                      translation: 'Common.Expression',
-                      expression: 'optional',
-                      show(data) {
-                        return data.style.useBackgroundColorExpression;
-                      },
-                    },
                     colorPicker: {
                       component: 'color-picker',
                       type: 'object',
-                      ref: 'style.backgroundColor',
+                      ref: 'style.background.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show(data) {
-                        return !data.style.useBackgroundColorExpression;
-                      },
+                      show: data => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.background.colorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                   },
                 },
                 useBackgroundImage: {
-                  ref: 'style.background.isUsed',
+                  ref: 'style.background.useImage',
                   type: 'boolean',
                   translation: 'properties.backgroundImage.use',
                   component: 'switch',
-                  defaultValue: false,
                   options: [
                     {
                       value: true,
@@ -406,7 +395,7 @@ export default function ext({ translator }) {
                   component: 'media',
                   defaultValue: '',
                   show(data) {
-                    return propertyResolver.getValue(data, 'style.background.isUsed');
+                    return propertyResolver.getValue(data, 'style.background.useImage');
                   },
                 },
                 backgroundSize: {
@@ -438,7 +427,7 @@ export default function ext({ translator }) {
                   ],
                   show(data) {
                     return (
-                      propertyResolver.getValue(data, 'style.background.isUsed') &&
+                      propertyResolver.getValue(data, 'style.background.useImage') &&
                       propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
                     );
                   },
@@ -450,7 +439,7 @@ export default function ext({ translator }) {
                   component: 'align-matrix',
                   show(data) {
                     return (
-                      propertyResolver.getValue(data, 'style.background.isUsed') &&
+                      propertyResolver.getValue(data, 'style.background.useImage') &&
                       propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
                       propertyResolver.getValue(data, 'style.background.size') !== 'fill'
                     );
@@ -466,15 +455,14 @@ export default function ext({ translator }) {
               grouped: true,
               translation: 'properties.border',
               items: {
-                useBorders: {
+                useBorder: {
                   type: 'items',
                   items: {
-                    useBorders: {
-                      ref: 'style.border.isUsed',
+                    useBorder: {
+                      ref: 'style.border.useBorder',
                       type: 'boolean',
                       translation: 'properties.border.use',
                       component: 'switch',
-                      defaultValue: false,
                       options: [
                         {
                           value: true,
@@ -490,7 +478,7 @@ export default function ext({ translator }) {
                 },
                 borderSettings: {
                   type: 'items',
-                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
+                  show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
                   items: {
                     borderRadius: {
                       component: 'slider',
@@ -513,7 +501,7 @@ export default function ext({ translator }) {
                       type: 'string',
                       component: 'dropdown',
                       translation: 'properties.border.color',
-                      ref: 'style.border.useExpression',
+                      ref: 'style.border.useColorExpression',
                       options: colorOptions,
                     },
                     borderColor: {
@@ -522,14 +510,14 @@ export default function ext({ translator }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data => !propertyResolver.getValue(data, 'style.border.useExpression'),
+                      show: data => !propertyResolver.getValue(data, 'style.border.useColorExpression'),
                     },
                     borderColorExpression: {
                       component: 'string',
                       type: 'string',
                       ref: 'style.border.colorExpression',
                       translation: 'Common.Expression',
-                      show: data => propertyResolver.getValue(data, 'style.border.useExpression'),
+                      show: data => propertyResolver.getValue(data, 'style.border.useColorExpression'),
                       expression: 'optional',
                     },
                   },

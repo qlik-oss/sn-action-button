@@ -40,23 +40,15 @@ const properties = {
     /**
      * @type {object}
      */
-    border: {
+    font: {
+      /**
+       * @type {string}
+       */
+      size: '',
       /**
        * @type {boolean}
        */
-      isUsed: false,
-      /**
-       * @type {number}
-       */
-      radius: null,
-      /**
-       * @type {number}
-       */
-      width: 0,
-      /**
-       * @type {boolean}
-       */
-      useExpression: false,
+      useColorExpression: false,
       /**
        * @type {object}
        */
@@ -65,7 +57,83 @@ const properties = {
         color: null,
       },
       /**
+       * @type {string}
+       */
+      colorExpression: '',
+      /**
        * @type {object}
+       */
+      style: {
+        bold: true,
+        italic: false,
+        underline: false,
+      },
+      /**
+       * @type {string}
+       */
+      align: 'center',
+    },
+    /**
+     * @type {object}
+     */
+    background: {
+      /**
+       * @type {boolean}
+       */
+      useColorExpression: false,
+      /**
+       * @type {object}
+       */
+      color: {
+        index: -1,
+        color: null,
+      },
+      /**
+       * @type {string}
+       */
+      colorExpression: '',
+      /**
+       * @type {boolean}
+       */
+      useImage: false,
+      /**
+       * @type {string}
+       */
+      size: 'auto',
+      /**
+       * @type {string}
+       */
+      position: 'topLeft',
+    },
+    /**
+     * @type {object}
+     */
+    border: {
+      /**
+       * @type {boolean}
+       */
+      useBorder: false,
+      /**
+       * @type {number}
+       */
+      radius: 0,
+      /**
+       * @type {number}
+       */
+      width: 0,
+      /**
+       * @type {boolean}
+       */
+      useColorExpression: false,
+      /**
+       * @type {object}
+       */
+      color: {
+        index: -1,
+        color: null,
+      },
+      /**
+       * @type {string}
        */
       colorExpression: '',
     },
