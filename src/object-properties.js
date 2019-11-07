@@ -67,7 +67,7 @@ const properties = {
       /**
        * @type {object}
        */
-      colorByExpression: '',
+      colorExpression: '',
     },
   },
   /**

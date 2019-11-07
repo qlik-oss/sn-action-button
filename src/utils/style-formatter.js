@@ -64,8 +64,8 @@ export default {
       styles += formatProperty('background-repeat', 'no-repeat');
     }
     if (style.border.isUsed) {
-      const { width, useExpression, radius, color, colorByExpression } = style.border;
-      const borderColor = useExpression ? colorByExpression : color;
+      const { width, useExpression, radius, color, colorExpression } = style.border;
+      const borderColor = useExpression ? colorExpression : color;
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       styles += formatProperty(

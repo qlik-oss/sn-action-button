@@ -459,7 +459,7 @@ export default function ext({ translator }) {
                     borderColorExpression: {
                       component: 'string',
                       type: 'string',
-                      ref: 'style.border.colorByExpression',
+                      ref: 'style.border.colorExpression',
                       translation: 'Common.Expression',
                       show: data => propertyResolver.getValue(data, 'style.border.useExpression'),
                       expression: 'optional',

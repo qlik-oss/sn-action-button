@@ -147,7 +147,7 @@ describe('style-formatter', () => {
         isUsed: true,
         width: 10,
         useExpression: true,
-        colorByExpression: 'rebeccapurple',
+        colorExpression: 'rebeccapurple',
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border: 5px solid rgba(102,51,153,1)')).to.be.true;
