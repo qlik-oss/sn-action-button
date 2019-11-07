@@ -393,7 +393,6 @@ export default function ext({ translator }) {
                   tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
                   type: 'string',
                   component: 'media',
-                  defaultValue: '',
                   show(data) {
                     return propertyResolver.getValue(data, 'style.background.useImage');
                   },

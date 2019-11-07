@@ -24,11 +24,11 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = (type, defaultColor) => {
-  const color = type.useColorExpression
-    ? colorUtils.resolveExpression(type.colorExpression)
-    : colorUtils.resolveColor(type.color, palette);
-  return color === 'none' ? defaultColor : color;
+const getColor = ({ useColorExpression, colorExpression, color }, defaultColor) => {
+  const resolvedColor = useColorExpression
+    ? colorUtils.resolveExpression(colorExpression)
+    : colorUtils.resolveColor(color, palette);
+  return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
 export default {
@@ -42,15 +42,13 @@ export default {
     // font
     styles += formatProperty('font-size', !isNaN(style.font.size) ? `${style.font.size}px` : '12px');
     styles += formatProperty('color', getColor(style.font, '#ffffff'));
+    style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
+    style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
+    style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
     styles += formatProperty('text-align', style.font.align);
-    if (style.font.style) {
-      style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
-      style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
-      style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
-    }
     // background
     styles += formatProperty('background-color', getColor(style.background, primaryColor));
-    if (style.background.useImage && style.background.url) {
+    if (style.background.useImage) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       bgUrl.replace(/^\.\.\//i, '/');
       bgUrl = bgUrl.replace(/"/g, '\\"');

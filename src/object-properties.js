@@ -97,6 +97,20 @@ const properties = {
        */
       useImage: false,
       /**
+       * @type {object}
+       */
+      url: {
+        /**
+         * @type {object}
+         */
+        qStaticContentUrl: {
+          /**
+           * @type {string}
+           */
+          qUrl: '',
+        },
+      },
+      /**
        * @type {string}
        */
       size: 'auto',
