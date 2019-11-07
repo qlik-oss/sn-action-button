@@ -238,16 +238,16 @@ export default function ext({ translator }) {
               type: 'items',
               translation: 'properties.font',
               items: {
-                fontSize: {
-                  component: 'string',
-                  type: 'string',
-                  ref: 'style.font.size',
-                  translation: 'properties.fontSize',
-                  expression: 'optional',
-                },
-                fontColor: {
+                sizeAndColor: {
                   type: 'items',
                   items: {
+                    fontSize: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.font.size',
+                      translation: 'properties.fontSize',
+                      expression: 'optional',
+                    },
                     useFontColorExpression: {
                       ref: 'style.font.useColorExpression',
                       type: 'boolean',
@@ -273,66 +273,71 @@ export default function ext({ translator }) {
                     },
                   },
                 },
-                fontStyling: {
-                  component: 'item-selection-list',
-                  type: 'string',
-                  ref: 'style.font.style',
-                  translation: 'properties.textStyle',
-                  horizontal: true,
-                  multipleSelect: true,
-                  items: [
-                    {
-                      component: 'icon-item',
-                      icon: 'bold',
-                      value: 'bold',
-                      translation: 'Common.bold',
-                      labelPlacement: 'bottom',
+                stylingAndAlign: {
+                  type: 'items',
+                  items: {
+                    fontStyling: {
+                      component: 'item-selection-list',
+                      type: 'string',
+                      ref: 'style.font.style',
+                      translation: 'properties.textStyle',
+                      horizontal: true,
+                      multipleSelect: true,
+                      items: [
+                        {
+                          component: 'icon-item',
+                          icon: 'bold',
+                          value: 'bold',
+                          translation: 'Common.bold',
+                          labelPlacement: 'bottom',
+                        },
+                        {
+                          component: 'icon-item',
+                          icon: 'italic',
+                          value: 'italic',
+                          translation: 'Common.italic',
+                          labelPlacement: 'bottom',
+                        },
+                        {
+                          component: 'icon-item',
+                          icon: 'underline',
+                          value: 'underline',
+                          translation: 'Common.underline',
+                          labelPlacement: 'bottom',
+                        },
+                      ],
                     },
-                    {
-                      component: 'icon-item',
-                      icon: 'italic',
-                      value: 'italic',
-                      translation: 'Common.italic',
-                      labelPlacement: 'bottom',
+                    textAlign: {
+                      component: 'item-selection-list',
+                      type: 'string',
+                      ref: 'style.font.align',
+                      translation: 'properties.Alignment',
+                      horizontal: true,
+                      items: [
+                        {
+                          component: 'icon-item',
+                          icon: 'align_left',
+                          value: 'left',
+                          translation: 'properties.dock.left',
+                          labelPlacement: 'bottom',
+                        },
+                        {
+                          component: 'icon-item',
+                          icon: 'align_center',
+                          value: 'center',
+                          translation: 'Common.Center',
+                          labelPlacement: 'bottom',
+                        },
+                        {
+                          component: 'icon-item',
+                          icon: 'align_right',
+                          value: 'right',
+                          translation: 'properties.dock.right',
+                          labelPlacement: 'bottom',
+                        },
+                      ],
                     },
-                    {
-                      component: 'icon-item',
-                      icon: 'underline',
-                      value: 'underline',
-                      translation: 'Common.underline',
-                      labelPlacement: 'bottom',
-                    },
-                  ],
-                },
-                textAlign: {
-                  component: 'item-selection-list',
-                  type: 'string',
-                  ref: 'style.font.align',
-                  translation: 'properties.Alignment',
-                  horizontal: true,
-                  items: [
-                    {
-                      component: 'icon-item',
-                      icon: 'align_left',
-                      value: 'left',
-                      translation: 'properties.dock.left',
-                      labelPlacement: 'bottom',
-                    },
-                    {
-                      component: 'icon-item',
-                      icon: 'align_center',
-                      value: 'center',
-                      translation: 'Common.Center',
-                      labelPlacement: 'bottom',
-                    },
-                    {
-                      component: 'icon-item',
-                      icon: 'align_right',
-                      value: 'right',
-                      translation: 'properties.dock.right',
-                      labelPlacement: 'bottom',
-                    },
-                  ],
+                  },
                 },
               },
             },
@@ -369,98 +374,13 @@ export default function ext({ translator }) {
                     },
                   },
                 },
-                useBackgroundImage: {
-                  ref: 'style.background.useImage',
-                  type: 'boolean',
-                  translation: 'properties.backgroundImage.use',
-                  component: 'switch',
-                  options: [
-                    {
-                      value: true,
-                      translation: 'properties.on',
-                    },
-                    {
-                      value: false,
-                      translation: 'properties.off',
-                    },
-                  ],
-                },
-                backgroundUrl: {
-                  ref: 'style.background.url.qStaticContentUrlDef.qUrl',
-                  layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
-                  schemaIgnore: true,
-                  translation: 'Common.Image',
-                  tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
-                  type: 'string',
-                  component: 'media',
-                  show(data) {
-                    return propertyResolver.getValue(data, 'style.background.useImage');
-                  },
-                },
-                backgroundSize: {
-                  ref: 'style.background.size',
-                  translation: 'properties.backgroundImage.size',
-                  type: 'string',
-                  component: 'dropdown',
-                  options: [
-                    {
-                      value: 'auto',
-                      translation: 'properties.backgroundImage.originalSize',
-                    },
-                    {
-                      value: 'alwaysFit',
-                      translation: 'properties.backgroundImage.sizeAlwaysFit',
-                    },
-                    {
-                      value: 'fitWidth',
-                      translation: 'properties.backgroundImage.sizeFitWidth',
-                    },
-                    {
-                      value: 'fitHeight',
-                      translation: 'properties.backgroundImage.sizeFitHeight',
-                    },
-                    {
-                      value: 'fill',
-                      translation: 'properties.backgroundImage.sizeStretch',
-                    },
-                  ],
-                  show(data) {
-                    return (
-                      propertyResolver.getValue(data, 'style.background.useImage') &&
-                      propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
-                    );
-                  },
-                },
-                backgroundPosition: {
-                  ref: 'style.background.position',
-                  translation: 'Common.Position',
-                  type: 'string',
-                  component: 'align-matrix',
-                  show(data) {
-                    return (
-                      propertyResolver.getValue(data, 'style.background.useImage') &&
-                      propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
-                      propertyResolver.getValue(data, 'style.background.size') !== 'fill'
-                    );
-                  },
-                  currentSize(data) {
-                    return propertyResolver.getValue(data, 'style.background.size');
-                  },
-                },
-              },
-            },
-            borders: {
-              type: 'items',
-              grouped: true,
-              translation: 'properties.border',
-              items: {
-                useBorder: {
+                borderSettings: {
                   type: 'items',
                   items: {
-                    useBorder: {
-                      ref: 'style.border.useBorder',
+                    useBackgroundImage: {
+                      ref: 'style.background.useImage',
                       type: 'boolean',
-                      translation: 'properties.border.use',
+                      translation: 'properties.backgroundImage.use',
                       component: 'switch',
                       options: [
                         {
@@ -473,14 +393,104 @@ export default function ext({ translator }) {
                         },
                       ],
                     },
+                    backgroundUrl: {
+                      ref: 'style.background.url.qStaticContentUrlDef.qUrl',
+                      layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
+                      schemaIgnore: true,
+                      translation: 'Common.Image',
+                      tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
+                      type: 'string',
+                      component: 'media',
+                      show(data) {
+                        return propertyResolver.getValue(data, 'style.background.useImage');
+                      },
+                    },
+                    backgroundSize: {
+                      ref: 'style.background.size',
+                      translation: 'properties.backgroundImage.size',
+                      type: 'string',
+                      component: 'dropdown',
+                      options: [
+                        {
+                          value: 'auto',
+                          translation: 'properties.backgroundImage.originalSize',
+                        },
+                        {
+                          value: 'alwaysFit',
+                          translation: 'properties.backgroundImage.sizeAlwaysFit',
+                        },
+                        {
+                          value: 'fitWidth',
+                          translation: 'properties.backgroundImage.sizeFitWidth',
+                        },
+                        {
+                          value: 'fitHeight',
+                          translation: 'properties.backgroundImage.sizeFitHeight',
+                        },
+                        {
+                          value: 'fill',
+                          translation: 'properties.backgroundImage.sizeStretch',
+                        },
+                      ],
+                      show(data) {
+                        return (
+                          propertyResolver.getValue(data, 'style.background.useImage') &&
+                          propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                        );
+                      },
+                    },
+                    backgroundPosition: {
+                      ref: 'style.background.position',
+                      translation: 'Common.Position',
+                      type: 'string',
+                      component: 'align-matrix',
+                      show(data) {
+                        return (
+                          propertyResolver.getValue(data, 'style.background.useImage') &&
+                          propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
+                          propertyResolver.getValue(data, 'style.background.size') !== 'fill'
+                        );
+                      },
+                      currentSize(data) {
+                        return propertyResolver.getValue(data, 'style.background.size');
+                      },
+                    },
                   },
                 },
+              },
+            },
+            borders: {
+              type: 'items',
+              grouped: true,
+              translation: 'properties.border',
+              items: {
                 borderSettings: {
                   type: 'items',
-                  show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
                   items: {
+                    useBorder: {
+                      type: 'items',
+                      items: {
+                        useBorder: {
+                          ref: 'style.border.useBorder',
+                          type: 'boolean',
+                          translation: 'properties.border.use',
+                          component: 'switch',
+                          options: [
+                            {
+                              value: true,
+                              translation: 'properties.on',
+                            },
+                            {
+                              value: false,
+                              translation: 'properties.off',
+                            },
+                          ],
+                        },
+                      },
+                    },
                     borderRadius: {
                       component: 'slider',
+                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
                       translation: 'properties.border.radius',
                       type: 'number',
                       ref: 'style.border.radius',
@@ -490,6 +500,7 @@ export default function ext({ translator }) {
                     },
                     borderWidth: {
                       component: 'slider',
+                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
                       type: 'number',
                       ref: 'style.border.width',
                       translation: 'properties.border.width',
@@ -498,6 +509,7 @@ export default function ext({ translator }) {
                     },
                     colorDropdown: {
                       type: 'string',
+                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
                       component: 'dropdown',
                       translation: 'properties.border.color',
                       ref: 'style.border.useColorExpression',
@@ -509,14 +521,18 @@ export default function ext({ translator }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data => !propertyResolver.getValue(data, 'style.border.useColorExpression'),
+                      show: data =>
+                        propertyResolver.getValue(data, 'style.border.useBorder') &&
+                        !propertyResolver.getValue(data, 'style.border.useColorExpression'),
                     },
                     borderColorExpression: {
                       component: 'string',
                       type: 'string',
                       ref: 'style.border.colorExpression',
                       translation: 'Common.Expression',
-                      show: data => propertyResolver.getValue(data, 'style.border.useColorExpression'),
+                      show: data =>
+                        propertyResolver.getValue(data, 'style.border.useBorder') &&
+                        propertyResolver.getValue(data, 'style.border.useColorExpression'),
                       expression: 'optional',
                     },
                   },

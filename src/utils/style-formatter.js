@@ -50,13 +50,15 @@ export default {
     styles += formatProperty('background-color', getColor(style.background, primaryColor));
     if (style.background.useImage) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
-      bgUrl.replace(/^\.\.\//i, '/');
-      bgUrl = bgUrl.replace(/"/g, '\\"');
-      bgUrl = bgUrl.replace(/'/g, "\\'");
-      styles += formatProperty('background-image', `url('${bgUrl}')`);
-      styles += formatProperty('background-size', backgroundSize[style.background.size]);
-      styles += formatProperty('background-position', backgroundPosition[style.background.position]);
-      styles += formatProperty('background-repeat', 'no-repeat');
+      if (bgUrl) {
+        bgUrl.replace(/^\.\.\//i, '/');
+        bgUrl = bgUrl.replace(/"/g, '\\"');
+        bgUrl = bgUrl.replace(/'/g, "\\'");
+        styles += formatProperty('background-image', `url('${bgUrl}')`);
+        styles += formatProperty('background-size', backgroundSize[style.background.size]);
+        styles += formatProperty('background-position', backgroundPosition[style.background.position]);
+        styles += formatProperty('background-repeat', 'no-repeat');
+      }
     }
     // border
     if (style.border.useBorder) {
