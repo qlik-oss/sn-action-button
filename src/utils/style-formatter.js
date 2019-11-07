@@ -25,15 +25,15 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (path, inputColor, defaultColor, isExpression) => {
+const getColor = (inputColor, defaultColor, isExpression) => {
   const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
-  return `${path}: ${color === 'none' ? defaultColor : color};`;
+  return `${color === 'none' ? defaultColor : color}`;
 };
 
 export default {
-  getStyles(style, disabled, Theme) {
+  getStyles({ style, disabled, Theme, element }) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;border:none;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;';
     const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
     const backgroundColor = style.useBackgroundColorExpression
       ? style.backgroundColorExpression
@@ -41,13 +41,11 @@ export default {
 
     palette = colorUtils.getPalette(Theme);
     primaryColor = colorUtils.getDefaultColor(Theme);
-    styles += formatColorProperty('color', fontColor, '#ffffff', style.useFontColorExpression);
+    styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty(
+    styles += formatProperty(
       'background-color',
-      backgroundColor,
-      primaryColor,
-      style.useBackgroundColorExpression
+      getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
     );
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
@@ -64,6 +62,19 @@ export default {
         backgroundPosition[style.background.position] || backgroundPosition.topLeft
       );
       styles += formatProperty('background-repeat', 'no-repeat');
+    }
+    if (style.border.isUsed) {
+      const { width, useExpression, radius, color, colorExpression } = style.border;
+      const borderColor = useExpression ? colorExpression : color;
+      const { offsetHeight, offsetWidth } = element;
+      const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
+      styles += formatProperty(
+        'border',
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(borderColor, 'none', useExpression)}`
+      );
+      styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
+    } else {
+      styles += 'border: none;';
     }
 
     return styles;

@@ -24,16 +24,51 @@ const properties = {
    */
   enabledCondition: 1,
   /**
-   * @typedef {object}
+   * @type {object}
    */
   navigation: {
     action: 'none',
   },
+  /**
+   * @type {object}
+   */
   style: {
     /**
      * @type {string}
      */
     label: 'Button',
+    /**
+     * @type {object}
+     */
+    border: {
+      /**
+       * @type {boolean}
+       */
+      isUsed: false,
+      /**
+       * @type {number}
+       */
+      radius: null,
+      /**
+       * @type {number}
+       */
+      width: 0,
+      /**
+       * @type {boolean}
+       */
+      useExpression: false,
+      /**
+       * @type {object}
+       */
+      color: {
+        index: -1,
+        color: null,
+      },
+      /**
+       * @type {object}
+       */
+      colorExpression: '',
+    },
   },
   /**
    * @type {array}
