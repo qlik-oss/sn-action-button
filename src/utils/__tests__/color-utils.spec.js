@@ -57,6 +57,4 @@ describe('color-utils', () => {
       expect(result).to.include.members(['none', 'color1', 'color2']);
     });
   });
-
-  // TODO: test for getDefault? We have a lot of passes in that funciton tho...
 });
