@@ -35,12 +35,13 @@ export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
     const primaryColor = colorUtils.getDefaultColor(Theme);
+    const fontSize = style.font.size !== '' && !isNaN(style.font.size) ? `${style.font.size}px` : '12px';
     palette = colorUtils.getPalette(Theme);
     // enable
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
     // font
-    styles += formatProperty('font-size', !isNaN(style.font.size) ? `${style.font.size}px` : '12px');
+    styles += formatProperty('font-size', fontSize);
     styles += formatProperty('color', getColor(style.font, '#ffffff'));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));

@@ -69,7 +69,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].field).to.equal(action.selectedField);
       expect(newProperties.actions[0].variable).to.equal(action.variable);
       expect(newProperties.actions[0].value).to.equal(action.value);
-      expect(newProperties.actions[0].softLock).to.equal(true);
+      expect(newProperties.actions[0].softLock).to.be.true;
       expect(newProperties.actions[0].cId).to.equal(action.cId);
     });
 
@@ -129,7 +129,7 @@ describe('conversion', () => {
       expect(result.qProperty.actions).to.be.an('array').that.is.empty;
       expect(result.qProperty.props.useEnabledCondition).to.equal(null);
       expect(result.qProperty.props.fullWidth).to.equal('auto');
-      expect(result.qProperty.showTitle).to.equal(false);
+      expect(result.qProperty.showTitle).to.be.false;
       expect(result.qProperty.title).to.equal('');
       expect(result.qProperty.footnote).to.equal('');
       expect(result.qProperty.navigation.action).to.equal('none');

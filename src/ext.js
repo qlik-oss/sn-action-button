@@ -187,7 +187,7 @@ export default function ext({ translator }) {
           type: 'items',
           translation: 'properties.enableConditionSection',
           items: {
-            usecondition: {
+            useCondition: {
               type: 'boolean',
               component: 'switch',
               translation: 'properties.enableToggle',
@@ -374,7 +374,7 @@ export default function ext({ translator }) {
                     },
                   },
                 },
-                borderSettings: {
+                backgroundImage: {
                   type: 'items',
                   items: {
                     useBackgroundImage: {
@@ -435,7 +435,7 @@ export default function ext({ translator }) {
                       show(data) {
                         return (
                           propertyResolver.getValue(data, 'style.background.useImage') &&
-                          propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                          !!propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
                         );
                       },
                     },
@@ -459,7 +459,7 @@ export default function ext({ translator }) {
                 },
               },
             },
-            borders: {
+            border: {
               type: 'items',
               grouped: true,
               translation: 'properties.border',
@@ -468,25 +468,20 @@ export default function ext({ translator }) {
                   type: 'items',
                   items: {
                     useBorder: {
-                      type: 'items',
-                      items: {
-                        useBorder: {
-                          ref: 'style.border.useBorder',
-                          type: 'boolean',
-                          translation: 'properties.border.use',
-                          component: 'switch',
-                          options: [
-                            {
-                              value: true,
-                              translation: 'properties.on',
-                            },
-                            {
-                              value: false,
-                              translation: 'properties.off',
-                            },
-                          ],
+                      ref: 'style.border.useBorder',
+                      type: 'boolean',
+                      translation: 'properties.border.use',
+                      component: 'switch',
+                      options: [
+                        {
+                          value: true,
+                          translation: 'properties.on',
                         },
-                      },
+                        {
+                          value: false,
+                          translation: 'properties.off',
+                        },
+                      ],
                     },
                     borderRadius: {
                       component: 'slider',
@@ -515,7 +510,7 @@ export default function ext({ translator }) {
                       ref: 'style.border.useColorExpression',
                       options: colorOptions,
                     },
-                    borderColor: {
+                    colorPicker: {
                       component: 'color-picker',
                       type: 'object',
                       ref: 'style.border.color',
@@ -525,7 +520,7 @@ export default function ext({ translator }) {
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         !propertyResolver.getValue(data, 'style.border.useColorExpression'),
                     },
-                    borderColorExpression: {
+                    colorExpression: {
                       component: 'string',
                       type: 'string',
                       ref: 'style.border.colorExpression',

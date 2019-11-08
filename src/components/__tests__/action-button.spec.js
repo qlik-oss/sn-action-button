@@ -23,7 +23,7 @@ describe('action button', () => {
     it('should render action button', () => {
       const aButton = actionButton(defaultValues);
       expect(aButton).to.be.an('object');
-      expect(aButton.textContent).to.equal('testLabel');
+      expect(aButton.textContent).to.equal('Button');
       expect(defaultValues.button.setAttribute).to.have.been.called;
     });
 
