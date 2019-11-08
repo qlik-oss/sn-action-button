@@ -38,6 +38,10 @@ const properties = {
      */
     label: 'Button',
     /**
+     * @type {number}
+     */
+    fontSize: 100,
+    /**
      * @type {object}
      */
     border: {

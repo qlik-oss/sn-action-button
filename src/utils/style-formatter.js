@@ -42,7 +42,6 @@ export default {
     palette = colorUtils.getPalette(Theme);
     primaryColor = colorUtils.getDefaultColor(Theme);
     styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
-    styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
     styles += formatProperty(
       'background-color',
       getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
@@ -78,5 +77,19 @@ export default {
     }
 
     return styles;
+  },
+  setFontSize(button, style) {
+    function setFontsize(textElement, newFontsize) {
+      textElement.setAttribute('style', `white-space: nowrap; font-size: ${newFontsize}px;`);
+    }
+    const text = button.firstElementChild;
+    text.textContent = style.label;
+    setFontsize(text, button.clientHeight);
+    let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+    setFontsize(text, newFontsize);
+    if (text.offsetWidth + 8 > button.clientWidth) {
+      newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
+    }
+    setFontsize(text, (newFontsize * style.fontSize) / 100);
   },
 };
