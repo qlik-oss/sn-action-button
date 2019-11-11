@@ -49,7 +49,7 @@ export default {
     styles += formatProperty('text-align', style.font.align);
     // background
     styles += formatProperty('background-color', getColor(style.background, primaryColor));
-    if (style.background.useImage) {
+    if (style.background.useImage && style.background.url.qStaticContentUrl) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl.replace(/^\.\.\//i, '/');

@@ -114,7 +114,7 @@ describe('style-formatter', () => {
 
     it('should return specified image url and default image settings', () => {
       style.background.useImage = true;
-      style.background.url.qStaticContentUrl.qUrl = someUrl;
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;

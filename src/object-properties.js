@@ -103,7 +103,7 @@ const properties = {
         /**
          * @type {object}
          */
-        qStaticContentUrl: {
+        qStaticContentUrlDef: {
           /**
            * @type {string}
            */
