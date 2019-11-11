@@ -42,8 +42,8 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
 
   button.onmousedown = () => {
     if (!disabled && !inEditMode) {
-      button.style.width = '98%';
-      button.style.height = '98%';
+      button.style.width = '99%';
+      button.style.height = '99%';
     }
   };
 
