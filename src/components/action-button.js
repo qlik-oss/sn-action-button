@@ -12,9 +12,10 @@ export const runActions = async actionList => {
 export default function ActionButton({ layout, button, Theme, app, context, senseNavigation, element }) {
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
+  const inEditMode = context.permissions.indexOf('interact') === -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
-  if (disabled && context.permissions.indexOf('interact') !== -1) {
+  if (disabled && !inEditMode) {
     button.setAttribute('disabled', true);
   } else {
     button.removeAttribute('disabled');
@@ -36,6 +37,20 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
         await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
       }
       button.removeAttribute('disabled');
+    }
+  };
+
+  button.onmousedown = () => {
+    if (!disabled && !inEditMode) {
+      button.style.width = '98%';
+      button.style.height = '98%';
+    }
+  };
+
+  button.onmouseup = () => {
+    if (!disabled && !inEditMode) {
+      button.style.width = '100%';
+      button.style.height = '100%';
     }
   };
 
