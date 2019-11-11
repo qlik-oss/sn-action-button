@@ -33,7 +33,7 @@ const formatColorProperty = (path, inputColor, defaultColor) => {
 export default {
   getStyles(style, disabled, Theme) {
     // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;';
+    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
 
     palette = themeResolver.getPalette(Theme);
     primaryColor = themeResolver.getDefaultColor(Theme);
