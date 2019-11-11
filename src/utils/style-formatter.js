@@ -1,4 +1,4 @@
-import themeResolver from './theme-resolver';
+import colorUtils from './color-utils';
 
 let palette;
 let primaryColor;
@@ -25,22 +25,35 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const formatColorProperty = (path, inputColor, defaultColor) => {
-  const color = themeResolver.resolveColor(inputColor, palette);
-  return `${path}: ${color === 'none' ? defaultColor : color};`;
+const getColor = (inputColor, defaultColor, isExpression) => {
+  const color = isExpression ? colorUtils.resolveExpression(inputColor) : colorUtils.resolveColor(inputColor, palette);
+  return `${color === 'none' ? defaultColor : color}`;
 };
 
 export default {
-  getStyles(style, disabled, Theme) {
-    // TODO: use constants for default values?
-    let styles = 'width: 100%;height: 100%;font-weight: bold;cursor:pointer;border:none;';
+  getStyles({ style, disabled, Theme, element }) {
+    let styles = 'width: 100%;height: 100%;padding: 4px;';
+    const fontColor = style.useFontColorExpression ? style.fontColorExpression : style.fontColor;
+    const backgroundColor = style.useBackgroundColorExpression
+      ? style.backgroundColorExpression
+      : style.backgroundColor;
 
-    palette = themeResolver.getPalette(Theme);
-    primaryColor = themeResolver.getDefaultColor(Theme);
-    styles += formatColorProperty('color', style.fontColor, '#ffffff');
+    palette = colorUtils.getPalette(Theme);
+    primaryColor = colorUtils.getDefaultColor(Theme);
+    styles += formatProperty('color', getColor(fontColor, '#ffffff', style.useFontColorExpression));
     styles += formatProperty('font-size', !isNaN(style.fontSize) ? `${style.fontSize}px` : '12px');
-    styles += formatColorProperty('background-color', style.backgroundColor, primaryColor);
+    styles += formatProperty('text-align', style.textAlign);
+    if (style.textStyle) {
+      style.textStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+      style.textStyle.italic && (styles += formatProperty('font-style', 'italic'));
+      style.textStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
+    }
+    styles += formatProperty(
+      'background-color',
+      getColor(backgroundColor, primaryColor, style.useBackgroundColorExpression)
+    );
     disabled && (styles += formatProperty('opacity', 0.4));
+    !disabled && (styles += formatProperty('cursor', 'pointer'));
 
     if (style.background && style.background.isUsed) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
@@ -54,6 +67,19 @@ export default {
         backgroundPosition[style.background.position] || backgroundPosition.topLeft
       );
       styles += formatProperty('background-repeat', 'no-repeat');
+    }
+    if (style.border.isUsed) {
+      const { width, useExpression, radius, color, colorExpression } = style.border;
+      const borderColor = useExpression ? colorExpression : color;
+      const { offsetHeight, offsetWidth } = element;
+      const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
+      styles += formatProperty(
+        'border',
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(borderColor, 'none', useExpression)}`
+      );
+      styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
+    } else {
+      styles += 'border: none;';
     }
 
     return styles;

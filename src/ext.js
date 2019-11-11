@@ -1,8 +1,20 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
+import importProperties from './utils/conversion';
 
-export default function ext(/* env */) {
+const colorOptions = [
+  {
+    value: false,
+    translation: 'properties.colorMode.primary',
+  },
+  {
+    value: true,
+    translation: 'properties.colorMode.byExpression',
+  },
+];
+
+export default function ext({ translator }) {
   return {
     definition: {
       type: 'items',
@@ -10,19 +22,19 @@ export default function ext(/* env */) {
       items: {
         actions: {
           type: 'items',
-          label: 'Actions',
+          translation: 'Object.ActionButton.Actions',
           items: {
             actions: {
               type: 'array',
-              label: 'Actions',
+              translation: 'Object.ActionButton.Actions',
               ref: 'actions',
-              itemTitleRef: (data, index) => {
+              itemTitleRef: data => {
                 const act = actions.find(action => data.actionType === action.value);
-                return (act && act.label) || `Action ${index + 1}`;
+                return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
               },
               allowAdd: true,
               allowRemove: true,
-              addTranslation: 'Add Item',
+              addTranslation: 'Object.ActionButton.AddAction',
               items: {
                 actionType: {
                   type: 'string',
@@ -82,14 +94,14 @@ export default function ext(/* env */) {
                 showSystemVariables: {
                   type: 'boolean',
                   ref: 'showSystemVariables',
-                  label: 'showSystemVariables',
+                  translation: 'ExpressionEditor.SystemVariables',
                   defaultValue: false,
                   show: data => checkShowAction(data, 'variable'),
                 },
                 softLock: {
                   type: 'boolean',
                   ref: 'softLock',
-                  label: 'Overwrite locked selections',
+                  translation: 'Object.ActionButton.Softlock',
                   defaultValue: false,
                   show: data => checkShowAction(data, 'softLock'),
                 },
@@ -97,7 +109,7 @@ export default function ext(/* env */) {
                   type: 'string',
                   ref: 'value',
                   component: 'string',
-                  label: 'Value',
+                  translation: 'properties.value',
                   expression: 'optional',
                   show: data => checkShowAction(data, 'value'),
                 },
@@ -107,12 +119,12 @@ export default function ext(/* env */) {
               component: 'expandable-items',
               items: {
                 navigation: {
-                  label: 'Navigation',
+                  translation: 'Object.ActionButton.Navigation',
                   type: 'items',
                   items: {
                     action: {
                       ref: 'navigation.action',
-                      label: 'Navigation action',
+                      translation: 'Object.ActionButton.Navigation',
                       component: 'dropdown',
                       defaultValue: null,
                       options: navigationActions,
@@ -120,14 +132,14 @@ export default function ext(/* env */) {
                     sheetId: {
                       type: 'string',
                       ref: 'navigation.sheet',
-                      label: 'Sheet Id',
+                      translation: 'properties.sheet',
                       expression: 'optional',
                       show: data => checkShowNavigation(data, 'sheetId'),
                     },
                     sheet: {
                       type: 'string',
                       ref: 'navigation.sheet',
-                      label: 'Sheet',
+                      translation: 'properties.sheet',
                       component: 'dropdown',
                       show: data => checkShowNavigation(data, 'sheet'),
                       options: async (action, hyperCubeHandler) => {
@@ -141,7 +153,7 @@ export default function ext(/* env */) {
                     story: {
                       type: 'string',
                       ref: 'navigation.story',
-                      label: 'Story',
+                      translation: 'properties.story',
                       component: 'dropdown',
                       show: data => checkShowNavigation(data, 'story'),
                       options: async (action, hyperCubeHandler) => {
@@ -155,13 +167,13 @@ export default function ext(/* env */) {
                     websiteUrl: {
                       type: 'string',
                       ref: 'navigation.websiteUrl',
-                      label: 'Website Url',
+                      translation: 'properties.website',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                     },
                     sameWindow: {
                       type: 'boolean',
                       ref: 'navigation.sameWindow',
-                      label: 'Open in same window',
+                      translation: 'properties.sameWindow',
                       show: data => checkShowNavigation(data, 'websiteUrl'),
                       defaultValue: false,
                     },
@@ -173,85 +185,199 @@ export default function ext(/* env */) {
         },
         enableCondition: {
           type: 'items',
-          label: 'Enable condition',
+          translation: 'properties.enableConditionSection',
           items: {
             usecondition: {
               type: 'boolean',
               component: 'switch',
-              label: 'Use enable condition',
+              translation: 'properties.enableToggle',
               ref: 'useEnabledCondition',
               options: [
                 {
                   value: true,
-                  label: 'On',
+                  translation: 'properties.on',
                 },
                 {
                   value: false,
-                  label: 'Off',
+                  translation: 'properties.off',
                 },
               ],
             },
             condition: {
               ref: 'enabledCondition',
-              label: 'Enable condition',
+              translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              show(data) {
-                return data.useEnabledCondition === true;
-              },
+              show: data => data.useEnabledCondition,
             },
           },
         },
         settings: {
           component: 'expandable-items',
-          translation: 'Appearance',
+          translation: 'Common.Appearance',
           uses: 'settings',
           items: {
             general: {
               type: 'items',
-              items: [
-                {
+              translation: 'properties.general',
+              items: {
+                showTitles: {},
+                details: {
+                  show: false,
+                },
+                label: {
                   component: 'string',
                   ref: 'style.label',
-                  translation: 'Label',
+                  translation: 'Common.Label',
                   expression: 'optional',
                 },
-              ],
+              },
             },
             font: {
               grouped: true,
               type: 'items',
-              translation: 'Font',
-              items: [
-                {
+              translation: 'properties.font',
+              items: {
+                fontSize: {
                   component: 'string',
                   type: 'string',
                   ref: 'style.fontSize',
-                  translation: 'Font size',
+                  translation: 'properties.fontSize',
                   expression: 'optional',
                 },
-                {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.fontColor',
-                  translation: 'Font color',
-                  dualOutput: true,
-                  show: true,
+                fontColor: {
+                  type: 'items',
+                  items: {
+                    useFontColorExpression: {
+                      ref: 'style.useFontColorExpression',
+                      type: 'boolean',
+                      translation: 'properties.fontColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.fontColorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show: data => data.style.useFontColorExpression,
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.fontColor',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => !data.style.useFontColorExpression,
+                    },
+                  },
                 },
-              ],
+                fontStyling: {
+                  component: 'item-selection-list',
+                  type: 'string',
+                  ref: 'style.textStyle',
+                  translation: 'properties.textStyle',
+                  horizontal: true,
+                  multipleSelect: true,
+                  items: [
+                    {
+                      component: 'icon-item',
+                      icon: 'bold',
+                      value: 'bold',
+                      translation: 'Common.bold',
+                      labelPlacement: 'bottom',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'italic',
+                      value: 'italic',
+                      translation: 'Common.italic',
+                      labelPlacement: 'bottom',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'underline',
+                      value: 'underline',
+                      translation: 'Common.underline',
+                      labelPlacement: 'bottom',
+                    },
+                  ],
+                  defaultValue: {
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                  },
+                },
+                textAlign: {
+                  component: 'item-selection-list',
+                  type: 'string',
+                  ref: 'style.textAlign',
+                  translation: 'properties.Alignment',
+                  horizontal: true,
+                  items: [
+                    {
+                      component: 'icon-item',
+                      icon: 'align_left',
+                      value: 'left',
+                      translation: 'properties.dock.left',
+                      labelPlacement: 'bottom',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'align_center',
+                      value: 'center',
+                      translation: 'Common.Center',
+                      labelPlacement: 'bottom',
+                    },
+                    {
+                      component: 'icon-item',
+                      icon: 'align_right',
+                      value: 'right',
+                      translation: 'properties.dock.right',
+                      labelPlacement: 'bottom',
+                    },
+                  ],
+                  defaultValue: 'center',
+                },
+              },
             },
             background: {
               grouped: true,
               type: 'items',
-              translation: 'Background',
+              translation: 'properties.background',
               items: {
-                colorPicker: {
-                  component: 'color-picker',
-                  type: 'object',
-                  ref: 'style.backgroundColor',
-                  translation: 'Background color',
-                  dualOutput: true,
-                  show: true,
+                backgroundColor: {
+                  type: 'items',
+                  items: {
+                    useColorExpression: {
+                      ref: 'style.useBackgroundColorExpression',
+                      type: 'boolean',
+                      translation: 'AppDetails.SheetBackgroundColor',
+                      component: 'dropdown',
+                      options: colorOptions,
+                    },
+                    colorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.backgroundColorExpression',
+                      translation: 'Common.Expression',
+                      expression: 'optional',
+                      show(data) {
+                        return data.style.useBackgroundColorExpression;
+                      },
+                    },
+                    colorPicker: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.backgroundColor',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show(data) {
+                        return !data.style.useBackgroundColorExpression;
+                      },
+                    },
+                  },
                 },
                 useBackgroundImage: {
                   ref: 'style.background.isUsed',
@@ -335,10 +461,87 @@ export default function ext(/* env */) {
                 },
               },
             },
+            borders: {
+              type: 'items',
+              grouped: true,
+              translation: 'properties.border',
+              items: {
+                useBorders: {
+                  type: 'items',
+                  items: {
+                    useBorders: {
+                      ref: 'style.border.isUsed',
+                      type: 'boolean',
+                      translation: 'properties.border.use',
+                      component: 'switch',
+                      defaultValue: false,
+                      options: [
+                        {
+                          value: true,
+                          translation: 'properties.on',
+                        },
+                        {
+                          value: false,
+                          translation: 'properties.off',
+                        },
+                      ],
+                    },
+                  },
+                },
+                borderSettings: {
+                  type: 'items',
+                  show: data => propertyResolver.getValue(data, 'style.border.isUsed'),
+                  items: {
+                    borderRadius: {
+                      component: 'slider',
+                      translation: 'properties.border.radius',
+                      type: 'number',
+                      ref: 'style.border.radius',
+                      min: 0,
+                      max: 100,
+                      step: 1,
+                    },
+                    borderWidth: {
+                      component: 'slider',
+                      type: 'number',
+                      ref: 'style.border.width',
+                      translation: 'properties.border.width',
+                      min: 0,
+                      max: 100,
+                    },
+                    colorDropdown: {
+                      type: 'string',
+                      component: 'dropdown',
+                      translation: 'properties.border.color',
+                      ref: 'style.border.useExpression',
+                      options: colorOptions,
+                    },
+                    borderColor: {
+                      component: 'color-picker',
+                      type: 'object',
+                      ref: 'style.border.color',
+                      translation: 'properties.color',
+                      dualOutput: true,
+                      show: data => !propertyResolver.getValue(data, 'style.border.useExpression'),
+                    },
+                    borderColorExpression: {
+                      component: 'string',
+                      type: 'string',
+                      ref: 'style.border.colorExpression',
+                      translation: 'Common.Expression',
+                      show: data => propertyResolver.getValue(data, 'style.border.useExpression'),
+                      expression: 'optional',
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
     },
+    importProperties,
+    exportProperties: null,
     support: {
       export: !1,
       exportData: !1,

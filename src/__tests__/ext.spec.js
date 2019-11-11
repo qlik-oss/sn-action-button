@@ -1,8 +1,14 @@
 import ext from '../ext';
 
 describe('ext', () => {
+  const translator = {
+    get: someString => someString,
+  };
   let data;
-  const props = ext();
+  const props = ext({ translator });
+  const actionItems = props.definition.items.actions.items.actions.items;
+  const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
+  const { font, background, borders } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -14,20 +20,18 @@ describe('ext', () => {
     it('Should return action label', () => {
       data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.equal('Apply a bookmark');
+      expect(itemTitle).to.equal('Object.ActionButton.ApplyBookmark');
     });
 
     it('Should return default action label when no act.label', () => {
       data = { actionType: 'someAction' };
       const itemTitle = itemTitleRef(data, 0);
-      expect(itemTitle).to.equal('Action 1');
+      expect(itemTitle).to.equal('Object.ActionButton.NewAction');
     });
   });
 
   describe('options', () => {
     let options;
-    const actionItems = props.definition.items.actions.items.actions.items;
-    const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
     const bookmarks = [
       {
         qData: {
@@ -133,10 +137,11 @@ describe('ext', () => {
   });
 
   describe('show functions', () => {
-    const { background } = props.definition.items.settings.items;
     beforeEach(() => {
       data = {
         style: {
+          useFontColorExpression: false,
+          useBackgroundColorExpression: false,
           background: {
             isUsed: true,
             url: {
@@ -145,14 +150,146 @@ describe('ext', () => {
               },
             },
           },
+          border: {
+            isUsed: true,
+            useExpression: false,
+          },
         },
+        useEnabledCondition: true,
       };
     });
+
+    it('should return false for all actionItems show functions', () => {
+      const actionObject = { actionType: 'forward' };
+      const resultBookmark = actionItems.bookmark.show(actionObject);
+      expect(resultBookmark).to.equal(false);
+      const resultField = actionItems.field.show(actionObject);
+      expect(resultField).to.equal(false);
+      const resultVariable = actionItems.variable.show(actionObject);
+      expect(resultVariable).to.equal(false);
+      const resultSystemVariable = actionItems.showSystemVariables.show(actionObject);
+      expect(resultSystemVariable).to.equal(false);
+      const resultSoftLock = actionItems.softLock.show(actionObject);
+      expect(resultSoftLock).to.equal(false);
+      const resultValue = actionItems.value.show(actionObject);
+      expect(resultValue).to.equal(false);
+    });
+
+    it('should return true when bookmark needs to show', () => {
+      const result = actionItems.bookmark.show({ actionType: 'applyBookmark' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when field needs to show', () => {
+      const result = actionItems.field.show({ actionType: 'clearAllButThis' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when field needs to show', () => {
+      const result = actionItems.variable.show({ actionType: 'setVariable' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when showSystemVariables needs to show', () => {
+      const result = actionItems.showSystemVariables.show({ actionType: 'setVariable' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when softLock needs to show', () => {
+      const result = actionItems.softLock.show({ actionType: 'selectAll' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when value needs to show', () => {
+      const result = actionItems.value.show({ actionType: 'selectValues' });
+      expect(result).to.equal(true);
+    });
+
+    it('should return false for all navigationItems show functions', () => {
+      const navigationObject = { navigation: { action: 'nextSheet' } };
+      const resultSheetId = navigationItems.sheetId.show(navigationObject);
+      expect(resultSheetId).to.equal(false);
+      const resultSheet = navigationItems.sheet.show(navigationObject);
+      expect(resultSheet).to.equal(false);
+      const resultStory = navigationItems.story.show(navigationObject);
+      expect(resultStory).to.equal(false);
+      const resultWebsiteUrl = navigationItems.websiteUrl.show(navigationObject);
+      expect(resultWebsiteUrl).to.equal(false);
+      const resultSameWindow = navigationItems.sameWindow.show(navigationObject);
+      expect(resultSameWindow).to.equal(false);
+    });
+
+    it('should return true when sheetId needs to show', () => {
+      const result = navigationItems.sheetId.show({ navigation: { action: 'goToSheetById' } });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when sheet needs to show', () => {
+      const result = navigationItems.sheet.show({ navigation: { action: 'goToSheet' } });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when story needs to show', () => {
+      const result = navigationItems.story.show({ navigation: { action: 'goToStory' } });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when websiteUrl needs to show', () => {
+      const result = navigationItems.websiteUrl.show({ navigation: { action: 'openWebsite' } });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when sameWindow needs to show', () => {
+      const result = navigationItems.sameWindow.show({ navigation: { action: 'openWebsite' } });
+      expect(result).to.equal(true);
+    });
+
+    it('should return true when enableCondition needs to show', () => {
+      const result = props.definition.items.enableCondition.items.condition.show(data);
+      expect(result).to.equal(true);
+    });
+
+    it('should return false when enableCondition should not show', () => {
+      data.useEnabledCondition = false;
+      const result = props.definition.items.enableCondition.items.condition.show(data);
+      expect(result).to.equal(false);
+    });
+
+    it('should return false for expression and true for picker when useFontColorExpression is false', () => {
+      const resultExpression = font.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = font.items.fontColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(false);
+      expect(resultPicker).to.equal(true);
+    });
+
+    it('should return true for expression and false for picker when useFontColorExpression is true', () => {
+      data.style.useFontColorExpression = true;
+      const resultExpression = font.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = font.items.fontColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(true);
+      expect(resultPicker).to.equal(false);
+    });
+
+    it('should return false for expression and true for picker when useBackgroundColorExpression is false', () => {
+      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
+      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(false);
+      expect(resultPicker).to.equal(true);
+    });
+
+    it('should return true for expression and false for picker when useBackgroundColorExpression is true', () => {
+      data.style.useBackgroundColorExpression = true;
+      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
+      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      expect(resultExpression).to.equal(true);
+      expect(resultPicker).to.equal(false);
+    });
+
     it('should return true when background is used', () => {
       const result = background.items.backgroundUrl.show(data);
       expect(result).to.equal(true);
     });
-    it('should return false  for backgroundSize when background is not used', () => {
+    it('should return false for backgroundSize when background is not used', () => {
       data.style.background.isUsed = false;
       const result = background.items.backgroundUrl.show(data);
       expect(result).to.equal(false);
@@ -184,6 +321,39 @@ describe('ext', () => {
       data.style.background.size = 'fill';
       const result = background.items.backgroundPosition.show(data);
       expect(result).to.equal(false);
+    });
+    it('should return true and show when border is used', () => {
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(true);
+    });
+
+    it('should return false and not show when border is not used', () => {
+      data.style.border.isUsed = false;
+      const result = borders.items.borderSettings.show(data);
+      expect(result).to.equal(false);
+    });
+
+    it('should show borderColor when no expression is used', () => {
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
+      expect(borderColor).to.equal(true);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(false);
+    });
+
+    it('should show borderColorExpression when expression is used', () => {
+      data.style.border.useExpression = true;
+      const borderColor = borders.items.borderSettings.items.borderColor.show(data);
+      expect(borderColor).to.equal(false);
+      const borderColorExpression = borders.items.borderSettings.items.borderColorExpression.show(data);
+      expect(borderColorExpression).to.equal(true);
+    });
+  });
+
+  describe('currentSize', () => {
+    it('should return curent size', () => {
+      data = { style: { background: { size: 'mySize' } } };
+      const result = background.items.backgroundPosition.currentSize(data);
+      expect(result).to.equal('mySize');
     });
   });
 });
