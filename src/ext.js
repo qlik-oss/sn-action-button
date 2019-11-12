@@ -244,7 +244,7 @@ export default function ext({ translator }) {
                     fontSize: {
                       component: 'slider',
                       type: 'number',
-                      ref: 'style.fontSize',
+                      ref: 'style.font.size',
                       translation: 'properties.fontSize',
                       min: 0,
                       steps: 1,

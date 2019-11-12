@@ -44,7 +44,7 @@ const properties = {
       /**
        * @type {number}
        */
-      size: 100,
+      size: 50,
       /**
        * @type {boolean}
        */
