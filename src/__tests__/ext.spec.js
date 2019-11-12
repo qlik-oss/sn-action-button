@@ -359,9 +359,9 @@ describe('ext', () => {
 
   describe('currentSize', () => {
     it('should return current size', () => {
-      data = { style: { background: { size: 'mySize' } } };
+      data = JSON.parse(JSON.stringify(objectProperties));
       const result = background.items.backgroundImage.items.backgroundPosition.currentSize(data);
-      expect(result).to.equal('mySize');
+      expect(result).to.equal('auto');
     });
   });
 });

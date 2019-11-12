@@ -107,7 +107,6 @@ describe('style-formatter', () => {
     });
 
     it('should return default background color when color is none', () => {
-      style.background.color = { index: 0 };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
     });
@@ -118,7 +117,7 @@ describe('style-formatter', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
-      expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
+      expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;
     });
 
@@ -139,7 +138,7 @@ describe('style-formatter', () => {
     it('should return specified image position', () => {
       style.background = {
         useImage: true,
-        position: 'centerCenter',
+        position: 'topLeft',
         url: {
           qStaticContentUrl: {
             qUrl: someUrl,
@@ -147,7 +146,7 @@ describe('style-formatter', () => {
         },
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
+      expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
     });
     // border
     it('should set border color and width', () => {

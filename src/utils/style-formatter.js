@@ -1,7 +1,5 @@
 import colorUtils from './color-utils';
 
-let palette;
-
 const backgroundSize = {
   auto: 'auto auto',
   alwaysFit: 'contain',
@@ -24,7 +22,7 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = ({ useColorExpression, colorExpression, color }, defaultColor) => {
+const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, palette) => {
   const resolvedColor = useColorExpression
     ? colorUtils.resolveExpression(colorExpression)
     : colorUtils.resolveColor(color, palette);
@@ -36,19 +34,19 @@ export default {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const fontSize = style.font.size !== '' && !isNaN(style.font.size) ? `${style.font.size}px` : '12px';
-    palette = colorUtils.getPalette(Theme);
+    const palette = colorUtils.getPalette(Theme);
     // enable
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
     // font
     styles += formatProperty('font-size', fontSize);
-    styles += formatProperty('color', getColor(style.font, '#ffffff'));
+    styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
     style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
     styles += formatProperty('text-align', style.font.align);
     // background
-    styles += formatProperty('background-color', getColor(style.background, primaryColor));
+    styles += formatProperty('background-color', getColor(style.background, primaryColor, palette));
     if (style.background.useImage && style.background.url.qStaticContentUrl) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
@@ -68,7 +66,7 @@ export default {
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       styles += formatProperty(
         'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, 'none')}`
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, 'none', palette)}`
       );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {

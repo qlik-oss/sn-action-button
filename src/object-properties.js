@@ -117,7 +117,7 @@ const properties = {
       /**
        * @type {string}
        */
-      position: 'topLeft',
+      position: 'centerCenter',
     },
     /**
      * @type {object}
