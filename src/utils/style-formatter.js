@@ -75,12 +75,10 @@ export default {
   },
   setFontSizeAndFamily({ button, Theme, layout }) {
     const { style } = layout;
-    const currentTheme = Theme.getCurrent();
-    const { fontFamily } = currentTheme.properties;
     function setFontsize(textElement, newFontsize) {
       textElement.setAttribute(
         'style',
-        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${fontFamily || 'inherit'}`
+        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${colorUtils.getFontFamily(Theme)}`
       );
     }
     const text = button.firstElementChild;
@@ -91,6 +89,6 @@ export default {
     if (text.offsetWidth + 8 > button.clientWidth) {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
-    setFontsize(text, (newFontsize * style.fontSize) / 100);
+    setFontsize(text, (newFontsize * style.font.size) / 100);
   },
 };

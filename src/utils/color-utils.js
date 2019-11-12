@@ -1,6 +1,13 @@
 /* eslint-disable no-cond-assign */
 import CSSColors from './css-colors';
 
+function getCurrentTheme(Theme) {
+  if (Theme && Theme.getCurrent) {
+    return Theme.getCurrent();
+  }
+  return undefined;
+}
+
 const colorUtils = {
   resolveExpression: input => {
     // rgb
@@ -42,20 +49,16 @@ const colorUtils = {
     return 'none';
   },
   getPalette: Theme => {
-    let result = [];
-    if (Theme && Theme.getCurrent) {
-      const current = Theme.getCurrent();
-      result = current && current.properties.palettes.ui[0].colors;
-    }
-    return result;
+    const current = getCurrentTheme(Theme);
+    return (current && current.properties.palettes.ui[0].colors) || [];
   },
   getDefaultColor: Theme => {
-    let result = '';
-    if (Theme && Theme.getCurrent) {
-      const current = Theme.getCurrent();
-      result = current && current.properties.dataColors && current.properties.dataColors.primaryColor;
-    }
-    return result || '#4477aa';
+    const current = getCurrentTheme(Theme);
+    return (current && current.properties.dataColors && current.properties.dataColors.primaryColor) || '#4477aa';
+  },
+  getFontFamily: Theme => {
+    const current = getCurrentTheme(Theme);
+    return (current && current.properties.fontFamily) || 'inherit';
   },
 };
 
