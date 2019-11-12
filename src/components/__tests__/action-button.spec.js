@@ -62,13 +62,13 @@ describe('action button', () => {
     });
   });
   describe('disabledButton', () => {
-    button = {
-      setAttribute: sinon.spy(),
-    };
-    defaults.button = button;
-    defaults.layout.style.useEnabledCondition = true;
-    defaults.layout.style.enabledCondition = 0;
     it('should render disabled button', () => {
+      button = {
+        setAttribute: sinon.spy(),
+      };
+      defaults.button = button;
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
       const aButton = actionButton(defaults);
       expect(aButton).to.be.an('object');
       expect(defaults.button.setAttribute).to.have.been.calledWith('disabled', true);
