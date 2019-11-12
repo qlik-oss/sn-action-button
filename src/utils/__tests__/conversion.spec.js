@@ -1,4 +1,5 @@
 import importProperties, { convertNavigation, convertAction } from '../conversion';
+import objectProperties from '../../object-properties';
 
 describe('conversion', () => {
   describe('convertNavigation', () => {
@@ -69,7 +70,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].field).to.equal(action.selectedField);
       expect(newProperties.actions[0].variable).to.equal(action.variable);
       expect(newProperties.actions[0].value).to.equal(action.value);
-      expect(newProperties.actions[0].softLock).to.equal(true);
+      expect(newProperties.actions[0].softLock).to.be.true;
       expect(newProperties.actions[0].cId).to.equal(action.cId);
     });
 
@@ -112,15 +113,7 @@ describe('conversion', () => {
     let initialProperties;
     beforeEach(() => {
       exportedFmt = { properties: { visualization: 'qlik-button-for-navigation' } };
-      initialProperties = {
-        showTitle: false,
-        title: '',
-        subtitle: '',
-        footnote: '',
-        navigation: { action: 'none' },
-        style: { label: '', useEnabledCondition: false, enabledCondition: 1 },
-        action: [],
-      };
+      initialProperties = JSON.parse(JSON.stringify(objectProperties));
     });
     it('should return default newPropertyTree', () => {
       const result = importProperties(exportedFmt, initialProperties);
@@ -129,7 +122,7 @@ describe('conversion', () => {
       expect(result.qProperty.actions).to.be.an('array').that.is.empty;
       expect(result.qProperty.props.useEnabledCondition).to.equal(null);
       expect(result.qProperty.props.fullWidth).to.equal('auto');
-      expect(result.qProperty.showTitle).to.equal(false);
+      expect(result.qProperty.showTitles).to.be.false;
       expect(result.qProperty.title).to.equal('');
       expect(result.qProperty.footnote).to.equal('');
       expect(result.qProperty.navigation.action).to.equal('none');
@@ -144,7 +137,7 @@ describe('conversion', () => {
     it('should convert props from exported properties and overwrite initalprops', () => {
       exportedFmt.properties.props = {
         buttonLabel: 'myButton',
-        buttonShowIcon: false,
+        buttonShowIcon: true,
         buttonIconLui: 'thisIcon',
         buttonTextAlign: 'left',
         navigationAction: 'thisNavigationAction',
@@ -162,13 +155,13 @@ describe('conversion', () => {
         ],
       };
       const result = importProperties(exportedFmt, initialProperties);
+      const expectedStyle = JSON.parse(JSON.stringify(initialProperties.style));
+      expectedStyle.label = 'myButton';
+      expectedStyle.showIcon = true;
+      expectedStyle.icon = 'thisIcon';
+      expectedStyle.font.align = 'left';
       expect(result.qProperty.actions).to.have.length(2);
-      expect(result.qProperty.style).to.deep.equal({
-        label: 'myButton',
-        showIcon: false,
-        icon: 'thisIcon',
-        textAlign: 'left',
-      });
+      expect(result.qProperty.style).to.deep.equal(expectedStyle);
       expect(result.qProperty.navigation).to.deep.equal({
         action: 'thisNavigationAction',
         sameWindow: false,

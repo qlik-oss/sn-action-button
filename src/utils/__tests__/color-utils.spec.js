@@ -3,7 +3,7 @@ import defaultValues from '../../__tests__/default-button-props';
 
 describe('color-utils', () => {
   const palette = ['color1', 'color2', 'color3'];
-  describe('resolve-color', () => {
+  describe('resolveColor', () => {
     it('should resolve color for theme', () => {
       const color = colorUtils.resolveColor('color2', palette);
       expect(color).to.equal('color2');
@@ -21,7 +21,7 @@ describe('color-utils', () => {
       expect(color).to.equal('none');
     });
   });
-  describe('resolve-color', () => {
+  describe('resolveExpression', () => {
     it('should resolve color for rgb expression', () => {
       const color = colorUtils.resolveExpression('RGB(255,255,0)');
       expect(color).to.equal('rgb(255,255,0)');
@@ -57,6 +57,4 @@ describe('color-utils', () => {
       expect(result).to.include.members(['none', 'color1', 'color2']);
     });
   });
-
-  // TODO: test for getDefault? We have a lot of passes in that funciton tho...
 });

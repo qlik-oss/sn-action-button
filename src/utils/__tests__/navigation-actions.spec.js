@@ -113,16 +113,16 @@ describe('navigation actions', () => {
     });
     it('should return true when should be shown', () => {
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).to.equal(true);
+      expect(result).to.be.true;
     });
     it('should return undefined when no action found', () => {
       data.navigation.action = 'notAnAction';
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).to.equal(undefined);
+      expect(result).to.be.undefined;
     });
     it('should return false when field not in required input', () => {
       const result = checkShowNavigation(data, 'websiteUrl');
-      expect(result).to.equal(false);
+      expect(result).to.be.false;
     });
   });
 
