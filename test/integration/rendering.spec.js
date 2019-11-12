@@ -1,14 +1,13 @@
 const artifacts = {
-  artifactsPath: 'test/integration/__artifacts__'
+  artifactsPath: 'test/integration/__artifacts__',
 };
-
 
 describe('should render an', () => {
   const content = '.nebulajs-sn';
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
   before(async () => {
-    await page.goto(`${process.testServer.url}/render/app/${app}?object=mkzTM`);
+    await page.goto(`${process.testServer.url}/render/app/${app}?object=mtd`);
     await page.waitForSelector(content, { visible: true });
   });
 
