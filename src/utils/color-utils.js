@@ -1,12 +1,12 @@
 /* eslint-disable no-cond-assign */
 import CSSColors from './css-colors';
 
-function getCurrentTheme(Theme) {
+export const getCurrentTheme = Theme => {
   if (Theme && Theme.getCurrent) {
     return Theme.getCurrent();
   }
   return undefined;
-}
+};
 
 const colorUtils = {
   resolveExpression: input => {
@@ -44,7 +44,7 @@ const colorUtils = {
       if (input.color !== undefined) {
         return !input.color ? 'none' : input.color;
       }
-      return !input ? 'none' : input;
+      return typeof input === 'string' ? input : 'none';
     }
     return 'none';
   },

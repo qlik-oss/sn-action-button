@@ -78,7 +78,7 @@ export default {
     function setFontsize(textElement, newFontsize) {
       textElement.setAttribute(
         'style',
-        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${colorUtils.getFontFamily(Theme)}`
+        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${colorUtils.getFontFamily(Theme)};`
       );
     }
     const text = button.firstElementChild;

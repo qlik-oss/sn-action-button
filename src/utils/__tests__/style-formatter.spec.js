@@ -1,15 +1,15 @@
 import styleFormatter from '../style-formatter';
-import defaultProperties from '../../__tests__/default-button-props';
+import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;padding: 4px;cursor: pointer;color: #ffffff;font-weight: bold;text-align: center;background-color: #4477aa;border: none;';
+      'width: 100%;height: 100%;padding: 4px;cursor: pointer;color: #ffffff;font-weight: bold;text-align: center;background-color: myPrimaryColor;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
     const someUrl = '/media/Logo/qlik.png';
-    const { Theme, layout } = defaultProperties;
+    const { Theme, layout } = defaultValues;
     const disabled = false;
     let element;
 
@@ -95,7 +95,7 @@ describe('style-formatter', () => {
 
     it('should return default background color when color is none', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
+      expect(formattedStyle.includes('background-color: myPrimaryColor')).to.be.true;
     });
 
     it('should return specified image url and default image settings', () => {
@@ -106,6 +106,16 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
       expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;
+    });
+
+    it('should return no settings shen url is missing', () => {
+      style.background.useImage = true;
+      style.background.url.qStaticContentUrl = {};
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('background-image:')).to.be.false;
+      expect(formattedStyle.includes('background-size:')).to.be.false;
+      expect(formattedStyle.includes('background-position:')).to.be.false;
+      expect(formattedStyle.includes('background-repeat:')).to.be.false;
     });
 
     it('should return specified image size', () => {
@@ -181,6 +191,53 @@ describe('style-formatter', () => {
     it('should not set a border', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('border: none')).to.be.true;
+    });
+  });
+
+  describe('setFontSizeAndFamily', () => {
+    const { Theme } = defaultValues;
+    let button;
+    const layout = JSON.parse(JSON.stringify(defaultValues.layout));
+    beforeEach(() => {
+      button = {
+        firstElementChild: { setAttribute: sinon.spy(), offsetHeight: 400, offsetWidth: 20 },
+        clientHeight: 100,
+        clientWidth: 100,
+      };
+    });
+    it('should set fontSize and family to default', () => {
+      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      expect(button.firstElementChild.textContent).to.equal('Button');
+      expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 100px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 25px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 12.5px; font-family: myFont;'
+      );
+    });
+    it('should set fontSize when text offsetWidth is bigger than button', () => {
+      button.firstElementChild.offsetWidth = 400;
+      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 100px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 25px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 2.875px; font-family: myFont;'
+      );
     });
   });
 });

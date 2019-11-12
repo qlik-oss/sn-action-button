@@ -1,5 +1,8 @@
 import defaultValues from '../../__tests__/default-button-props';
-import { render } from '../root';
+import { render, teardown } from '../root';
+
+// Empty function should be test when filled
+teardown();
 
 describe('root', () => {
   describe('render', () => {
