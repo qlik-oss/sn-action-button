@@ -2,7 +2,7 @@ import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 
-import { render, teardown } from './components/root';
+import { render } from './components/root';
 
 export default function supernova(env) {
   const { Theme, sense, translator } = env;
@@ -29,11 +29,6 @@ export default function supernova(env) {
           senseNavigation,
         });
       },
-      resize() {},
-      willUnmount() {
-        teardown(this.element);
-      },
-      destroy() {},
     },
     ext: ext({ translator }),
   };

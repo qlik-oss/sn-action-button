@@ -14,17 +14,18 @@ describe('index', () => {
       firstElementChild: { setAttribute: () => {} },
     }),
   };
-  const thisElement = { appendChild: () => {} };
+  const thisElement = { appendChild: sinon.spy() };
   it('should render supernova', () => {
     const result = supernova(env);
     result.component.mounted(thisElement);
     result.component.render({ layout });
-    result.component.resize();
-    result.component.willUnmount();
-    result.component.destroy();
     expect(result)
       .to.be.an('object')
       .to.have.keys('qae', 'component', 'ext');
+    expect(result.component)
+      .to.be.an('object')
+      .to.have.keys('mounted', 'render', 'element');
+    expect(thisElement.appendChild).to.have.been.called;
   });
   it('should render supernova with navigation', () => {
     env.sense = {
