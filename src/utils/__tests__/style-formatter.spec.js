@@ -5,10 +5,9 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;padding: 4px;cursor: pointer;font-size: 12px;color: #ffffff;font-weight: bold;text-align: center;background-color: #4477aa;border: none;';
+      'width: 100%;height: 100%;padding: 4px;cursor: pointer;color: #ffffff;font-weight: bold;text-align: center;background-color: #4477aa;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
-    const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
     const { Theme, layout } = defaultProperties;
     const disabled = false;
@@ -38,18 +37,6 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
     });
     // font
-    it('should return specified font size', () => {
-      style.font.size = someSize;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
-    });
-
-    it('should return default font size for incorrect value', () => {
-      style.font.size = 'someSize';
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('font-size: 12px')).to.be.true;
-    });
-
     it('should return specified font color', () => {
       style.font.color = someColor;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });

@@ -73,9 +73,15 @@ export default {
 
     return styles;
   },
-  setFontSize(button, style) {
+  setFontSizeAndFamily({ button, Theme, layout }) {
+    const { style } = layout;
+    const currentTheme = Theme.getCurrent();
+    const { fontFamily } = currentTheme.properties;
     function setFontsize(textElement, newFontsize) {
-      textElement.setAttribute('style', `white-space: nowrap; font-size: ${newFontsize}px;`);
+      textElement.setAttribute(
+        'style',
+        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${fontFamily || 'inherit'}`
+      );
     }
     const text = button.firstElementChild;
     text.textContent = style.label;

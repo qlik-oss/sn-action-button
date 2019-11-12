@@ -6,5 +6,5 @@ export function teardown() {}
 export function render(element, props) {
   const button = ActionButton({ element, ...props });
   element.appendChild(button);
-  styleFormatter.setFontSize(button, props.layout.style);
+  styleFormatter.setFontSizeAndFamily({ button, ...props });
 }
