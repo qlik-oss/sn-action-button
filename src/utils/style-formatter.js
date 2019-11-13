@@ -29,17 +29,19 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
   return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
+const setFontsize = (textElement, newFontsize, fontFamily) => {
+  textElement.setAttribute('style', `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${fontFamily};`);
+};
+
 export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
     const primaryColor = colorUtils.getDefaultColor(Theme);
-    const fontSize = style.font.size !== '' && !isNaN(style.font.size) ? `${style.font.size}px` : '12px';
     const palette = colorUtils.getPalette(Theme);
     // enable
     disabled && (styles += formatProperty('opacity', 0.4));
     !disabled && (styles += formatProperty('cursor', 'pointer'));
     // font
-    styles += formatProperty('font-size', fontSize);
     styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
@@ -74,5 +76,18 @@ export default {
     }
 
     return styles;
+  },
+  setFontSizeAndFamily({ button, Theme, layout }) {
+    const { style } = layout;
+    const text = button.firstElementChild;
+    text.textContent = style.label;
+    const fontFamily = colorUtils.getFontFamily(Theme);
+    setFontsize(text, button.clientHeight, fontFamily);
+    let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+    setFontsize(text, newFontsize, fontFamily);
+    if (text.offsetWidth + 8 > button.clientWidth) {
+      newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
+    }
+    setFontsize(text, (newFontsize * style.font.size) / 100, fontFamily);
   },
 };

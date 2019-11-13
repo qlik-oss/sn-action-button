@@ -42,9 +42,9 @@ const properties = {
      */
     font: {
       /**
-       * @type {string}
+       * @type {number}
        */
-      size: '',
+      size: 50,
       /**
        * @type {boolean}
        */

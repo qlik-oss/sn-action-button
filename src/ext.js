@@ -242,11 +242,13 @@ export default function ext({ translator }) {
                   type: 'items',
                   items: {
                     fontSize: {
-                      component: 'string',
-                      type: 'string',
+                      component: 'slider',
+                      type: 'number',
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
-                      expression: 'optional',
+                      min: 1,
+                      steps: 1,
+                      max: 100,
                     },
                     useFontColorExpression: {
                       ref: 'style.font.useColorExpression',
