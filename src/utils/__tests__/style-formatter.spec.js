@@ -108,7 +108,7 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;
     });
 
-    it('should return no settings shen url is missing', () => {
+    it('should return no settings when url is missing', () => {
       style.background.useImage = true;
       style.background.url.qStaticContentUrl = {};
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });

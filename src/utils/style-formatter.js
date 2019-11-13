@@ -29,6 +29,10 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
   return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
+const setFontsize = (textElement, newFontsize, fontFamily) => {
+  textElement.setAttribute('style', `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${fontFamily};`);
+};
+
 export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
@@ -75,20 +79,15 @@ export default {
   },
   setFontSizeAndFamily({ button, Theme, layout }) {
     const { style } = layout;
-    function setFontsize(textElement, newFontsize) {
-      textElement.setAttribute(
-        'style',
-        `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${colorUtils.getFontFamily(Theme)};`
-      );
-    }
     const text = button.firstElementChild;
     text.textContent = style.label;
-    setFontsize(text, button.clientHeight);
+    const fontFamily = colorUtils.getFontFamily(Theme);
+    setFontsize(text, button.clientHeight, fontFamily);
     let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
-    setFontsize(text, newFontsize);
+    setFontsize(text, newFontsize, fontFamily);
     if (text.offsetWidth + 8 > button.clientWidth) {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
-    setFontsize(text, (newFontsize * style.font.size) / 100);
+    setFontsize(text, (newFontsize * style.font.size) / 100, fontFamily);
   },
 };
