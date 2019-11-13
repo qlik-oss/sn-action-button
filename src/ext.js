@@ -40,6 +40,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'actionType',
                   component: 'expression-with-dropdown',
+                  translation: 'Object.ActionButton.Actions',
                   defaultValue: null,
                   options: actions,
                   itemTitleRef: (data) => {
@@ -51,6 +52,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'bookmark',
                   component: 'expression-with-dropdown',
+                  translation: 'Common.Bookmarks',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
@@ -65,6 +67,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'field',
                   component: 'expression-with-dropdown',
+                  translation: 'Common.Fields',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
@@ -79,6 +82,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'variable',
                   component: 'expression-with-dropdown',
+                  translation: 'Common.Variables',
                   defaultValue: null,
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
