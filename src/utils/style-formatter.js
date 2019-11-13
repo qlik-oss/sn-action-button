@@ -34,7 +34,7 @@ const setFontsize = (textElement, newFontsize, fontFamily) => {
 };
 
 export default {
-  getStyles({ style, disabled, Theme, element }) {
+  setStyles({ style, disabled, Theme, element, button }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;';
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const palette = colorUtils.getPalette(Theme);
@@ -74,8 +74,7 @@ export default {
     } else {
       styles += 'border: none;';
     }
-
-    return styles;
+    button.setAttribute('style', styles);
   },
   setFontSizeAndFamily({ button, Theme, layout }) {
     const { style } = layout;
