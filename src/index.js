@@ -30,9 +30,6 @@ export default function supernova(env) {
           senseNavigation,
         });
       },
-      resize() {},
-      willUnmount() {},
-      destroy() {},
     },
     ext: ext({ translator }),
   };
