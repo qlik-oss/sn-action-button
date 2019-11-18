@@ -16,8 +16,8 @@ describe('action button', () => {
       defaults.button = button;
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
+      defaults.app = defaultValues.app;
       defaults.app.clearAll = sinon.spy();
-      defaults.app.getSheetList = () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }];
       defaults.context.permissions = ['interact'];
       defaults.senseNavigation = {
         goToSheet: sinon.spy(),

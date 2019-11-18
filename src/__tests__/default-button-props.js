@@ -19,7 +19,6 @@ const defaultValues = {
   },
   app: {
     getSheetList: () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }],
-    clearAll: () => {},
     getBookmarkList: () => [],
   },
   context: { permissions: ['interact'] },
