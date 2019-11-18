@@ -4,6 +4,8 @@ import actionButton, { runActions } from '../action-button';
 let actionList;
 let button;
 
+const defaults = JSON.parse(JSON.stringify(defaultValues));
+
 describe('action button', () => {
   describe('ActionButton', () => {
     beforeEach(() => {
@@ -11,40 +13,40 @@ describe('action button', () => {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
       };
-      defaultValues.button = button;
-      defaultValues.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
-      defaultValues.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
-      defaultValues.app.clearAll = sinon.spy();
-      defaultValues.context.permissions = ['interact'];
-      defaultValues.senseNavigation = {
+      defaults.button = button;
+      defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
+      defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
+      defaults.app.clearAll = sinon.spy();
+      defaults.app.getSheetList = () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }];
+      defaults.context.permissions = ['interact'];
+      defaults.senseNavigation = {
         goToSheet: sinon.spy(),
       };
     });
     it('should render action button', () => {
-      const aButton = actionButton(defaultValues);
+      const aButton = actionButton(defaults);
       expect(aButton).to.be.an('object');
-      expect(aButton.textContent).to.equal('testLabel');
-      expect(defaultValues.button.setAttribute).to.have.been.called;
+      expect(defaults.button.setAttribute).to.have.been.called;
     });
 
     it('should disable action button on click and enable again', async () => {
-      const aButton = actionButton(defaultValues);
+      const aButton = actionButton(defaults);
       await aButton.onclick();
       expect(button.setAttribute).to.have.been.calledWith('disabled', true);
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
-      expect(defaultValues.senseNavigation.goToSheet).to.have.been.called;
+      expect(defaults.senseNavigation.goToSheet).to.have.been.called;
     });
 
     it('should not act on click when permissions not present', async () => {
-      defaultValues.context.permissions = ['notInteract'];
-      const aButton = actionButton(defaultValues);
+      defaults.context.permissions = ['notInteract'];
+      const aButton = actionButton(defaults);
       await aButton.onclick();
-      expect(defaultValues.button.setAttribute).to.not.have.been.calledWith('disabled', true);
+      expect(defaults.button.setAttribute).to.not.have.been.calledWith('disabled', true);
     });
 
     it('should run without navigation', async () => {
-      defaultValues.layout.navigation = {};
-      const aButton = actionButton(defaultValues);
+      defaults.layout.navigation = {};
+      const aButton = actionButton(defaults);
       await aButton.onclick();
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
@@ -60,16 +62,16 @@ describe('action button', () => {
     });
   });
   describe('disabledButton', () => {
-    button = {
-      setAttribute: sinon.spy(),
-    };
-    defaultValues.button = button;
-    defaultValues.layout.style.useEnabledCondition = true;
-    defaultValues.layout.style.enabledCondition = 0;
     it('should render disabled button', () => {
-      const aButton = actionButton(defaultValues);
+      button = {
+        setAttribute: sinon.spy(),
+      };
+      defaults.button = button;
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+      const aButton = actionButton(defaults);
       expect(aButton).to.be.an('object');
-      expect(defaultValues.button.setAttribute).to.have.been.calledWith('disabled', true);
+      expect(defaults.button.setAttribute).to.have.been.calledWith('disabled', true);
     });
   });
 });

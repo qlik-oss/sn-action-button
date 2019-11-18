@@ -5,20 +5,16 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;padding: 4px;color: #ffffff;font-size: 12px;text-align: center;background-color: #4477aa;cursor: pointer;border: none;';
+      'width: 100%;height: 100%;padding: 4px;cursor: pointer;color: #ffffff;font-weight: bold;text-align: center;background-color: myPrimaryColor;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
-    const someSize = 24;
     const someUrl = '/media/Logo/qlik.png';
-    const { Theme } = defaultValues;
+    const { Theme, layout } = defaultValues;
     const disabled = false;
     let element;
 
     beforeEach(() => {
-      style = {
-        border: { isUsed: false },
-        textAlign: 'center',
-      };
+      style = JSON.parse(JSON.stringify(layout.style));
       element = {
         offsetHeight: 200,
         offsetWidth: 100,
@@ -29,70 +25,102 @@ describe('style-formatter', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle).to.equal(defaultStyle);
     });
-
-    it('should return specified background color', () => {
-      style.backgroundColor = someColor;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
+    // enable
+    it('should have set opacity and cursor for disabled button', () => {
+      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, Theme });
+      expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
+      expect(formattedStyle.includes('cursor: pointer')).to.be.false;
     });
 
-    it('should return specified background color from expression', () => {
-      style.backgroundColorExpression = someColorExpression;
-      style.useBackgroundColorExpression = true;
+    it('should not have set opacity for enabled button', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).to.be.true;
+      expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
     });
-
-    it('should return default background color when color is none', () => {
-      style.backgroundColor = { index: 0 };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('background-color: #4477aa')).to.be.true;
-    });
-
+    // font
     it('should return specified font color', () => {
-      style.fontColor = someColor;
+      style.font.color = someColor;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`color: ${someColor}`)).to.be.true;
     });
 
     it('should return specified font color from expression', () => {
-      style.fontColorExpression = someColorExpression;
-      style.useFontColorExpression = true;
+      style.font.colorExpression = someColorExpression;
+      style.font.useColorExpression = true;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`color: ${someColorExpression}`)).to.be.true;
     });
 
-    it('should return specified font size', () => {
-      style.fontSize = someSize;
+    it('should return font-weight: bold when bold is selected', () => {
+      style.font.style = {
+        bold: true,
+      };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes(`font-size: ${someSize}px`)).to.be.true;
+      expect(formattedStyle.includes('font-weight: bold')).to.be.true;
     });
 
-    it('should return default font size for incorrect value', () => {
-      style.fontSize = 'someSize';
+    it('should return font-style: italic when italic is selected', () => {
+      style.font.style = {
+        italic: true,
+      };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('font-size: 12px')).to.be.true;
+      expect(formattedStyle.includes('font-style: italic')).to.be.true;
+    });
+
+    it('should return text-decoration: underline when underline is selected', () => {
+      style.font.style = {
+        underline: true,
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('text-decoration: underline')).to.be.true;
+    });
+
+    it('should return text-align: left when left is selected', () => {
+      style.font.align = 'left';
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('text-align: left')).to.be.true;
+    });
+    // background
+    it('should return specified background color', () => {
+      style.background.color = someColor;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes(`background-color: ${someColor}`)).to.be.true;
+    });
+
+    it('should return specified background color from expression', () => {
+      style.background.colorExpression = someColorExpression;
+      style.background.useColorExpression = true;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).to.be.true;
+    });
+
+    it('should return default background color when color is none', () => {
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('background-color: myPrimaryColor')).to.be.true;
     });
 
     it('should return specified image url and default image settings', () => {
-      style.background = {
-        isUsed: true,
-        url: {
-          qStaticContentUrl: {
-            qUrl: someUrl,
-          },
-        },
-      };
+      style.background.useImage = true;
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
-      expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
+      expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;
+    });
+
+    it('should return no settings when url is missing', () => {
+      style.background.useImage = true;
+      style.background.url.qStaticContentUrl = {};
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
+      expect(formattedStyle.includes('background-image:')).to.be.false;
+      expect(formattedStyle.includes('background-size:')).to.be.false;
+      expect(formattedStyle.includes('background-position:')).to.be.false;
+      expect(formattedStyle.includes('background-repeat:')).to.be.false;
     });
 
     it('should return specified image size', () => {
       style.background = {
-        isUsed: true,
+        useImage: true,
         size: 'fill',
         url: {
           qStaticContentUrl: {
@@ -106,8 +134,8 @@ describe('style-formatter', () => {
 
     it('should return specified image position', () => {
       style.background = {
-        isUsed: true,
-        position: 'centerCenter',
+        useImage: true,
+        position: 'topLeft',
         url: {
           qStaticContentUrl: {
             qUrl: someUrl,
@@ -115,47 +143,12 @@ describe('style-formatter', () => {
         },
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
+      expect(formattedStyle.includes('background-position: 0% 0%')).to.be.true;
     });
-
-    it('should have set opacity for disabled button', () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, Theme });
-      expect(formattedStyle.includes('opacity: 0.4')).to.be.true;
-    });
-
-    it('should not have set cursor for disabled button', () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, Theme });
-      expect(formattedStyle.includes('cursor: pointer')).to.be.false;
-    });
-
-    it('should not have set opacity for enabled button', () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('opacity: 0.4')).to.be.false;
-    });
-    it('should return font-weight: bold when bold is selected', () => {
-      style.textStyle = {
-        bold: true,
-      };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('font-weight: bold')).to.be.true;
-    });
-    it('should return font-style: italic when italic is selected', () => {
-      style.textStyle = {
-        italic: true,
-      };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('font-style: italic')).to.be.true;
-    });
-    it('should return text-decoration: underline when underline is selected', () => {
-      style.textStyle = {
-        underline: true,
-      };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('text-decoration: underline')).to.be.true;
-    });
+    // border
     it('should set border color and width', () => {
       style.border = {
-        isUsed: true,
+        useBorder: true,
         width: 10,
         color: {
           index: 2,
@@ -167,9 +160,9 @@ describe('style-formatter', () => {
 
     it('should set a border based on expression', () => {
       style.border = {
-        isUsed: true,
+        useBorder: true,
         width: 10,
-        useExpression: true,
+        useColorExpression: true,
         colorExpression: 'rebeccapurple',
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
@@ -178,7 +171,7 @@ describe('style-formatter', () => {
 
     it('should set border radius', () => {
       style.border = {
-        isUsed: true,
+        useBorder: true,
         radius: 20,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
@@ -188,7 +181,7 @@ describe('style-formatter', () => {
     it('should set border radius for smaller height', () => {
       element.offsetHeight = 50;
       style.border = {
-        isUsed: true,
+        useBorder: true,
         radius: 20,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
@@ -198,6 +191,53 @@ describe('style-formatter', () => {
     it('should not set a border', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('border: none')).to.be.true;
+    });
+  });
+
+  describe('setFontSizeAndFamily', () => {
+    const { Theme } = defaultValues;
+    let button;
+    const layout = JSON.parse(JSON.stringify(defaultValues.layout));
+    beforeEach(() => {
+      button = {
+        firstElementChild: { setAttribute: sinon.spy(), offsetHeight: 400, offsetWidth: 20 },
+        clientHeight: 100,
+        clientWidth: 100,
+      };
+    });
+    it('should set fontSize and family to default', () => {
+      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      expect(button.firstElementChild.textContent).to.equal('Button');
+      expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 100px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 25px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 12.5px; font-family: myFont;'
+      );
+    });
+    it('should set fontSize when text offsetWidth is bigger than button', () => {
+      button.firstElementChild.offsetWidth = 400;
+      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 100px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 25px; font-family: myFont;'
+      );
+      expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
+        'style',
+        'white-space: nowrap; font-size: 2.875px; font-family: myFont;'
+      );
     });
   });
 });
