@@ -44,10 +44,6 @@ export default function ext({ translator }) {
                   defaultValue: null,
                   options: actions,
                   dropdownOnly: true,
-                  itemTitleRef: data => {
-                    const act = actions.find(action => data.actionType === action.value);
-                    return (act && act.label) || '';
-                  },
                 },
                 bookmark: {
                   type: 'string',
