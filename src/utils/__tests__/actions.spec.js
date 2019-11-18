@@ -42,6 +42,7 @@ describe('actions', () => {
         getVariableByName: sinon.stub().resolves(variableObject),
         lockAll: sinon.spy(),
         unlockAll: sinon.spy(),
+        getBookmarkList: () => [],
       };
     });
 
