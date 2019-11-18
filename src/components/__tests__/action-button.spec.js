@@ -50,6 +50,29 @@ describe('action button', () => {
       await aButton.onclick();
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
+    it('should call scale on mouse click and set style.transform', async () => {
+      defaultValues.context.permissions = ['interact'];
+      const aButton = actionButton(defaultValues);
+      aButton.offsetHeight = 100;
+      aButton.offsetWidth = 200;
+      aButton.style = {};
+      aButton.onmousedown();
+      expect(aButton.style.transform).to.equal('scale(0.99, 0.98)');
+      aButton.onmouseup();
+      expect(aButton.style.transform).to.equal('scale(1)');
+    });
+
+    it('should call scale on touch tap and set style.transform', async () => {
+      defaultValues.context.permissions = ['interact'];
+      const aButton = actionButton(defaultValues);
+      aButton.offsetHeight = 200;
+      aButton.offsetWidth = 100;
+      aButton.style = {};
+      aButton.ontouchstart();
+      expect(aButton.style.transform).to.equal('scale(0.98, 0.99)');
+      aButton.ontouchend();
+      expect(aButton.style.transform).to.equal('scale(1)');
+    });
   });
   describe('runActions', () => {
     beforeEach(() => {

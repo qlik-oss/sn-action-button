@@ -39,19 +39,29 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
     }
   };
 
-  button.onmousedown = () => {
+  const scale = () => {
     if (!disabled && !inEditMode) {
-      button.style.width = '99%';
-      button.style.height = '99%';
+      const { offsetWidth, offsetHeight } = button;
+      button.style.transform =
+        offsetHeight > offsetWidth
+          ? `scale(${0.98}, ${1 - (offsetWidth / offsetHeight) * 0.02})`
+          : `scale(${1 - (offsetHeight / offsetWidth) * 0.02}, ${0.98})`;
     }
   };
 
-  button.onmouseup = () => {
-    if (!disabled && !inEditMode) {
-      button.style.width = '100%';
-      button.style.height = '100%';
+  const resetScale = () => {
+    const { transform } = button.style;
+    if (!disabled && !inEditMode & (transform !== 'scale(1)' || transform !== '')) {
+      button.style.transform = 'scale(1)';
     }
   };
+
+  button.onmousedown = scale;
+  button.onmouseup = resetScale;
+  button.onmouseleave = resetScale;
+  button.ontouchstart = scale;
+  button.ontouchend = resetScale;
+  button.ontouchcancel = resetScale;
 
   return button;
 }
