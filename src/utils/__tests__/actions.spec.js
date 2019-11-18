@@ -42,7 +42,7 @@ describe('actions', () => {
         getVariableByName: sinon.stub().resolves(variableObject),
         lockAll: sinon.spy(),
         unlockAll: sinon.spy(),
-        getBookmarkList: () => [],
+        getBookmarkList: () => [{ qData: { title: 'findMyBookmark' }, qInfo: { qId: 'myBookmarkId' } }],
       };
     });
 
@@ -57,6 +57,12 @@ describe('actions', () => {
       bookmark = null;
       await actionObj.getActionCall({ app, bookmark })();
       expect(app.applyBookmark).to.not.have.been.called;
+    });
+
+    it('should call applyBookmark with bookmark from bookmark list', async () => {
+      const actionObj = actions.find(action => action.value === 'applyBookmark');
+      await actionObj.getActionCall({ app, bookmark: 'findMyBookmark' })();
+      expect(app.applyBookmark).to.have.been.calledWith('myBookmarkId');
     });
 
     it('should call clearAll', async () => {
