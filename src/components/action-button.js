@@ -15,6 +15,7 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
   const inEditMode = context.permissions.indexOf('interact') === -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element, button });
   button.setAttribute('style', formattedStyles);
+  console.log(disabled, inEditMode);
   if (disabled && !inEditMode) {
     button.setAttribute('disabled', true);
   } else {
@@ -51,7 +52,8 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
 
   const resetScale = () => {
     const { transform } = button.style;
-    if (!disabled && !inEditMode & (transform !== 'scale(1)' || transform !== '')) {
+    if (!disabled && !inEditMode && transform !== '' && transform !== 'scale(1)') {
+      console.log('reset');
       button.style.transform = 'scale(1)';
     }
   };
