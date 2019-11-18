@@ -62,12 +62,10 @@ const importProperties = (exportedFmt, initialProperties) => {
           break;
         case 'props':
           props = exportedFmt.properties[key];
-          newProperties.style = {
-            label: props.buttonLabel,
-            showIcon: props.buttonShowIcon,
-            icon: props.buttonIconLui,
-            textAlign: props.buttonTextAlign,
-          };
+          newProperties.style.label = props.buttonLabel;
+          newProperties.style.showIcon = props.buttonShowIcon;
+          newProperties.style.icon = props.buttonIconLui;
+          newProperties.style.font.align = props.buttonTextAlign;
           newProperties.useEnabledCondition = props.useEnabledCondition;
           newProperties.enabledCondition = props.enabledCondition;
           props.actionItems &&

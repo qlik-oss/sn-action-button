@@ -1,12 +1,8 @@
 import ActionButton from './action-button';
+import styleFormatter from '../utils/style-formatter';
 
-export function teardown() {}
-
-export function render(element, props) {
+export default function render(element, props) {
   const button = ActionButton({ element, ...props });
   element.appendChild(button);
-  element.setAttribute(
-    'style',
-    'height: 100%; position: relative; display: flex; justify-content: center; align-items: center;'
-  );
+  styleFormatter.setFontSizeAndFamily({ button, ...props });
 }
