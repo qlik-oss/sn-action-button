@@ -14,7 +14,6 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element, button });
-  console.log(button);
   button.setAttribute('style', formattedStyles);
   if (disabled && context.permissions.indexOf('interact') !== -1) {
     button.setAttribute('disabled', true);
