@@ -2,7 +2,7 @@ import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 
-import render from './components/root';
+import renderButton from './components/action-button';
 
 export default function supernova(env) {
   const { Theme, sense, translator } = env;
@@ -20,13 +20,7 @@ export default function supernova(env) {
         this.element.appendChild(button);
       },
       render({ layout, context }) {
-        render(this.element, {
-          layout,
-          context,
-          Theme,
-          app: this.app,
-          senseNavigation,
-        });
+        renderButton({ element: this.element, layout, context, Theme, app: this.app, senseNavigation });
       },
     },
     ext: ext({ translator }),

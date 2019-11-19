@@ -11,11 +11,15 @@ const defaultValues = {
     }),
   },
   layout: { style: props.style },
-  button: {
-    setAttribute: () => {},
-    removeAttribute: () => {},
-    firstElementChild: { setAttribute: () => {} },
-    someProps: () => {},
+  element: {
+    firstElementChild: {
+      // button: {
+      setAttribute: () => {},
+      removeAttribute: () => {},
+      firstElementChild: { setAttribute: () => {}, text: {} },
+      someProps: () => {},
+    },
+    // },
   },
   app: {
     getSheetList: () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }],

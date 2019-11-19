@@ -14,7 +14,16 @@ describe('index', () => {
       firstElementChild: { setAttribute: () => {} },
     }),
   };
-  const thisElement = { appendChild: sinon.spy() };
+  const thisElement = {
+    appendChild: sinon.spy(),
+    firstElementChild: {
+      setAttribute: () => {},
+      removeAttribute: () => {},
+      firstElementChild: { setAttribute: () => {}, text: {} },
+      someProps: () => {},
+    },
+  };
+
   it('should render supernova', () => {
     const result = supernova(env);
     result.component.mounted(thisElement);
