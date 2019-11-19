@@ -37,6 +37,4 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
       button.removeAttribute('disabled');
     }
   };
-
-  return button;
 }

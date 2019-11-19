@@ -15,6 +15,9 @@ export default function supernova(env) {
     component: {
       mounted(element) {
         this.element = element;
+        const button = document.createElement('button');
+        button.appendChild(document.createElement('text'));
+        this.element.appendChild(button);
       },
       render({ layout, context }) {
         render(this.element, {
