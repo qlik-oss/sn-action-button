@@ -51,7 +51,6 @@ describe('action button', () => {
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
     it('should call scale and resetScale on mousedown/up', async () => {
-      defaults.context.permissions = ['interact'];
       const aButton = actionButton(defaults);
       aButton.offsetHeight = 100;
       aButton.offsetWidth = 200;
@@ -62,7 +61,6 @@ describe('action button', () => {
       expect(aButton.style.transform).to.equal('scale(1)');
     });
     it('should call scale and resetScale on touchstart/stop', async () => {
-      defaults.context.permissions = ['interact'];
       const aButton = actionButton(defaults);
       aButton.offsetHeight = 200;
       aButton.offsetWidth = 100;
@@ -115,15 +113,17 @@ describe('action button', () => {
     });
   });
   describe('disabledButton', () => {
+    beforeEach(() => {
+      defaults = JSON.parse(JSON.stringify(defaultValues));
+      defaults.button = button;
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+    });
     it('should render disabled button', () => {
       button = {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
       };
-      defaults = JSON.parse(JSON.stringify(defaultValues));
-      defaults.button = button;
-      defaults.layout.useEnabledCondition = true;
-      defaults.layout.enabledCondition = 0;
       const aButton = actionButton(defaults);
       expect(aButton).to.be.an('object');
       expect(defaults.button.setAttribute).to.have.been.calledWith('disabled', true);
