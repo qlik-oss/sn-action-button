@@ -86,18 +86,18 @@ export default {
     const { style } = layout;
     button.innerHTML = '';
     const text = document.createElement('text');
-    const textContent = document.createElement('span');
-    textContent.setAttribute('style', 'white-space: nowrap;');
-    textContent.textContent = style.label;
+    const textSpan = document.createElement('span');
+    textSpan.setAttribute('style', 'white-space: nowrap;');
+    textSpan.textContent = style.label;
     if (style.icon.useIcon && style.icon.iconType !== '') {
       const iconSpan = document.createElement('span');
       iconSpan.setAttribute('style', 'font-size: inherit;');
       iconSpan.setAttribute('class', `lui-icon lui-icon--${style.icon.iconType}`);
       style.icon.position === 'left'
-        ? text.appendChild(iconSpan) && text.appendChild(textContent)
-        : text.appendChild(textContent) && text.appendChild(iconSpan);
+        ? text.appendChild(iconSpan) && text.appendChild(textSpan)
+        : text.appendChild(textSpan) && text.appendChild(iconSpan);
     } else {
-      text.appendChild(textContent);
+      text.appendChild(textSpan);
     }
     button.appendChild(text);
     const fontFamily = colorUtils.getFontFamily(Theme);
