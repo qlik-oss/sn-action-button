@@ -560,11 +560,11 @@ export default function ext({ translator }) {
                       translation: 'properties.icon.position',
                       options: [
                         {
-                          label: 'properties.dock.left',
+                          translation: 'properties.dock.left',
                           value: 'left',
                         },
                         {
-                          label: 'properties.dock.right',
+                          translation: 'properties.dock.right',
                           value: 'right',
                         },
                       ],
