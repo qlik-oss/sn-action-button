@@ -3,12 +3,12 @@ import renderButton, { runActions } from '../action-button';
 
 let actionList;
 let button;
-
-const defaults = JSON.parse(JSON.stringify(defaultValues));
+let defaults;
 
 describe('action button', () => {
   describe('renderButton', () => {
     beforeEach(() => {
+      defaults = JSON.parse(JSON.stringify(defaultValues));
       button = {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
@@ -51,6 +51,57 @@ describe('action button', () => {
       await defaults.element.firstElementChild.onclick();
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
+    it('should call scale and resetScale on mousedown/up', async () => {
+      renderButton(defaults);
+      defaults.element.firstElementChild.offsetHeight = 100;
+      defaults.element.firstElementChild.offsetWidth = 200;
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.onmousedown();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(0.99, 0.98)');
+      defaults.element.firstElementChild.onmouseup();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
+    });
+    it('should call scale and resetScale on touchstart/stop', async () => {
+      renderButton(defaults);
+      defaults.element.firstElementChild.offsetHeight = 200;
+      defaults.element.firstElementChild.offsetWidth = 100;
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(0.98, 0.99)');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
+    });
+    it('should not scale nor reset when disabled', async () => {
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+    });
+    it('should not scale nor reset scale when in edit mode', async () => {
+      defaults.context.permissions = [];
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+    });
+    it('should not reset scale when already scaled to 1', async () => {
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: 'scale(1)' };
+      defaults.element.firstElementChild.onmouseleave();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
+    });
+    it('should not reset scale when already scale is not set yet', async () => {
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchcancel();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+    });
   });
   describe('runActions', () => {
     beforeEach(() => {
@@ -63,10 +114,17 @@ describe('action button', () => {
     });
   });
   describe('disabledButton', () => {
+    beforeEach(() => {
+      defaults = JSON.parse(JSON.stringify(defaultValues));
+      defaults.button = button;
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+    });
     it('should render disabled button', () => {
       button = {
         setAttribute: sinon.spy(),
         firstElementChild: { setAttribute: () => {}, text: {} },
+        removeAttribute: sinon.spy(),
       };
       defaults.element.firstElementChild = button;
       defaults.layout.useEnabledCondition = true;

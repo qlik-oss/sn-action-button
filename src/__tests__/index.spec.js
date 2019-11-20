@@ -6,6 +6,7 @@ describe('index', () => {
     Theme: defaultValues.Theme,
   };
   const { layout } = defaultValues;
+  const context = { permissions: [] };
   global.document = {
     createElement: () => ({
       appendChild: () => {},
@@ -27,7 +28,7 @@ describe('index', () => {
   it('should render supernova', () => {
     const result = supernova(env);
     result.component.mounted(thisElement);
-    result.component.render({ layout });
+    result.component.render({ layout, context });
     expect(result)
       .to.be.an('object')
       .to.have.keys('qae', 'component', 'ext');
