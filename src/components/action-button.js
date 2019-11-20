@@ -39,7 +39,7 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
       button.removeAttribute('disabled');
     }
   };
-  styleFormatter.setFontSizeAndFamily({ button, Theme, layout });
+  styleFormatter.createLabelAndIcon({ button, Theme, layout });
 
   const scale = () => {
     if (!disabled && interactPermission) {
