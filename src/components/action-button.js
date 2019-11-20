@@ -12,10 +12,10 @@ export const runActions = async actionList => {
 export default function ActionButton({ layout, button, Theme, app, context, senseNavigation, element }) {
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
-  const inEditMode = context.permissions.indexOf('interact') === -1;
+  const interactPermission = context.permissions.indexOf('interact') !== -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element, button });
   button.setAttribute('style', formattedStyles);
-  if (disabled && !inEditMode) {
+  if (disabled && interactPermission) {
     button.setAttribute('disabled', true);
   } else {
     button.removeAttribute('disabled');
@@ -40,7 +40,7 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
   };
 
   const scale = () => {
-    if (!disabled && !inEditMode) {
+    if (!disabled && interactPermission) {
       const { offsetWidth, offsetHeight } = button;
       button.style.transform =
         offsetHeight > offsetWidth
@@ -51,7 +51,7 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
 
   const resetScale = () => {
     const { transform } = button.style;
-    if (!disabled && !inEditMode && transform !== '' && transform !== 'scale(1)') {
+    if (!disabled && interactPermission && transform !== '' && transform !== 'scale(1)') {
       button.style.transform = 'scale(1)';
     }
   };
