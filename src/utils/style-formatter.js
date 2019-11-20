@@ -38,7 +38,7 @@ const setFontStyling = (textElement, fontsize, fontFamily, align) => {
 
 export default {
   getStyles({ style, disabled, Theme, element }) {
-    let styles = 'width: 100%;height: 100%;padding: 4px;';
+    let styles = 'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;';
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const palette = colorUtils.getPalette(Theme);
     // enable
