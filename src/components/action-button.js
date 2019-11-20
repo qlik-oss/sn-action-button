@@ -9,7 +9,8 @@ export const runActions = async actionList => {
   }
 };
 
-export default function ActionButton({ layout, button, Theme, app, context, senseNavigation, element }) {
+export default function renderButton({ layout, Theme, app, context, senseNavigation, element }) {
+  const button = element.firstElementChild;
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const interactPermission = context.permissions.indexOf('interact') !== -1;
@@ -38,6 +39,7 @@ export default function ActionButton({ layout, button, Theme, app, context, sens
       button.removeAttribute('disabled');
     }
   };
+  styleFormatter.setFontSizeAndFamily({ button, Theme, layout });
 
   const scale = () => {
     if (!disabled && interactPermission) {

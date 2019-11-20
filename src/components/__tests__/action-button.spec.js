@@ -1,19 +1,20 @@
 import defaultValues from '../../__tests__/default-button-props';
-import actionButton, { runActions } from '../action-button';
+import renderButton, { runActions } from '../action-button';
 
 let actionList;
 let button;
 let defaults;
 
 describe('action button', () => {
-  describe('ActionButton', () => {
+  describe('renderButton', () => {
     beforeEach(() => {
       defaults = JSON.parse(JSON.stringify(defaultValues));
       button = {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
+        firstElementChild: { setAttribute: () => {}, text: {} },
       };
-      defaults.button = button;
+      defaults.element.firstElementChild = button;
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
       defaults.app.clearAll = sinon.spy();
@@ -24,14 +25,14 @@ describe('action button', () => {
       };
     });
     it('should render action button', () => {
-      const aButton = actionButton(defaults);
-      expect(aButton).to.be.an('object');
-      expect(defaults.button.setAttribute).to.have.been.called;
+      renderButton(defaults);
+      expect(defaults.element.firstElementChild).to.be.an('object');
+      expect(button.setAttribute).to.have.been.called;
     });
 
     it('should disable action button on click and enable again', async () => {
-      const aButton = actionButton(defaults);
-      await aButton.onclick();
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
       expect(button.setAttribute).to.have.been.calledWith('disabled', true);
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
       expect(defaults.senseNavigation.goToSheet).to.have.been.called;
@@ -39,67 +40,67 @@ describe('action button', () => {
 
     it('should not act on click when permissions not present', async () => {
       defaults.context.permissions = ['notInteract'];
-      const aButton = actionButton(defaults);
-      await aButton.onclick();
-      expect(defaults.button.setAttribute).to.not.have.been.calledWith('disabled', true);
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
     });
 
     it('should run without navigation', async () => {
       defaults.layout.navigation = {};
-      const aButton = actionButton(defaults);
-      await aButton.onclick();
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
     });
     it('should call scale and resetScale on mousedown/up', async () => {
-      const aButton = actionButton(defaults);
-      aButton.offsetHeight = 100;
-      aButton.offsetWidth = 200;
-      aButton.style = { transform: '' };
-      aButton.onmousedown();
-      expect(aButton.style.transform).to.equal('scale(0.99, 0.98)');
-      aButton.onmouseup();
-      expect(aButton.style.transform).to.equal('scale(1)');
+      renderButton(defaults);
+      defaults.element.firstElementChild.offsetHeight = 100;
+      defaults.element.firstElementChild.offsetWidth = 200;
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.onmousedown();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(0.99, 0.98)');
+      defaults.element.firstElementChild.onmouseup();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
     });
     it('should call scale and resetScale on touchstart/stop', async () => {
-      const aButton = actionButton(defaults);
-      aButton.offsetHeight = 200;
-      aButton.offsetWidth = 100;
-      aButton.style = { transform: '' };
-      aButton.ontouchstart();
-      expect(aButton.style.transform).to.equal('scale(0.98, 0.99)');
-      aButton.ontouchend();
-      expect(aButton.style.transform).to.equal('scale(1)');
+      renderButton(defaults);
+      defaults.element.firstElementChild.offsetHeight = 200;
+      defaults.element.firstElementChild.offsetWidth = 100;
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(0.98, 0.99)');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
     });
     it('should not scale nor reset when disabled', async () => {
       defaults.layout.useEnabledCondition = true;
       defaults.layout.enabledCondition = 0;
-      const aButton = actionButton(defaults);
-      aButton.style = { transform: '' };
-      aButton.ontouchstart();
-      expect(aButton.style.transform).to.equal('');
-      aButton.ontouchend();
-      expect(aButton.style.transform).to.equal('');
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
     });
     it('should not scale nor reset scale when in edit mode', async () => {
       defaults.context.permissions = [];
-      const aButton = actionButton(defaults);
-      aButton.style = { transform: '' };
-      aButton.ontouchstart();
-      expect(aButton.style.transform).to.equal('');
-      aButton.ontouchend();
-      expect(aButton.style.transform).to.equal('');
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchstart();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
+      defaults.element.firstElementChild.ontouchend();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
     });
     it('should not reset scale when already scaled to 1', async () => {
-      const aButton = actionButton(defaults);
-      aButton.style = { transform: 'scale(1)' };
-      aButton.onmouseleave();
-      expect(aButton.style.transform).to.equal('scale(1)');
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: 'scale(1)' };
+      defaults.element.firstElementChild.onmouseleave();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
     });
     it('should not reset scale when already scale is not set yet', async () => {
-      const aButton = actionButton(defaults);
-      aButton.style = { transform: '' };
-      aButton.ontouchcancel();
-      expect(aButton.style.transform).to.equal('');
+      renderButton(defaults);
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.ontouchcancel();
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
     });
   });
   describe('runActions', () => {
@@ -122,11 +123,15 @@ describe('action button', () => {
     it('should render disabled button', () => {
       button = {
         setAttribute: sinon.spy(),
+        firstElementChild: { setAttribute: () => {}, text: {} },
         removeAttribute: sinon.spy(),
       };
-      const aButton = actionButton(defaults);
-      expect(aButton).to.be.an('object');
-      expect(defaults.button.setAttribute).to.have.been.calledWith('disabled', true);
+      defaults.element.firstElementChild = button;
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+      renderButton(defaults);
+      expect(defaults.element.firstElementChild).to.be.an('object');
+      expect(button.setAttribute).to.have.been.calledWith('disabled', true);
     });
   });
 });
