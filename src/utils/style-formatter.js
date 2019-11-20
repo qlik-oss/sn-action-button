@@ -29,8 +29,13 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
   return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
-const setFontsize = (textElement, newFontsize, fontFamily) => {
-  textElement.setAttribute('style', `white-space: nowrap; font-size: ${newFontsize}px; font-family: ${fontFamily};`);
+const setFontsize = (textElement, newFontsize, fontFamily, addFlex, alignment) => {
+  textElement.setAttribute(
+    'style',
+    `${
+      addFlex ? `display: flex; align-items: center; justify-content: ${alignment};` : ''
+    } font-size: ${newFontsize}px; font-family: ${fontFamily};`
+  );
 };
 
 export default {
@@ -79,8 +84,22 @@ export default {
   },
   setFontSizeAndFamily({ button, Theme, layout }) {
     const { style } = layout;
-    const text = button.firstElementChild;
-    text.textContent = style.label;
+    button.innerHTML = '';
+    const text = document.createElement('text');
+    const textContent = document.createElement('span');
+    textContent.setAttribute('style', 'white-space: nowrap;');
+    textContent.textContent = style.label;
+    if (style.icon.useIcon && style.icon.iconType !== '') {
+      const iconSpan = document.createElement('span');
+      iconSpan.setAttribute('style', 'font-size: inherit;');
+      iconSpan.setAttribute('class', `lui-icon lui-icon--${style.icon.iconType}`);
+      style.icon.position === 'left'
+        ? text.appendChild(iconSpan) && text.appendChild(textContent)
+        : text.appendChild(textContent) && text.appendChild(iconSpan);
+    } else {
+      text.appendChild(textContent);
+    }
+    button.appendChild(text);
     const fontFamily = colorUtils.getFontFamily(Theme);
     setFontsize(text, button.clientHeight, fontFamily);
     let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
@@ -88,6 +107,6 @@ export default {
     if (text.offsetWidth + 8 > button.clientWidth) {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
-    setFontsize(text, (newFontsize * style.font.size) / 100, fontFamily);
+    setFontsize(text, (newFontsize * style.font.size) / 100, fontFamily, true, style.font.align);
   },
 };

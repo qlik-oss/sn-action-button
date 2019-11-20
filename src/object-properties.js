@@ -151,6 +151,23 @@ const properties = {
        */
       colorExpression: '',
     },
+    /**
+     * @type {object}
+     */
+    icon: {
+      /**
+       * @type {boolean}
+       */
+      useIcon: false,
+      /**
+       * @type {string}
+       */
+      iconType: '',
+      /**
+       * @type {string}
+       */
+      position: 'left',
+    },
   },
   /**
    * @type {array}
