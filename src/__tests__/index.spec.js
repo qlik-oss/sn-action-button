@@ -8,12 +8,19 @@ describe('index', () => {
   const { layout } = defaultValues;
   const context = { permissions: [] };
   global.document = {
-    createElement: () => ({
-      appendChild: () => {},
-      setAttribute: () => {},
-      removeAttribute: () => {},
-      firstElementChild: { setAttribute: () => {} },
-    }),
+    createElement: () => {
+      const newElement = {
+        setAttribute: () => {},
+        removeAttribute: () => {},
+        firstElementChild: { setAttribute: () => {} },
+        style: {},
+        children: [],
+      };
+      newElement.appendChild = newChild => {
+        newElement.children.push(newChild);
+      };
+      return newElement;
+    },
   };
   const thisElement = {
     appendChild: sinon.spy(),
@@ -22,6 +29,7 @@ describe('index', () => {
       removeAttribute: () => {},
       firstElementChild: { setAttribute: () => {}, text: {} },
       someProps: () => {},
+      appendChild: () => {},
     },
   };
 
