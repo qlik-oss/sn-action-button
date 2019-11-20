@@ -194,7 +194,7 @@ describe('style-formatter', () => {
     });
   });
 
-  describe('setFontSizeAndFamily', () => {
+  describe('createLabelAndIcon', () => {
     const { Theme } = defaultValues;
     let button;
     const layout = JSON.parse(JSON.stringify(defaultValues.layout));
@@ -206,7 +206,7 @@ describe('style-formatter', () => {
       };
     });
     it('should set fontSize and family to default', () => {
-      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      styleFormatter.createLabelAndIcon({ Theme, button, layout });
       expect(button.firstElementChild.textContent).to.equal('Button');
       expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
       expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
@@ -224,7 +224,7 @@ describe('style-formatter', () => {
     });
     it('should set fontSize when text offsetWidth is bigger than button', () => {
       button.firstElementChild.offsetWidth = 400;
-      styleFormatter.setFontSizeAndFamily({ Theme, button, layout });
+      styleFormatter.createLabelAndIcon({ Theme, button, layout });
       expect(button.firstElementChild.setAttribute).to.have.been.calledThrice;
       expect(button.firstElementChild.setAttribute).to.have.been.calledWith(
         'style',

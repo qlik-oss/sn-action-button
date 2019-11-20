@@ -29,12 +29,10 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
   return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
-const setFontsize = (textElement, newFontsize, fontFamily, addFlex, alignment) => {
+const setFontStyling = (textElement, fontsize, fontFamily, align) => {
   textElement.setAttribute(
     'style',
-    `${
-      addFlex ? `display: flex; align-items: center; justify-content: ${alignment};` : ''
-    } font-size: ${newFontsize}px; font-family: ${fontFamily};`
+    `display: flex; align-items: center; justify-content: ${align}; font-size: ${fontsize}px; font-family: ${fontFamily};`
   );
 };
 
@@ -50,7 +48,6 @@ export default {
     styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
-    style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
     styles += formatProperty('text-align', style.font.align);
     // background
     styles += formatProperty('background-color', getColor(style.background, primaryColor, palette));
@@ -82,16 +79,23 @@ export default {
 
     return styles;
   },
-  setFontSizeAndFamily({ button, Theme, layout }) {
+  createLabelAndIcon({ button, Theme, layout }) {
     const { style } = layout;
     button.innerHTML = '';
     const text = document.createElement('text');
+    text.style.whiteSpace = 'nowrap';
+
+    // textSpan containing the text. Only set text decoration here otherwise button will get underline as well
     const textSpan = document.createElement('span');
-    textSpan.setAttribute('style', 'white-space: nowrap;');
+    if (style.font.style.underline) {
+      textSpan.setAttribute('style', 'text-decoration: underline;');
+    }
     textSpan.textContent = style.label;
+
+    // Icon
     if (style.icon.useIcon && style.icon.iconType !== '') {
       const iconSpan = document.createElement('span');
-      iconSpan.setAttribute('style', 'font-size: inherit;');
+      iconSpan.setAttribute('style', 'font-size: inherit; text-decoration: none;');
       iconSpan.setAttribute('class', `lui-icon lui-icon--${style.icon.iconType}`);
       style.icon.position === 'left'
         ? text.appendChild(iconSpan) && text.appendChild(textSpan)
@@ -100,13 +104,22 @@ export default {
       text.appendChild(textSpan);
     }
     button.appendChild(text);
-    const fontFamily = colorUtils.getFontFamily(Theme);
-    setFontsize(text, button.clientHeight, fontFamily);
+
+    // Calculations on font size.
+    // 1. Setting font size to height of button container
+    text.style.fontSize = `${button.clientHeight}px`;
+
+    // 2. Adjust the font size to the height ratio between button container and text box
     let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
-    setFontsize(text, newFontsize, fontFamily);
+    text.style.fontSize = `${newFontsize}px`;
+
+    // 3. Adjust the font size to the width ratio between button container and text box
     if (text.offsetWidth + 8 > button.clientWidth) {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
-    setFontsize(text, (newFontsize * style.font.size) / 100, fontFamily, true, style.font.align);
+
+    // 4. Setting final font size and other font styling
+    const fontFamily = colorUtils.getFontFamily(Theme);
+    setFontStyling(text, (newFontsize * style.font.size) / 100, fontFamily, style.font.align);
   },
 };
