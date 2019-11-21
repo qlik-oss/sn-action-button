@@ -29,6 +29,9 @@ export default function ext({ translator }) {
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
               itemTitleRef: data => {
+                if (data.actionLabel !== '') {
+                  return data.actionLabel;
+                }
                 const act = actions.find(action => data.actionType === action.value);
                 return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
               },
@@ -36,6 +39,13 @@ export default function ext({ translator }) {
               allowRemove: true,
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
+                label: {
+                  component: 'string',
+                  ref: 'actionLabel',
+                  translation: 'Common.Label',
+                  expression: 'optional',
+                  defaultValue: '',
+                },
                 actionType: {
                   type: 'string',
                   ref: 'actionType',
