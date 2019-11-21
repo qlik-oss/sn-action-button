@@ -37,19 +37,21 @@ export default function ext({ translator }) {
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
                 actionType: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'actionType',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Object.ActionButton.Actions',
+                  defaultValue: '',
                   options: actions,
+                  dropdownOnly: true,
                 },
                 bookmark: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'bookmark',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Common.Bookmarks',
+                  defaultValue: '',
+                  expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
@@ -60,11 +62,12 @@ export default function ext({ translator }) {
                   show: data => checkShowAction(data, 'bookmark'),
                 },
                 field: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'field',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Common.Fields',
+                  defaultValue: '',
+                  dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
                     return fields.map(field => ({
@@ -75,11 +78,12 @@ export default function ext({ translator }) {
                   show: data => checkShowAction(data, 'field'),
                 },
                 variable: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'variable',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Common.Variables',
+                  defaultValue: '',
+                  expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
