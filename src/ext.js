@@ -50,7 +50,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'actionType',
                   component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Actions',
+                  translation: 'Object.ActionButton.Action',
                   defaultValue: '',
                   options: actions,
                   dropdownOnly: true,
@@ -59,7 +59,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'bookmark',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Bookmarks',
+                  translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
                   expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
@@ -75,7 +75,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'field',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Fields',
+                  translation: 'Common.Field',
                   defaultValue: '',
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
@@ -91,7 +91,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'variable',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Variables',
+                  translation: 'Common.Variable',
                   defaultValue: '',
                   expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
