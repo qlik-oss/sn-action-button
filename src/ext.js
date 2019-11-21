@@ -29,6 +29,9 @@ export default function ext({ translator }) {
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
               itemTitleRef: data => {
+                if (data.actionLabel !== '') {
+                  return data.actionLabel;
+                }
                 const act = actions.find(action => data.actionType === action.value);
                 return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
               },
@@ -36,11 +39,18 @@ export default function ext({ translator }) {
               allowRemove: true,
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
+                label: {
+                  component: 'string',
+                  ref: 'actionLabel',
+                  translation: 'Common.Label',
+                  expression: 'optional',
+                  defaultValue: '',
+                },
                 actionType: {
                   type: 'string',
                   ref: 'actionType',
                   component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Actions',
+                  translation: 'Object.ActionButton.Action',
                   defaultValue: '',
                   options: actions,
                   dropdownOnly: true,
@@ -49,7 +59,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'bookmark',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Bookmarks',
+                  translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
                   expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
@@ -65,7 +75,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'field',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Fields',
+                  translation: 'Common.Field',
                   defaultValue: '',
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
@@ -81,7 +91,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'variable',
                   component: 'expression-with-dropdown',
-                  translation: 'Common.Variables',
+                  translation: 'Common.Variable',
                   defaultValue: '',
                   expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
