@@ -447,6 +447,10 @@ export default function ext({ translator }) {
                           value: 'fill',
                           translation: 'properties.backgroundImage.sizeStretch',
                         },
+                        {
+                          value: 'alwaysFill',
+                          translation: 'properties.backgroundImage.sizeAlwaysFill', // find actual translation!
+                        },
                       ],
                       show(data) {
                         return (

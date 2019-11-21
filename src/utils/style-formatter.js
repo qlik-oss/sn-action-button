@@ -6,6 +6,7 @@ const backgroundSize = {
   fitWidth: '100% auto',
   fitHeight: 'auto 100%',
   fill: '100% 100%',
+  alwaysFill: 'cover',
 };
 
 const backgroundPosition = {
