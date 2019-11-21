@@ -31,7 +31,7 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
-      if (senseNavigation && senseNavigation.getCurrentStoryId() === false) {
+      if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
         const { navigation } = layout;
         const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
