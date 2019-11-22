@@ -449,7 +449,7 @@ export default function ext({ translator }) {
                         },
                         {
                           value: 'alwaysFill',
-                          translation: 'properties.backgroundImage.sizeAlwaysFill', // find actual translation!
+                          translation: 'properties.backgroundImage.sizeAlwaysFill',
                         },
                       ],
                       show(data) {
