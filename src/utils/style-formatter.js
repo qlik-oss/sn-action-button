@@ -49,7 +49,8 @@ export default {
     style.font.style.underline && (styles += formatProperty('text-decoration', 'underline'));
     styles += formatProperty('text-align', style.font.align);
     // background
-    styles += formatProperty('background-color', getColor(style.background, primaryColor, palette));
+    const backgroundColor = getColor(style.background, primaryColor, palette);
+    styles += formatProperty('background-color', backgroundColor);
     if (style.background.useImage && style.background.url.qStaticContentUrl) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
@@ -67,9 +68,10 @@ export default {
       const { width, radius } = style.border;
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
+      const defaultBorderColor = colorUtils.lightenOrDarkenColor(backgroundColor, -20);
       styles += formatProperty(
         'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, 'none', palette)}`
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, defaultBorderColor, palette)}`
       );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {
