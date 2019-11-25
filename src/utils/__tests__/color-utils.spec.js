@@ -98,16 +98,16 @@ describe('color-utils', () => {
   });
   describe('lightenOrDarkenColor', () => {
     it('should not lighten #ffffff', () => {
-      const result = colorUtils.lightenOrDarkenColor('#ffffff', 10);
+      const result = colorUtils.lightenOrDarkenColor('#ffffff', 0.1);
       expect(result).to.equal('#ffffff');
     });
     it('should not darken #000000', () => {
-      const result = colorUtils.lightenOrDarkenColor('#000000', -10);
+      const result = colorUtils.lightenOrDarkenColor('#000000', -0.1);
       expect(result).to.equal('#000000');
     });
-    it('should darken #ffffff to #ebebeb', () => {
-      const result = colorUtils.lightenOrDarkenColor('#ffffff', -20);
-      expect(result).to.equal('#ebebeb');
+    it('should darken #ffffff to #cccccc', () => {
+      const result = colorUtils.lightenOrDarkenColor('#ffffff', -0.2);
+      expect(result).to.equal('#cccccc');
     });
   });
 });
