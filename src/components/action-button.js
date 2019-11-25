@@ -31,10 +31,12 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
-      const { navigation } = layout;
-      const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
-      if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-        await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
+      if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
+        const { navigation } = layout;
+        const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
+        if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
+          await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
+        }
       }
       button.removeAttribute('disabled');
     }

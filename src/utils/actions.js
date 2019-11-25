@@ -10,7 +10,9 @@ const actions = [
     translation: 'Object.ActionButton.ApplyBookmark',
     group: 'bookmark',
     getActionCall: ({ app, bookmark }) => async () => {
-      bookmark && (await app.applyBookmark(bookmark));
+      const bookMarks = await app.getBookmarkList();
+      const findBm = bookMarks.find(bm => bm.qData.title === bookmark);
+      bookmark && (await app.applyBookmark((findBm && findBm.qInfo && findBm.qInfo.qId) || bookmark));
     },
     requiredInput: ['bookmark'],
   },

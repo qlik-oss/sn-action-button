@@ -18,11 +18,12 @@ describe('action button', () => {
       defaults.element.firstElementChild = button;
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
+      defaults.app = defaultValues.app;
       defaults.app.clearAll = sinon.spy();
-      defaults.app.getSheetList = () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }];
       defaults.context.permissions = ['interact'];
       defaults.senseNavigation = {
         goToSheet: sinon.spy(),
+        getCurrentStoryId: () => false,
       };
     });
     it('should render action button', () => {
@@ -51,7 +52,17 @@ describe('action button', () => {
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.removeAttribute).to.have.been.calledWith('disabled');
+      expect(defaults.senseNavigation.goToSheet).to.not.have.been.called;
     });
+
+    it('should not run navigation when in story mode', async () => {
+      defaults.senseNavigation.getCurrentStoryId = () => 'storyIde';
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.removeAttribute).to.have.been.calledWith('disabled');
+      expect(defaults.senseNavigation.goToSheet).to.not.have.been.called;
+    });
+
     it('should call scale and resetScale on mousedown/up', async () => {
       renderButton(defaults);
       defaults.element.firstElementChild.offsetHeight = 100;

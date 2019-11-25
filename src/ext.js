@@ -41,6 +41,9 @@ export default function ext({ translator }) {
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
               itemTitleRef: data => {
+                if (data.actionLabel !== '') {
+                  return data.actionLabel;
+                }
                 const act = actions.find(action => data.actionType === action.value);
                 return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
               },
@@ -48,20 +51,29 @@ export default function ext({ translator }) {
               allowRemove: true,
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
+                label: {
+                  component: 'string',
+                  ref: 'actionLabel',
+                  translation: 'Common.Label',
+                  expression: 'optional',
+                  defaultValue: '',
+                },
                 actionType: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'actionType',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Object.ActionButton.Action',
+                  defaultValue: '',
                   options: actions,
+                  dropdownOnly: true,
                 },
                 bookmark: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'bookmark',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'ExpressionEditor.SetExpresions.Bookmark',
+                  defaultValue: '',
+                  expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
@@ -72,11 +84,12 @@ export default function ext({ translator }) {
                   show: data => checkShowAction(data, 'bookmark'),
                 },
                 field: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'field',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Common.Field',
+                  defaultValue: '',
+                  dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
                     return fields.map(field => ({
@@ -87,11 +100,12 @@ export default function ext({ translator }) {
                   show: data => checkShowAction(data, 'field'),
                 },
                 variable: {
-                  // TODO: searchable dropdown
                   type: 'string',
                   ref: 'variable',
-                  component: 'dropdown',
-                  defaultValue: null,
+                  component: 'expression-with-dropdown',
+                  translation: 'Common.Variable',
+                  defaultValue: '',
+                  expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
@@ -435,6 +449,10 @@ export default function ext({ translator }) {
                         {
                           value: 'fill',
                           translation: 'properties.backgroundImage.sizeStretch',
+                        },
+                        {
+                          value: 'alwaysFill',
+                          translation: 'properties.backgroundImage.sizeAlwaysFill',
                         },
                       ],
                       show(data) {

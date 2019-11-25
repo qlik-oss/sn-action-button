@@ -49,6 +49,9 @@ describe('index', () => {
     env.sense = {
       navigation: {},
     };
+    env.translator = {
+      get: () => {},
+    };
     const result = supernova(env);
     expect(result)
       .to.be.an('object')

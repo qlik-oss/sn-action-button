@@ -7,6 +7,7 @@ import renderButton from './components/action-button';
 export default function supernova(env) {
   const { Theme, sense, translator } = env;
   const senseNavigation = sense && sense.navigation;
+  properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
   return {
     qae: {
       properties,
