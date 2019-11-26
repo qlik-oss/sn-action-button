@@ -29,7 +29,7 @@ export default function ext({ translator }) {
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
               itemTitleRef: data => {
-                if (data.actionLabel !== '') {
+                if (data.actionLabel) {
                   return data.actionLabel;
                 }
                 const act = actions.find(action => data.actionType === action.value);
