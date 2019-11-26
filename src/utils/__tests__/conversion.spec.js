@@ -157,8 +157,8 @@ describe('conversion', () => {
       const result = importProperties(exportedFmt, initialProperties);
       const expectedStyle = JSON.parse(JSON.stringify(initialProperties.style));
       expectedStyle.label = 'myButton';
-      expectedStyle.showIcon = true;
-      expectedStyle.icon = 'thisIcon';
+      expectedStyle.icon.useIcon = true;
+      expectedStyle.icon.iconType = 'thisIcon';
       expectedStyle.font.align = 'left';
       expect(result.qProperty.actions).to.have.length(2);
       expect(result.qProperty.style).to.deep.equal(expectedStyle);
