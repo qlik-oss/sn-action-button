@@ -61,23 +61,21 @@ const colorUtils = {
     return (current && current.properties.fontFamily) || 'inherit';
   },
   getFadedColor(color) {
-    const percent = -0.15;
+    const percent = 0.15;
     let f; let R; let B; let G;
-    const t = 0; // percent < 0 ? 0 : 255
-    const p = percent * -1; // percent < 0 ? percent * -1 : percent
     if (color.length > 7) {
       f = color.split(',');
       const rgba = f[0].indexOf('a') !== -1;
       R = rgba ? parseInt(f[0].slice(5), 10) : parseInt(f[0].slice(4), 10);
       G = parseInt(f[1], 10);
       B = parseInt(f[2], 10);
-      return `${(rgba ? 'rgba(' : 'rgb(') + (Math.round((t - R) * p) + R)},${Math.round((t - G) * p) + G},${Math.round((t - B) * p) + B}${rgba ? `,${f[3]}` : ')'}`;
+      return `${(rgba ? 'rgba(' : 'rgb(') + (Math.round((0 - R) * percent) + R)},${Math.round((0 - G) * percent) + G},${Math.round((0 - B) * percent) + B}${rgba ? `,${f[3]}` : ')'}`;
     }
     f = parseInt(color.slice(1), 16);
     R = f >> 16;
     G = (f >> 8) & 0x00FF;
     B = f & 0x0000FF;
-    return `#${(0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1)}`;
+    return `#${(0x1000000 + (Math.round((0 - R) * percent) + R) * 0x10000 + (Math.round((0 - G) * percent) + G) * 0x100 + (Math.round((0 - B) * percent) + B)).toString(16).slice(1)}`;
   }
 };
 
