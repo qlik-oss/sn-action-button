@@ -68,7 +68,7 @@ export default {
       const { width, radius } = style.border;
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
-      const defaultBorderColor = colorUtils.lightenOrDarkenColor(backgroundColor, -0.15);
+      const defaultBorderColor = colorUtils.getFadedColor(backgroundColor);
       styles += formatProperty(
         'border',
         `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, defaultBorderColor, palette)}`

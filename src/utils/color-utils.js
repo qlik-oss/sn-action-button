@@ -60,10 +60,11 @@ const colorUtils = {
     const current = getCurrentTheme(Theme);
     return (current && current.properties.fontFamily) || 'inherit';
   },
-  lightenOrDarkenColor(color, percent) {
+  getFadedColor(color) {
+    const percent = -0.1;
     const f = parseInt(color.slice(1), 16);
-    const t = percent < 0 ? 0 : 255;
-    const p = percent < 0 ? percent * -1 : percent;
+    const t = 0; // percent < 0 ? 0 : 255
+    const p = percent * -1; // percent < 0 ? percent * -1 : percent
     const R = f >> 16;
     const G = (f >> 8) & 0x00FF;
     const B = f & 0x0000FF;

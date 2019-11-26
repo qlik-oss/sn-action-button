@@ -96,18 +96,18 @@ describe('color-utils', () => {
       expect(result).to.have.keys('properties');
     });
   });
-  describe('lightenOrDarkenColor', () => {
-    it('should not lighten #ffffff', () => {
-      const result = colorUtils.lightenOrDarkenColor('#ffffff', 0.1);
-      expect(result).to.equal('#ffffff');
-    });
+  describe('getFadedColor', () => {
     it('should not darken #000000', () => {
-      const result = colorUtils.lightenOrDarkenColor('#000000', -0.1);
+      const result = colorUtils.getFadedColor('#000000');
       expect(result).to.equal('#000000');
     });
-    it('should darken #ffffff to #cccccc', () => {
-      const result = colorUtils.lightenOrDarkenColor('#ffffff', -0.2);
-      expect(result).to.equal('#cccccc');
+    it('should darken #001000 to #000e00', () => {
+      const result = colorUtils.getFadedColor('#001000');
+      expect(result).to.equal('#000e00');
+    });
+    it('should darken #ffffff to #e6e6e6', () => {
+      const result = colorUtils.getFadedColor('#ffffff');
+      expect(result).to.equal('#e6e6e6');
     });
   });
 });
