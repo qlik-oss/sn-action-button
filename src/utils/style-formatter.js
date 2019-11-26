@@ -50,6 +50,7 @@ export default {
     styles += formatProperty('text-align', style.font.align);
     // background
     const backgroundColor = getColor(style.background, primaryColor, palette);
+    console.log(backgroundColor);
     styles += formatProperty('background-color', backgroundColor);
     if (style.background.useImage && style.background.url.qStaticContentUrl) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
@@ -69,6 +70,7 @@ export default {
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
       const defaultBorderColor = colorUtils.getFadedColor(backgroundColor);
+      console.log(defaultBorderColor);
       styles += formatProperty(
         'border',
         `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, defaultBorderColor, palette)}`
