@@ -30,13 +30,6 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
   return resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
-const setFontStyling = (textElement, fontsize, fontFamily, align) => {
-  textElement.setAttribute(
-    'style',
-    `display: flex; align-items: center; justify-content: ${align}; font-size: ${fontsize}px; font-family: ${fontFamily};`
-  );
-};
-
 export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;';
@@ -49,7 +42,6 @@ export default {
     styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
-    styles += formatProperty('text-align', style.font.align);
     // background
     styles += formatProperty('background-color', getColor(style.background, primaryColor, palette));
     if (style.background.useImage && style.background.url.qStaticContentUrl) {
@@ -80,47 +72,41 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, Theme, layout }) {
-    const { style } = layout;
-    button.innerHTML = '';
+  createLabelAndIcon({ button, Theme, style }) {
+    // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-
-    // textSpan containing the text. Only set text decoration here otherwise button will get underline as well
+    text.style.fontFamily = colorUtils.getFontFamily(Theme);
+    // label
     const textSpan = document.createElement('span');
-    if (style.font.style.underline) {
-      textSpan.setAttribute('style', 'text-decoration: underline;');
-    }
     textSpan.textContent = style.label;
-
-    // Icon
+    style.font.style.underline && (textSpan.style.textDecoration = 'underline');
+    text.appendChild(textSpan);
+    // icon
     if (style.icon.useIcon && style.icon.iconType !== '') {
       const iconSpan = document.createElement('span');
-      iconSpan.setAttribute('style', 'font-size: inherit; text-decoration: none;');
+      iconSpan.style.textDecoration = 'none';
+      iconSpan.style.fontSize = 'inherit';
       iconSpan.setAttribute('class', `lui-icon lui-icon--${style.icon.iconType}`);
-      style.icon.position === 'left'
-        ? text.appendChild(iconSpan) && text.appendChild(textSpan)
-        : text.appendChild(textSpan) && text.appendChild(iconSpan);
-    } else {
-      text.appendChild(textSpan);
+      style.icon.position === 'left' ? text.insertBefore(iconSpan, textSpan) : text.appendChild(iconSpan);
     }
+    button.innerHTML = '';
     button.appendChild(text);
 
     // Calculations on font size.
     // 1. Setting font size to height of button container
     text.style.fontSize = `${button.clientHeight}px`;
-
     // 2. Adjust the font size to the height ratio between button container and text box
     let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
     text.style.fontSize = `${newFontsize}px`;
-
     // 3. Adjust the font size to the width ratio between button container and text box
     if (text.offsetWidth + 8 > button.clientWidth) {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
-
-    // 4. Setting final font size and other font styling
-    const fontFamily = colorUtils.getFontFamily(Theme);
-    setFontStyling(text, (newFontsize * style.font.size) / 100, fontFamily, style.font.align);
+    // 4. Setting final font size by scaling with the font size from the layout + other font styling
+    text.style.fontSize = `${(newFontsize * style.font.size) / 100}px`;
+    text.style.display = 'flex';
+    text.style.alignItems = 'center';
+    text.style.justifyContent = style.font.align;
   },
 };

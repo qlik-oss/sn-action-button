@@ -5,7 +5,7 @@ describe('index', () => {
   const env = {
     Theme: defaultValues.Theme,
   };
-  const { layout } = defaultValues;
+  const layout = JSON.parse(JSON.stringify(defaultValues.layout));
   const context = { permissions: [] };
   global.document = {
     createElement: () => {
@@ -50,7 +50,7 @@ describe('index', () => {
       navigation: {},
     };
     env.translator = {
-      get: () => {},
+      get: () => 'Button',
     };
     const result = supernova(env);
     expect(result)

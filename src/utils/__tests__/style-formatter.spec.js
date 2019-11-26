@@ -5,7 +5,7 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;cursor: pointer;color: #ffffff;font-weight: bold;text-align: center;background-color: myPrimaryColor;border: none;';
+      'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
     const someUrl = '/media/Logo/qlik.png';
@@ -80,20 +80,6 @@ describe('style-formatter', () => {
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
       expect(formattedStyle.includes('font-style: italic')).to.be.true;
-    });
-
-    // it('should return text-decoration: underline when underline is selected', () => {
-    //   style.font.style = {
-    //     underline: true,
-    //   };
-    //   const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-    //   expect(formattedStyle.includes('text-decoration: underline')).to.be.true;
-    // });
-
-    it('should return text-align: left when left is selected', () => {
-      style.font.align = 'left';
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme });
-      expect(formattedStyle.includes('text-align: left')).to.be.true;
     });
     // background
     it('should return specified background color', () => {
@@ -211,10 +197,12 @@ describe('style-formatter', () => {
   });
 
   describe('createLabelAndIcon', () => {
-    const { Theme } = defaultValues;
+    const { Theme, layout } = defaultValues;
     let button;
-    const layout = JSON.parse(JSON.stringify(defaultValues.layout));
+    let style;
+
     beforeEach(() => {
+      style = JSON.parse(JSON.stringify(layout.style));
       button = {
         firstElementChild: { setAttribute: sinon.spy(), offsetHeight: 400, offsetWidth: 20 },
         clientHeight: 100,
@@ -228,15 +216,19 @@ describe('style-formatter', () => {
         },
       };
     });
-    it('should set fontSize and family to default', () => {
-      styleFormatter.createLabelAndIcon({ Theme, button, layout });
-      const textSpan = button.children[0].children[0];
-      expect(textSpan.textContent).to.equal('Button');
-      expect(button.children[0].setAttribute).to.have.been.calledWith(
-        'style',
-        'display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-family: myFont;'
-      );
+
+    it('should set fontSize and styling', () => {
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      const text = button.children[0];
+      expect(text.children[0].textContent).to.equal('Button');
+      expect(text.style.whiteSpace).to.equal('nowrap');
+      expect(text.style.fontFamily).to.equal('myFont');
+      expect(text.style.fontSize).to.equal('12.5px');
+      expect(text.style.display).to.equal('flex');
+      expect(text.style.alignItems).to.equal('center');
+      expect(text.style.justifyContent).to.equal('center');
     });
+
     it('should set fontSize when text offsetWidth is bigger than button', () => {
       button.appendChild = child => {
         child.setAttribute = sinon.spy();
@@ -244,11 +236,40 @@ describe('style-formatter', () => {
         child.offsetWidth = 400;
         button.children.push(child);
       };
-      styleFormatter.createLabelAndIcon({ Theme, button, layout });
-      expect(button.children[0].setAttribute).to.have.been.calledWith(
-        'style',
-        'display: flex; align-items: center; justify-content: center; font-size: 2.875px; font-family: myFont;'
-      );
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].style.fontSize).to.equal('2.875px');
+    });
+
+    // insertBefore not working...
+    // it('should place icon first then label inside text element', () => {
+    //   style.icon.useIcon = true;
+    //   style.icon.iconType = 'someIcon';
+    //   styleFormatter.createLabelAndIcon({ Theme, button, style });
+    //   const text = button.children[0];
+    //   expect(text.children[0].style.textDecoration).to.equal('none');
+    //   expect(text.children[1].style.textContent).to.equal('Button');
+    // });
+
+    it('should place label first then icon inside text element', () => {
+      style.icon.useIcon = true;
+      style.icon.iconType = 'someIcon';
+      style.icon.position = 'right';
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      const text = button.children[0];
+      // expect(text.children[0].textContent).to.equal('Button');
+      expect(text.children[1].style.textDecoration).to.equal('none');
+    });
+
+    it('should set textDecoration to underline', () => {
+      style.font.style.underline = true;
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].children[0].style.textDecoration).to.equal('underline');
+    });
+
+    it('should set justifyContent to flex-start', () => {
+      style.font.align = 'flex-start';
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].style.justifyContent).to.equal('flex-start');
     });
   });
 });

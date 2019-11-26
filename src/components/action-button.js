@@ -16,7 +16,7 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   const interactPermission = context.permissions.indexOf('interact') !== -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
-  styleFormatter.createLabelAndIcon({ button, Theme, layout });
+  styleFormatter.createLabelAndIcon({ button, Theme, style });
   if (disabled && interactPermission) {
     button.setAttribute('disabled', true);
   } else {

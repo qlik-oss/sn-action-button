@@ -9,7 +9,7 @@ describe('ext', () => {
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
-  const { font, background, border } = props.definition.items.settings.items;
+  const { font, background, border, icon } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -360,6 +360,21 @@ describe('ext', () => {
       const borderColorExpression = border.items.borderSettings.items.colorExpression.show(data);
       expect(borderColor).to.be.false;
       expect(borderColorExpression).to.be.true;
+    });
+    // icon
+    it('should return true for iconType', () => {
+      data.style.icon.useIcon = true;
+      const resultType = icon.items.iconSettings.items.iconType.show(data);
+      const resultPosition = icon.items.iconSettings.items.iconPosition.show(data);
+      expect(resultType).to.be.true;
+      expect(resultPosition).to.be.true;
+    });
+
+    it('should return false for iconType', () => {
+      const resultType = icon.items.iconSettings.items.iconType.show(data);
+      const resultPosition = icon.items.iconSettings.items.iconPosition.show(data);
+      expect(resultType).to.be.false;
+      expect(resultPosition).to.be.false;
     });
   });
 
