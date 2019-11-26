@@ -19,7 +19,7 @@ describe('ext', () => {
     const { itemTitleRef } = props.definition.items.actions.items.actions;
 
     it('Should return action label from dropdown', () => {
-      data = { actionType: 'applyBookmark', actionLabel: '' };
+      data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.ApplyBookmark');
     });
@@ -30,7 +30,7 @@ describe('ext', () => {
       expect(itemTitle).to.equal('actionLabel');
     });
 
-    it('Should return default action label when no act.label', () => {
+    it('Should return default action label when actionLabel is empty string', () => {
       data = { actionType: 'someAction', actionLabel: '' };
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.NewAction');
