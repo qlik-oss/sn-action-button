@@ -131,71 +131,66 @@ export default function ext({ translator }) {
               },
             },
             navigation: {
+              translation: 'Object.ActionButton.Navigation',
               type: 'items',
               items: {
-                navigation: {
+                action: {
+                  ref: 'navigation.action',
                   translation: 'Object.ActionButton.Navigation',
-                  type: 'items',
-                  items: {
-                    action: {
-                      ref: 'navigation.action',
-                      translation: 'Object.ActionButton.Navigation',
-                      component: 'expression-with-dropdown',
-                      defaultValue: null,
-                      options: navigationActions,
-                      dropdownOnly: true,
-                    },
-                    sheetId: {
-                      type: 'string',
-                      ref: 'navigation.sheet',
-                      translation: 'properties.sheet',
-                      expression: 'optional',
-                      show: data => checkShowNavigation(data, 'sheetId'),
-                    },
-                    sheet: {
-                      type: 'string',
-                      ref: 'navigation.sheet',
-                      translation: 'properties.sheet',
-                      component: 'expression-with-dropdown',
-                      expressionType: 'StringExpression',
-                      show: data => checkShowNavigation(data, 'sheet'),
-                      options: async (action, hyperCubeHandler) => {
-                        const sheets = await hyperCubeHandler.app.getSheetList();
-                        return sheets.map(sheet => ({
-                          value: sheet.qInfo.qId,
-                          label: sheet.qMeta.title,
-                        }));
-                      },
-                    },
-                    story: {
-                      type: 'string',
-                      ref: 'navigation.story',
-                      translation: 'properties.story',
-                      component: 'expression-with-dropdown',
-                      expressionType: 'StringExpression',
-                      show: data => checkShowNavigation(data, 'story'),
-                      options: async (action, hyperCubeHandler) => {
-                        const stories = await hyperCubeHandler.app.getStoryList();
-                        return stories.map(story => ({
-                          value: story.qInfo.qId,
-                          label: story.qMeta.title,
-                        }));
-                      },
-                    },
-                    websiteUrl: {
-                      type: 'string',
-                      ref: 'navigation.websiteUrl',
-                      translation: 'properties.website',
-                      show: data => checkShowNavigation(data, 'websiteUrl'),
-                    },
-                    sameWindow: {
-                      type: 'boolean',
-                      ref: 'navigation.sameWindow',
-                      translation: 'properties.sameWindow',
-                      show: data => checkShowNavigation(data, 'websiteUrl'),
-                      defaultValue: false,
-                    },
+                  component: 'expression-with-dropdown',
+                  defaultValue: null,
+                  options: navigationActions,
+                  dropdownOnly: true,
+                },
+                sheetId: {
+                  type: 'string',
+                  ref: 'navigation.sheet',
+                  translation: 'properties.sheet',
+                  expression: 'optional',
+                  show: data => checkShowNavigation(data, 'sheetId'),
+                },
+                sheet: {
+                  type: 'string',
+                  ref: 'navigation.sheet',
+                  translation: 'properties.sheet',
+                  component: 'expression-with-dropdown',
+                  expressionType: 'StringExpression',
+                  show: data => checkShowNavigation(data, 'sheet'),
+                  options: async (action, hyperCubeHandler) => {
+                    const sheets = await hyperCubeHandler.app.getSheetList();
+                    return sheets.map(sheet => ({
+                      value: sheet.qInfo.qId,
+                      label: sheet.qMeta.title,
+                    }));
                   },
+                },
+                story: {
+                  type: 'string',
+                  ref: 'navigation.story',
+                  translation: 'properties.story',
+                  component: 'expression-with-dropdown',
+                  expressionType: 'StringExpression',
+                  show: data => checkShowNavigation(data, 'story'),
+                  options: async (action, hyperCubeHandler) => {
+                    const stories = await hyperCubeHandler.app.getStoryList();
+                    return stories.map(story => ({
+                      value: story.qInfo.qId,
+                      label: story.qMeta.title,
+                    }));
+                  },
+                },
+                websiteUrl: {
+                  type: 'string',
+                  ref: 'navigation.websiteUrl',
+                  translation: 'properties.website',
+                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                },
+                sameWindow: {
+                  type: 'boolean',
+                  ref: 'navigation.sameWindow',
+                  translation: 'properties.sameWindow',
+                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                  defaultValue: false,
                 },
               },
             },
