@@ -25,6 +25,9 @@ describe('style-formatter', () => {
         newElement.appendChild = newChild => {
           newElement.children.push(newChild);
         };
+        newElement.insertBefore = newChild => {
+          newElement.children.unshift(newChild);
+        };
         return newElement;
       },
     };
@@ -240,15 +243,14 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).to.equal('2.875px');
     });
 
-    // insertBefore not working...
-    // it('should place icon first then label inside text element', () => {
-    //   style.icon.useIcon = true;
-    //   style.icon.iconType = 'someIcon';
-    //   styleFormatter.createLabelAndIcon({ Theme, button, style });
-    //   const text = button.children[0];
-    //   expect(text.children[0].style.textDecoration).to.equal('none');
-    //   expect(text.children[1].style.textContent).to.equal('Button');
-    // });
+    it('should place icon first then label inside text element', () => {
+      style.icon.useIcon = true;
+      style.icon.iconType = 'someIcon';
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      const text = button.children[0];
+      expect(text.children[0].style.textDecoration).to.equal('none');
+      expect(text.children[1].textContent).to.equal('Button');
+    });
 
     it('should place label first then icon inside text element', () => {
       style.icon.useIcon = true;
@@ -256,7 +258,7 @@ describe('style-formatter', () => {
       style.icon.position = 'right';
       styleFormatter.createLabelAndIcon({ Theme, button, style });
       const text = button.children[0];
-      // expect(text.children[0].textContent).to.equal('Button');
+      expect(text.children[0].textContent).to.equal('Button');
       expect(text.children[1].style.textDecoration).to.equal('none');
     });
 
