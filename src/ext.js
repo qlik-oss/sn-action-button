@@ -50,6 +50,7 @@ export default function ext({ translator }) {
               },
               allowAdd: true,
               allowRemove: true,
+              allowMove: true,
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
                 label: {
@@ -74,7 +75,7 @@ export default function ext({ translator }) {
                   component: 'expression-with-dropdown',
                   translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
-                  expressionType: 'StringExpression',
+                  dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
