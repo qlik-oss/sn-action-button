@@ -38,6 +38,7 @@ export default function ext({ translator }) {
               },
               allowAdd: true,
               allowRemove: true,
+              allowMove: true,
               addTranslation: 'Object.ActionButton.AddAction',
               items: {
                 label: {
