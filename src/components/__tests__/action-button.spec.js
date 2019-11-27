@@ -68,10 +68,18 @@ describe('action button', () => {
       defaults.element.firstElementChild.offsetHeight = 100;
       defaults.element.firstElementChild.offsetWidth = 200;
       defaults.element.firstElementChild.style = { transform: '' };
-      defaults.element.firstElementChild.onmousedown();
+      defaults.element.firstElementChild.onmousedown({ button: 0 });
       expect(defaults.element.firstElementChild.style.transform).to.equal('scale(0.99, 0.98)');
       defaults.element.firstElementChild.onmouseup();
       expect(defaults.element.firstElementChild.style.transform).to.equal('scale(1)');
+    });
+    it('should not call scale with secondary button', async () => {
+      renderButton(defaults);
+      defaults.element.firstElementChild.offsetHeight = 100;
+      defaults.element.firstElementChild.offsetWidth = 200;
+      defaults.element.firstElementChild.style = { transform: '' };
+      defaults.element.firstElementChild.onmousedown({ button: 2 });
+      expect(defaults.element.firstElementChild.style.transform).to.equal('');
     });
     it('should call scale and resetScale on touchstart/stop', async () => {
       renderButton(defaults);

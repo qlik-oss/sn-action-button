@@ -43,7 +43,8 @@ export default {
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
     // background
-    styles += formatProperty('background-color', getColor(style.background, primaryColor, palette));
+    const backgroundColor = getColor(style.background, primaryColor, palette);
+    styles += formatProperty('background-color', backgroundColor);
     if (style.background.useImage && style.background.url.qStaticContentUrl) {
       let bgUrl = style.background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
@@ -61,9 +62,10 @@ export default {
       const { width, radius } = style.border;
       const { offsetHeight, offsetWidth } = element;
       const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
+      const defaultBorderColor = colorUtils.getFadedColor(backgroundColor);
       styles += formatProperty(
         'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, 'none', palette)}`
+        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, defaultBorderColor, palette)}`
       );
       styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
     } else {
