@@ -275,5 +275,11 @@ describe('style-formatter', () => {
       styleFormatter.createLabelAndIcon({ Theme, button, style });
       expect(button.children[0].style.justifyContent).to.equal('flex-start');
     });
+
+    it('should set justifyContent to flex-end', () => {
+      style.font.align = 'right';
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].style.justifyContent).to.equal('flex-end');
+    });
   });
 });
