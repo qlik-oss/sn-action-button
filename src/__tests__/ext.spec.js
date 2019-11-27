@@ -8,7 +8,7 @@ describe('ext', () => {
   let data;
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
-  const navigationItems = props.definition.items.actions.items.navigation.items;
+  const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
   const { font, background, border } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
