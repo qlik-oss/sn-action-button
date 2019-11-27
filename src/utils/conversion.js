@@ -84,6 +84,18 @@ const importProperties = (exportedFmt, initialProperties) => {
         case 'qStateName':
           newProperties[key] = exportedFmt.properties[key];
           break;
+        case 'showTitles':
+          newProperties[key] = exportedFmt.properties[key];
+          break;
+        case 'title':
+          newProperties[key] = exportedFmt.properties[key];
+          break;
+        case 'subtitle':
+          newProperties[key] = exportedFmt.properties[key];
+          break;
+        case 'footnote':
+          newProperties[key] = exportedFmt.properties[key];
+          break;
         default:
           break;
       }
