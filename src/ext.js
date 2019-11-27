@@ -231,13 +231,13 @@ export default function ext({ translator }) {
           uses: 'settings',
           items: {
             general: {
-              showTitles: {},
-              details: {
-                show: false,
-              },
               type: 'items',
               translation: 'properties.general',
               items: {
+                showTitles: {},
+                details: {
+                  show: false,
+                },
                 label: {
                   component: 'string',
                   ref: 'style.label',
