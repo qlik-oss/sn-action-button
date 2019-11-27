@@ -244,19 +244,21 @@ describe('style-formatter', () => {
     });
 
     it('should place icon first then label inside text element', () => {
+      const isSense = true;
       style.icon.useIcon = true;
       style.icon.iconType = 'someIcon';
-      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      styleFormatter.createLabelAndIcon({ Theme, button, style, isSense });
       const text = button.children[0];
       expect(text.children[0].style.textDecoration).to.equal('none');
       expect(text.children[1].textContent).to.equal('Button');
     });
 
     it('should place label first then icon inside text element', () => {
+      const isSense = true;
       style.icon.useIcon = true;
       style.icon.iconType = 'someIcon';
       style.icon.position = 'right';
-      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      styleFormatter.createLabelAndIcon({ Theme, button, style, isSense });
       const text = button.children[0];
       expect(text.children[0].textContent).to.equal('Button');
       expect(text.children[1].style.textDecoration).to.equal('none');

@@ -10,13 +10,14 @@ export const runActions = async actionList => {
 };
 
 export default function renderButton({ layout, Theme, app, context, senseNavigation, element }) {
+  const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const interactPermission = context.permissions.indexOf('interact') !== -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
-  styleFormatter.createLabelAndIcon({ button, Theme, style });
+  styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
   if (disabled && interactPermission) {
     button.setAttribute('disabled', true);
   } else {

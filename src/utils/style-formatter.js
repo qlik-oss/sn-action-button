@@ -72,7 +72,7 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, Theme, style }) {
+  createLabelAndIcon({ button, Theme, style, isSense }) {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
@@ -83,7 +83,7 @@ export default {
     style.font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
-    if (style.icon.useIcon && style.icon.iconType !== '') {
+    if (isSense && style.icon.useIcon && style.icon.iconType !== '') {
       const iconSpan = document.createElement('span');
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
