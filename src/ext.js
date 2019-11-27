@@ -345,7 +345,7 @@ export default function ext({ translator }) {
                         {
                           component: 'icon-item',
                           icon: 'align_left',
-                          value: 'flex-start',
+                          value: 'left',
                           translation: 'properties.dock.left',
                           labelPlacement: 'bottom',
                         },
@@ -359,7 +359,7 @@ export default function ext({ translator }) {
                         {
                           component: 'icon-item',
                           icon: 'align_right',
-                          value: 'flex-end',
+                          value: 'right',
                           translation: 'properties.dock.right',
                           labelPlacement: 'bottom',
                         },

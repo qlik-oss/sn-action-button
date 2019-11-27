@@ -107,6 +107,7 @@ export default {
     text.style.fontSize = `${(newFontsize * style.font.size) / 100}px`;
     text.style.display = 'flex';
     text.style.alignItems = 'center';
-    text.style.justifyContent = style.font.align;
+    text.style.justifyContent =
+      style.font.align === 'left' ? 'flex-start' : style.font.align === 'right' ? 'flex-end' : 'center';
   },
 };

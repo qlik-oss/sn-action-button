@@ -269,7 +269,7 @@ describe('style-formatter', () => {
     });
 
     it('should set justifyContent to flex-start', () => {
-      style.font.align = 'flex-start';
+      style.font.align = 'left';
       styleFormatter.createLabelAndIcon({ Theme, button, style });
       expect(button.children[0].style.justifyContent).to.equal('flex-start');
     });
