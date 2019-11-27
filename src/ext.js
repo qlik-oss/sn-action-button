@@ -231,6 +231,10 @@ export default function ext({ translator }) {
           uses: 'settings',
           items: {
             general: {
+              showTitles: {},
+              details: {
+                show: false,
+              },
               type: 'items',
               translation: 'properties.general',
               items: {
@@ -239,10 +243,6 @@ export default function ext({ translator }) {
                   ref: 'style.label',
                   translation: 'Common.Label',
                   expression: 'optional',
-                },
-                showTitles: {},
-                details: {
-                  show: false,
                 },
               },
             },
