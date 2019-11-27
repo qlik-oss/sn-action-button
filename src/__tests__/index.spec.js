@@ -5,15 +5,22 @@ describe('index', () => {
   const env = {
     Theme: defaultValues.Theme,
   };
-  const { layout } = defaultValues;
+  const layout = JSON.parse(JSON.stringify(defaultValues.layout));
   const context = { permissions: [] };
   global.document = {
-    createElement: () => ({
-      appendChild: () => {},
-      setAttribute: () => {},
-      removeAttribute: () => {},
-      firstElementChild: { setAttribute: () => {} },
-    }),
+    createElement: () => {
+      const newElement = {
+        setAttribute: () => {},
+        removeAttribute: () => {},
+        firstElementChild: { setAttribute: () => {} },
+        style: {},
+        children: [],
+      };
+      newElement.appendChild = newChild => {
+        newElement.children.push(newChild);
+      };
+      return newElement;
+    },
   };
   const thisElement = {
     appendChild: sinon.spy(),
@@ -22,6 +29,7 @@ describe('index', () => {
       removeAttribute: () => {},
       firstElementChild: { setAttribute: () => {}, text: {} },
       someProps: () => {},
+      appendChild: () => {},
     },
   };
 
@@ -42,7 +50,7 @@ describe('index', () => {
       navigation: {},
     };
     env.translator = {
-      get: () => {},
+      get: () => 'Button',
     };
     const result = supernova(env);
     expect(result)

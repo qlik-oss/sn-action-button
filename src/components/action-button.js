@@ -10,17 +10,20 @@ export const runActions = async actionList => {
 };
 
 export default function renderButton({ layout, Theme, app, context, senseNavigation, element }) {
+  const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const interactPermission = context.permissions.indexOf('interact') !== -1;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element, button });
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
+  styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
   if (disabled && interactPermission) {
     button.setAttribute('disabled', true);
   } else {
     button.removeAttribute('disabled');
   }
+
   button.onclick = async () => {
     const actionCallList = [];
     if (context.permissions.indexOf('interact') !== -1) {
@@ -41,7 +44,6 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
       button.removeAttribute('disabled');
     }
   };
-  styleFormatter.setFontSizeAndFamily({ button, Theme, layout });
 
   const scale = () => {
     if (!disabled && interactPermission) {

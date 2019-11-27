@@ -17,6 +17,7 @@ const defaultValues = {
       removeAttribute: () => {},
       firstElementChild: { setAttribute: () => {}, text: {} },
       someProps: () => {},
+      appendChild: () => {},
     },
   },
   app: {

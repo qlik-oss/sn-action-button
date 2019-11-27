@@ -58,13 +58,11 @@ const importProperties = (exportedFmt, initialProperties) => {
     Object.keys(exportedFmt.properties).forEach(key => {
       let props;
       switch (key) {
-        case 'qLayoutExclude':
-          break;
         case 'props':
           props = exportedFmt.properties[key];
           newProperties.style.label = props.buttonLabel;
-          newProperties.style.showIcon = props.buttonShowIcon;
-          newProperties.style.icon = props.buttonIconLui;
+          newProperties.style.icon.useIcon = props.buttonShowIcon;
+          newProperties.style.icon.iconType = props.buttonIconLui;
           newProperties.style.font.align = props.buttonTextAlign;
           newProperties.useEnabledCondition = props.useEnabledCondition;
           newProperties.enabledCondition = props.enabledCondition;

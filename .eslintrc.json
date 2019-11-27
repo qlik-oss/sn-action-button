@@ -19,7 +19,8 @@
     "no-unused-expressions": 0,
     "object-curly-newline": 0,
     "operator-linebreak": 0,
-    "import/no-extraneous-dependencies": [2, { "devDependencies": true }]
+    "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
+    "no-nested-ternary": 0
   },
   "overrides": [
     {

@@ -2,6 +2,7 @@ import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
+import luiIcons from './utils/lui-icons';
 
 const colorOptions = [
   {
@@ -11,6 +12,17 @@ const colorOptions = [
   {
     value: true,
     translation: 'properties.colorMode.byExpression',
+  },
+];
+
+const toggleOptions = [
+  {
+    value: true,
+    translation: 'properties.on',
+  },
+  {
+    value: false,
+    translation: 'properties.off',
   },
 ];
 
@@ -397,16 +409,7 @@ export default function ext({ translator }) {
                       type: 'boolean',
                       translation: 'properties.backgroundImage.use',
                       component: 'switch',
-                      options: [
-                        {
-                          value: true,
-                          translation: 'properties.on',
-                        },
-                        {
-                          value: false,
-                          translation: 'properties.off',
-                        },
-                      ],
+                      options: toggleOptions,
                     },
                     backgroundUrl: {
                       ref: 'style.background.url.qStaticContentUrlDef.qUrl',
@@ -491,16 +494,7 @@ export default function ext({ translator }) {
                       type: 'boolean',
                       translation: 'properties.border.use',
                       component: 'switch',
-                      options: [
-                        {
-                          value: true,
-                          translation: 'properties.on',
-                        },
-                        {
-                          value: false,
-                          translation: 'properties.off',
-                        },
-                      ],
+                      options: toggleOptions,
                     },
                     borderRadius: {
                       component: 'slider',
@@ -548,6 +542,50 @@ export default function ext({ translator }) {
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         propertyResolver.getValue(data, 'style.border.useColorExpression'),
                       expression: 'optional',
+                    },
+                  },
+                },
+              },
+            },
+            icon: {
+              type: 'items',
+              grouped: true,
+              translation: 'properties.icon',
+              items: {
+                iconSettings: {
+                  type: 'items',
+                  items: {
+                    useIcon: {
+                      ref: 'style.icon.useIcon',
+                      type: 'boolean',
+                      translation: 'properties.icon.use',
+                      component: 'switch',
+                      options: toggleOptions,
+                    },
+                    iconType: {
+                      ref: 'style.icon.iconType',
+                      component: 'expression-with-dropdown',
+                      translation: 'properties.icon.iconType',
+                      defaultValue: '',
+                      options: luiIcons,
+                      expressionType: 'StringExpression',
+                      show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
+                    },
+                    iconPosition: {
+                      ref: 'style.icon.position',
+                      component: 'dropdown',
+                      translation: 'properties.icon.position',
+                      options: [
+                        {
+                          translation: 'properties.dock.left',
+                          value: 'left',
+                        },
+                        {
+                          translation: 'properties.dock.right',
+                          value: 'right',
+                        },
+                      ],
+                      show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
                     },
                   },
                 },

@@ -13,6 +13,7 @@ describe('action button', () => {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
         firstElementChild: { setAttribute: () => {}, text: {} },
+        appendChild: () => {},
       };
       defaults.element.firstElementChild = button;
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
@@ -144,6 +145,7 @@ describe('action button', () => {
         setAttribute: sinon.spy(),
         firstElementChild: { setAttribute: () => {}, text: {} },
         removeAttribute: sinon.spy(),
+        appendChild: () => {},
       };
       defaults.element.firstElementChild = button;
       defaults.layout.useEnabledCondition = true;
