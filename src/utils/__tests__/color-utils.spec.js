@@ -96,4 +96,22 @@ describe('color-utils', () => {
       expect(result).to.have.keys('properties');
     });
   });
+  describe('getFadedColor', () => {
+    it('should not darken #000000', () => {
+      const result = colorUtils.getFadedColor('#000000');
+      expect(result).to.equal('#000000');
+    });
+    it('should darken #ffffff to #d9d9d9', () => {
+      const result = colorUtils.getFadedColor('#ffffff');
+      expect(result).to.equal('#d9d9d9');
+    });
+    it('should darken rgb(255,255,255) to rgb(217,217,217)', () => {
+      const result = colorUtils.getFadedColor('rgb(255,255,255)');
+      expect(result).to.equal('rgb(217,217,217)');
+    });
+    it('should darken rgba(255,255,255,1) to rgba(217,217,217,1)', () => {
+      const result = colorUtils.getFadedColor('rgba(255,255,255,1)');
+      expect(result).to.equal('rgba(217,217,217,1)');
+    });
+  });
 });

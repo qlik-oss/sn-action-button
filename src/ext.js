@@ -34,14 +34,15 @@ export default function ext({ translator }) {
       items: {
         actions: {
           type: 'items',
-          translation: 'Object.ActionButton.Actions',
+          translation: 'Object.ActionButton.ActionsAndNavigation',
+          grouped: true,
           items: {
             actions: {
               type: 'array',
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
               itemTitleRef: data => {
-                if (data.actionLabel !== '') {
+                if (data.actionLabel) {
                   return data.actionLabel;
                 }
                 const act = actions.find(action => data.actionType === action.value);
@@ -142,68 +143,66 @@ export default function ext({ translator }) {
               },
             },
             navigation: {
-              component: 'expandable-items',
+              translation: 'Object.ActionButton.Navigation',
+              type: 'items',
               items: {
-                navigation: {
+                action: {
+                  ref: 'navigation.action',
                   translation: 'Object.ActionButton.Navigation',
-                  type: 'items',
-                  items: {
-                    action: {
-                      ref: 'navigation.action',
-                      translation: 'Object.ActionButton.Navigation',
-                      component: 'dropdown',
-                      defaultValue: null,
-                      options: navigationActions,
-                    },
-                    sheetId: {
-                      type: 'string',
-                      ref: 'navigation.sheet',
-                      translation: 'properties.sheet',
-                      expression: 'optional',
-                      show: data => checkShowNavigation(data, 'sheetId'),
-                    },
-                    sheet: {
-                      type: 'string',
-                      ref: 'navigation.sheet',
-                      translation: 'properties.sheet',
-                      component: 'dropdown',
-                      show: data => checkShowNavigation(data, 'sheet'),
-                      options: async (action, hyperCubeHandler) => {
-                        const sheets = await hyperCubeHandler.app.getSheetList();
-                        return sheets.map(sheet => ({
-                          value: sheet.qInfo.qId,
-                          label: sheet.qMeta.title,
-                        }));
-                      },
-                    },
-                    story: {
-                      type: 'string',
-                      ref: 'navigation.story',
-                      translation: 'properties.story',
-                      component: 'dropdown',
-                      show: data => checkShowNavigation(data, 'story'),
-                      options: async (action, hyperCubeHandler) => {
-                        const stories = await hyperCubeHandler.app.getStoryList();
-                        return stories.map(story => ({
-                          value: story.qInfo.qId,
-                          label: story.qMeta.title,
-                        }));
-                      },
-                    },
-                    websiteUrl: {
-                      type: 'string',
-                      ref: 'navigation.websiteUrl',
-                      translation: 'properties.website',
-                      show: data => checkShowNavigation(data, 'websiteUrl'),
-                    },
-                    sameWindow: {
-                      type: 'boolean',
-                      ref: 'navigation.sameWindow',
-                      translation: 'properties.sameWindow',
-                      show: data => checkShowNavigation(data, 'websiteUrl'),
-                      defaultValue: false,
-                    },
+                  component: 'expression-with-dropdown',
+                  defaultValue: null,
+                  options: navigationActions,
+                  dropdownOnly: true,
+                },
+                sheetId: {
+                  type: 'string',
+                  ref: 'navigation.sheet',
+                  translation: 'properties.sheet',
+                  expression: 'optional',
+                  show: data => checkShowNavigation(data, 'sheetId'),
+                },
+                sheet: {
+                  type: 'string',
+                  ref: 'navigation.sheet',
+                  translation: 'properties.sheet',
+                  component: 'expression-with-dropdown',
+                  expressionType: 'StringExpression',
+                  show: data => checkShowNavigation(data, 'sheet'),
+                  options: async (action, hyperCubeHandler) => {
+                    const sheets = await hyperCubeHandler.app.getSheetList();
+                    return sheets.map(sheet => ({
+                      value: sheet.qInfo.qId,
+                      label: sheet.qMeta.title,
+                    }));
                   },
+                },
+                story: {
+                  type: 'string',
+                  ref: 'navigation.story',
+                  translation: 'properties.story',
+                  component: 'expression-with-dropdown',
+                  expressionType: 'StringExpression',
+                  show: data => checkShowNavigation(data, 'story'),
+                  options: async (action, hyperCubeHandler) => {
+                    const stories = await hyperCubeHandler.app.getStoryList();
+                    return stories.map(story => ({
+                      value: story.qInfo.qId,
+                      label: story.qMeta.title,
+                    }));
+                  },
+                },
+                websiteUrl: {
+                  type: 'string',
+                  ref: 'navigation.websiteUrl',
+                  translation: 'properties.website',
+                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                },
+                sameWindow: {
+                  type: 'boolean',
+                  ref: 'navigation.sameWindow',
+                  translation: 'properties.sameWindow',
+                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                  defaultValue: false,
                 },
               },
             },

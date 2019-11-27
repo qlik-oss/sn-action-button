@@ -191,5 +191,17 @@ describe('conversion', () => {
       const result = importProperties(undefined, initialProperties);
       expect(result).to.include.all.keys('qChildren', 'qProperty');
     });
+
+    it('should convert titles', () => {
+      exportedFmt.properties.showTitles = true;
+      exportedFmt.properties.title = 'hello1';
+      exportedFmt.properties.subtitle = 'hello2';
+      exportedFmt.properties.footnote = 'hello3';
+      const result = importProperties(exportedFmt, initialProperties);
+      expect(result.qProperty.showTitles).to.be.true;
+      expect(result.qProperty.title).to.equal('hello1');
+      expect(result.qProperty.subtitle).to.equal('hello2');
+      expect(result.qProperty.footnote).to.equal('hello3');
+    });
   });
 });

@@ -62,7 +62,11 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
     }
   };
 
-  button.onmousedown = scale;
+  button.onmousedown = event => {
+    if (event.button === 0) {
+      scale();
+    }
+  };
   button.onmouseup = resetScale;
   button.onmouseleave = resetScale;
   button.ontouchstart = scale;

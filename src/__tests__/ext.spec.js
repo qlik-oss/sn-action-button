@@ -8,7 +8,7 @@ describe('ext', () => {
   let data;
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
-  const navigationItems = props.definition.items.actions.items.navigation.items.navigation.items;
+  const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
 
   it('should return properties object', () => {
@@ -19,7 +19,7 @@ describe('ext', () => {
     const { itemTitleRef } = props.definition.items.actions.items.actions;
 
     it('Should return action label from dropdown', () => {
-      data = { actionType: 'applyBookmark', actionLabel: '' };
+      data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.ApplyBookmark');
     });
@@ -30,8 +30,8 @@ describe('ext', () => {
       expect(itemTitle).to.equal('actionLabel');
     });
 
-    it('Should return default action label when no act.label', () => {
-      data = { actionType: 'someAction', actionLabel: '' };
+    it('Should return default action label when empty action', () => {
+      data = { actionType: '', actionLabel: '' };
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.NewAction');
     });
