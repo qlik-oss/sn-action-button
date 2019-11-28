@@ -18,11 +18,6 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
   styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
-  if (disabled && interactPermission) {
-    button.setAttribute('disabled', true);
-  } else {
-    button.removeAttribute('disabled');
-  }
 
   button.onclick = async () => {
     const actionCallList = [];
