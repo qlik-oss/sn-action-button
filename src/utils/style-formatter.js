@@ -33,37 +33,37 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
 export default {
   getStyles({ style, disabled, Theme, element }) {
     let styles = 'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;';
+    const { font, background, border } = style;
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const palette = colorUtils.getPalette(Theme);
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
-    styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
-    style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
-    style.font.style.italic && (styles += formatProperty('font-style', 'italic'));
+    styles += formatProperty('color', getColor(font, '#ffffff', palette));
+    font.style.bold && (styles += formatProperty('font-weight', 'bold'));
+    font.style.italic && (styles += formatProperty('font-style', 'italic'));
     // background
-    const backgroundColor = getColor(style.background, primaryColor, palette);
+    const backgroundColor = getColor(background, primaryColor, palette);
     styles += formatProperty('background-color', backgroundColor);
-    if (style.background.useImage && style.background.url.qStaticContentUrl) {
-      let bgUrl = style.background.url.qStaticContentUrl.qUrl;
+    if (background.useImage && background.url.qStaticContentUrl) {
+      let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl.replace(/^\.\.\//i, '/');
         bgUrl = bgUrl.replace(/"/g, '\\"');
         bgUrl = bgUrl.replace(/'/g, "\\'");
         styles += formatProperty('background-image', `url('${bgUrl}')`);
-        styles += formatProperty('background-size', backgroundSize[style.background.size]);
-        styles += formatProperty('background-position', backgroundPosition[style.background.position]);
+        styles += formatProperty('background-size', backgroundSize[background.size]);
+        styles += formatProperty('background-position', backgroundPosition[background.position]);
         styles += formatProperty('background-repeat', 'no-repeat');
       }
     }
     // border
-    if (style.border.useBorder) {
-      const { border } = style;
+    if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
       const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), palette);
-      const borderSize = ((border.width / 200) * lengthShortSide) / 2;
+      const borderSize = (border.width * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
-      styles += formatProperty('border-radius', `${((border.radius / 100) * lengthShortSide) / 2}px`);
+      styles += formatProperty('border-radius', `${(border.radius * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
     }

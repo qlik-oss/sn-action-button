@@ -504,8 +504,8 @@ export default function ext({ translator }) {
                       type: 'number',
                       ref: 'style.border.radius',
                       min: 0,
-                      max: 100,
-                      step: 1,
+                      max: 1,
+                      step: 0.01,
                     },
                     borderWidth: {
                       component: 'slider',
@@ -514,7 +514,8 @@ export default function ext({ translator }) {
                       ref: 'style.border.width',
                       translation: 'properties.border.width',
                       min: 0,
-                      max: 100,
+                      max: 0.5,
+                      step: 0.005,
                     },
                     colorDropdown: {
                       type: 'string',
