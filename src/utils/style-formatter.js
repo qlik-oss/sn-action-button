@@ -24,7 +24,6 @@ const backgroundPosition = {
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, palette) => {
-  console.log(color, palette);
   const resolvedColor = useColorExpression
     ? colorUtils.resolveExpression(colorExpression)
     : colorUtils.resolveColor(color, palette);
