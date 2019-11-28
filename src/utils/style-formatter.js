@@ -36,8 +36,7 @@ export default {
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const palette = colorUtils.getPalette(Theme);
     // enable
-    disabled && (styles += formatProperty('opacity', 0.4));
-    !disabled && (styles += formatProperty('cursor', 'pointer'));
+    styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(style.font, '#ffffff', palette));
     style.font.style.bold && (styles += formatProperty('font-weight', 'bold'));
