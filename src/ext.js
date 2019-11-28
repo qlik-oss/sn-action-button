@@ -272,7 +272,7 @@ export default function ext({ translator }) {
                       type: 'number',
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
-                      min: 1,
+                      min: 20,
                       steps: 1,
                       max: 100,
                     },
