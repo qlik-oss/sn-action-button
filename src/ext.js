@@ -566,7 +566,7 @@ export default function ext({ translator }) {
                     iconType: {
                       ref: 'style.icon.iconType',
                       component: 'expression-with-dropdown',
-                      translation: 'properties.icon.iconType',
+                      translation: 'properties.icon',
                       defaultValue: '',
                       options: luiIcons,
                       expressionType: 'StringExpression',
@@ -575,7 +575,7 @@ export default function ext({ translator }) {
                     iconPosition: {
                       ref: 'style.icon.position',
                       component: 'dropdown',
-                      translation: 'properties.icon.position',
+                      translation: 'Common.Position',
                       options: [
                         {
                           translation: 'properties.dock.left',
