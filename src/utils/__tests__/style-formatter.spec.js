@@ -160,7 +160,6 @@ describe('style-formatter', () => {
         },
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
-      console.log(formattedStyle);
       expect(formattedStyle.includes('border: 5px solid color2')).to.be.true;
     });
 
