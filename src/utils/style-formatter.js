@@ -24,6 +24,7 @@ const backgroundPosition = {
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, palette) => {
+  console.log(color, palette);
   const resolvedColor = useColorExpression
     ? colorUtils.resolveExpression(colorExpression)
     : colorUtils.resolveColor(color, palette);
@@ -59,15 +60,12 @@ export default {
     }
     // border
     if (style.border.useBorder) {
-      const { width, radius } = style.border;
-      const { offsetHeight, offsetWidth } = element;
-      const lengthShortSide = offsetHeight < offsetWidth ? offsetHeight : offsetWidth;
-      const defaultBorderColor = colorUtils.getFadedColor(backgroundColor);
-      styles += formatProperty(
-        'border',
-        `${((width / 100) * lengthShortSide) / 2}px solid ${getColor(style.border, defaultBorderColor, palette)}`
-      );
-      styles += formatProperty('border-radius', `${((radius / 100) * lengthShortSide) / 2}px`);
+      const { border } = style;
+      const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
+      const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), palette);
+      const borderSize = ((border.width / 200) * lengthShortSide) / 2;
+      styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
+      styles += formatProperty('border-radius', `${((border.radius / 100) * lengthShortSide) / 2}px`);
     } else {
       styles += 'border: none;';
     }

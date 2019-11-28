@@ -154,7 +154,7 @@ describe('style-formatter', () => {
     it('should set border color and width', () => {
       style.border = {
         useBorder: true,
-        width: 10,
+        width: 20,
         color: {
           index: 2,
         },
@@ -166,7 +166,7 @@ describe('style-formatter', () => {
     it('should set a border based on expression', () => {
       style.border = {
         useBorder: true,
-        width: 10,
+        width: 20,
         useColorExpression: true,
         colorExpression: 'rebeccapurple',
       };
