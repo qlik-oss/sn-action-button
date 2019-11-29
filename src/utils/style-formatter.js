@@ -106,7 +106,7 @@ export default {
       newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    text.style.fontSize =`${Math.max((newFontsize * style.font.size) / 100, 8)}px`;
+    text.style.fontSize = `${Math.max((newFontsize * style.font.size), 8)}px`;
     text.style.display = 'flex';
     text.style.alignItems = 'center';
     text.style.justifyContent =
