@@ -32,7 +32,7 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
 
 export default {
   getStyles({ style, disabled, Theme, element }) {
-    let styles = 'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;';
+    let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;';
     const { font, background, border } = style;
     const primaryColor = colorUtils.getDefaultColor(Theme);
     const palette = colorUtils.getPalette(Theme);
@@ -81,7 +81,8 @@ export default {
     style.font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
-    if (isSense && style.icon.useIcon && style.icon.iconType !== '') {
+    const hasIcon = isSense && style.icon.useIcon && style.icon.iconType !== '';
+    if (hasIcon) {
       const iconSpan = document.createElement('span');
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
@@ -98,11 +99,17 @@ export default {
     let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
     text.style.fontSize = `${newFontsize}px`;
     // 3. Adjust the font size to the width ratio between button container and text box
-    if (text.offsetWidth + 8 > button.clientWidth) {
-      newFontsize *= (button.clientWidth - 8) / text.offsetWidth;
+    if (text.offsetWidth > button.clientWidth) {
+      newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    text.style.fontSize = `${(newFontsize * style.font.size) / 100}px`;
+    if (hasIcon) {
+      text.style.fontSize = `${newFontsize * style.font.size * 0.0091}px`;
+      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+    } else {
+      text.style.fontSize = `${newFontsize * style.font.size * 0.0094}px`;
+    }
+    text.style.margin = '0 3%';
     text.style.display = 'flex';
     text.style.alignItems = 'center';
     text.style.justifyContent =
