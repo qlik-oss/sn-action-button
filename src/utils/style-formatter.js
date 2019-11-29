@@ -104,8 +104,8 @@ export default {
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
     if (hasIcon) {
-      text.style.fontSize = `${newFontsize * style.font.size * 0.0091}px`;
-      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+      text.style.fontSize = `${newFontsize * style.font.size * 0.009}px`;
+      text.children[0].style.marginRight = `${text.offsetWidth * 0.05}px`;
     } else {
       text.style.fontSize = `${newFontsize * style.font.size * 0.0094}px`;
     }

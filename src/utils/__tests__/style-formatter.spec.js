@@ -5,7 +5,7 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;padding: 4px;transition: transform .1s ease-in-out;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;';
+      'width: 100%;height: 100%;transition: transform .1s ease-in-out;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
     const someUrl = '/media/Logo/qlik.png';
@@ -226,7 +226,7 @@ describe('style-formatter', () => {
       expect(text.children[0].textContent).to.equal('Button');
       expect(text.style.whiteSpace).to.equal('nowrap');
       expect(text.style.fontFamily).to.equal('myFont');
-      expect(text.style.fontSize).to.equal('12.5px');
+      expect(text.style.fontSize).to.equal('11.75px');
       expect(text.style.display).to.equal('flex');
       expect(text.style.alignItems).to.equal('center');
       expect(text.style.justifyContent).to.equal('center');
@@ -240,7 +240,7 @@ describe('style-formatter', () => {
         button.children.push(child);
       };
       styleFormatter.createLabelAndIcon({ Theme, button, style });
-      expect(button.children[0].style.fontSize).to.equal('2.875px');
+      expect(button.children[0].style.fontSize).to.equal('2.9375px');
     });
 
     it('should place icon first then label inside text element', () => {
@@ -251,6 +251,7 @@ describe('style-formatter', () => {
       const text = button.children[0];
       expect(text.children[0].style.textDecoration).to.equal('none');
       expect(text.children[1].textContent).to.equal('Button');
+      expect(button.children[0].style.fontSize).to.equal('11.25px');
     });
 
     it('should place label first then icon inside text element', () => {
