@@ -243,6 +243,17 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).to.equal('8px');
     });
 
+    it('should set fontSize when text offsetWidth is bigger than button', () => {
+      button.appendChild = child => {
+        child.setAttribute = sinon.spy();
+        child.offsetHeight = 400;
+        child.offsetWidth = 125;
+        button.children.push(child);
+      };
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].style.fontSize).to.equal('9.2px');
+    });
+
     it('should place icon first then label inside text element', () => {
       const isSense = true;
       style.icon.useIcon = true;
