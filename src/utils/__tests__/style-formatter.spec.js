@@ -154,7 +154,7 @@ describe('style-formatter', () => {
     it('should set border color and width', () => {
       style.border = {
         useBorder: true,
-        width: 10,
+        width: 0.1,
         color: {
           index: 2,
         },
@@ -166,7 +166,7 @@ describe('style-formatter', () => {
     it('should set a border based on expression', () => {
       style.border = {
         useBorder: true,
-        width: 10,
+        width: 0.1,
         useColorExpression: true,
         colorExpression: 'rebeccapurple',
       };
@@ -177,7 +177,7 @@ describe('style-formatter', () => {
     it('should set border radius', () => {
       style.border = {
         useBorder: true,
-        radius: 20,
+        radius: 0.2,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border-radius: 10px')).to.be.true;
@@ -187,7 +187,7 @@ describe('style-formatter', () => {
       element.offsetHeight = 50;
       style.border = {
         useBorder: true,
-        radius: 20,
+        radius: 0.2,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, Theme, element });
       expect(formattedStyle.includes('border-radius: 5px')).to.be.true;

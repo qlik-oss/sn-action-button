@@ -133,26 +133,4 @@ describe('action button', () => {
       expect(actionList[1]).to.have.been.calledOnce;
     });
   });
-  describe('disabledButton', () => {
-    beforeEach(() => {
-      defaults = JSON.parse(JSON.stringify(defaultValues));
-      defaults.button = button;
-      defaults.layout.useEnabledCondition = true;
-      defaults.layout.enabledCondition = 0;
-    });
-    it('should render disabled button', () => {
-      button = {
-        setAttribute: sinon.spy(),
-        firstElementChild: { setAttribute: () => {}, text: {} },
-        removeAttribute: sinon.spy(),
-        appendChild: () => {},
-      };
-      defaults.element.firstElementChild = button;
-      defaults.layout.useEnabledCondition = true;
-      defaults.layout.enabledCondition = 0;
-      renderButton(defaults);
-      expect(defaults.element.firstElementChild).to.be.an('object');
-      expect(button.setAttribute).to.have.been.calledWith('disabled', true);
-    });
-  });
 });

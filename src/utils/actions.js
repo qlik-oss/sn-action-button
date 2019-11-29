@@ -17,6 +17,24 @@ const actions = [
     requiredInput: ['bookmark'],
   },
   {
+    value: 'back',
+    translation: 'Object.ActionButton.MoveBackward',
+    group: 'selection',
+    getActionCall: ({ app }) => async () => {
+      await app.back();
+    },
+    requiredInput: [],
+  },
+  {
+    value: 'forward',
+    translation: 'Object.ActionButton.MoveForward',
+    group: 'selection',
+    getActionCall: ({ app }) => async () => {
+      await app.forward();
+    },
+    requiredInput: [],
+  },
+  {
     value: 'clearAll',
     translation: 'Object.ActionButton.ClearAll',
     group: 'selection',
@@ -38,24 +56,6 @@ const actions = [
     requiredInput: ['field', 'softLock'],
   },
   {
-    value: 'forward',
-    translation: 'Object.ActionButton.MoveForward',
-    group: 'selection',
-    getActionCall: ({ app }) => async () => {
-      await app.forward();
-    },
-    requiredInput: [],
-  },
-  {
-    value: 'back',
-    translation: 'Object.ActionButton.MoveBackward',
-    group: 'selection',
-    getActionCall: ({ app }) => async () => {
-      await app.back();
-    },
-    requiredInput: [],
-  },
-  {
     value: 'clearField',
     translation: 'Object.ActionButton.ClearSelectionInField',
     group: 'selection',
@@ -63,48 +63,6 @@ const actions = [
       if (field) {
         const fieldObj = await app.getField(field, qStateName);
         await fieldObj.clear();
-      }
-    },
-    requiredInput: ['field'],
-  },
-  {
-    value: 'lockAll',
-    translation: 'Object.ActionButton.LockAllSelections',
-    group: 'selection',
-    getActionCall: ({ app }) => async () => {
-      await app.lockAll();
-    },
-    requiredInput: [],
-  },
-  {
-    value: 'lockField',
-    translation: 'Object.ActionButton.LockField',
-    group: 'selection',
-    getActionCall: ({ app, qStateName, field }) => async () => {
-      if (field) {
-        const fieldObj = await app.getField(field, qStateName);
-        await fieldObj.lock();
-      }
-    },
-    requiredInput: ['field'],
-  },
-  {
-    value: 'unlockAll',
-    translation: 'Object.ActionButton.UnlockAllSelections',
-    group: 'selection',
-    getActionCall: ({ app }) => async () => {
-      await app.unlockAll();
-    },
-    requiredInput: [],
-  },
-  {
-    value: 'unlockField',
-    translation: 'Object.ActionButton.UnlockAField',
-    group: 'selection',
-    getActionCall: ({ app, qStateName, field }) => async () => {
-      if (field) {
-        const fieldObj = await app.getField(field, qStateName);
-        await fieldObj.unlock();
       }
     },
     requiredInput: ['field'],
@@ -181,6 +139,48 @@ const actions = [
       }
     },
     requiredInput: ['field', 'value', 'softLock'],
+  },
+  {
+    value: 'lockAll',
+    translation: 'Object.ActionButton.LockAllSelections',
+    group: 'selection',
+    getActionCall: ({ app }) => async () => {
+      await app.lockAll();
+    },
+    requiredInput: [],
+  },
+  {
+    value: 'lockField',
+    translation: 'Object.ActionButton.LockField',
+    group: 'selection',
+    getActionCall: ({ app, qStateName, field }) => async () => {
+      if (field) {
+        const fieldObj = await app.getField(field, qStateName);
+        await fieldObj.lock();
+      }
+    },
+    requiredInput: ['field'],
+  },
+  {
+    value: 'unlockAll',
+    translation: 'Object.ActionButton.UnlockAllSelections',
+    group: 'selection',
+    getActionCall: ({ app }) => async () => {
+      await app.unlockAll();
+    },
+    requiredInput: [],
+  },
+  {
+    value: 'unlockField',
+    translation: 'Object.ActionButton.UnlockAField',
+    group: 'selection',
+    getActionCall: ({ app, qStateName, field }) => async () => {
+      if (field) {
+        const fieldObj = await app.getField(field, qStateName);
+        await fieldObj.unlock();
+      }
+    },
+    requiredInput: ['field'],
   },
   {
     value: 'setVariable',

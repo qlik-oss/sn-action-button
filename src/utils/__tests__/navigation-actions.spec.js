@@ -24,11 +24,6 @@ describe('navigation actions', () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'none');
       expect(navigationObject).to.not.have.property('navigationCall');
     });
-    it('should call firstSheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
-      await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
-    });
     it('should call nextSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'nextSheet');
       await navigationObject.navigationCall({ senseNavigation });
@@ -41,6 +36,11 @@ describe('navigation actions', () => {
     });
     it('should call lastSheet', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
+      await navigationObject.navigationCall({ app, senseNavigation });
+      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
+    });
+    it('should call firstSheet', async () => {
+      const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
       await navigationObject.navigationCall({ app, senseNavigation });
       expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
     });

@@ -65,6 +65,18 @@ describe('actions', () => {
       expect(app.applyBookmark).to.have.been.calledWith('myBookmarkId');
     });
 
+    it('should call back', async () => {
+      const actionObject = actions.find(action => action.value === 'back');
+      await actionObject.getActionCall({ app })();
+      expect(app.back).to.have.been.called;
+    });
+
+    it('should call forward', async () => {
+      const actionObject = actions.find(action => action.value === 'forward');
+      await actionObject.getActionCall({ app })();
+      expect(app.forward).to.have.been.called;
+    });
+
     it('should call clearAll', async () => {
       const actionObject = actions.find(action => action.value === 'clearAll');
       await actionObject.getActionCall({ app, softLock })();
@@ -85,18 +97,6 @@ describe('actions', () => {
       expect(fieldObject.clearAllButThis).to.not.have.been.called;
     });
 
-    it('should call forward', async () => {
-      const actionObject = actions.find(action => action.value === 'forward');
-      await actionObject.getActionCall({ app })();
-      expect(app.forward).to.have.been.called;
-    });
-
-    it('should call back', async () => {
-      const actionObject = actions.find(action => action.value === 'back');
-      await actionObject.getActionCall({ app })();
-      expect(app.back).to.have.been.called;
-    });
-
     it('should call clearField', async () => {
       const actionObject = actions.find(action => action.value === 'clearField');
       await actionObject.getActionCall({ app, qStateName, field })();
@@ -111,46 +111,6 @@ describe('actions', () => {
       expect(fieldObject.clear).to.not.have.been.called;
     });
 
-    it('should call lockAll', async () => {
-      const actionObject = actions.find(action => action.value === 'lockAll');
-      await actionObject.getActionCall({ app })();
-      expect(app.lockAll).to.have.been.called;
-    });
-
-    it('should call lockField', async () => {
-      const actionObject = actions.find(action => action.value === 'lockField');
-      await actionObject.getActionCall({ app, qStateName, field })();
-      expect(app.getField).to.have.been.calledWith(field, qStateName);
-      expect(fieldObject.lock).to.have.been.called;
-    });
-
-    it('should NOT call lockField when no field', async () => {
-      const actionObject = actions.find(action => action.value === 'lockField');
-      field = null;
-      await actionObject.getActionCall({ app, qStateName, field })();
-      expect(fieldObject.lock).to.not.have.been.called;
-    });
-
-    it('should call unlockAll', async () => {
-      const actionObject = actions.find(action => action.value === 'unlockAll');
-      await actionObject.getActionCall({ app })();
-      expect(app.unlockAll).to.have.been.called;
-    });
-
-    it('should call unlockField', async () => {
-      const actionObject = actions.find(action => action.value === 'unlockField');
-      await actionObject.getActionCall({ app, qStateName, field })();
-      expect(app.getField).to.have.been.calledWith(field, qStateName);
-      expect(fieldObject.unlock).to.have.been.called;
-    });
-
-    it('should NOT call unlockField when no field', async () => {
-      const actionObject = actions.find(action => action.value === 'unlockField');
-      field = null;
-      await actionObject.getActionCall({ app, qStateName, field })();
-      expect(fieldObject.unlock).to.not.have.been.called;
-    });
-
     it('should call selectAll', async () => {
       const actionObject = actions.find(action => action.value === 'selectAll');
       await actionObject.getActionCall({ app, qStateName, field, softLock })();
@@ -163,6 +123,20 @@ describe('actions', () => {
       field = null;
       await actionObject.getActionCall({ app, qStateName, field })();
       expect(fieldObject.selectAll).to.not.have.been.called;
+    });
+
+    it('should call toggleSelect', async () => {
+      const actionObject = actions.find(action => action.value === 'toggleSelect');
+      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
+      expect(app.getField).to.have.been.calledWith(field, qStateName);
+      expect(fieldObject.toggleSelect).to.have.been.calledWith(value, softLock);
+    });
+
+    it('should NOT call toggleSelect when no field', async () => {
+      const actionObject = actions.find(action => action.value === 'toggleSelect');
+      field = null;
+      await actionObject.getActionCall({ app, qStateName, field, value })();
+      expect(fieldObject.toggleSelect).to.not.have.been.called;
     });
 
     it('should call selectValues', async () => {
@@ -221,18 +195,44 @@ describe('actions', () => {
       expect(fieldObject.selectPossible).to.not.have.been.called;
     });
 
-    it('should call toggleSelect', async () => {
-      const actionObject = actions.find(action => action.value === 'toggleSelect');
-      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
-      expect(app.getField).to.have.been.calledWith(field, qStateName);
-      expect(fieldObject.toggleSelect).to.have.been.calledWith(value, softLock);
+    it('should call lockAll', async () => {
+      const actionObject = actions.find(action => action.value === 'lockAll');
+      await actionObject.getActionCall({ app })();
+      expect(app.lockAll).to.have.been.called;
     });
 
-    it('should NOT call toggleSelect when no field', async () => {
-      const actionObject = actions.find(action => action.value === 'toggleSelect');
+    it('should call lockField', async () => {
+      const actionObject = actions.find(action => action.value === 'lockField');
+      await actionObject.getActionCall({ app, qStateName, field })();
+      expect(app.getField).to.have.been.calledWith(field, qStateName);
+      expect(fieldObject.lock).to.have.been.called;
+    });
+
+    it('should NOT call lockField when no field', async () => {
+      const actionObject = actions.find(action => action.value === 'lockField');
       field = null;
-      await actionObject.getActionCall({ app, qStateName, field, value })();
-      expect(fieldObject.toggleSelect).to.not.have.been.called;
+      await actionObject.getActionCall({ app, qStateName, field })();
+      expect(fieldObject.lock).to.not.have.been.called;
+    });
+
+    it('should call unlockAll', async () => {
+      const actionObject = actions.find(action => action.value === 'unlockAll');
+      await actionObject.getActionCall({ app })();
+      expect(app.unlockAll).to.have.been.called;
+    });
+
+    it('should call unlockField', async () => {
+      const actionObject = actions.find(action => action.value === 'unlockField');
+      await actionObject.getActionCall({ app, qStateName, field })();
+      expect(app.getField).to.have.been.calledWith(field, qStateName);
+      expect(fieldObject.unlock).to.have.been.called;
+    });
+
+    it('should NOT call unlockField when no field', async () => {
+      const actionObject = actions.find(action => action.value === 'unlockField');
+      field = null;
+      await actionObject.getActionCall({ app, qStateName, field })();
+      expect(fieldObject.unlock).to.not.have.been.called;
     });
 
     it('should call setVariable', async () => {
@@ -259,7 +259,10 @@ describe('actions', () => {
 
     it('should return array with numbers in value string', () => {
       valueString = '1;2';
-      ExpectedList = [{ qNumber: 1, qIsNumeric: true }, { qNumber: 2, qIsNumeric: true }];
+      ExpectedList = [
+        { qNumber: 1, qIsNumeric: true },
+        { qNumber: 2, qIsNumeric: true },
+      ];
       expect(getValueList(valueString)).to.eql(ExpectedList);
     });
   });
