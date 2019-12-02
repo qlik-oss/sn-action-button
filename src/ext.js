@@ -273,8 +273,8 @@ export default function ext({ translator }) {
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
                       min: 0.2,
-                      steps: 0.01,
                       max: 1,
+                      step: 0.01,
                     },
                     useFontColorExpression: {
                       ref: 'style.font.useColorExpression',
