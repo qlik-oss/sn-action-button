@@ -30,16 +30,6 @@ export default [
     label: 'Info',
   },
   {
-    value: 'toggle-left',
-    icon: 'toggle-left',
-    label: 'Toggle left',
-  },
-  {
-    value: 'toggle-right',
-    icon: 'toggle-right',
-    label: 'Toggle right',
-  },
-  {
     value: 'text',
     icon: 'text',
     label: 'Text',
@@ -225,36 +215,6 @@ export default [
     label: 'Paste',
   },
   {
-    value: 'align-left',
-    icon: 'align-left',
-    label: 'Align left',
-  },
-  {
-    value: 'align-center',
-    icon: 'align-center',
-    label: 'Align center',
-  },
-  {
-    value: 'align-right',
-    icon: 'align-right',
-    label: 'Align right',
-  },
-  {
-    value: 'bold',
-    icon: 'bold',
-    label: 'Bold',
-  },
-  {
-    value: 'italic',
-    icon: 'italic',
-    label: 'Italic',
-  },
-  {
-    value: 'underline',
-    icon: 'underline',
-    label: 'Underline',
-  },
-  {
     value: 'camera',
     icon: 'camera',
     label: 'Camera',
@@ -325,11 +285,6 @@ export default [
     label: 'Edit',
   },
   {
-    value: 'lasso',
-    icon: 'lasso',
-    label: 'Lasso',
-  },
-  {
     value: 'key',
     icon: 'key',
     label: 'Key',
@@ -350,11 +305,6 @@ export default [
     label: 'Person',
   },
   {
-    value: 'stream',
-    icon: 'stream',
-    label: 'Stream',
-  },
-  {
     value: 'grid',
     icon: 'grid',
     label: 'Grid',
@@ -373,11 +323,6 @@ export default [
     value: 'folder',
     icon: 'folder',
     label: 'Folder',
-  },
-  {
-    value: 'toggle-bottom',
-    icon: 'toggle-bottom',
-    label: 'Toggle bottom',
   },
   {
     value: 'drop',
@@ -620,11 +565,6 @@ export default [
     label: 'Save',
   },
   {
-    value: 'run',
-    icon: 'run',
-    label: 'Run',
-  },
-  {
     value: 'pause',
     icon: 'pause',
     label: 'Pause',
@@ -835,11 +775,6 @@ export default [
     label: 'Script',
   },
   {
-    value: 'run-script',
-    icon: 'run-script',
-    label: 'Run script',
-  },
-  {
     value: 'script-ok',
     icon: 'script-ok',
     label: 'Script ok',
@@ -848,16 +783,6 @@ export default [
     value: 'debug',
     icon: 'debug',
     label: 'Debug',
-  },
-  {
-    value: 'associate',
-    icon: 'associate',
-    label: 'Associate',
-  },
-  {
-    value: 'break-association',
-    icon: 'break-association',
-    label: 'Break association',
   },
   {
     value: 'auto-layout',
