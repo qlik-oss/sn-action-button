@@ -78,6 +78,9 @@ export default {
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = style.label;
+    textSpan.style.whiteSpace = 'nowrap';
+    textSpan.style.textOverflow = 'ellipsis';
+    textSpan.style.overflow = 'hidden';
     style.font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
