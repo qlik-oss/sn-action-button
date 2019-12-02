@@ -232,7 +232,7 @@ describe('style-formatter', () => {
       expect(text.style.justifyContent).to.equal('center');
     });
 
-    it('should set fontSize when text offsetWidth is bigger than button', () => {
+    it('should set fontSize to 8px for small font sizes', () => {
       button.appendChild = child => {
         child.setAttribute = sinon.spy();
         child.offsetHeight = 400;
@@ -240,7 +240,18 @@ describe('style-formatter', () => {
         button.children.push(child);
       };
       styleFormatter.createLabelAndIcon({ Theme, button, style });
-      expect(button.children[0].style.fontSize).to.equal('2.9375px');
+      expect(button.children[0].style.fontSize).to.equal('8px');
+    });
+
+    it('should set fontSize when text offsetWidth is bigger than button', () => {
+      button.appendChild = child => {
+        child.setAttribute = sinon.spy();
+        child.offsetHeight = 400;
+        child.offsetWidth = 125;
+        button.children.push(child);
+      };
+      styleFormatter.createLabelAndIcon({ Theme, button, style });
+      expect(button.children[0].style.fontSize).to.equal('9.399999999999999px');
     });
 
     it('should place icon first then label inside text element', () => {

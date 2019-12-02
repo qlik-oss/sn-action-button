@@ -7,7 +7,7 @@ describe('should render an', () => {
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
   before(async () => {
-    await page.goto(`${process.testServer.url}/render/app/${app}?object=mtd`);
+    await page.goto(`${process.testServer.url}/render/app/${app}?object=CNaxMh`);
     await page.waitForSelector(content, { visible: true });
   });
 

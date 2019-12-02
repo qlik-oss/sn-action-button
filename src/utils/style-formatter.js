@@ -101,13 +101,16 @@ export default {
     // 3. Adjust the font size to the width ratio between button container and text box
     if (text.offsetWidth > button.clientWidth) {
       newFontsize *= button.clientWidth / text.offsetWidth;
+      // console.log('wide');
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
     if (hasIcon) {
-      text.style.fontSize = `${newFontsize * style.font.size * 0.009}px`;
-      text.children[0].style.marginRight = `${text.offsetWidth * 0.05}px`;
+      text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.9, 8)}px`;
+      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+      // console.log(newFontsize * style.font.size * 0.9);
     } else {
-      text.style.fontSize = `${newFontsize * style.font.size * 0.0094}px`;
+      text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.94, 8)}px`;
+      // console.log(newFontsize * style.font.size * 0.94);
     }
     text.style.margin = '0 3%';
     text.style.display = 'flex';
