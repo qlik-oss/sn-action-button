@@ -272,9 +272,9 @@ export default function ext({ translator }) {
                       type: 'number',
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
-                      min: 1,
-                      steps: 1,
-                      max: 100,
+                      min: 0.2,
+                      max: 1,
+                      step: 0.01,
                     },
                     useFontColorExpression: {
                       ref: 'style.font.useColorExpression',
