@@ -14,14 +14,14 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
-  const interactPermission = context.permissions.indexOf('interact') !== -1;
+  const isClickable = !disabled && context.permissions.indexOf('interact') !== -1;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
   button.setAttribute('style', formattedStyles);
   styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
 
   button.onclick = async () => {
-    const actionCallList = [];
-    if (context.permissions.indexOf('interact') !== -1) {
+    if (isClickable) {
+      const actionCallList = [];
       const { actions } = layout;
       actions.forEach(action => {
         const actionObj = allActions.find(act => act.value === action.actionType);
@@ -41,7 +41,7 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   };
 
   const scale = () => {
-    if (!disabled && interactPermission) {
+    if (isClickable) {
       const { offsetWidth, offsetHeight } = button;
       button.style.transform =
         offsetHeight > offsetWidth
@@ -52,7 +52,7 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
 
   const resetScale = () => {
     const { transform } = button.style;
-    if (!disabled && interactPermission && transform !== '' && transform !== 'scale(1)') {
+    if (isClickable && transform !== '' && transform !== 'scale(1)') {
       button.style.transform = 'scale(1)';
     }
   };
