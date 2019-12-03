@@ -1,6 +1,5 @@
 import defaultValues from '../../__tests__/default-button-props';
 import renderButton, { runActions } from '../action-button';
-import actions from '../../utils/actions';
 
 let actionList;
 let button;
@@ -43,25 +42,17 @@ describe('action button', () => {
 
     it('should not act on click when permissions not present', async () => {
       defaults.context.permissions = ['notInteract'];
-      const callback = sinon.spy();
-      const oldCallback = actions[0].getActionCall;
-      actions[0].getActionCall = () => callback;
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
-      expect(callback).to.not.have.been.called;
-      actions[0].getActionCall = oldCallback;
+      expect(button.removeAttribute).to.not.have.been.called;
     });
 
     it('should not act on click when button is disabled by condition', async () => {
       defaults.layout.useEnabledCondition = true;
       defaults.layout.enabledCondition = 0;
-      const callback = sinon.spy();
-      const oldCallback = actions[0].getActionCall;
-      actions[0].getActionCall = () => callback;
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
-      expect(callback).to.not.have.been.called;
-      actions[0].getActionCall = oldCallback;
+      expect(button.removeAttribute).to.not.have.been.called;
     });
 
     it('should run without navigation', async () => {
