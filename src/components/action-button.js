@@ -20,8 +20,8 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
 
   button.onclick = async () => {
-    const actionCallList = [];
     if (isClickable) {
+      const actionCallList = [];
       const { actions } = layout;
       actions.forEach(action => {
         const actionObj = allActions.find(act => act.value === action.actionType);
