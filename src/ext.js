@@ -63,19 +63,19 @@ export default function ext({ translator }) {
                 actionType: {
                   type: 'string',
                   ref: 'actionType',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
                   options: actions,
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                 },
                 bookmark: {
                   type: 'string',
                   ref: 'bookmark',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
@@ -88,10 +88,10 @@ export default function ext({ translator }) {
                 field: {
                   type: 'string',
                   ref: 'field',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Common.Field',
                   defaultValue: '',
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
                     return fields.map(field => ({
@@ -104,10 +104,10 @@ export default function ext({ translator }) {
                 variable: {
                   type: 'string',
                   ref: 'variable',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Common.Variable',
                   defaultValue: '',
-                  expressionType: 'StringExpression',
+                  // expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
@@ -150,10 +150,10 @@ export default function ext({ translator }) {
                 action: {
                   ref: 'navigation.action',
                   translation: 'Object.ActionButton.Navigation',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   defaultValue: null,
                   options: navigationActions,
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                 },
                 sheetId: {
                   type: 'string',
@@ -166,8 +166,8 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'navigation.sheet',
                   translation: 'properties.sheet',
-                  component: 'expression-with-dropdown',
-                  expressionType: 'StringExpression',
+                  component: 'dropdown',
+                  // expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'sheet'),
                   options: async (action, hyperCubeHandler) => {
                     const sheets = await hyperCubeHandler.app.getSheetList();
@@ -181,8 +181,8 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'navigation.story',
                   translation: 'properties.story',
-                  component: 'expression-with-dropdown',
-                  expressionType: 'StringExpression',
+                  component: 'dropdown',
+                  // expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'story'),
                   options: async (action, hyperCubeHandler) => {
                     const stories = await hyperCubeHandler.app.getStoryList();
@@ -566,11 +566,11 @@ export default function ext({ translator }) {
                     },
                     iconType: {
                       ref: 'style.icon.iconType',
-                      component: 'expression-with-dropdown',
+                      component: 'dropdown',
                       translation: 'properties.icon',
                       defaultValue: '',
                       options: luiIcons,
-                      expressionType: 'StringExpression',
+                      // expressionType: 'StringExpression',
                       show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
                     },
                     iconPosition: {
