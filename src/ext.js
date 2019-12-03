@@ -67,7 +67,7 @@ export default function ext({ translator }) {
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
                   options: actions,
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                 },
                 bookmark: {
                   type: 'string',
@@ -75,7 +75,7 @@ export default function ext({ translator }) {
                   component: 'dropdown',
                   translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map(bookmark => ({
@@ -91,7 +91,7 @@ export default function ext({ translator }) {
                   component: 'dropdown',
                   translation: 'Common.Field',
                   defaultValue: '',
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
                     return fields.map(field => ({
@@ -107,7 +107,7 @@ export default function ext({ translator }) {
                   component: 'dropdown',
                   translation: 'Common.Variable',
                   defaultValue: '',
-                  expressionType: 'StringExpression',
+                  // expressionType: 'StringExpression',
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
@@ -153,7 +153,7 @@ export default function ext({ translator }) {
                   component: 'dropdown',
                   defaultValue: null,
                   options: navigationActions,
-                  dropdownOnly: true,
+                  // dropdownOnly: true,
                 },
                 sheetId: {
                   type: 'string',
@@ -167,7 +167,7 @@ export default function ext({ translator }) {
                   ref: 'navigation.sheet',
                   translation: 'properties.sheet',
                   component: 'dropdown',
-                  expressionType: 'StringExpression',
+                  // expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'sheet'),
                   options: async (action, hyperCubeHandler) => {
                     const sheets = await hyperCubeHandler.app.getSheetList();
@@ -182,7 +182,7 @@ export default function ext({ translator }) {
                   ref: 'navigation.story',
                   translation: 'properties.story',
                   component: 'dropdown',
-                  expressionType: 'StringExpression',
+                  // expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'story'),
                   options: async (action, hyperCubeHandler) => {
                     const stories = await hyperCubeHandler.app.getStoryList();
@@ -570,7 +570,7 @@ export default function ext({ translator }) {
                       translation: 'properties.icon',
                       defaultValue: '',
                       options: luiIcons,
-                      expressionType: 'StringExpression',
+                      // expressionType: 'StringExpression',
                       show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
                     },
                     iconPosition: {
