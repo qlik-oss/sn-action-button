@@ -63,7 +63,7 @@ export default function ext({ translator }) {
                 actionType: {
                   type: 'string',
                   ref: 'actionType',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
                   options: actions,
@@ -72,7 +72,7 @@ export default function ext({ translator }) {
                 bookmark: {
                   type: 'string',
                   ref: 'bookmark',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'ExpressionEditor.SetExpresions.Bookmark',
                   defaultValue: '',
                   dropdownOnly: true,
@@ -88,7 +88,7 @@ export default function ext({ translator }) {
                 field: {
                   type: 'string',
                   ref: 'field',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Common.Field',
                   defaultValue: '',
                   dropdownOnly: true,
@@ -104,7 +104,7 @@ export default function ext({ translator }) {
                 variable: {
                   type: 'string',
                   ref: 'variable',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'Common.Variable',
                   defaultValue: '',
                   expressionType: 'StringExpression',
@@ -150,7 +150,7 @@ export default function ext({ translator }) {
                 action: {
                   ref: 'navigation.action',
                   translation: 'Object.ActionButton.Navigation',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   defaultValue: null,
                   options: navigationActions,
                   dropdownOnly: true,
@@ -166,7 +166,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'navigation.sheet',
                   translation: 'properties.sheet',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'sheet'),
                   options: async (action, hyperCubeHandler) => {
@@ -181,7 +181,7 @@ export default function ext({ translator }) {
                   type: 'string',
                   ref: 'navigation.story',
                   translation: 'properties.story',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   expressionType: 'StringExpression',
                   show: data => checkShowNavigation(data, 'story'),
                   options: async (action, hyperCubeHandler) => {
@@ -566,7 +566,7 @@ export default function ext({ translator }) {
                     },
                     iconType: {
                       ref: 'style.icon.iconType',
-                      component: 'expression-with-dropdown',
+                      component: 'dropdown',
                       translation: 'properties.icon',
                       defaultValue: '',
                       options: luiIcons,
