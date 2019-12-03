@@ -226,7 +226,7 @@ describe('style-formatter', () => {
       expect(text.children[0].textContent).to.equal('Button');
       expect(text.style.whiteSpace).to.equal('nowrap');
       expect(text.style.fontFamily).to.equal('myFont');
-      expect(text.style.fontSize).to.equal('11.75px');
+      expect(text.style.fontSize).to.equal('11.5px');
       expect(text.style.display).to.equal('flex');
       expect(text.style.alignItems).to.equal('center');
       expect(text.style.justifyContent).to.equal('center');
@@ -251,7 +251,7 @@ describe('style-formatter', () => {
         button.children.push(child);
       };
       styleFormatter.createLabelAndIcon({ Theme, button, style });
-      expect(button.children[0].style.fontSize).to.equal('9.399999999999999px');
+      expect(button.children[0].style.fontSize).to.equal('9.200000000000001px');
     });
 
     it('should place icon first then label inside text element', () => {
@@ -262,7 +262,7 @@ describe('style-formatter', () => {
       const text = button.children[0];
       expect(text.children[0].style.textDecoration).to.equal('none');
       expect(text.children[1].textContent).to.equal('Button');
-      expect(button.children[0].style.fontSize).to.equal('11.25px');
+      expect(button.children[0].style.fontSize).to.equal('11px');
     });
 
     it('should place label first then icon inside text element', () => {
