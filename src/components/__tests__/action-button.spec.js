@@ -44,7 +44,7 @@ describe('action button', () => {
       defaults.context.permissions = ['notInteract'];
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
-      expect(button.removeAttribute).to.not.have.been.called;
+      expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
     });
 
     it('should not act on click when button is disabled by condition', async () => {
@@ -52,7 +52,7 @@ describe('action button', () => {
       defaults.layout.enabledCondition = 0;
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
-      expect(button.removeAttribute).to.not.have.been.called;
+      expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
     });
 
     it('should run without navigation', async () => {
