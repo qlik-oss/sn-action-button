@@ -11,13 +11,12 @@ If you use npm: `npm install @nebula.js/sn-action-button`. You can also load thr
 ## Usage
 
 ```js
-
 import nucleus from '@nebula.js/nucleus';
-import actionButton from '@nebula.js/sn-actions-button';
+import actionButton from '@nebula.js/sn-action-button';
 
 // 'app' is an enigma app model
 const nuked = nucleus(app, {
-  types: [{ // register the mekko chart
+  types: [{ // register the action button object
     name: 'action-button',
     load: () => Promise.resolve(actionButton);
   }]
