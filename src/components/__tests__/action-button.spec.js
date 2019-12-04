@@ -47,6 +47,14 @@ describe('action button', () => {
       expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
     });
 
+    it('should not act on click when button is disabled by condition', async () => {
+      defaults.layout.useEnabledCondition = true;
+      defaults.layout.enabledCondition = 0;
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
+    });
+
     it('should run without navigation', async () => {
       defaults.layout.navigation = {};
       renderButton(defaults);
