@@ -7,3 +7,27 @@ Action button supernova for nebula.js
 ## Installing
 
 If you use npm: `npm install @nebula.js/sn-action-button`. You can also load through the script tag directly from [https://unpkg.com](https://unpkg.com/@nebula.js/sn-action-button).
+
+## Usage
+
+```js
+
+import nucleus from '@nebula.js/nucleus';
+import actionButton from '@nebula.js/sn-actions-button';
+
+// 'app' is an enigma app model
+const nuked = nucleus(app, {
+  types: [{ // register the mekko chart
+    name: 'action-button',
+    load: () => Promise.resolve(actionButton);
+  }]
+});
+
+nuked.create({
+  type: 'action-button',
+}, {
+  element
+});
+```
+
+[See full example](./example)
