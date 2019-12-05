@@ -30,11 +30,12 @@
         permissions: ['passive', 'interact', 'select', 'fetch'], // allow selections
       },
       properties: {
-        // actions: [{
-        //   actionType: 'selectValue',
-        //   field: 'Region',
-        //   value: 'Americas;Asia'
-        // }],
+        actions: [{
+          actionType: 'selectValues',
+          field: 'Region',
+          value: 'Americas;Asia',
+          softLock: false
+        }],
         style: {
           label: 'Make selections',
           font: {
@@ -66,9 +67,10 @@
         permissions: ['passive', 'interact', 'select', 'fetch'], // allow selections
       },
       properties: {
-        // actions: [{
-        //   actionType: 'clearAll',
-        // }],
+        actions: [{
+          actionType: 'clearAll',
+          softLock: false,
+        }],
         style: {
           label: 'Clear Selections',
           font: {

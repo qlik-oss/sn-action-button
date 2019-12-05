@@ -14,8 +14,6 @@ const pkg = require(path.resolve(__dirname, '../package.json')); // eslint-disab
 module.exports = {
   glob: [
     './src/object-properties.js',
-    // './src/coloring/index.js',
-    // './src/coloring/byDimension.js',
   ],
   package: path.resolve(__dirname, '../package.json'),
   api: {
