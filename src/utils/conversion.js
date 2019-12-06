@@ -39,6 +39,8 @@ export function convertNavigation(oldType) {
       return 'goToSheetById';
     case 'gotoStory':
       return 'goToStory';
+    case 'switchToEdit':
+      return 'none';
     default:
       return oldType;
   }
