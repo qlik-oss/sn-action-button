@@ -15,6 +15,10 @@ describe('conversion', () => {
       const result = convertNavigation('gotoStory');
       expect(result).to.equal('goToStory');
     });
+    it('should return none for switchToEdit', () => {
+      const result = convertNavigation('switchToEdit');
+      expect(result).to.equal('none');
+    });
     it('should return default entry', () => {
       const result = convertNavigation('myOldType');
       expect(result).to.equal('myOldType');
