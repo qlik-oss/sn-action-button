@@ -1,10 +1,12 @@
 export const getValueList = async (app, values, isDate) => {
-  const valuesArray = values.split(';');
+  let valuesArray = values.split(';');
   if (isDate) {
-    for (let i = 0; i < valuesArray.length; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      valuesArray[i] = await app.evaluate(`Num('${valuesArray[i]}')`);
-    }
+    let dateExpression = '';
+    valuesArray.forEach(date => {
+      dateExpression += `Num('${date}')&';'&`;
+    });
+    const convertedDates = await app.evaluate(dateExpression.slice(0, -5));
+    valuesArray = convertedDates.split(';');
   }
   return valuesArray.map(value => (Number.isNaN(+value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
 };
