@@ -194,6 +194,7 @@ export default function ext({ translator }) {
                 },
                 websiteUrl: {
                   type: 'string',
+                  expression: 'optional',
                   ref: 'navigation.websiteUrl',
                   translation: 'properties.website',
                   show: data => checkShowNavigation(data, 'websiteUrl'),
