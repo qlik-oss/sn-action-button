@@ -3,6 +3,7 @@ import actions, { getValueList, checkShowAction } from '../actions';
 describe('actions', () => {
   let app;
   let fieldObject;
+  let fieldInfoObject;
   let variableObject;
   let field;
   let bookmark;
@@ -30,6 +31,9 @@ describe('actions', () => {
         selectPossible: sinon.spy(),
         toggleSelect: sinon.spy(),
       };
+      fieldInfoObject = {
+        qTags: [],
+      };
       variableObject = {
         setStringValue: sinon.spy(),
       };
@@ -39,10 +43,12 @@ describe('actions', () => {
         back: sinon.spy(),
         forward: sinon.spy(),
         getField: sinon.stub().resolves(fieldObject),
+        getFieldDescription: sinon.stub().resolves(fieldInfoObject),
         getVariableByName: sinon.stub().resolves(variableObject),
         lockAll: sinon.spy(),
         unlockAll: sinon.spy(),
         getBookmarkList: () => [{ qData: { title: 'findMyBookmark' }, qInfo: { qId: 'myBookmarkId' } }],
+        evaluate: () => '43850;43881',
       };
     });
 
@@ -142,8 +148,9 @@ describe('actions', () => {
     it('should call selectValues', async () => {
       const actionObject = actions.find(action => action.value === 'selectValues');
       await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
+      const valueList = await getValueList(app, value, false);
       expect(app.getField).to.have.been.calledWith(field, qStateName);
-      expect(fieldObject.selectValues).to.have.been.calledWith(getValueList(value), false, softLock);
+      expect(fieldObject.selectValues).to.have.been.calledWith(valueList, false, softLock);
     });
 
     it('should NOT call selectValues when no field', async () => {
@@ -253,39 +260,53 @@ describe('actions', () => {
     let valueString = 'valueOne;valueTwo';
     let ExpectedList = [{ qText: 'valueOne' }, { qText: 'valueTwo' }];
 
-    it('should return array with values in an array', () => {
-      expect(getValueList(valueString)).to.eql(ExpectedList);
+    it('should return array with values in an array', async () => {
+      const valueList = await getValueList(app, valueString, false);
+      expect(valueList).to.eql(ExpectedList);
     });
 
-    it('should return array with numbers in value string', () => {
+    it('should return array with numbers in value string', async () => {
       valueString = '1;2';
       ExpectedList = [
         { qNumber: 1, qIsNumeric: true },
         { qNumber: 2, qIsNumeric: true },
       ];
-      expect(getValueList(valueString)).to.eql(ExpectedList);
+      const valueList = await getValueList(app, valueString, false);
+      expect(valueList).to.eql(ExpectedList);
+    });
+
+    it('should return array with converted dates', async () => {
+      valueString = '2020-01-20;2020-02-20';
+      ExpectedList = [
+        { qNumber: 43850, qIsNumeric: true },
+        { qNumber: 43881, qIsNumeric: true },
+      ];
+      const valueList = await getValueList(app, valueString, true);
+      expect(valueList).to.eql(ExpectedList);
     });
   });
 
   describe('checkShowAction', () => {
     let data;
-    describe('checkShowAction', () => {
-      beforeEach(() => {
-        data = { actionType: 'applyBookmark' };
-      });
-      it('should return true when field required', () => {
-        const result = checkShowAction(data, 'bookmark');
-        expect(result).to.be.true;
-      });
-      it('should return false when field is not required', () => {
-        const result = checkShowAction(data, 'notTheField');
-        expect(result).to.be.false;
-      });
-      it('should return undefined when action is not found', () => {
-        data.actionType = 'notAnAction';
-        const result = checkShowAction(data, 'bookmark');
-        expect(result).to.equal(undefined);
-      });
+
+    beforeEach(() => {
+      data = { actionType: 'applyBookmark' };
+    });
+
+    it('should return true when field required', () => {
+      const result = checkShowAction(data, 'bookmark');
+      expect(result).to.be.true;
+    });
+
+    it('should return false when field is not required', () => {
+      const result = checkShowAction(data, 'notTheField');
+      expect(result).to.be.false;
+    });
+
+    it('should return undefined when action is not found', () => {
+      data.actionType = 'notAnAction';
+      const result = checkShowAction(data, 'bookmark');
+      expect(result).to.equal(undefined);
     });
   });
 });

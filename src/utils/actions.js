@@ -1,8 +1,15 @@
-export function getValueList(values) {
-  return values
-    .split(';')
-    .map(value => (isNaN(value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
-}
+export const getValueList = async (app, values, isDate) => {
+  let valuesArray = values.split(';');
+  if (isDate) {
+    let dateExpression = '';
+    valuesArray.forEach(date => {
+      dateExpression += `Num('${date}')&';'&`;
+    });
+    const convertedDates = await app.evaluate(dateExpression.slice(0, -5));
+    valuesArray = convertedDates.split(';');
+  }
+  return valuesArray.map(value => (Number.isNaN(+value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
+};
 
 const actions = [
   {
@@ -86,7 +93,8 @@ const actions = [
     getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
       if (field && value) {
         const fieldObj = await app.getField(field, qStateName);
-        const valueList = getValueList(value);
+        const fieldInfo = await app.getFieldDescription(field);
+        const valueList = await getValueList(app, value, fieldInfo.qTags.includes('$date'));
         await fieldObj.selectValues(valueList, false, softLock);
       }
     },
