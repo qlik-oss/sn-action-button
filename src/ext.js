@@ -255,6 +255,7 @@ export default function ext({ translator }) {
                 label: {
                   component: 'string',
                   ref: 'style.label',
+                  defaultValue: '',
                   translation: 'Common.Label',
                   expression: 'optional',
                 },
