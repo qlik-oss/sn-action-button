@@ -6,7 +6,7 @@ describe('navigation actions', () => {
   const sheet = 'sheetIdHere';
   const story = 'storyIdHere';
   const websiteUrl = 'https://myUrlHere';
-  const { app } = defaultValues;
+  const { app } = defaultValues();
 
   describe('all navigation actions', () => {
     beforeEach(() => {

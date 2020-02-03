@@ -10,7 +10,7 @@ before(async function run() {
     type: 'action-button'
   });
 
-  process.testServer = s;
+  process.env.BASE_URL = s.url;
 
   page.on('pageerror', e => {
     // eslint-disable-next-line no-console

@@ -8,7 +8,7 @@ let defaults;
 describe('action button', () => {
   describe('renderButton', () => {
     beforeEach(() => {
-      defaults = JSON.parse(JSON.stringify(defaultValues));
+      defaults = defaultValues();
       button = {
         setAttribute: sinon.spy(),
         removeAttribute: sinon.spy(),
@@ -18,9 +18,7 @@ describe('action button', () => {
       defaults.element.firstElementChild = button;
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
-      defaults.app = defaultValues.app;
       defaults.app.clearAll = sinon.spy();
-      defaults.context.permissions = ['interact'];
       defaults.senseNavigation = {
         goToSheet: sinon.spy(),
         getCurrentStoryId: () => false,
@@ -40,8 +38,8 @@ describe('action button', () => {
       expect(defaults.senseNavigation.goToSheet).to.have.been.called;
     });
 
-    it('should not act on click when permissions not present', async () => {
-      defaults.context.permissions = ['notInteract'];
+    it('should not act on click when \'active\' constraint is enabled ', async () => {
+      defaults.constraints = { active: true };
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.setAttribute).to.not.have.been.calledWith('disabled', true);
@@ -110,7 +108,10 @@ describe('action button', () => {
       expect(defaults.element.firstElementChild.style.transform).to.equal('');
     });
     it('should not scale nor reset scale when in edit mode', async () => {
-      defaults.context.permissions = [];
+      defaults.constraints = {
+        passive: true,
+        active: true,
+      };
       renderButton(defaults);
       defaults.element.firstElementChild.style = { transform: '' };
       defaults.element.firstElementChild.ontouchstart();

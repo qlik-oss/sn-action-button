@@ -9,15 +9,15 @@ export const runActions = async actionList => {
   }
 };
 
-export default function renderButton({ layout, Theme, app, context, senseNavigation, element }) {
+export default function renderButton({ layout, theme, app, constraints, senseNavigation, element }) {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
-  const isClickable = !disabled && context.permissions.indexOf('interact') !== -1;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, Theme, element });
+  const isClickable = !disabled && !constraints.active;
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
   button.setAttribute('style', formattedStyles);
-  styleFormatter.createLabelAndIcon({ button, Theme, style, isSense });
+  styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
 
   button.onclick = async () => {
     if (isClickable) {
@@ -68,5 +68,13 @@ export default function renderButton({ layout, Theme, app, context, senseNavigat
   button.ontouchend = resetScale;
   button.ontouchcancel = resetScale;
 
-  return button;
+  return () => {
+    button.onclick = undefined;
+    button.onmousedown = undefined;
+    button.onmouseup = undefined;
+    button.onmouseleave = undefined;
+    button.ontouchstart = undefined;
+    button.ontouchend = undefined;
+    button.ontouchcancel = undefined;
+  };
 }

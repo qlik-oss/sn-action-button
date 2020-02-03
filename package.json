@@ -32,7 +32,7 @@
     "lint": "eslint src",
     "start": "nebula serve",
     "test:unit": "aw -c aw.config.js",
-    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js' --chrome.headless true --chrome.slowMo 10",
+    "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
     "prepublishOnly": "rm -rf dist && npm run build"
   },
   "husky": {
@@ -46,7 +46,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "0.1.0-alpha.25"
+    "@nebula.js/supernova": "^0.1.0-alpha.28"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.10",
@@ -55,7 +55,8 @@
     "@babel/preset-env": "7.7.7",
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@nebula.js/cli": "0.1.0-alpha.25",
+    "@nebula.js/cli": "0.1.0-alpha.28",
+    "@nebula.js/test-utils": "0.1.0-alpha.28",
     "babel-plugin-istanbul": "5.2.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",

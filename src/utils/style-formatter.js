@@ -23,27 +23,26 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, palette) => {
+const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, theme) => {
   const resolvedColor = useColorExpression
     ? colorUtils.resolveExpression(colorExpression)
-    : colorUtils.resolveColor(color, palette);
-  return resolvedColor === 'none' ? defaultColor : resolvedColor;
+    : theme.getColorPickerColor(color);
+  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
 export default {
-  getStyles({ style, disabled, Theme, element }) {
+  getStyles({ style, disabled, theme, element }) {
     let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;';
     const { font, background, border } = style;
-    const primaryColor = colorUtils.getDefaultColor(Theme);
-    const palette = colorUtils.getPalette(Theme);
+    const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
-    styles += formatProperty('color', getColor(font, '#ffffff', palette));
+    styles += formatProperty('color', getColor(font, '#ffffff', theme));
     font.style.bold && (styles += formatProperty('font-weight', 'bold'));
     font.style.italic && (styles += formatProperty('font-style', 'italic'));
     // background
-    const backgroundColor = getColor(background, primaryColor, palette);
+    const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
@@ -60,7 +59,7 @@ export default {
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
-      const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), palette);
+      const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
       const borderSize = (border.width * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
       styles += formatProperty('border-radius', `${(border.radius * lengthShortSide) / 2}px`);
@@ -70,11 +69,11 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, Theme, style, isSense }) {
+  createLabelAndIcon({ button, theme, style, isSense }) {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-    text.style.fontFamily = colorUtils.getFontFamily(Theme);
+    text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = style.label;
