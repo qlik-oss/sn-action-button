@@ -1,14 +1,10 @@
 import props from '../object-properties';
 
-const defaultValues = {
-  Theme: {
-    getCurrent: () => ({
-      properties: {
-        palettes: { ui: [{ colors: ['none', 'color1', 'color2'] }] },
-        dataColors: { primaryColor: 'myPrimaryColor' },
-        fontFamily: 'myFont',
-      },
-    }),
+const defaultValues = (sandbox) => ({
+  theme: {
+    getDataColorSpecials: () => ({ primary: 'myPrimaryColor' }),
+    getColorPickerColor: sandbox ? sandbox.stub() : () => '',
+    getStyle: sandbox ? sandbox.stub() : () => '',
   },
   layout: { style: props.style },
   element: {
@@ -24,8 +20,8 @@ const defaultValues = {
     getSheetList: () => [{ qData: { rank: 1 }, qInfo: { qId: 'id1' } }],
     getBookmarkList: () => [],
   },
-  context: { permissions: ['interact'] },
+  constraints: {},
   senseNavigation: {},
-};
+});
 
 export default defaultValues;

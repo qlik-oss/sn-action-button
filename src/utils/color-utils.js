@@ -1,13 +1,6 @@
 /* eslint-disable no-cond-assign */
 import CSSColors from './css-colors';
 
-export const getCurrentTheme = Theme => {
-  if (Theme && Theme.getCurrent) {
-    return Theme.getCurrent();
-  }
-  return undefined;
-};
-
 const colorUtils = {
   resolveExpression: input => {
     // rgb
@@ -34,31 +27,6 @@ const colorUtils = {
     }
     // invalid
     return 'none';
-  },
-  resolveColor: (input, palette) => {
-    // Resolve color from a palette. We should open Theme API from sense so we can use same functionality
-    if (typeof input !== 'undefined' && input !== null) {
-      if (input.index !== undefined && input.index !== -1 && palette[input.index]) {
-        return palette[input.index];
-      }
-      if (input.color !== undefined) {
-        return !input.color ? 'none' : input.color;
-      }
-      return typeof input === 'string' ? input : 'none';
-    }
-    return 'none';
-  },
-  getPalette: Theme => {
-    const current = getCurrentTheme(Theme);
-    return (current && current.properties.palettes.ui[0].colors) || [];
-  },
-  getDefaultColor: Theme => {
-    const current = getCurrentTheme(Theme);
-    return (current && current.properties.dataColors && current.properties.dataColors.primaryColor) || '#4477aa';
-  },
-  getFontFamily: Theme => {
-    const current = getCurrentTheme(Theme);
-    return (current && current.properties.fontFamily) || 'inherit';
   },
   getFadedColor(color) {
     const percent = 0.15;

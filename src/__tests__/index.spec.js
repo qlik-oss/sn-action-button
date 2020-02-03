@@ -1,12 +1,21 @@
-import supernova from '../index';
-import defaultValues from './default-button-props';
+import { create } from '@nebula.js/test-utils';
 
 describe('index', () => {
-  const env = {
-    Theme: defaultValues.Theme,
-  };
-  const layout = JSON.parse(JSON.stringify(defaultValues.layout));
-  const context = { permissions: [] };
+  let renderButton;
+  let sandbox;
+  let supernova;
+  before(() => {
+    sandbox = sinon.createSandbox();
+    renderButton = sandbox.stub();
+    [{ default: supernova }] = aw.mock([
+      ['**/action-button.js', () => renderButton]
+    ],
+    ['../index.js']);
+  });
+  afterEach(() => {
+    sandbox.reset();
+  });
+
   global.document = {
     createElement: () => {
       const newElement = {
@@ -33,28 +42,27 @@ describe('index', () => {
     },
   };
 
-  it('should render supernova', () => {
-    const result = supernova(env);
-    result.component.mounted(thisElement);
-    result.component.render({ layout, context });
-    expect(result)
-      .to.be.an('object')
-      .to.have.keys('qae', 'component', 'ext');
-    expect(result.component)
-      .to.be.an('object')
-      .to.have.keys('mounted', 'render', 'element');
+  it('should render supernova', async () => {
+    const result = supernova({
+      sense: { navigation: 'nav' },
+      translator: { get: () => '' }
+    });
+    const c = create(result.component, {
+      element: thisElement,
+      layout: 'layout',
+      constraints: 'constraints',
+    });
+
+    await c.update();
+
     expect(thisElement.appendChild).to.have.been.called;
-  });
-  it('should render supernova with navigation', () => {
-    env.sense = {
-      navigation: {},
-    };
-    env.translator = {
-      get: () => 'Button',
-    };
-    const result = supernova(env);
-    expect(result)
-      .to.be.an('object')
-      .to.have.keys('qae', 'component', 'ext');
+    expect(renderButton).to.have.been.calledWithExactly({
+      element: thisElement,
+      layout: 'layout',
+      app: undefined,
+      constraints: 'constraints',
+      theme: undefined,
+      senseNavigation: 'nav'
+    });
   });
 });

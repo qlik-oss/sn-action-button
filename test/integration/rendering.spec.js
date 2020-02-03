@@ -3,11 +3,11 @@ const artifacts = {
 };
 
 describe('should render an', () => {
-  const content = '.nebulajs-sn';
-  const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
+  const content = '.nebulajs-sn[data-render-count="1"]';
+  // const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
   before(async () => {
-    await page.goto(`${process.testServer.url}/render/app/${app}?object=CNaxMh`);
+    await page.goto(`${process.env.BASE_URL}/render/?snapshot=btn`);
     await page.waitForSelector(content, { visible: true });
   });
 
