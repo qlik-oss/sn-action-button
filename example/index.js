@@ -19,16 +19,13 @@
       }],
     });
 
-    nuked.selections().mount(document.querySelector('.toolbar'));
+    nuked.selections().then(s => s.mount(document.querySelector('.toolbar')));
 
     // create a session object
     nuked.create({
       type: 'action-button',
     }, {
       element: document.querySelector('.object'),
-      context: {
-        permissions: ['passive', 'interact', 'select', 'fetch'], // allow selections
-      },
       properties: {
         actions: [{
           actionType: 'selectValues',
@@ -63,9 +60,6 @@
       type: 'action-button',
     }, {
       element: document.querySelectorAll('.object')[1],
-      context: {
-        permissions: ['passive', 'interact', 'select', 'fetch'], // allow selections
-      },
       properties: {
         actions: [{
           actionType: 'clearAll',
