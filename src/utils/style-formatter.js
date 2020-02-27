@@ -110,11 +110,7 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (hasIcon && style.font.style.italic) {
-      text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.84, 8)}px`;
-      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
-      text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
-    } else if (hasIcon || style.font.style.italic) {
+    if (hasIcon) {
       text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
