@@ -84,7 +84,7 @@ export default {
     textSpan.textContent = style.label;
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
-    textSpan.style.overflow = 'hidden';
+    textSpan.style.overflow = 'visible';
     style.font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
@@ -110,7 +110,7 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (hasIcon) {
+    if (hasIcon || style.font.style.italic) {
       text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
