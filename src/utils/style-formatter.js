@@ -120,6 +120,11 @@ export default {
     } else {
       text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.92, 8)}px`;
     }
+    if (text.style.fontSize === '8px') {
+      text.children.forEach(child => {
+        child.style.overflow = 'hidden';
+      });
+    }
     text.style.margin = '0 3%';
     text.style.display = 'flex';
     text.style.alignItems = 'center';
