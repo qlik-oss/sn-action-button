@@ -277,20 +277,6 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).to.equal('9.200000000000001px');
     });
 
-    it('should set fontSize when italic is selected', () => {
-      style.font.style = {
-        italic: true,
-      };
-      button.appendChild = child => {
-        child.setAttribute = sinon.spy();
-        child.offsetHeight = 400;
-        child.offsetWidth = 125;
-        button.children.push(child);
-      };
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      expect(button.children[0].style.fontSize).to.equal('8.8px');
-    });
-
     it('should place icon first then label inside text element', () => {
       const isSense = true;
       style.icon.useIcon = true;
@@ -299,7 +285,7 @@ describe('style-formatter', () => {
       const text = button.children[0];
       expect(text.children[0].style.textDecoration).to.equal('none');
       expect(text.children[1].textContent).to.equal('Button');
-      expect(button.children[0].style.fontSize).to.equal('10.5px');
+      expect(button.children[0].style.fontSize).to.equal('11px');
     });
 
     it('should place label first then icon inside text element', () => {
