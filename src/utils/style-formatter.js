@@ -110,12 +110,22 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (hasIcon) {
+    if (style.font.style.italic) {
+      if (hasIcon) {
+        text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.84, 8)}px`;
+        text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+        text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
+      } else {
+        text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.90, 8)}px`;
+        text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
+      }
+    } else if (hasIcon) {
       text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
       text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.92, 8)}px`;
     }
+    // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
       text.children.forEach(child => {
         child.style.overflow = 'hidden';
