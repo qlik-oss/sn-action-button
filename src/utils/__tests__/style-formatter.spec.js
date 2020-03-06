@@ -93,7 +93,7 @@ describe('style-formatter', () => {
     });
 
     it('should return font-style: italic when italic is selected', () => {
-      style.font.style.italic = {
+      style.font.style = {
         italic: true,
       };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
@@ -276,7 +276,7 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize when italic is selected', () => {
-      style.font.style.italic = {
+      style.font.style = {
         italic: true,
       };
       button.appendChild = child => {
@@ -289,8 +289,8 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).to.equal('9px');
     });
 
-    it('should place icon first then label inside text element', () => {
-      style.font.style.italic = {
+    it('should place icon first then label inside text element with italics', () => {
+      style.font.style = {
         italic: true,
       };
       const isSense = true;
