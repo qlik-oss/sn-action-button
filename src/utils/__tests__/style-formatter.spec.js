@@ -218,15 +218,13 @@ describe('style-formatter', () => {
 
   describe('createLabelAndIcon', () => {
     let theme;
-    let layout;
     let button;
     let style;
 
     beforeEach(() => {
       const d = defaultValues(sandbox);
       theme = d.theme;
-      layout = d.layout;
-      style = layout.style;
+      style = d.layout.style;
 
       button = {
         firstElementChild: { setAttribute: sinon.spy(), offsetHeight: 400, offsetWidth: 20 },
@@ -278,9 +276,7 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize when italic is selected', () => {
-      style.font.style = {
-        italic: true,
-      };
+      style.font.style.italic = true;
       button.appendChild = child => {
         child.setAttribute = sinon.spy();
         child.offsetHeight = 400;
@@ -294,23 +290,24 @@ describe('style-formatter', () => {
     it('should place icon first then label inside text element', () => {
       const isSense = true;
       style.icon.useIcon = true;
-      style.icon.iconType = 'someIcon';
+      style.icon.iconType = 'back';
       styleFormatter.createLabelAndIcon({ theme, button, style, isSense });
       const text = button.children[0];
       expect(text.children[0].style.textDecoration).to.equal('none');
       expect(text.children[1].textContent).to.equal('Button');
-      expect(button.children[0].style.fontSize).to.equal('10.5px');
+      expect(button.children[0].style.fontSize).to.equal('11px');
     });
 
     it('should place label first then icon inside text element', () => {
       const isSense = true;
       style.icon.useIcon = true;
-      style.icon.iconType = 'someIcon';
+      style.icon.iconType = 'Back';
       style.icon.position = 'right';
       styleFormatter.createLabelAndIcon({ theme, button, style, isSense });
       const text = button.children[0];
       expect(text.children[0].textContent).to.equal('Button');
       expect(text.children[1].style.textDecoration).to.equal('none');
+      expect(button.children[0].style.fontSize).to.equal('11px');
     });
 
     it('should set textDecoration to underline', () => {
