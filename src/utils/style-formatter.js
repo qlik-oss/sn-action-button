@@ -1,4 +1,5 @@
 import colorUtils from './color-utils';
+import luiIcons from './lui-icons';
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -75,26 +76,28 @@ export default {
     return styles;
   },
   createLabelAndIcon({ button, theme, style, isSense }) {
+    const { icon, font, label } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
     text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
     // label
     const textSpan = document.createElement('span');
-    textSpan.textContent = style.label;
+    textSpan.textContent = label;
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
-    style.font.style.underline && (textSpan.style.textDecoration = 'underline');
+    font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
-    const hasIcon = isSense && style.icon.useIcon && style.icon.iconType !== '';
+    const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
     if (hasIcon) {
       const iconSpan = document.createElement('span');
+      const iconType = luiIcons.find(iconObj => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
-      iconSpan.setAttribute('class', `lui-icon lui-icon--${style.icon.iconType}`);
-      style.icon.position === 'left' ? text.insertBefore(iconSpan, textSpan) : text.appendChild(iconSpan);
+      iconSpan.setAttribute('class', `lui-icon lui-icon--${iconType ? iconType.value : ''}`);
+      icon.position === 'left' ? text.insertBefore(iconSpan, textSpan) : text.appendChild(iconSpan);
     }
     button.innerHTML = '';
     button.appendChild(text);
@@ -110,20 +113,20 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (style.font.style.italic) {
+    if (font.style.italic) {
       if (hasIcon) {
-        text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.84, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.84, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
         text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
       } else {
-        text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.90, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.9, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
       }
     } else if (hasIcon) {
-      text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.88, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
-      text.style.fontSize = `${Math.max(newFontsize * style.font.size * 0.92, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.92, 8)}px`;
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
@@ -134,7 +137,6 @@ export default {
     text.style.margin = '0 3%';
     text.style.display = 'flex';
     text.style.alignItems = 'center';
-    text.style.justifyContent =
-      style.font.align === 'left' ? 'flex-start' : style.font.align === 'right' ? 'flex-end' : 'center';
+    text.style.justifyContent = font.align === 'left' ? 'flex-start' : font.align === 'right' ? 'flex-end' : 'center';
   },
 };
