@@ -1854,6 +1854,11 @@
   dependencies:
     puppeteer "2.0.0"
 
+"@nebula.js/supernova@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@nebula.js/supernova/-/supernova-0.2.1.tgz#51e81222d2c7e633d28ebfe85356d529d2a1dc1c"
+  integrity sha512-5IdoRdmdTporwQZ29O4F4gFujfFU7al5e5UfCKaXVfwNWfuvA13OoyrTrzSRDMliwhIdWuAcoiRoPbNuGflHlA==
+
 "@nebula.js/test-utils@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/test-utils/-/test-utils-0.2.0.tgz#f4a2b26c0b6169158f96dc7c7f6e71a1ad77b957"
