@@ -112,7 +112,6 @@ const actions = [
     },
     requiredInput: ['field', 'value', 'softLock'],
   },
-
   {
     value: 'selectAlternative',
     translation: 'Object.ActionButton.SelectAlternatives',
@@ -222,7 +221,7 @@ const actions = [
 ];
 
 export function checkShowAction(data, field) {
-  const act = actions.find((action) => data.actionType === action.value);
+  const act = actions.find(action => data.actionType === action.value);
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 }
 
