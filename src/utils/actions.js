@@ -101,6 +101,19 @@ const actions = [
     requiredInput: ['field', 'value', 'softLock'],
   },
   {
+    value: 'selectMatchingValues',
+    translation: '$Select matching values in a field',
+    group: 'selection',
+    getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
+      if (field && value) {
+        const fieldObj = await app.getField(field, qStateName);
+        await fieldObj.select(value, false, softLock);
+      }
+    },
+    requiredInput: ['field', 'value', 'softLock'],
+  },
+
+  {
     value: 'selectAlternative',
     translation: 'Object.ActionButton.SelectAlternatives',
     group: 'selection',
@@ -209,7 +222,7 @@ const actions = [
 ];
 
 export function checkShowAction(data, field) {
-  const act = actions.find(action => data.actionType === action.value);
+  const act = actions.find((action) => data.actionType === action.value);
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 }
 

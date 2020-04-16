@@ -160,6 +160,20 @@ describe('actions', () => {
       expect(fieldObject.selectValues).to.not.have.been.called;
     });
 
+    it('should call selectValues', async () => {
+      const actionObject = actions.find(action => action.value === 'selectMatchingValues');
+      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
+      expect(fieldObject.select).to.have.been.calledWith(value, false, softLock);
+    });
+
+    it('should NOT call selectValues when no field', async () => {
+      const actionObject = actions.find(action => action.value === 'selectMatchingValues');
+      field = null;
+      await actionObject.getActionCall({ app, qStateName, field })();
+      expect(fieldObject.selectValues).to.not.have.been.called;
+    });
+
+
     it('should call selectAlternative', async () => {
       const actionObject = actions.find(action => action.value === 'selectAlternative');
       await actionObject.getActionCall({ app, qStateName, field, softLock })();
