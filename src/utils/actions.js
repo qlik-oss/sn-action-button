@@ -102,7 +102,7 @@ const actions = [
   },
   {
     value: 'selectMatchingValues',
-    translation: '$Select matching values in a field',
+    translation: 'Object.ActionButton.SelectMatchingValues',
     group: 'selection',
     getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
       if (field && value) {
