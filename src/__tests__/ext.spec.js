@@ -18,6 +18,13 @@ describe('ext', () => {
   describe('itemTitleRef', () => {
     const { itemTitleRef } = props.definition.items.actions.items.actions;
 
+    beforeEach(() => {
+      data = {
+        actionType: '',
+        actionLabel: ''
+      };
+    });
+
     it('Should return action label from dropdown', () => {
       data = { actionType: 'applyBookmark' };
       const itemTitle = itemTitleRef(data, 0);
@@ -31,9 +38,14 @@ describe('ext', () => {
     });
 
     it('Should return default action label when empty action', () => {
-      data = { actionType: '', actionLabel: '' };
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.NewAction');
+    });
+
+    it('Should return invalid action label when action is not found in actions list', () => {
+      data = { actionType: 'invalidAction' };
+      const itemTitle = itemTitleRef(data, 0);
+      expect(itemTitle).to.equal('Object.ActionButton.InvalidAction');
     });
   });
 

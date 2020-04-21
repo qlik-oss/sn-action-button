@@ -82,7 +82,7 @@ describe('conversion', () => {
       action.actionType = 'selectField';
       convertAction(action, newProperties);
       expect(newProperties.actions).to.have.length(1);
-      expect(newProperties.actions[0].actionType).to.equal('selectValues');
+      expect(newProperties.actions[0].actionType).to.equal('selectMatchingValues');
       expect(newProperties.actions[0].bookmark).to.equal(action.selectedBookmark);
       expect(newProperties.actions[0].field).to.equal(action.selectedField);
       expect(newProperties.actions[0].variable).to.equal(action.variable);
@@ -95,7 +95,7 @@ describe('conversion', () => {
       action.actionType = 'selectAndLockField';
       convertAction(action, newProperties);
       expect(newProperties.actions).to.have.length(2);
-      expect(newProperties.actions[0].actionType).to.equal('selectValues');
+      expect(newProperties.actions[0].actionType).to.equal('selectMatchingValues');
       expect(newProperties.actions[0].bookmark).to.equal(action.selectedBookmark);
       expect(newProperties.actions[0].field).to.equal(action.selectedField);
       expect(newProperties.actions[0].variable).to.equal(action.variable);
