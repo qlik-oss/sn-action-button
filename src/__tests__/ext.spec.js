@@ -38,7 +38,6 @@ describe('ext', () => {
     });
 
     it('Should return default action label when empty action', () => {
-      // data = { actionType: '', actionLabel: ''};
       const itemTitle = itemTitleRef(data, 0);
       expect(itemTitle).to.equal('Object.ActionButton.NewAction');
     });
