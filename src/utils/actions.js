@@ -101,6 +101,18 @@ const actions = [
     requiredInput: ['field', 'value', 'softLock'],
   },
   {
+    value: 'selectMatchingValues',
+    translation: 'Object.ActionButton.SelectMatchingValues',
+    group: 'selection',
+    getActionCall: ({ app, qStateName, field, value, softLock }) => async () => {
+      if (field && value) {
+        const fieldObj = await app.getField(field, qStateName);
+        await fieldObj.select(value, false, softLock);
+      }
+    },
+    requiredInput: ['field', 'value', 'softLock'],
+  },
+  {
     value: 'selectAlternative',
     translation: 'Object.ActionButton.SelectAlternatives',
     group: 'selection',

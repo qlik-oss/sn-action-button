@@ -19,10 +19,10 @@ export function convertAction(action, newProperties) {
       newAction.softLock = true;
       break;
     case 'selectField':
-      newAction.actionType = 'selectValues';
+      newAction.actionType = 'selectMatchingValues';
       break;
     case 'selectAndLockField':
-      newProperties.actions.push({ ...newAction, cId: null, actionType: 'selectValues' });
+      newProperties.actions.push({ ...newAction, cId: null, actionType: 'selectMatchingValues' });
       newAction.actionType = 'lockField';
       break;
     default:
