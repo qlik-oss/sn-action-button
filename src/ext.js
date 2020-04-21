@@ -45,8 +45,11 @@ export default function ext({ translator }) {
                 if (data.actionLabel) {
                   return data.actionLabel;
                 }
-                const act = actions.find(action => data.actionType === action.value);
-                return translator.get((act && act.translation) || 'Object.ActionButton.NewAction');
+                // If actionType exists but it's not found in the actions list,
+                // the action is invalid for the current version of the button
+                const fallbackTitle = data.actionType ? 'Object.ActionButton.InvalidAction' : 'Object.ActionButton.NewAction';
+                const action = actions.find(act => data.actionType === act.value);
+                return translator.get((action && action.translation) || fallbackTitle);
               },
               allowAdd: true,
               allowRemove: true,
