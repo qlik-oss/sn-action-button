@@ -1,6 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
-import urlUtils from './../utils/url-utils';
+import urlUtils from './url-utils';
 
 const backgroundSize = {
   auto: 'auto auto',
