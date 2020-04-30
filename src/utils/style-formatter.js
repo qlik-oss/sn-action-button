@@ -1,5 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
+import urlUtils from './url-utils';
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -53,9 +54,7 @@ export default {
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
-        bgUrl.replace(/^\.\.\//i, '/');
-        bgUrl = bgUrl.replace(/"/g, '\\"');
-        bgUrl = bgUrl.replace(/'/g, "\\'");
+        bgUrl = urlUtils.getImageUrl(bgUrl);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
         styles += formatProperty('background-size', backgroundSize[background.size]);
         styles += formatProperty('background-position', backgroundPosition[background.position]);
@@ -93,7 +92,7 @@ export default {
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
     if (hasIcon) {
       const iconSpan = document.createElement('span');
-      const iconType = luiIcons.find(iconObj => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
+      const iconType = luiIcons.find((iconObj) => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
       iconSpan.setAttribute('class', `lui-icon lui-icon--${iconType ? iconType.value : ''}`);
@@ -130,7 +129,7 @@ export default {
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
-      text.children.forEach(child => {
+      text.children.forEach((child) => {
         child.style.overflow = 'hidden';
       });
     }

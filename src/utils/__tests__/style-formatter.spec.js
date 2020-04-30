@@ -36,10 +36,10 @@ describe('style-formatter', () => {
           style: {},
           children: [],
         };
-        newElement.appendChild = newChild => {
+        newElement.appendChild = (newChild) => {
           newElement.children.push(newChild);
         };
-        newElement.insertBefore = newChild => {
+        newElement.insertBefore = (newChild) => {
           newElement.children.unshift(newChild);
         };
         return newElement;
@@ -123,7 +123,7 @@ describe('style-formatter', () => {
       style.background.useImage = true;
       style.background.url.qStaticContentUrl = { qUrl: someUrl };
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
-      expect(formattedStyle.includes(`background-image: url('${someUrl}')`)).to.be.true;
+      expect(formattedStyle.includes(`background-image: url('..${someUrl}')`)).to.be.true;
       expect(formattedStyle.includes('background-size: auto auto')).to.be.true;
       expect(formattedStyle.includes('background-position: 50% 50%')).to.be.true;
       expect(formattedStyle.includes('background-repeat: no-repeat')).to.be.true;
@@ -231,7 +231,7 @@ describe('style-formatter', () => {
         clientHeight: 100,
         clientWidth: 100,
         children: [],
-        appendChild: child => {
+        appendChild: (child) => {
           child.setAttribute = sinon.spy();
           child.offsetHeight = 400;
           child.offsetWidth = 20;
@@ -254,7 +254,7 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize to 8px for small font sizes', () => {
-      button.appendChild = child => {
+      button.appendChild = (child) => {
         child.setAttribute = sinon.spy();
         child.offsetHeight = 400;
         child.offsetWidth = 400;
@@ -265,7 +265,7 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize when text offsetWidth is bigger than button', () => {
-      button.appendChild = child => {
+      button.appendChild = (child) => {
         child.setAttribute = sinon.spy();
         child.offsetHeight = 400;
         child.offsetWidth = 125;
@@ -279,7 +279,7 @@ describe('style-formatter', () => {
       style.font.style = {
         italic: true,
       };
-      button.appendChild = child => {
+      button.appendChild = (child) => {
         child.setAttribute = sinon.spy();
         child.offsetHeight = 400;
         child.offsetWidth = 125;
