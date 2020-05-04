@@ -1,4 +1,4 @@
-import { useElement, useStaleLayout, useEffect, useMemo, useApp, useConstraints, useTheme } from '@nebula.js/supernova';
+import { useElement, useStaleLayout, useEffect, useMemo, useApp, useConstraints, useTheme } from '@nebula.js/stardust';
 
 import properties from './object-properties';
 import data from './data';

@@ -1913,10 +1913,10 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@nebula.js/cli-build@0.5.0", "@nebula.js/cli-build@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-0.5.0.tgz#4b0daf41193930b0e7ac19dc8792d3ef218ab9e7"
-  integrity sha512-9PNLYiJflJUXkdx2muhkfEzHx+Hyv1Yde10U6sNHpJAmgp+bsw2kRPUWwZ063DpBg8lq4TucuGWd22V/sYFEhQ==
+"@nebula.js/cli-build@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-0.6.0.tgz#c4d0751cb4b87a47ea56dabbb98a41809761dda7"
+  integrity sha512-yMOn0jv8g1LhcGvJcfWGNfpa/wt6Xyof/DVSjKpFgLatNBdaDkDOf/hxSz2uIbn9t+QQzm9n06trkf60MDXQxQ==
   dependencies:
     "@babel/cli" "7.8.4"
     "@babel/core" "7.9.0"
@@ -1932,23 +1932,23 @@
     rollup-plugin-terser "5.3.0"
     yargs "15.3.1"
 
-"@nebula.js/cli-create@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-0.5.0.tgz#b7524a1c26f241c1df1a778769b72b9278594961"
-  integrity sha512-ZMgbkkfM98GKcPLfnlTVry2zwrojFDx+7a/I9lAI2SUvwpezOkRJfuBJeeOAuASJ5xmJR93s87CxGtYf7WyidA==
+"@nebula.js/cli-create@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-0.6.0.tgz#196d38f5aae17b8e884b3541f7fa1d3221be372e"
+  integrity sha512-8WFOKbD2B+rZi6dmJAeoj+Y/v3bPXRug2zRhM+MURB4DNgkzkuNo+vyyMMrowN9+ZkZRueHQQvHu7yde5/qqvg==
   dependencies:
     chalk "4.0.0"
     ejs "3.0.2"
     fs-extra "9.0.0"
     inquirer "7.1.0"
 
-"@nebula.js/cli-serve@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-0.5.0.tgz#0acd3889a1b3a22dd7b9ff96b3fe88b885c98d48"
-  integrity sha512-ZuXNA2lphOKkn75CdCoEw5EblJH+IB/kNn4pRbAVKuEuKjU2XSgKUhkgUR2uz60VedaQM6bS8hyxWQ1v5PkzTg==
+"@nebula.js/cli-serve@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-0.6.0.tgz#ced6b69e75e622c067d8d0c0e9b0a79df8490881"
+  integrity sha512-NTVrmR9k1Xb411n7RaOV+pm8AexAAEffrE/W1ptkgSnQSWrBg22Aw02DXheQ3nTXe7Zq73PKDTM4Afe+RQGE3Q==
   dependencies:
-    "@nebula.js/cli-build" "0.5.0"
-    "@nebula.js/snapshooter" "0.5.0"
+    "@nebula.js/cli-build" "0.6.0"
+    "@nebula.js/snapshooter" "0.6.0"
     body-parser "1.19.0"
     chalk "4.0.0"
     chokidar "3.3.1"
@@ -1965,31 +1965,31 @@
     ws "7.2.3"
     yargs "15.3.1"
 
-"@nebula.js/cli@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-0.5.0.tgz#78b1234c962b403a96e98cc02f41738e159b2874"
-  integrity sha512-t4xddEe06xx92OmWwde2FFo8+aW5DWRarXe1NUfXX5cl09YktYxCuSmuoJuuBlfByGdWI4JuBMN5SvPG0Jg0bQ==
+"@nebula.js/cli@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-0.6.0.tgz#025ebccb2c804f2cc63880e72a70dc8f022b4190"
+  integrity sha512-dUNHVouGzcbKsczlTxDa2v/RIY3L8ucORsHFqXGKFLjvwslBnOIfL0oXILBWYx9rHxzUMYWZ96katsCji6Atfw==
   dependencies:
-    "@nebula.js/cli-create" "0.5.0"
+    "@nebula.js/cli-create" "0.6.0"
     import-cwd "3.0.0"
     yargs "15.3.1"
 
-"@nebula.js/snapshooter@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/snapshooter/-/snapshooter-0.5.0.tgz#8ed6802bd54c40a8612a78560e7c85cb0029c2a7"
-  integrity sha512-O1pM4aVlykJlalD3iGcXgF8JPJ38ExTa5ySulzOldLMaTV/HaHhlgFvzoeAlVKNKd4RSghkshJlxUMpJsi0MkQ==
+"@nebula.js/snapshooter@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/snapshooter/-/snapshooter-0.6.0.tgz#47ac63db8e5b73bf9cab75b2535d8da9ef8fe7e6"
+  integrity sha512-bgBOAp0/Z+wacSJWVFBB7xXGCBP4lCsJJhw7VT27YATgCYEVbQa2HzJmNwYPfptE4Ozwcs8RP21dDEmseimuDg==
   dependencies:
     puppeteer "2.1.1"
 
-"@nebula.js/supernova@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/supernova/-/supernova-0.5.0.tgz#7ab3bb80903690af8a10876e3b22e626fe450100"
-  integrity sha512-N7KaIpA1eip8tDt0O+VmbLoActDR0PlYzY1Ts241c4U30hHMYI2uDmAgquBqQyJU0Je/05bMfq4XQ03u4KI/BA==
+"@nebula.js/stardust@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-0.6.0.tgz#a92c75dde6a73cf80afb157d1df600a2ebedd59c"
+  integrity sha512-b4aaV9t5m40DzFnGGH8JtRtxme2BI6ex1joiQV0raHns79lOPQ671/paqio74/d81WK9LpS2sdk3mIhZYdGpOw==
 
-"@nebula.js/test-utils@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/test-utils/-/test-utils-0.5.0.tgz#82c0989bb8d01b4868ecb8ca467ac42522a35c15"
-  integrity sha512-w96MG030ITUc2QOmHSYz7Ph3aXM/8eYWBpCd3+vevD7ts/toA/ax5OWSzeji2YNDkHDPhRx7ZKD4amXqYzA9Iw==
+"@nebula.js/test-utils@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/test-utils/-/test-utils-0.6.0.tgz#2482504d7a30d02f5bd7baa15763dec03659e8e7"
+  integrity sha512-2xuDvuOofZ+PCOxoH7a3PJNgu11PDOYj1J6q6ryC0oDIL+58mufLBzabi65eoR4WNEjFLEPLvbZlTYw1f4s24Q==
 
 "@nodelib/fs.scandir@2.1.2":
   version "2.1.2"
