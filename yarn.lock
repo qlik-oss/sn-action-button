@@ -2032,7 +2032,7 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@nebula.js/cli-build@0.6.0", "@nebula.js/cli-build@^0.6.0":
+"@nebula.js/cli-build@0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-0.6.0.tgz#c4d0751cb4b87a47ea56dabbb98a41809761dda7"
   integrity sha512-yMOn0jv8g1LhcGvJcfWGNfpa/wt6Xyof/DVSjKpFgLatNBdaDkDOf/hxSz2uIbn9t+QQzm9n06trkf60MDXQxQ==
@@ -2061,7 +2061,7 @@
     fs-extra "9.0.0"
     inquirer "7.1.0"
 
-"@nebula.js/cli-serve@^0.6.0":
+"@nebula.js/cli-serve@0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-0.6.0.tgz#ced6b69e75e622c067d8d0c0e9b0a79df8490881"
   integrity sha512-NTVrmR9k1Xb411n7RaOV+pm8AexAAEffrE/W1ptkgSnQSWrBg22Aw02DXheQ3nTXe7Zq73PKDTM4Afe+RQGE3Q==
@@ -2100,10 +2100,10 @@
   dependencies:
     puppeteer "2.1.1"
 
-"@nebula.js/supernova@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/supernova/-/supernova-0.5.0.tgz#7ab3bb80903690af8a10876e3b22e626fe450100"
-  integrity sha512-N7KaIpA1eip8tDt0O+VmbLoActDR0PlYzY1Ts241c4U30hHMYI2uDmAgquBqQyJU0Je/05bMfq4XQ03u4KI/BA==
+"@nebula.js/stardust@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-0.6.0.tgz#a92c75dde6a73cf80afb157d1df600a2ebedd59c"
+  integrity sha512-b4aaV9t5m40DzFnGGH8JtRtxme2BI6ex1joiQV0raHns79lOPQ671/paqio74/d81WK9LpS2sdk3mIhZYdGpOw==
 
 "@nebula.js/test-utils@0.6.0":
   version "0.6.0"

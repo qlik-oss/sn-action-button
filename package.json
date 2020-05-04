@@ -46,7 +46,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/supernova": "^0.5.0"
+    "@nebula.js/stardust": ">=0.6.0"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.13",
@@ -56,9 +56,9 @@
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@nebula.js/cli": "0.6.0",
-    "@nebula.js/cli-build": "^0.6.0",
-    "@nebula.js/cli-serve": "^0.6.0",
-    "@nebula.js/supernova": "^0.5.0",
+    "@nebula.js/cli-build": "0.6.0",
+    "@nebula.js/cli-serve": "0.6.0",
+    "@nebula.js/stardust": "0.6.0",
     "@nebula.js/test-utils": "0.6.0",
     "babel-plugin-istanbul": "6.0.0",
     "eslint": "6.8.0",
