@@ -14,21 +14,20 @@ If you use npm: `npm install @nebula.js/sn-action-button`. You can also load thr
 ## Usage
 
 ```js
-import nucleus from '@nebula.js/nucleus';
+import { embed } from '@nebula.js/stardust';
 import actionButton from '@nebula.js/sn-action-button';
 
 // 'app' is an enigma app model
-const nuked = nucleus(app, {
+const nuked = embed(app, {
   types: [{ // register the action button object
     name: 'action-button',
     load: () => Promise.resolve(actionButton);
   }]
 });
 
-nuked.create({
+nuked.render({
+  element,
   type: 'action-button',
-}, {
-  element
 });
 ```
 

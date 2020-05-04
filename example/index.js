@@ -12,7 +12,7 @@
 
   connect()('/apps/Executive_Dashboard.qvf').then((app) => {
     // configure nucleus
-    const nuked = window.nucleus(app, {
+    const nuked = window.stardust.embed(app, {
       types: [{
         name: 'action-button',
         load: () => Promise.resolve(window['sn-action-button']),
@@ -22,9 +22,8 @@
     nuked.selections().then(s => s.mount(document.querySelector('.toolbar')));
 
     // create a session object
-    nuked.create({
+    nuked.render({
       type: 'action-button',
-    }, {
       element: document.querySelector('.object'),
       properties: {
         actions: [{
@@ -56,9 +55,8 @@
     });
 
     // create another session object
-    nuked.create({
+    nuked.render({
       type: 'action-button',
-    }, {
       element: document.querySelectorAll('.object')[1],
       properties: {
         actions: [{
