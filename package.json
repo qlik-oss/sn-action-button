@@ -55,7 +55,7 @@
     "@babel/preset-env": "7.9.6",
     "@commitlint/cli": "9.1.1",
     "@commitlint/config-conventional": "9.1.1",
-    "@nebula.js/cli": "0.6.0",
+    "@nebula.js/cli": "1.0.0",
     "@nebula.js/cli-build": "1.0.0",
     "@nebula.js/cli-serve": "0.6.0",
     "@nebula.js/stardust": "1.0.1",
