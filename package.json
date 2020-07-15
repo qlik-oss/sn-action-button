@@ -46,7 +46,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=0.6.0"
+    "@nebula.js/stardust": ">=1.0.1"
   },
   "devDependencies": {
     "@after-work.js/aw": "6.0.13",
@@ -58,7 +58,7 @@
     "@nebula.js/cli": "0.6.0",
     "@nebula.js/cli-build": "0.6.0",
     "@nebula.js/cli-serve": "0.6.0",
-    "@nebula.js/stardust": "0.6.0",
+    "@nebula.js/stardust": "1.0.1",
     "@nebula.js/test-utils": "0.6.0",
     "babel-plugin-istanbul": "6.0.0",
     "eslint": "6.8.0",
