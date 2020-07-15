@@ -2104,10 +2104,10 @@
   dependencies:
     puppeteer "2.1.1"
 
-"@nebula.js/stardust@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-0.6.0.tgz#a92c75dde6a73cf80afb157d1df600a2ebedd59c"
-  integrity sha512-b4aaV9t5m40DzFnGGH8JtRtxme2BI6ex1joiQV0raHns79lOPQ671/paqio74/d81WK9LpS2sdk3mIhZYdGpOw==
+"@nebula.js/stardust@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-1.0.1.tgz#28c08fb857c14c96c929ca315922f24d63fc69b3"
+  integrity sha512-kk9i+roe5ArWBQFmadJ1z7GO+8PZRNCcfFnd0mKKPHNsZei5evBzvZy4X/ywxIIrbdLCuVajUEbyPhX3vEUo6w==
 
 "@nebula.js/test-utils@0.6.0":
   version "0.6.0"
