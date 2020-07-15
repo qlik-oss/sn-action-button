@@ -83,7 +83,7 @@ const navigationActions = [
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
         if (websiteUrl) {
-          const url = websiteUrl.match(/^(https?|mailto):\/\//) ? websiteUrl : `http://${websiteUrl}`;
+          const url = websiteUrl.match(/^(https?:\/\/|mailto:(\/\/)?)/) ? websiteUrl : `http://${websiteUrl}`;
           let target = '';
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
