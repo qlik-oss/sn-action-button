@@ -6,6 +6,7 @@ describe('navigation actions', () => {
   const sheet = 'sheetIdHere';
   const story = 'storyIdHere';
   const websiteUrl = 'https://myUrlHere';
+  const mailtoUrl = 'mailto:me@example';
   const { app } = defaultValues();
 
   describe('all navigation actions', () => {
@@ -99,6 +100,11 @@ describe('navigation actions', () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
       expect(global.window.open).to.have.been.calledWith(websiteUrl, '_parent');
+    });
+    it('should call mailto', async () => {
+      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
+      expect(global.window.open).to.have.been.calledWith(mailtoUrl, '');
     });
   });
 
