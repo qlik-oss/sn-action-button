@@ -173,7 +173,6 @@ describe('actions', () => {
       expect(fieldObject.selectValues).to.not.have.been.called;
     });
 
-
     it('should call selectAlternative', async () => {
       const actionObject = actions.find(action => action.value === 'selectAlternative');
       await actionObject.getActionCall({ app, qStateName, field, softLock })();
