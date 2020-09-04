@@ -608,6 +608,7 @@ export default function ext({ translator }) {
       exportData: !1,
       snapshot: !1,
       viewData: !1,
+      quickMobile: !0,
     },
   };
 }
