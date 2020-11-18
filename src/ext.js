@@ -177,6 +177,7 @@ export default function ext({ translator }) {
                     return sheets.map(sheet => ({
                       value: sheet.qInfo.qId,
                       label: sheet.qMeta.title,
+                      showCondition: sheet.qData.showCondition,
                     }));
                   },
                 },
