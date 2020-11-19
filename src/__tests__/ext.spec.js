@@ -84,6 +84,9 @@ describe('ext', () => {
         qInfo: {
           qId: 'firstSheetId',
         },
+        qData: {
+          showCondition: '0',
+        }
       },
       {
         qMeta: {
@@ -92,6 +95,9 @@ describe('ext', () => {
         qInfo: {
           qId: 'secondSheetId',
         },
+        qData: {
+          showCondition: '1',
+        }
       },
     ];
     const stories = [
