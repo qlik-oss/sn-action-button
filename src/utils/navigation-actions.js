@@ -13,7 +13,7 @@ export const getOrderedSheets = async app => {
   return sheets.sort((current, next) => current.qData.rank - next.qData.rank);
 };
 
-export const getOrderedVisibleSheet = async ({ app }) => {
+export const getOrderedVisibleSheet = async app => {
   const sheets = await app.getSheetList();
   const visibleSheets = sheets.filter((sheet) => Util.evaluateCondition(sheet.qData.showCondition));
   return visibleSheets.sort((current, next) => current.qData.rank - next.qData.rank);
@@ -44,7 +44,7 @@ const navigationActions = [
     translation: 'Object.ActionButton.GoToLastSheet',
     value: 'lastSheet',
     navigationCall: async ({ app, isEnabled, senseNavigation }) => {
-      const sheets = isEnabled('SHEET_SHOW_CONDITION') ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
+      const sheets = isEnabled ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
       await senseNavigation.goToSheet(sheets[sheets.length - 1].qInfo.qId);
     },
     requiredInput: [],
@@ -53,7 +53,7 @@ const navigationActions = [
     translation: 'Object.ActionButton.GoToFirstSheet',
     value: 'firstSheet',
     navigationCall: async ({ app, isEnabled, senseNavigation }) => {
-      const sheets = isEnabled('SHEET_SHOW_CONDITION') ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
+      const sheets = isEnabled ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
       await senseNavigation.goToSheet(sheets[0].qInfo.qId);
     },
     requiredInput: [],

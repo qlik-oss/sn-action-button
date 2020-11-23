@@ -9,7 +9,8 @@ import renderButton from './components/action-button';
 export default function supernova(env) {
   const { sense, translator, flags } = env;
   const senseNavigation = sense && sense.navigation;
-  const { isEnabled } = flags;
+  let { isEnabled } = flags;
+  isEnabled = isEnabled('SHEET_SHOW_CONDITION');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
   return {
     qae: {

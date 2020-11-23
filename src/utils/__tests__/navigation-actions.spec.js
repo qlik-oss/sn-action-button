@@ -1,4 +1,4 @@
-import navigationActions, { checkShowNavigation, getOrderedSheets } from '../navigation-actions';
+import navigationActions, { checkShowNavigation, getOrderedSheets, getOrderedVisibleSheet } from '../navigation-actions';
 import defaultValues from '../../__tests__/default-button-props';
 
 describe('navigation actions', () => {
@@ -8,6 +8,7 @@ describe('navigation actions', () => {
   const websiteUrl = 'https://myUrlHere';
   const mailtoUrl = 'mailto:me@example';
   const { app } = defaultValues();
+  let isEnabled = false;
 
   describe('all navigation actions', () => {
     beforeEach(() => {
@@ -35,12 +36,12 @@ describe('navigation actions', () => {
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.prevSheet).to.have.been.called;
     });
-    it('should call lastSheet', async () => {
+    it('should call lastSheet feature flag is off', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
       await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
+      expect(senseNavigation.goToSheet).to.have.been.calledWith('id8');
     });
-    it('should call firstSheet', async () => {
+    it('should call firstSheet feature flag is off', async () => {
       const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
       await navigationObject.navigationCall({ app, senseNavigation });
       expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
@@ -106,6 +107,19 @@ describe('navigation actions', () => {
       await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
       expect(global.window.open).to.have.been.calledWith(mailtoUrl, '');
     });
+    describe('sheets with show conditions', () => {
+      isEnabled = true;
+      it('should call lastSheet feature flag is on', async () => {
+        const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
+        await navigationObject.navigationCall({ isEnabled, app, senseNavigation });
+        expect(senseNavigation.goToSheet).to.have.been.calledWith('id7');
+      });
+      it('should call firstSheet feature flag is on', async () => {
+        const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
+        await navigationObject.navigationCall({ isEnabled, app, senseNavigation });
+        expect(senseNavigation.goToSheet).to.have.been.calledWith('id3');
+      });
+    });
   });
 
   describe('checkShowNavigation', () => {
@@ -147,6 +161,26 @@ describe('navigation actions', () => {
       expect(result[1].qInfo.qId).to.equal('id1.5');
       expect(result[2].qInfo.qId).to.equal('id7');
       expect(result[3].qInfo.qId).to.equal('id15');
+    });
+  });
+
+  describe('getOrderedVisibleSheet', () => {
+    const sheets = [
+      { qData: { rank: 15, showCondition: 'False' }, qInfo: { qId: 'id15' } },
+      { qData: { rank: 1.2, showCondition: 'True' }, qInfo: { qId: 'id1.2' } },
+      { qData: { rank: 1.5, showCondition: '1' }, qInfo: { qId: 'id1.5' } },
+      { qData: { rank: 3, showCondition: '0' }, qInfo: { qId: 'id3' } },
+      { qData: { rank: 1, showCondition: '' }, qInfo: { qId: 'id1' } },
+      { qData: { rank: 7, showCondition: '0' }, qInfo: { qId: 'id7' } },
+    ];
+    const fakeApp = { getSheetList: () => sheets };
+    it('should return visible sheets in correct order', async () => {
+      const result = await getOrderedVisibleSheet(fakeApp);
+      expect(result).to.have.length(3);
+      expect(result[0].qInfo.qId).to.equal('id1');
+      expect(result[1].qInfo.qId).to.equal('id1.2');
+      expect(result[2].qInfo.qId).to.equal('id1.5');
+      expect(result[3]).to.equal(undefined);
     });
   });
 });

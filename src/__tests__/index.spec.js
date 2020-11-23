@@ -45,7 +45,8 @@ describe('index', () => {
   it('should render supernova', async () => {
     const result = supernova({
       sense: { navigation: 'nav' },
-      translator: { get: () => '' }
+      translator: { get: () => '' },
+      flags: { isEnabled: () => '' },
     });
     const c = create(result.component, {
       element: thisElement,
@@ -62,7 +63,8 @@ describe('index', () => {
       app: undefined,
       constraints: 'constraints',
       theme: undefined,
-      senseNavigation: 'nav'
+      senseNavigation: 'nav',
+      isEnabled: ''
     });
   });
 });
