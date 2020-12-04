@@ -9,8 +9,9 @@ import renderButton from './components/action-button';
 export default function supernova(env) {
   const { sense, translator, flags } = env;
   const senseNavigation = sense && sense.navigation;
-  let { isEnabled } = flags;
-  isEnabled = isEnabled('SHEET_SHOW_CONDITION');
+  const { isEnabled } = flags;
+  const enableSheetShow = isEnabled('SHEET_SHOW_CONDITION');
+  const enableReloadAction = isEnabled('ACTION_BUTTON_RELOAD');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
   return {
     qae: {
@@ -31,12 +32,15 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, isEnabled });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, enableSheetShow });
 
-      useEffect(() => () => {
-        cleanup();
-      }, [element]);
+      useEffect(
+        () => () => {
+          cleanup();
+        },
+        [element]
+      );
     },
-    ext: ext({ translator }),
+    ext: ext({ translator, enableReloadAction }),
   };
 }

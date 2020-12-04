@@ -1,4 +1,8 @@
-import navigationActions, { checkShowNavigation, getOrderedSheets, getOrderedVisibleSheet } from '../navigation-actions';
+import navigationActions, {
+  checkShowNavigation,
+  getOrderedSheets,
+  getOrderedVisibleSheet,
+} from '../navigation-actions';
 import defaultValues from '../../__tests__/default-button-props';
 
 describe('navigation actions', () => {
@@ -8,7 +12,7 @@ describe('navigation actions', () => {
   const websiteUrl = 'https://myUrlHere';
   const mailtoUrl = 'mailto:me@example';
   const { app } = defaultValues();
-  let isEnabled = false;
+  let enableSheetShow = false;
 
   describe('all navigation actions', () => {
     beforeEach(() => {
@@ -23,100 +27,100 @@ describe('navigation actions', () => {
       };
     });
     it('should not have navigation call for None', () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'none');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'none');
       expect(navigationObject).to.not.have.property('navigationCall');
     });
     it('should call nextSheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'nextSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'nextSheet');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.nextSheet).to.have.been.called;
     });
     it('should call prevSheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'prevSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'prevSheet');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.prevSheet).to.have.been.called;
     });
     it('should call lastSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
       await navigationObject.navigationCall({ app, senseNavigation });
       expect(senseNavigation.goToSheet).to.have.been.calledWith('id8');
     });
     it('should call firstSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
       await navigationObject.navigationCall({ app, senseNavigation });
       expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
     });
     it('should call goToSheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
       await navigationObject.navigationCall({ senseNavigation, sheet });
       expect(senseNavigation.goToSheet).to.have.been.calledWith(sheet);
     });
     it('should NOT call goToSheet when no sheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToSheet');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.goToSheet).to.not.have.been.called;
     });
     it('should call goToSheetById', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToSheetById');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheetById');
       await navigationObject.navigationCall({ senseNavigation, sheet });
       expect(senseNavigation.goToSheet).to.have.been.calledWith(sheet);
     });
     it('should NOT call goToSheetById when no sheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToSheetById');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheetById');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.goToSheet).to.not.have.been.called;
     });
     it('should call goToStory', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToStory');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToStory');
       await navigationObject.navigationCall({ senseNavigation, story });
       expect(senseNavigation.goToStory).to.have.been.calledWith(story);
     });
     it('should NOT call goToStory when no sheet', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'goToStory');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToStory');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.goToStory).to.not.have.been.called;
     });
     it('should NOT call openWebsite', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({});
       expect(global.window.open).to.not.have.been.called;
     });
     it('should call openWebsite with defaults', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: false });
       expect(global.window.open).to.have.been.calledWith(websiteUrl, '');
     });
     it('should call openWebsite and add http://', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl: 'myWebsite', sameWindow: false });
       expect(global.window.open).to.have.been.calledWith('http://myWebsite', '');
     });
     it('should call openWebsite in same window', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
       expect(global.window.open).to.have.been.calledWith(websiteUrl, '_self');
     });
     it('should call openWebsite in parent', async () => {
       global.window.top = 12;
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
       expect(global.window.open).to.have.been.calledWith(websiteUrl, '_parent');
     });
     it('should call mailto', async () => {
-      const navigationObject = navigationActions.find(navigation => navigation.value === 'openWebsite');
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
       expect(global.window.open).to.have.been.calledWith(mailtoUrl, '');
     });
     describe('sheets with show conditions', () => {
-      isEnabled = true;
+      enableSheetShow = true;
       it('should call lastSheet feature flag is on', async () => {
-        const navigationObject = navigationActions.find(navigation => navigation.value === 'lastSheet');
-        await navigationObject.navigationCall({ isEnabled, app, senseNavigation });
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
+        await navigationObject.navigationCall({ enableSheetShow, app, senseNavigation });
         expect(senseNavigation.goToSheet).to.have.been.calledWith('id7');
       });
       it('should call firstSheet feature flag is on', async () => {
-        const navigationObject = navigationActions.find(navigation => navigation.value === 'firstSheet');
-        await navigationObject.navigationCall({ isEnabled, app, senseNavigation });
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
+        await navigationObject.navigationCall({ enableSheetShow, app, senseNavigation });
         expect(senseNavigation.goToSheet).to.have.been.calledWith('id3');
       });
     });

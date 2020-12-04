@@ -2,13 +2,13 @@ export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
   if (isDate) {
     let dateExpression = '';
-    valuesArray.forEach(date => {
+    valuesArray.forEach((date) => {
       dateExpression += `Num('${date}')&';'&`;
     });
     const convertedDates = await app.evaluate(dateExpression.slice(0, -5));
     valuesArray = convertedDates.split(';');
   }
-  return valuesArray.map(value => (Number.isNaN(+value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
+  return valuesArray.map((value) => (Number.isNaN(+value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }));
 };
 
 const actions = [
@@ -18,7 +18,7 @@ const actions = [
     group: 'bookmark',
     getActionCall: ({ app, bookmark }) => async () => {
       const bookMarks = await app.getBookmarkList();
-      const findBm = bookMarks.find(bm => bm.qData.title === bookmark);
+      const findBm = bookMarks.find((bm) => bm.qData.title === bookmark);
       bookmark && (await app.applyBookmark((findBm && findBm.qInfo && findBm.qInfo.qId) || bookmark));
     },
     requiredInput: ['bookmark'],
@@ -218,10 +218,22 @@ const actions = [
     },
     requiredInput: ['variable', 'value'],
   },
+  {
+    value: 'doReload',
+    translation: 'Object.ActionButton.DoReload',
+    group: 'reload',
+    getActionCall: ({ app, partial }) => async () => {
+      const e = await app.doReload(0, !!partial, false);
+      if (e) {
+        await app.doSave();
+      }
+    },
+    requiredInput: ['partial'],
+  },
 ];
 
 export function checkShowAction(data, field) {
-  const act = actions.find(action => data.actionType === action.value);
+  const act = actions.find((action) => data.actionType === action.value);
   return act && act.requiredInput && act.requiredInput.indexOf(field) !== -1;
 }
 

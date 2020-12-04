@@ -2,14 +2,14 @@ import allActions from '../utils/actions';
 import navigationActions from '../utils/navigation-actions';
 import styleFormatter from '../utils/style-formatter';
 
-export const runActions = async actionList => {
+export const runActions = async (actionList) => {
   for (let i = 0; i < actionList.length; i++) {
     // eslint-disable-next-line no-await-in-loop
     await actionList[i]();
   }
 };
 
-export default function renderButton({ layout, theme, app, constraints, senseNavigation, element, isEnabled }) {
+export default function renderButton({ layout, theme, app, constraints, senseNavigation, element, enableSheetShow }) {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
@@ -23,17 +23,17 @@ export default function renderButton({ layout, theme, app, constraints, senseNav
     if (isClickable) {
       const actionCallList = [];
       const { actions } = layout;
-      actions.forEach(action => {
-        const actionObj = allActions.find(act => act.value === action.actionType);
+      actions.forEach((action) => {
+        const actionObj = allActions.find((act) => act.value === action.actionType);
         actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action }));
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
       if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
         const { navigation } = layout;
-        const navigationObject = navigation && navigationActions.find(nav => nav.value === navigation.action);
+        const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-          await navigationObject.navigationCall({ app, isEnabled, senseNavigation, ...navigation });
+          await navigationObject.navigationCall({ app, enableSheetShow, senseNavigation, ...navigation });
         }
       }
       button.removeAttribute('disabled');
@@ -57,7 +57,7 @@ export default function renderButton({ layout, theme, app, constraints, senseNav
     }
   };
 
-  button.onmousedown = event => {
+  button.onmousedown = (event) => {
     if (event.button === 0) {
       scale();
     }
