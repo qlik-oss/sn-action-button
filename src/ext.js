@@ -26,7 +26,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator }) {
+export default function ext({ translator, enableReloadAction }) {
   return {
     definition: {
       type: 'items',
@@ -41,14 +41,16 @@ export default function ext({ translator }) {
               type: 'array',
               translation: 'Object.ActionButton.Actions',
               ref: 'actions',
-              itemTitleRef: data => {
+              itemTitleRef: (data) => {
                 if (data.actionLabel) {
                   return data.actionLabel;
                 }
                 // If actionType exists but it's not found in the actions list,
                 // the action is invalid for the current version of the button
-                const fallbackTitle = data.actionType ? 'Object.ActionButton.InvalidAction' : 'Object.ActionButton.NewAction';
-                const action = actions.find(act => data.actionType === act.value);
+                const fallbackTitle = data.actionType
+                  ? 'Object.ActionButton.InvalidAction'
+                  : 'Object.ActionButton.NewAction';
+                const action = actions.find((act) => data.actionType === act.value);
                 return translator.get((action && action.translation) || fallbackTitle);
               },
               allowAdd: true,
@@ -69,7 +71,7 @@ export default function ext({ translator }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: actions,
+                  options: () => actions.filter((a) => enableReloadAction || a.value !== 'doReload'),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -81,12 +83,12 @@ export default function ext({ translator }) {
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
-                    return bms.map(bookmark => ({
+                    return bms.map((bookmark) => ({
                       label: bookmark.qData.title,
                       value: bookmark.qInfo.qId,
                     }));
                   },
-                  show: data => checkShowAction(data, 'bookmark'),
+                  show: (data) => checkShowAction(data, 'bookmark'),
                 },
                 field: {
                   type: 'string',
@@ -97,12 +99,12 @@ export default function ext({ translator }) {
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
-                    return fields.map(field => ({
+                    return fields.map((field) => ({
                       label: field.qName,
                       value: field.qName,
                     }));
                   },
-                  show: data => checkShowAction(data, 'field'),
+                  show: (data) => checkShowAction(data, 'field'),
                 },
                 variable: {
                   type: 'string',
@@ -114,27 +116,27 @@ export default function ext({ translator }) {
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
-                      .filter(v => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
-                      .map(v => ({
+                      .filter((v) => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
+                      .map((v) => ({
                         label: v.qName,
                         value: v.qName,
                       }));
                   },
-                  show: data => checkShowAction(data, 'variable'),
+                  show: (data) => checkShowAction(data, 'variable'),
                 },
                 showSystemVariables: {
                   type: 'boolean',
                   ref: 'showSystemVariables',
                   translation: 'ExpressionEditor.SystemVariables',
                   defaultValue: false,
-                  show: data => checkShowAction(data, 'variable'),
+                  show: (data) => checkShowAction(data, 'variable'),
                 },
                 softLock: {
                   type: 'boolean',
                   ref: 'softLock',
                   translation: 'Object.ActionButton.Softlock',
                   defaultValue: false,
-                  show: data => checkShowAction(data, 'softLock'),
+                  show: (data) => checkShowAction(data, 'softLock'),
                 },
                 value: {
                   type: 'string',
@@ -142,7 +144,14 @@ export default function ext({ translator }) {
                   component: 'string',
                   translation: 'properties.value',
                   expression: 'optional',
-                  show: data => checkShowAction(data, 'value'),
+                  show: (data) => checkShowAction(data, 'value'),
+                },
+                partial: {
+                  type: 'boolean',
+                  ref: 'partial',
+                  translation: 'Object.ActionButton.Partial',
+                  defaultValue: false,
+                  show: (data) => checkShowAction(data, 'partial'),
                 },
               },
             },
@@ -163,7 +172,7 @@ export default function ext({ translator }) {
                   ref: 'navigation.sheet',
                   translation: 'properties.sheet',
                   expression: 'optional',
-                  show: data => checkShowNavigation(data, 'sheetId'),
+                  show: (data) => checkShowNavigation(data, 'sheetId'),
                 },
                 sheet: {
                   type: 'string',
@@ -171,10 +180,10 @@ export default function ext({ translator }) {
                   translation: 'properties.sheet',
                   component: 'expression-with-dropdown',
                   expressionType: 'StringExpression',
-                  show: data => checkShowNavigation(data, 'sheet'),
+                  show: (data) => checkShowNavigation(data, 'sheet'),
                   options: async (action, hyperCubeHandler) => {
                     const sheets = await hyperCubeHandler.app.getSheetList();
-                    return sheets.map(sheet => ({
+                    return sheets.map((sheet) => ({
                       value: sheet.qInfo.qId,
                       label: sheet.qMeta.title,
                       showCondition: sheet.qData.showCondition,
@@ -187,10 +196,10 @@ export default function ext({ translator }) {
                   translation: 'properties.story',
                   component: 'expression-with-dropdown',
                   expressionType: 'StringExpression',
-                  show: data => checkShowNavigation(data, 'story'),
+                  show: (data) => checkShowNavigation(data, 'story'),
                   options: async (action, hyperCubeHandler) => {
                     const stories = await hyperCubeHandler.app.getStoryList();
-                    return stories.map(story => ({
+                    return stories.map((story) => ({
                       value: story.qInfo.qId,
                       label: story.qMeta.title,
                     }));
@@ -201,13 +210,13 @@ export default function ext({ translator }) {
                   expression: 'optional',
                   ref: 'navigation.websiteUrl',
                   translation: 'properties.website',
-                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                  show: (data) => checkShowNavigation(data, 'websiteUrl'),
                 },
                 sameWindow: {
                   type: 'boolean',
                   ref: 'navigation.sameWindow',
                   translation: 'properties.sameWindow',
-                  show: data => checkShowNavigation(data, 'websiteUrl'),
+                  show: (data) => checkShowNavigation(data, 'websiteUrl'),
                   defaultValue: false,
                 },
               },
@@ -239,7 +248,7 @@ export default function ext({ translator }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              show: data => data.useEnabledCondition,
+              show: (data) => data.useEnabledCondition,
             },
           },
         },
@@ -294,7 +303,7 @@ export default function ext({ translator }) {
                       ref: 'style.font.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
+                      show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                     colorExpression: {
                       component: 'string',
@@ -302,7 +311,7 @@ export default function ext({ translator }) {
                       ref: 'style.font.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-                      show: data => propertyResolver.getValue(data, 'style.font.useColorExpression'),
+                      show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                   },
                 },
@@ -395,7 +404,7 @@ export default function ext({ translator }) {
                       ref: 'style.background.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                      show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                     colorExpression: {
                       component: 'string',
@@ -403,7 +412,7 @@ export default function ext({ translator }) {
                       ref: 'style.background.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-                      show: data => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                      show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                   },
                 },
@@ -504,7 +513,7 @@ export default function ext({ translator }) {
                     },
                     borderRadius: {
                       component: 'slider',
-                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
+                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
                       translation: 'properties.border.radius',
                       type: 'number',
                       ref: 'style.border.radius',
@@ -514,7 +523,7 @@ export default function ext({ translator }) {
                     },
                     borderWidth: {
                       component: 'slider',
-                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
+                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
                       type: 'number',
                       ref: 'style.border.width',
                       translation: 'properties.border.width',
@@ -524,7 +533,7 @@ export default function ext({ translator }) {
                     },
                     colorDropdown: {
                       type: 'string',
-                      show: data => propertyResolver.getValue(data, 'style.border.useBorder'),
+                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
                       component: 'dropdown',
                       translation: 'properties.border.color',
                       ref: 'style.border.useColorExpression',
@@ -536,7 +545,7 @@ export default function ext({ translator }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      show: data =>
+                      show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         !propertyResolver.getValue(data, 'style.border.useColorExpression'),
                     },
@@ -545,7 +554,7 @@ export default function ext({ translator }) {
                       type: 'string',
                       ref: 'style.border.colorExpression',
                       translation: 'Common.Expression',
-                      show: data =>
+                      show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         propertyResolver.getValue(data, 'style.border.useColorExpression'),
                       expression: 'optional',
@@ -576,7 +585,7 @@ export default function ext({ translator }) {
                       defaultValue: '',
                       options: luiIcons,
                       expressionType: 'StringExpression',
-                      show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
+                      show: (data) => propertyResolver.getValue(data, 'style.icon.useIcon'),
                     },
                     iconPosition: {
                       ref: 'style.icon.position',
@@ -592,7 +601,7 @@ export default function ext({ translator }) {
                           value: 'right',
                         },
                       ],
-                      show: data => propertyResolver.getValue(data, 'style.icon.useIcon'),
+                      show: (data) => propertyResolver.getValue(data, 'style.icon.useIcon'),
                     },
                   },
                 },
