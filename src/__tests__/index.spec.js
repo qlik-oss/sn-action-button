@@ -7,10 +7,7 @@ describe('index', () => {
   before(() => {
     sandbox = sinon.createSandbox();
     renderButton = sandbox.stub();
-    [{ default: supernova }] = aw.mock([
-      ['**/action-button.js', () => renderButton]
-    ],
-    ['../index.js']);
+    [{ default: supernova }] = aw.mock([['**/action-button.js', () => renderButton]], ['../index.js']);
   });
   afterEach(() => {
     sandbox.reset();
@@ -25,7 +22,7 @@ describe('index', () => {
         style: {},
         children: [],
       };
-      newElement.appendChild = newChild => {
+      newElement.appendChild = (newChild) => {
         newElement.children.push(newChild);
       };
       return newElement;
@@ -64,7 +61,7 @@ describe('index', () => {
       constraints: 'constraints',
       theme: undefined,
       senseNavigation: 'nav',
-      isEnabled: ''
+      enableSheetShow: '',
     });
   });
 });
