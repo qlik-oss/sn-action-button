@@ -43,8 +43,8 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.GoToLastSheet',
     value: 'lastSheet',
-    navigationCall: async ({ app, enableSheetShow, senseNavigation }) => {
-      const sheets = enableSheetShow ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
+    navigationCall: async ({ app, senseNavigation }) => {
+      const sheets = await getOrderedVisibleSheet(app);
       await senseNavigation.goToSheet(sheets[sheets.length - 1].qInfo.qId);
     },
     requiredInput: [],
@@ -52,8 +52,8 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.GoToFirstSheet',
     value: 'firstSheet',
-    navigationCall: async ({ app, enableSheetShow, senseNavigation }) => {
-      const sheets = enableSheetShow ? await getOrderedVisibleSheet(app) : await getOrderedSheets(app);
+    navigationCall: async ({ app, senseNavigation }) => {
+      const sheets = await getOrderedVisibleSheet(app);
       await senseNavigation.goToSheet(sheets[0].qInfo.qId);
     },
     requiredInput: [],

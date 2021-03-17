@@ -61,7 +61,6 @@ describe('index', () => {
       constraints: 'constraints',
       theme: undefined,
       senseNavigation: 'nav',
-      enableSheetShow: '',
     });
   });
 });
