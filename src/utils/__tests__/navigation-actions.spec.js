@@ -39,16 +39,6 @@ describe('navigation actions', () => {
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.prevSheet).to.have.been.called;
     });
-    it('should call lastSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
-      await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id8');
-    });
-    it('should call firstSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
-      await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
-    });
     it('should call goToSheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
       await navigationObject.navigationCall({ senseNavigation, sheet });
