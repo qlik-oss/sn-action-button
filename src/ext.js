@@ -26,7 +26,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator, enableReloadAction }) {
+export default function ext({ translator }) {
   return {
     definition: {
       type: 'items',
@@ -71,7 +71,7 @@ export default function ext({ translator, enableReloadAction }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: () => actions.filter((a) => enableReloadAction || a.value !== 'doReload'),
+                  options: actions,
                   dropdownOnly: true,
                 },
                 bookmark: {

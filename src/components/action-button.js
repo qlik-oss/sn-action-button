@@ -9,7 +9,7 @@ export const runActions = async (actionList) => {
   }
 };
 
-export default function renderButton({ layout, theme, app, constraints, senseNavigation, element, enableSheetShow }) {
+export default function renderButton({ layout, theme, app, constraints, senseNavigation, element }) {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
@@ -33,7 +33,7 @@ export default function renderButton({ layout, theme, app, constraints, senseNav
         const { navigation } = layout;
         const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-          await navigationObject.navigationCall({ app, enableSheetShow, senseNavigation, ...navigation });
+          await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
         }
       }
       button.removeAttribute('disabled');

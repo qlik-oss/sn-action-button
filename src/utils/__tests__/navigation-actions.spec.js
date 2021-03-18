@@ -12,7 +12,6 @@ describe('navigation actions', () => {
   const websiteUrl = 'https://myUrlHere';
   const mailtoUrl = 'mailto:me@example';
   const { app } = defaultValues();
-  let enableSheetShow = false;
 
   describe('all navigation actions', () => {
     beforeEach(() => {
@@ -39,16 +38,6 @@ describe('navigation actions', () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'prevSheet');
       await navigationObject.navigationCall({ senseNavigation });
       expect(senseNavigation.prevSheet).to.have.been.called;
-    });
-    it('should call lastSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
-      await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id8');
-    });
-    it('should call firstSheet feature flag is off', async () => {
-      const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
-      await navigationObject.navigationCall({ app, senseNavigation });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith('id1');
     });
     it('should call goToSheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
@@ -112,15 +101,14 @@ describe('navigation actions', () => {
       expect(global.window.open).to.have.been.calledWith(mailtoUrl, '');
     });
     describe('sheets with show conditions', () => {
-      enableSheetShow = true;
       it('should call lastSheet feature flag is on', async () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
-        await navigationObject.navigationCall({ enableSheetShow, app, senseNavigation });
+        await navigationObject.navigationCall({ app, senseNavigation });
         expect(senseNavigation.goToSheet).to.have.been.calledWith('id7');
       });
       it('should call firstSheet feature flag is on', async () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
-        await navigationObject.navigationCall({ enableSheetShow, app, senseNavigation });
+        await navigationObject.navigationCall({ app, senseNavigation });
         expect(senseNavigation.goToSheet).to.have.been.calledWith('id3');
       });
     });
