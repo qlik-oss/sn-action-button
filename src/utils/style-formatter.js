@@ -39,7 +39,7 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
 
 export default {
   getStyles({ style, disabled, theme, element }) {
-    let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;';
+    let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;';
     const { font, background, border } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
