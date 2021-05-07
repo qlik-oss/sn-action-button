@@ -33,16 +33,12 @@
     "start": "nebula serve",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
-    "prepublishOnly": "rm -rf dist && npm run build"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
-    }
+    "prepublishOnly": "rm -rf dist && npm run build",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "eslint"
+      "eslint --cache --fix"
     ]
   },
   "peerDependencies": {
