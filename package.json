@@ -33,16 +33,12 @@
     "start": "nebula serve",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
-    "prepublishOnly": "rm -rf dist && npm run build"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
-    }
+    "prepublishOnly": "rm -rf dist && npm run build",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "eslint"
+      "eslint --cache --fix"
     ]
   },
   "peerDependencies": {
@@ -65,7 +61,7 @@
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-mocha": "8.1.0",
-    "husky": "6.0.0",
+    "husky": "^6.0.0",
     "lint-staged": "10.5.4",
     "mocha-junit-reporter": "2.0.0"
   }
