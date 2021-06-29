@@ -3,7 +3,7 @@ const artifacts = {
 };
 
 describe('should render an', () => {
-  const content = '.nebulajs-sn[data-render-count="1"]';
+  const content = '.njs-viz';
   // const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
   before(async () => {
