@@ -1,4 +1,13 @@
-import { useElement, useStaleLayout, useEffect, useMemo, useApp, useConstraints, useTheme } from '@nebula.js/stardust';
+import {
+  useElement,
+  useStaleLayout,
+  useEffect,
+  useMemo,
+  useApp,
+  useConstraints,
+  useTheme,
+  useImperativeHandle,
+} from '@nebula.js/stardust';
 
 import properties from './object-properties';
 import data from './data';
@@ -35,6 +44,15 @@ export default function supernova(env) {
         () => () => {
           cleanup();
         },
+        [element]
+      );
+
+      useImperativeHandle(
+        () => ({
+          focus() {
+            element.firstElementChild.onclick();
+          },
+        }),
         [element]
       );
     },
