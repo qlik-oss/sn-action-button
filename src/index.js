@@ -26,6 +26,7 @@ export default function supernova(env) {
       }, []);
 
       const layout = useStaleLayout();
+      console.log(layout);
       const app = useApp();
       const constraints = useConstraints();
 

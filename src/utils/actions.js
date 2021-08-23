@@ -230,6 +230,92 @@ const actions = [
     },
     requiredInput: ['partial'],
   },
+  {
+    label: 'Contact REST endpoint',
+    // translation: 'Object.ActionButton.CallRestEndpoint',
+    value: 'callRestUrl',
+    group: 'REST',
+    getActionCall: ({ restUrl, restMethod, restBody }) => async () => {
+      if (restUrl === undefined) {
+        // do nothing
+      }
+      console.log(`${restUrl} : ${restMethod} : ${restBody}`);
+      return fetch(restUrl, {
+        method: restMethod
+      })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          }
+          return response.status;
+        })
+        .catch((e) => e);
+    },
+    requiredInput: ['restUrl']
+  },
+  {
+    label: 'Execute Automation',
+    value: 'executeAutomation',
+    getActionCall: ({ layout, app, automation }) => async () => {
+      console.log(automation);
+      console.log(layout);
+      console.log(app.getLayout());
+      if (automation !== undefined) {
+        try {
+          const itemInfo = await fetch(`../api/v1/items/${automation}`)
+            .then(response => response.json());
+          console.log(itemInfo);
+          const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`)
+            .then(response => response.json());
+          console.log(autoInfo);
+          const autoExecute = await fetch(`../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`)
+            .then(response => response.json());
+          console.log(autoExecute);
+          // let status = autoExecute.status.toUpperCase();
+
+          // while(status !== 'FINISHED')
+          // {
+          //   status = await fetch(`../api/v1/automations/${autoInfo.guid}/runs/${autoExecute.guid}`)
+          //   .then(response => response.json())
+          //   .then(autoStatus => autoStatus.status.toUpperCase());
+          //   layout.style.label = status;
+
+          //   console.log(status);
+          //   await sleep(3000);
+          // }
+        } catch (e) {
+          // no-op
+        }
+      }
+    },
+    requiredInput: ['automation']
+  },
+  {
+    label: 'Current Selections',
+    value: 'currentSelections',
+    group: 'automation',
+    getActionCall: async ({ app, automation }) => {
+      const newDate = new Date().toISOString();
+      const bmkProp = {
+        qProp: {
+          qInfo: {
+            qId: `automation_${app.id}_${automation.value}_${newDate}`,
+            qType: 'bookmark'
+          },
+          qMetaDef: {
+            title: 'automation bookmark',
+            description: 'Generated to provide target automation with bookmark to get current selection state',
+            createdBy: 'sn-action-button',
+            createdFor: 'automation',
+            id: `automation_${app.id}_${automation.value}_${newDate}`
+          }
+        }
+      };
+      const bmk = await (app.createBookmark(bmkProp));
+      console.log(bmk.getLayout());
+    },
+    requiredInput: ['automation']
+  }
 ];
 
 export function checkShowAction(data, field) {
@@ -238,3 +324,9 @@ export function checkShowAction(data, field) {
 }
 
 export default actions;
+
+// private functions
+
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }

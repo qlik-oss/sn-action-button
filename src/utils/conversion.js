@@ -78,7 +78,7 @@ const importProperties = (exportedFmt, initialProperties) => {
             sheet: props.navigationAction === 'gotoSheetById' ? props.sheetId : props.selectedSheet,
             story: props.selectedStory,
             websiteUrl: props.websiteUrl,
-            sameWindow: props.sameWindow,
+            sameWindow: props.sameWindow
           };
           break;
         case 'qStateName':

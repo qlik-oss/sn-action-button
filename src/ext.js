@@ -1,5 +1,6 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
+// import automationDataTypes, {checkShowAutomationDataType} from './utils/automation-data-types';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
@@ -153,6 +154,64 @@ export default function ext({ translator }) {
                   defaultValue: false,
                   show: (data) => checkShowAction(data, 'partial'),
                 },
+                restUrl: {
+                  type: 'string',
+                  expression: 'optional',
+                  ref: 'restUrl',
+                  label: 'Endpoint URL',
+                  // translation: 'properties.rest',
+                  show: (data) => checkShowAction(data, 'restUrl'),
+                },
+                restMethod: {
+                  type: 'string',
+                  component: 'dropdown',
+                  label: 'REST method',
+                  ref: 'restMethod',
+                  defaultValue: 'GET',
+                  options: [
+                    {
+                      value: 'GET',
+                      label: 'GET'
+                    },
+                    {
+                      value: 'POST',
+                      label: 'POST'
+                    }
+                  ],
+                  show: (data) => checkShowAction(data, 'restUrl'),
+                },
+                restBody: {
+                  type: 'string',
+                  label: 'Request body',
+                  component: 'textarea',
+                  expression: 'always',
+                  maxLength: 1000,
+                  rows: 7,
+                  ref: 'action.restBody',
+                  show: (data) => checkShowAction(data, 'restUrl'),
+                },
+                automation: {
+                  type: 'string',
+                  component: 'dropdown',
+                  label: 'Select automation',
+                  ref: 'automation',
+                  options: async () => {
+                    const automations = await fetch('../api/v1/items?resourceType=automation')
+                      .then(response => response.json());
+                    return automations.data.map((blend) => ({
+                      value: blend.id,
+                      label: blend.name
+                    }));
+                  },
+                  show: (data) => checkShowAction(data, 'automation'),
+                },
+                automationPostData: {
+                  type: 'boolean',
+                  ref: 'automationPostData',
+                  label: 'Send data to automation?',
+                  show: (data) => checkShowAction(data, 'automation'),
+                  defaultValue: false
+                },
               },
             },
             navigation: {
@@ -218,7 +277,7 @@ export default function ext({ translator }) {
                   translation: 'properties.sameWindow',
                   show: (data) => checkShowNavigation(data, 'websiteUrl'),
                   defaultValue: false,
-                },
+                }
               },
             },
           },
