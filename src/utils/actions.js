@@ -231,29 +231,6 @@ const actions = [
     requiredInput: ['partial'],
   },
   {
-    label: 'Contact REST endpoint',
-    // translation: 'Object.ActionButton.CallRestEndpoint',
-    value: 'callRestUrl',
-    group: 'REST',
-    getActionCall: ({ restUrl, restMethod, restBody }) => async () => {
-      if (restUrl === undefined) {
-        // do nothing
-      }
-      console.log(`${restUrl} : ${restMethod} : ${restBody}`);
-      return fetch(restUrl, {
-        method: restMethod
-      })
-        .then(response => {
-          if (response.status === 200) {
-            return response.json();
-          }
-          return response.status;
-        })
-        .catch((e) => e);
-    },
-    requiredInput: ['restUrl']
-  },
-  {
     /** *************************************
      * Execute Automation contacts internal urls to obtain automation
      * information and execute the automation selected in the property panel in

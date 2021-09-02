@@ -1,6 +1,5 @@
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
-// import automationDataTypes, {checkShowAutomationDataType} from './utils/automation-data-types';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
