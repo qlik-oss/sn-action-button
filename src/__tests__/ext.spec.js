@@ -218,6 +218,16 @@ describe('ext', () => {
       expect(result).to.be.true;
     });
 
+    it('should return true when automation needs to show', () => {
+      const result = actionItems.automation.show({ actionType: 'executeAutomation' });
+      expect(result).to.be.true;
+    });
+
+    it('should return true when automationPostData needs to show', () => {
+      const result = actionItems.automationPostData.show({ actionType: 'executeAutomation' });
+      expect(result).to.be.true;
+    });
+
     it('should return false for all navigationItems show functions', () => {
       const navigationObject = { navigation: { action: 'nextSheet' } };
       const resultSheetId = navigationItems.sheetId.show(navigationObject);

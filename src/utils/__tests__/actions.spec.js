@@ -9,6 +9,10 @@ describe('actions', () => {
   let bookmark;
   let variable;
   let qStateName;
+  let automation;
+  let executePath;
+  let automationPostData;
+  let executeAutomation;
   const value = 'someValue';
   const softLock = true;
 
@@ -18,6 +22,12 @@ describe('actions', () => {
       bookmark = 'someBookmark';
       variable = 'someVariable';
       qStateName = 'someState';
+      automation = 'someAutomation';
+      executePath = 'someAutomationExecutionPath';
+      automationPostData = false;
+      executeAutomation = {
+        fetch: sinon.spy(),
+      };
       fieldObject = {
         clear: sinon.spy(),
         clearAllButThis: sinon.spy(),
@@ -276,11 +286,25 @@ describe('actions', () => {
       expect(app.doReload).to.have.been.calledWith(0, true, false);
       expect(app.doSave).to.have.been.called;
     });
+
     it('should not save on failed reload', async () => {
       const actionObject = actions.find((action) => action.value === 'doReload');
       app.doReload = () => false;
       await actionObject.getActionCall({ app, partial: true })();
       expect(app.doSave).to.have.not.been.called;
+    });
+
+    it('should call executeAutomation', async () => {
+      const actionObject = actions.find((action) => action.value === 'executeAutomation');
+      await actionObject.getActionCall({ app, automation, automationPostData })();
+      expect(executeAutomation.fetch).to.have.been.called.calledWith(executePath);
+    });
+
+    it('should NOT call executeAutomation when no automation', async () => {
+      const actionObject = actions.find((action) => action.value === 'executeAutomation');
+      automation = null;
+      await actionObject.getActionCall({ app, automation, automationPostData })();
+      expect(executeAutomation.fetch).to.not.have.been.called;
     });
   });
 
