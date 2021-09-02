@@ -154,42 +154,8 @@ export default function ext({ translator }) {
                   defaultValue: false,
                   show: (data) => checkShowAction(data, 'partial'),
                 },
-                restUrl: {
-                  type: 'string',
-                  expression: 'optional',
-                  ref: 'restUrl',
-                  label: 'Endpoint URL',
-                  // translation: 'properties.rest',
-                  show: (data) => checkShowAction(data, 'restUrl'),
-                },
-                restMethod: {
-                  type: 'string',
-                  component: 'dropdown',
-                  label: 'REST method',
-                  ref: 'restMethod',
-                  defaultValue: 'GET',
-                  options: [
-                    {
-                      value: 'GET',
-                      label: 'GET'
-                    },
-                    {
-                      value: 'POST',
-                      label: 'POST'
-                    }
-                  ],
-                  show: (data) => checkShowAction(data, 'restUrl'),
-                },
-                restBody: {
-                  type: 'string',
-                  label: 'Request body',
-                  component: 'textarea',
-                  expression: 'always',
-                  maxLength: 1000,
-                  rows: 7,
-                  ref: 'action.restBody',
-                  show: (data) => checkShowAction(data, 'restUrl'),
-                },
+                // adds automation to actions and adds a dropdown property panel
+                // item to select the automation for the button to trigger
                 automation: {
                   type: 'string',
                   component: 'dropdown',
@@ -205,13 +171,16 @@ export default function ext({ translator }) {
                   },
                   show: (data) => checkShowAction(data, 'automation'),
                 },
+                // Boolean property to instruct the automation action to create a
+                // bookmark and send it to the selected automation in the
+                // property panel.
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
-                  label: 'Send data to automation?',
+                  label: 'Send current selections to automation?',
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false
-                },
+                }
               },
             },
             navigation: {

@@ -254,65 +254,73 @@ const actions = [
     requiredInput: ['restUrl']
   },
   {
+    /** *************************************
+     * Execute Automation contacts internal urls to obtain automation
+     * information and execute the automation selected in the property panel in
+     * edit mode.
+     *
+     * ARGS
+     * app - Reference to current app inherited from index.js
+     * automation - the item id of the automation to contact the items api
+     * automationPostData - boolean value. If true, creates a bookmark of the
+     * current selections and sends the resulting bookmark id as an input
+     * parameter to the selected automation.
+    */
+
     label: 'Execute Automation',
     value: 'executeAutomation',
-    getActionCall: ({ layout, app, automation }) => async () => {
-      console.log(automation);
-      console.log(layout);
-      console.log(app.getLayout());
+    getActionCall: ({ app, automation, automationPostData }) => async () => {
       if (automation !== undefined) {
         try {
           const itemInfo = await fetch(`../api/v1/items/${automation}`)
             .then(response => response.json());
-          console.log(itemInfo);
           const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`)
             .then(response => response.json());
-          console.log(autoInfo);
-          const autoExecute = await fetch(`../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`)
+          let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
+          if (automationPostData && autoInfo.hasinputs) {
+            const inputBlock = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+              .then(response => response.json())
+              .then(blocks => {
+                let item;
+                // Used a for loop because I read on the Internet it's faster than
+                // using array operations
+                for (let i = 0; i < blocks.blocks.length; i++) {
+                  if (blocks.blocks[i].displayName === 'Inputs') {
+                    item = blocks.blocks[i];
+                    break;
+                  }
+                }
+                return item.form[0].label.toLowerCase();
+              });
+            const newDate = new Date();
+            const bmkProp = {
+              qProp: {
+                qInfo: {
+                  qId: `automation_${app.id}_${automation}_${newDate.getTime()}`,
+                  qType: 'bookmark'
+                },
+                qMetaDef: {
+                  title: `Generated automation bookmark on ${newDate.toISOString()}`,
+                  description: 'Generated to provide target automation with bookmark to get current selection state',
+                  _createdBy: 'sn-action-button',
+                  _createdFor: 'automation',
+                  _createdOn: `${newDate.toISOString()}`,
+                  _id: `automation_${app.id}_${automation}_${newDate.getTime()}`
+                }
+              }
+            };
+            const bmk = await (app.createBookmark(bmkProp)
+              .then(bookmark => bookmark.getLayout())
+              .then(layout => layout.qInfo.qId));
+            executePath = `${executePath}&${inputBlock}=${bmk}`;
+          }
+          // execute the automation
+          await fetch(executePath)
             .then(response => response.json());
-          console.log(autoExecute);
-          // let status = autoExecute.status.toUpperCase();
-
-          // while(status !== 'FINISHED')
-          // {
-          //   status = await fetch(`../api/v1/automations/${autoInfo.guid}/runs/${autoExecute.guid}`)
-          //   .then(response => response.json())
-          //   .then(autoStatus => autoStatus.status.toUpperCase());
-          //   layout.style.label = status;
-
-          //   console.log(status);
-          //   await sleep(3000);
-          // }
         } catch (e) {
           // no-op
         }
       }
-    },
-    requiredInput: ['automation']
-  },
-  {
-    label: 'Current Selections',
-    value: 'currentSelections',
-    group: 'automation',
-    getActionCall: async ({ app, automation }) => {
-      const newDate = new Date().toISOString();
-      const bmkProp = {
-        qProp: {
-          qInfo: {
-            qId: `automation_${app.id}_${automation.value}_${newDate}`,
-            qType: 'bookmark'
-          },
-          qMetaDef: {
-            title: 'automation bookmark',
-            description: 'Generated to provide target automation with bookmark to get current selection state',
-            createdBy: 'sn-action-button',
-            createdFor: 'automation',
-            id: `automation_${app.id}_${automation.value}_${newDate}`
-          }
-        }
-      };
-      const bmk = await (app.createBookmark(bmkProp));
-      console.log(bmk.getLayout());
     },
     requiredInput: ['automation']
   }
@@ -324,9 +332,3 @@ export function checkShowAction(data, field) {
 }
 
 export default actions;
-
-// private functions
-
-// function sleep(ms) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
