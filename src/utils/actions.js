@@ -244,7 +244,7 @@ const actions = [
      * parameter to the selected automation.
     */
 
-    label: 'Execute Automation',
+    translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall: ({ app, automation, automationPostData }) => async () => {
       if (automation !== undefined) {

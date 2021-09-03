@@ -158,7 +158,7 @@ export default function ext({ translator, automationsEnabled }) {
                 automation: {
                   type: 'string',
                   component: 'dropdown',
-                  label: 'Select automation',
+                  translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
                   options: async () => {
                     const automations = await fetch('../api/v1/items?resourceType=automation').then((response) =>
@@ -176,7 +176,7 @@ export default function ext({ translator, automationsEnabled }) {
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
-                  label: 'Send current selections to automation?',
+                  translation: 'Object.ActionButton.Automation.SendSelections',
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
                 },
