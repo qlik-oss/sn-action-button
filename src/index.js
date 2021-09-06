@@ -16,8 +16,13 @@ import ext from './ext';
 import renderButton from './components/action-button';
 
 export default function supernova(env) {
-  const { sense, translator } = env;
+  const {
+    sense,
+    translator,
+    flags: { isEnabled },
+  } = env;
   const senseNavigation = sense && sense.navigation;
+  const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
   return {
     qae: {
@@ -38,7 +43,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, automationsEnabled });
 
       useEffect(
         () => () => {
@@ -56,6 +61,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator }),
+    ext: ext({ translator, automationsEnabled }),
   };
 }

@@ -27,7 +27,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator }) {
+export default function ext({ translator, automationsEnabled }) {
   return {
     definition: {
       type: 'items',
@@ -72,7 +72,7 @@ export default function ext({ translator }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: actions,
+                  options: actions.filter((action) => action.value !== 'executeAutomation' || automationsEnabled),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -159,14 +159,14 @@ export default function ext({ translator }) {
                 automation: {
                   type: 'string',
                   component: 'dropdown',
-                  label: 'Select automation',
+                  translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
                   options: async () => {
                     const automations = await axios.get('../api/v1/items?resourceType=automation')
                       .then(response => response.data);
                     return automations.data.map((blend) => ({
                       value: blend.id,
-                      label: blend.name
+                      label: blend.name,
                     }));
                   },
                   show: (data) => checkShowAction(data, 'automation'),
@@ -177,10 +177,10 @@ export default function ext({ translator }) {
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
-                  label: 'Send current selections to automation?',
+                  translation: 'Object.ActionButton.Automation.SendSelections',
                   show: (data) => checkShowAction(data, 'automation'),
-                  defaultValue: false
-                }
+                  defaultValue: false,
+                },
               },
             },
             navigation: {
@@ -246,7 +246,7 @@ export default function ext({ translator }) {
                   translation: 'properties.sameWindow',
                   show: (data) => checkShowNavigation(data, 'websiteUrl'),
                   defaultValue: false,
-                }
+                },
               },
             },
           },
