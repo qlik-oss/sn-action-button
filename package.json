@@ -53,9 +53,9 @@
     "@babel/preset-env": "7.15.0",
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-conventional": "12.1.4",
-    "@nebula.js/cli-sense": "^1.5.0",
     "@nebula.js/cli": "1.6.0",
     "@nebula.js/cli-build": "1.6.0",
+    "@nebula.js/cli-sense": "^1.5.0",
     "@nebula.js/cli-serve": "1.6.0",
     "@nebula.js/stardust": "1.6.0",
     "@nebula.js/test-utils": "0.6.0",
@@ -67,5 +67,8 @@
     "husky": "6.0.0",
     "lint-staged": "11.1.2",
     "mocha-junit-reporter": "2.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
   }
 }

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import actions, { getValueList, checkShowAction } from '../actions';
 
 describe('actions', () => {
@@ -12,7 +13,6 @@ describe('actions', () => {
   let automation;
   let executePath;
   let automationPostData;
-  let executeAutomation;
   const value = 'someValue';
   const softLock = true;
 
@@ -25,9 +25,6 @@ describe('actions', () => {
       automation = 'someAutomation';
       executePath = 'someAutomationExecutionPath';
       automationPostData = false;
-      executeAutomation = {
-        fetch: sinon.spy(),
-      };
       fieldObject = {
         clear: sinon.spy(),
         clearAllButThis: sinon.spy(),
@@ -297,14 +294,14 @@ describe('actions', () => {
     it('should call executeAutomation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(executeAutomation.fetch).to.have.been.called.calledWith(executePath);
+      expect(axios.get).to.have.been.called.calledWith(executePath);
     });
 
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       automation = null;
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(executeAutomation.fetch).to.not.have.been.called;
+      expect(axios.get).to.not.have.been.called;
     });
   });
 

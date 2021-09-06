@@ -1,3 +1,4 @@
+import axios from 'axios';
 import actions, { checkShowAction } from './utils/actions';
 import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
@@ -161,8 +162,8 @@ export default function ext({ translator }) {
                   label: 'Select automation',
                   ref: 'automation',
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation')
-                      .then(response => response.json());
+                    const automations = await axios.get('../api/v1/items?resourceType=automation')
+                      .then(response => response.data);
                     return automations.data.map((blend) => ({
                       value: blend.id,
                       label: blend.name

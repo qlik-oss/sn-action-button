@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
   if (isDate) {
@@ -249,14 +251,14 @@ const actions = [
     getActionCall: ({ app, automation, automationPostData }) => async () => {
       if (automation !== undefined) {
         try {
-          const itemInfo = await fetch(`../api/v1/items/${automation}`)
-            .then(response => response.json());
-          const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`)
-            .then(response => response.json());
+          const itemInfo = await axios.get(`../api/v1/items/${automation}`)
+            .then(response => response.data);
+          const autoInfo = await axios.get(`../api/v1/automations/${itemInfo.resourceId}`)
+            .then(response => response.data);
           let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
           if (automationPostData && autoInfo.hasinputs) {
-            const inputBlock = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
-              .then(response => response.json())
+            const inputBlock = await axios.getField(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+              .then(response => response.data)
               .then(blocks => {
                 let item;
                 // Used a for loop because I read on the Internet it's faster than
@@ -292,8 +294,8 @@ const actions = [
             executePath = `${executePath}&${inputBlock}=${bmk}`;
           }
           // execute the automation
-          await fetch(executePath)
-            .then(response => response.json());
+          await axios.get(executePath)
+            .then(response => response.data);
         } catch (e) {
           // no-op
         }
