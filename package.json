@@ -67,8 +67,5 @@
     "husky": "6.0.0",
     "lint-staged": "11.1.2",
     "mocha-junit-reporter": "2.0.0"
-  },
-  "dependencies": {
-    "axios": "^0.21.1"
   }
 }

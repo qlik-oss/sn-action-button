@@ -1,7 +1,8 @@
-import axios from 'axios';
 import actions, { getValueList, checkShowAction } from '../actions';
 
 describe('actions', () => {
+  const sandbox = sinon.createSandbox();
+  const qStateName = 'someState';
   let app;
   let fieldObject;
   let fieldInfoObject;
@@ -9,56 +10,61 @@ describe('actions', () => {
   let field;
   let bookmark;
   let variable;
-  let qStateName;
   let automation;
-  let executePath;
-  let automationPostData;
+  const automationPostData = false;
   const value = 'someValue';
   const softLock = true;
+  const resourceId = 'fakeResourceId';
+  const guid = 'fakeGuid';
+  const executionToken = 'fakeExecutionToken';
 
   describe('all actions', () => {
     beforeEach(() => {
       field = 'someField';
       bookmark = 'someBookmark';
       variable = 'someVariable';
-      qStateName = 'someState';
       automation = 'someAutomation';
-      executePath = 'someAutomationExecutionPath';
-      automationPostData = false;
       fieldObject = {
-        clear: sinon.spy(),
-        clearAllButThis: sinon.spy(),
-        lock: sinon.spy(),
-        unlock: sinon.spy(),
-        select: sinon.spy(),
-        selectAll: sinon.spy(),
-        selectValues: sinon.spy(),
-        selectAlternative: sinon.spy(),
-        selectExcluded: sinon.spy(),
-        selectPossible: sinon.spy(),
-        toggleSelect: sinon.spy(),
+        clear: sandbox.spy(),
+        clearAllButThis: sandbox.spy(),
+        lock: sandbox.spy(),
+        unlock: sandbox.spy(),
+        select: sandbox.spy(),
+        selectAll: sandbox.spy(),
+        selectValues: sandbox.spy(),
+        selectAlternative: sandbox.spy(),
+        selectExcluded: sandbox.spy(),
+        selectPossible: sandbox.spy(),
+        toggleSelect: sandbox.spy(),
       };
       fieldInfoObject = {
         qTags: [],
       };
       variableObject = {
-        setStringValue: sinon.spy(),
+        setStringValue: sandbox.spy(),
       };
       app = {
-        applyBookmark: sinon.spy(),
-        clearAll: sinon.spy(),
-        back: sinon.spy(),
-        forward: sinon.spy(),
-        getField: sinon.stub().resolves(fieldObject),
-        getFieldDescription: sinon.stub().resolves(fieldInfoObject),
-        getVariableByName: sinon.stub().resolves(variableObject),
-        lockAll: sinon.spy(),
-        unlockAll: sinon.spy(),
+        applyBookmark: sandbox.spy(),
+        clearAll: sandbox.spy(),
+        back: sandbox.spy(),
+        forward: sandbox.spy(),
+        getField: sandbox.stub().resolves(fieldObject),
+        getFieldDescription: sandbox.stub().resolves(fieldInfoObject),
+        getVariableByName: sandbox.stub().resolves(variableObject),
+        lockAll: sandbox.spy(),
+        unlockAll: sandbox.spy(),
         getBookmarkList: () => [{ qData: { title: 'findMyBookmark' }, qInfo: { qId: 'myBookmarkId' } }],
         evaluate: () => '43850;43881',
-        doReload: sinon.stub().returns(true),
-        doSave: sinon.spy(),
+        doReload: sandbox.stub().returns(true),
+        doSave: sandbox.spy(),
       };
+      global.fetch = sandbox
+        .stub()
+        .returns(Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken }) }));
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     it('should call applyBookmark', async () => {
@@ -294,14 +300,19 @@ describe('actions', () => {
     it('should call executeAutomation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(axios.get).to.have.been.called.calledWith(executePath);
+      expect(global.fetch).to.have.been.calledThrice;
+      expect(global.fetch).to.have.been.calledWith(`../api/v1/items/${automation}`);
+      expect(global.fetch).to.have.been.calledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).to.have.been.calledWith(
+        `../api/v1/automations/${guid}/actions/execute?X-Execution-Token=${executionToken}`
+      );
     });
 
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      automation = null;
+      automation = undefined;
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(axios.get).to.not.have.been.called;
+      expect(global.fetch).to.not.have.been.called;
     });
   });
 
