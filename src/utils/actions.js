@@ -288,6 +288,7 @@ const actions = [
     getActionCall:
       ({ app, automation, automationPostData }) =>
         async () => {
+          automation = encodeURIComponent(automation);
           if (automation !== undefined) {
             try {
               const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
