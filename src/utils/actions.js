@@ -300,8 +300,6 @@ const actions = [
                   .then((response) => response.json())
                   .then((blocks) => {
                     let item;
-                    // Used a for loop because I read on the Internet it's faster than
-                    // using array operations
                     for (let i = 0; i < blocks.blocks.length; i++) {
                       if (blocks.blocks[i].displayName === 'Inputs') {
                         item = blocks.blocks[i];
@@ -323,7 +321,7 @@ const actions = [
                       _createdBy: 'sn-action-button',
                       _createdFor: 'automation',
                       _createdOn: `${newDate.toISOString()}`,
-                      _id: `automation_${app.id}_${automation}_${newDate.getTime()}`,
+                      _id: `automation_${encodeURIComponent(app.id)}_${automation}_${newDate.getTime()}`,
                     },
                   },
                 };

@@ -4,6 +4,7 @@ describe('actions', () => {
   const sandbox = sinon.createSandbox();
   const qStateName = 'someState';
   let app;
+  let createdBookmark;
   let fieldObject;
   let fieldInfoObject;
   let variableObject;
@@ -11,12 +12,14 @@ describe('actions', () => {
   let bookmark;
   let variable;
   let automation;
-  const automationPostData = false;
+  let hasinputs = false;
+  let automationPostData = false;
   const value = 'someValue';
   const softLock = true;
   const resourceId = 'fakeResourceId';
   const guid = 'fakeGuid';
   const executionToken = 'fakeExecutionToken';
+  const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }] }];
 
   describe('all actions', () => {
     beforeEach(() => {
@@ -43,9 +46,13 @@ describe('actions', () => {
       variableObject = {
         setStringValue: sandbox.spy(),
       };
+      createdBookmark = {
+        getLayout: sandbox.stub().resolves({ qInfo: { qId: 'bmId' } }),
+      };
       app = {
         applyBookmark: sandbox.spy(),
         clearAll: sandbox.spy(),
+        createBookmark: sandbox.stub().resolves(createdBookmark),
         back: sandbox.spy(),
         forward: sandbox.spy(),
         getField: sandbox.stub().resolves(fieldObject),
@@ -60,10 +67,14 @@ describe('actions', () => {
       };
       global.fetch = sandbox
         .stub()
-        .returns(Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken }) }));
+        .returns(
+          Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, hasinputs, blocks }) })
+        );
     });
 
     afterEach(() => {
+      hasinputs = false;
+      automationPostData = false;
       sandbox.verifyAndRestore();
     });
 
@@ -313,6 +324,15 @@ describe('actions', () => {
       automation = undefined;
       await actionObject.getActionCall({ app, automation, automationPostData })();
       expect(global.fetch).to.not.have.been.called;
+    });
+
+    it('should call executeAutomation with creation of bookmark', async () => {
+      hasinputs = true;
+      automationPostData = true;
+      const actionObject = actions.find((action) => action.value === 'executeAutomation');
+      await actionObject.getActionCall({ app, automation, automationPostData })();
+      expect(global.fetch).to.have.callCount(4);
+      expect(app.createBookmark).to.have.been.called;
     });
   });
 
