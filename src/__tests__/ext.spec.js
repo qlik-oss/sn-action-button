@@ -131,8 +131,9 @@ describe('ext', () => {
     ];
     const automations = [
       {
-        value: 'someItemId',
-        label: 'someItemName',
+        id: 'someItemId',
+        name: 'someItemName',
+        resourceType: 'someResourceType'
       },
     ];
     const handler = {
@@ -143,7 +144,7 @@ describe('ext', () => {
         getSheetList: () => sheets,
         getStoryList: () => stories,
       },
-      items: {
+      data: {
         getAutomationList: () => automations,
       }
     };
