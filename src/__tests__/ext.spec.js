@@ -129,13 +129,13 @@ describe('ext', () => {
         },
       },
     ];
-    const automations = [
-      {
+    const automations = {
+      data: [{
         id: 'someItemId',
         name: 'someItemName',
         resourceType: 'someResourceType',
-      },
-    ];
+      }],
+    };
     const handler = {
       app: {
         getBookmarkList: () => bookmarks,
