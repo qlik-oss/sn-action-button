@@ -29,7 +29,7 @@ describe('ext', () => {
       };
       global.fetch = sandbox
         .stub()
-        .returns(Promise.resolve({ json: () => ({ id: itemId, resourceId, resourceType }) }));
+        .returns(Promise.resolve({ json: () => ([{ id: itemId, resourceId, resourceType }]) }));
     });
 
     afterEach(() => {
@@ -173,7 +173,7 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      options = await actionItems.automation.options(null, handler);
+      options = await actionItems.automation.options(null, handler).then(response => response.data);
       expect(global.fetch).to.have.been.called;
       expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
       expect(options).to.have.length(1);
