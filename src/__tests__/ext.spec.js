@@ -129,13 +129,6 @@ describe('ext', () => {
         },
       },
     ];
-    const automations = {
-      data: [{
-        id: 'someItemId',
-        name: 'someItemName',
-        resourceType: 'someResourceType',
-      }],
-    };
     const handler = {
       app: {
         getBookmarkList: () => bookmarks,
@@ -143,7 +136,6 @@ describe('ext', () => {
         getVariableList: () => variables,
         getSheetList: () => sheets,
         getStoryList: () => stories,
-        getAutomationList: () => automations,
       },
     };
 
@@ -171,7 +163,7 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      options = await actionItems.automation.options(null, handler);
+      options = await actionItems.automation.options(null, global.fetch);
       expect(global.fetch).to.have.been.called;
       expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
       expect(options).to.have.length(1);
