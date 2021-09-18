@@ -29,7 +29,7 @@ describe('ext', () => {
       };
       global.fetch = sandbox
         .stub()
-        .returns(Promise.resolve({ json: () => ([{ id: itemId, resourceId, resourceType }]) }));
+        .returns(Promise.resolve({ json: () => ({ data: [{ id: itemId, resourceId, resourceType }] }) }));
     });
 
     afterEach(() => {
