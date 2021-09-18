@@ -6,10 +6,14 @@ describe('ext', () => {
     get: someString => someString,
   };
   let data;
+  const sandbox = sinon.createSandbox();
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
+  const itemId = 'someItemId';
+  const resourceId = 'someResourceId';
+  const resourceType = 'someResourceType';
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -23,6 +27,13 @@ describe('ext', () => {
         actionType: '',
         actionLabel: ''
       };
+      global.fetch = sandbox
+        .stub()
+        .returns(Promise.resolve({ json: () => ({ id: itemId, resourceId, resourceType }) }));
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     it('Should return action label from dropdown', () => {
@@ -118,6 +129,12 @@ describe('ext', () => {
         },
       },
     ];
+    const automations = [
+      {
+        value: 'someItemId',
+        label: 'someItemName',
+      },
+    ];
     const handler = {
       app: {
         getBookmarkList: () => bookmarks,
@@ -126,6 +143,9 @@ describe('ext', () => {
         getSheetList: () => sheets,
         getStoryList: () => stories,
       },
+      items: {
+        getAutomationList: () => automations,
+      }
     };
 
     it('Should return an array with a bookmark', async () => {
@@ -149,6 +169,13 @@ describe('ext', () => {
     it('Should return an array with all variables', async () => {
       options = await actionItems.variable.options({ showSystemVariables: true }, handler);
       expect(options).to.have.length(2);
+    });
+
+    it('Should return an array with all automations', async () => {
+      options = await actionItems.automation.options(null, handler);
+      expect(global.fetch).to.have.been.called;
+      expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
+      expect(options).to.have.length(1);
     });
 
     it('Should return an array with all sheets', async () => {
@@ -186,6 +213,8 @@ describe('ext', () => {
       expect(resultSoftLock).to.be.false;
       const resultValue = actionItems.value.show(actionObject);
       expect(resultValue).to.be.false;
+      const resultAutomation = actionItems.automation.show(actionObject);
+      expect(resultAutomation).to.be.false;
     });
 
     it('should return true when bookmark needs to show', () => {
