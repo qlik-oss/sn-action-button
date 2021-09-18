@@ -163,7 +163,7 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      options = await actionItems.automation.options(null, global.fetch);
+      options = await actionItems.automation.options();
       expect(global.fetch).to.have.been.called;
       expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
       expect(options).to.have.length(1);
