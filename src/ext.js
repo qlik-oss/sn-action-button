@@ -161,9 +161,8 @@ export default function ext({ translator, automationsEnabled }) {
                   translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation').then(
-                      (response) => response.data
-                    );
+                    const automations = await fetch('../api/v1/items?resourceType=automation').then((response) =>
+                      response.json());
                     return automations.data.map((blend) => ({
                       value: blend.id,
                       label: blend.name,

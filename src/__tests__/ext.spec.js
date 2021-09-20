@@ -3,7 +3,7 @@ import objectProperties from '../object-properties';
 
 describe('ext', () => {
   const translator = {
-    get: someString => someString,
+    get: (someString) => someString,
   };
   let data;
   const sandbox = sinon.createSandbox();
@@ -11,9 +11,8 @@ describe('ext', () => {
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
-  const itemId = 'someItemId';
-  const resourceId = 'someResourceId';
-  const resourceType = 'someResourceType';
+  const itemId = 'blendId';
+  const blendName = 'fakeBlendName';
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -25,11 +24,11 @@ describe('ext', () => {
     beforeEach(() => {
       data = {
         actionType: '',
-        actionLabel: ''
+        actionLabel: '',
       };
       global.fetch = sandbox
         .stub()
-        .returns(Promise.resolve({ json: () => ({ data: [{ id: itemId, resourceId, resourceType }] }) }));
+        .returns(Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
     });
 
     afterEach(() => {
@@ -97,7 +96,7 @@ describe('ext', () => {
         },
         qData: {
           showCondition: '0',
-        }
+        },
       },
       {
         qMeta: {
@@ -108,7 +107,7 @@ describe('ext', () => {
         },
         qData: {
           showCondition: '1',
-        }
+        },
       },
     ];
     const stories = [
@@ -167,6 +166,8 @@ describe('ext', () => {
       expect(global.fetch).to.have.been.called;
       expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
       expect(options).to.have.length(1);
+      expect(options[0].value).to.equal(itemId);
+      expect(options[0].label).to.equal(blendName);
     });
 
     it('Should return an array with all sheets', async () => {
