@@ -5,6 +5,7 @@
 .idea
 .vscode
 .npmrc
+.eslintcache
 
 node_modules
 coverage
