@@ -26,7 +26,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator }) {
+export default function ext({ translator, automationsEnabled }) {
   return {
     definition: {
       type: 'items',
@@ -71,7 +71,7 @@ export default function ext({ translator }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: actions,
+                  options: actions.filter((action) => action.value !== 'executeAutomation' || automationsEnabled),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -152,6 +152,33 @@ export default function ext({ translator }) {
                   translation: 'Object.ActionButton.Partial',
                   defaultValue: false,
                   show: (data) => checkShowAction(data, 'partial'),
+                },
+                // adds automation to actions and adds a dropdown property panel
+                // item to select the automation for the button to trigger
+                automation: {
+                  type: 'string',
+                  component: 'dropdown',
+                  translation: 'Object.ActionButton.Automation',
+                  ref: 'automation',
+                  options: async () => {
+                    const automations = await fetch('../api/v1/items?resourceType=automation').then((response) =>
+                      response.json());
+                    return automations.data.map((blend) => ({
+                      value: blend.id,
+                      label: blend.name,
+                    }));
+                  },
+                  show: (data) => checkShowAction(data, 'automation'),
+                },
+                // Boolean property to instruct the automation action to create a
+                // bookmark and send it to the selected automation in the
+                // property panel.
+                automationPostData: {
+                  type: 'boolean',
+                  ref: 'automationPostData',
+                  translation: 'Object.ActionButton.Automation.SendSelections',
+                  show: (data) => checkShowAction(data, 'automation'),
+                  defaultValue: false,
                 },
               },
             },

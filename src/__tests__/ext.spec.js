@@ -3,13 +3,16 @@ import objectProperties from '../object-properties';
 
 describe('ext', () => {
   const translator = {
-    get: someString => someString,
+    get: (someString) => someString,
   };
   let data;
+  const sandbox = sinon.createSandbox();
   const props = ext({ translator });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
+  const itemId = 'blendId';
+  const blendName = 'fakeBlendName';
 
   it('should return properties object', () => {
     expect(props).to.be.an('object');
@@ -21,8 +24,15 @@ describe('ext', () => {
     beforeEach(() => {
       data = {
         actionType: '',
-        actionLabel: ''
+        actionLabel: '',
       };
+      global.fetch = sandbox
+        .stub()
+        .returns(Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
+    });
+
+    afterEach(() => {
+      sandbox.verifyAndRestore();
     });
 
     it('Should return action label from dropdown', () => {
@@ -86,7 +96,7 @@ describe('ext', () => {
         },
         qData: {
           showCondition: '0',
-        }
+        },
       },
       {
         qMeta: {
@@ -97,7 +107,7 @@ describe('ext', () => {
         },
         qData: {
           showCondition: '1',
-        }
+        },
       },
     ];
     const stories = [
@@ -151,6 +161,15 @@ describe('ext', () => {
       expect(options).to.have.length(2);
     });
 
+    it('Should return an array with all automations', async () => {
+      options = await actionItems.automation.options();
+      expect(global.fetch).to.have.been.called;
+      expect(global.fetch).to.have.been.calledWith('../api/v1/items?resourceType=automation');
+      expect(options).to.have.length(1);
+      expect(options[0].value).to.equal(itemId);
+      expect(options[0].label).to.equal(blendName);
+    });
+
     it('Should return an array with all sheets', async () => {
       options = await navigationItems.sheet.options(null, handler);
       expect(options).to.have.length(2);
@@ -186,6 +205,8 @@ describe('ext', () => {
       expect(resultSoftLock).to.be.false;
       const resultValue = actionItems.value.show(actionObject);
       expect(resultValue).to.be.false;
+      const resultAutomation = actionItems.automation.show(actionObject);
+      expect(resultAutomation).to.be.false;
     });
 
     it('should return true when bookmark needs to show', () => {
@@ -215,6 +236,16 @@ describe('ext', () => {
 
     it('should return true when value needs to show', () => {
       const result = actionItems.value.show({ actionType: 'selectValues' });
+      expect(result).to.be.true;
+    });
+
+    it('should return true when automation needs to show', () => {
+      const result = actionItems.automation.show({ actionType: 'executeAutomation' });
+      expect(result).to.be.true;
+    });
+
+    it('should return true when automationPostData needs to show', () => {
+      const result = actionItems.automationPostData.show({ actionType: 'executeAutomation' });
       expect(result).to.be.true;
     });
 

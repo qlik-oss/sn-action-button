@@ -20,7 +20,9 @@
     "url": "https://github.com/qlik-oss/sn-action-button.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "sn-action-button.js",
+    "sn-action-button.qext"
   ],
   "engines": {
     "node": ">=8"
@@ -31,6 +33,7 @@
     "build": "nebula build",
     "lint": "eslint src",
     "start": "nebula serve",
+    "sense": "nebula sense",
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
     "prepublishOnly": "rm -rf dist && npm run build",
@@ -54,6 +57,7 @@
     "@commitlint/config-conventional": "12.1.4",
     "@nebula.js/cli": "1.7.0",
     "@nebula.js/cli-build": "1.7.0",
+    "@nebula.js/cli-sense": "1.7.0",
     "@nebula.js/cli-serve": "1.7.0",
     "@nebula.js/stardust": "1.7.0",
     "@nebula.js/test-utils": "0.6.0",

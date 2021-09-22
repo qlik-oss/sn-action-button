@@ -57,7 +57,7 @@ const importProperties = (exportedFmt, initialProperties) => {
   };
 
   if (exportedFmt && exportedFmt.properties.visualization === 'qlik-button-for-navigation') {
-    Object.keys(exportedFmt.properties).forEach(key => {
+    Object.keys(exportedFmt.properties).forEach((key) => {
       let props;
       switch (key) {
         case 'props':
@@ -69,7 +69,7 @@ const importProperties = (exportedFmt, initialProperties) => {
           newProperties.useEnabledCondition = props.useEnabledCondition;
           newProperties.enabledCondition = props.enabledCondition;
           props.actionItems &&
-            props.actionItems.forEach(actionItem => {
+            props.actionItems.forEach((actionItem) => {
               convertAction(actionItem, newProperties);
             });
           newProperties.navigation = {
