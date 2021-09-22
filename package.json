@@ -20,7 +20,9 @@
     "url": "https://github.com/qlik-oss/sn-action-button.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "sn-action-button.js",
+    "sn-action-button.qext"
   ],
   "engines": {
     "node": ">=8"

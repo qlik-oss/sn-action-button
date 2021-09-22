@@ -11,5 +11,4 @@ node_modules
 coverage
 dist/
 sn-action-button-ext/
-sn-action-button-jog-ext/
 .zip

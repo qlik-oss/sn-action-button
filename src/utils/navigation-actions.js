@@ -103,7 +103,7 @@ const navigationActions = [
       }
     },
     requiredInput: ['websiteUrl'],
-  }
+  },
 ];
 
 export const checkShowNavigation = (data, field) => {
