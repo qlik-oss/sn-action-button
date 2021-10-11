@@ -17,6 +17,7 @@ export default function renderButton({ layout, theme, app, constraints, senseNav
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
   button.setAttribute('style', formattedStyles);
+  button.setAttribute('tabindex', '-1');
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
 
   button.onclick = async () => {
