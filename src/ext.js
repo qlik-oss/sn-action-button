@@ -3,6 +3,7 @@ import navigationActions, { checkShowNavigation } from './utils/navigation-actio
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import getAllAutomations from './utils/list-automations';
 
 const colorOptions = [
   {
@@ -157,13 +158,13 @@ export default function ext({ translator, automationsEnabled }) {
                 // item to select the automation for the button to trigger
                 automation: {
                   type: 'string',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
+                  dropdownOnly: true,
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation').then((response) =>
-                      response.json());
-                    return automations.data.map((blend) => ({
+                    const automations = await getAllAutomations('../api/v1/items?resourceType=automation&limit=100');
+                    return automations.map((blend) => ({
                       value: blend.id,
                       label: blend.name,
                     }));
