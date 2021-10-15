@@ -1,5 +1,5 @@
 {
-  "name": "@nebula.js/sn-action-button-jog",
+  "name": "@nebula.js/sn-action-button",
   "version": "1.14.2",
   "description": "Supernova action button",
   "license": "MIT",
@@ -21,14 +21,14 @@
   },
   "files": [
     "dist",
-    "sn-action-button-jog.js",
-    "sn-action-button-jog.qext"
+    "sn-action-button.js",
+    "sn-action-button.qext"
   ],
   "engines": {
     "node": ">=8"
   },
-  "main": "dist/sn-action-button-jog.js",
-  "module": "dist/sn-action-button.esm-jog.js",
+  "main": "dist/sn-action-button.js",
+  "module": "dist/sn-action-button.esm.js",
   "scripts": {
     "build": "nebula build",
     "lint": "eslint src",
