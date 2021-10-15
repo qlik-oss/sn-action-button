@@ -19,6 +19,10 @@ describe('actions', () => {
   const resourceId = 'fakeResourceId';
   const guid = 'fakeGuid';
   const executionToken = 'fakeExecutionToken';
+  const fakeAppIdParam = 'app-id';
+  const fakeAppId = 'fakeAppId';
+  const fakeBmkParam = 'bookmarkid';
+  const fakeBmkId = 'fakeBmkId';
   const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }] }];
 
   describe('all actions', () => {
@@ -333,8 +337,14 @@ describe('actions', () => {
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).to.have.callCount(4);
       expect(app.createBookmark).to.have.been.called;
+      expect(global.fetch).to.have.callCount(4);
+      expect(global.fetch).to.have.been.calledWith(`../api/v1/items/${automation}`);
+      expect(global.fetch).to.have.been.calledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).to.have.been.calledWith(`../api/v1/automations/${resourceId}/blocks`);
+      expect(global.fetch).to.have.been.calledWith(
+        `../api/v1/automations/${guid}/actions/execute?X-Execution-Token=${executionToken}&${fakeAppIdParam}=${fakeAppId}&${fakeBmkParam}=${fakeBmkId}`
+      );
     });
   });
 
