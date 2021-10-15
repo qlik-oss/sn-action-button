@@ -19,10 +19,6 @@ describe('actions', () => {
   const resourceId = 'fakeResourceId';
   const guid = 'fakeGuid';
   const executionToken = 'fakeExecutionToken';
-  const fakeAppIdParam = 'app-id';
-  const fakeAppId = 'fakeAppId';
-  const fakeBmkParam = 'bookmarkid';
-  const fakeBmkId = 'fakeBmkId';
   const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }] }];
 
   describe('all actions', () => {
@@ -72,7 +68,7 @@ describe('actions', () => {
       global.fetch = sandbox
         .stub()
         .returns(
-          Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, hasinputs, blocks, fakeAppIdParam, fakeAppId, fakeBmkParam, fakeBmkId }) })
+          Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, hasinputs, blocks }) })
         );
     });
 
@@ -337,7 +333,7 @@ describe('actions', () => {
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).to.have.callCount(4);
+      expect(global.fetch).to.have.been.called;
       expect(app.createBookmark).to.have.been.called;
     });
   });
