@@ -313,7 +313,7 @@ describe('actions', () => {
       automationPostData = false;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).to.have.been.calledThrice();
+      expect(global.fetch).to.have.been.calledThrice;
       expect(global.fetch).to.have.been.calledWith(`../api/v1/items/${automation}`);
       expect(global.fetch).to.have.been.calledWith(`../api/v1/automations/${resourceId}`);
       expect(global.fetch).to.have.been.calledWith(
