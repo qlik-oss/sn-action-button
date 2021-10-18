@@ -19,7 +19,7 @@ describe('actions', () => {
   const resourceId = 'fakeResourceId';
   const guid = 'fakeGuid';
   const executionToken = 'fakeExecutionToken';
-  const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }] }];
+  const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }, { label: 'blockLabel' }] }];
 
   describe('all actions', () => {
     beforeEach(() => {
@@ -333,7 +333,7 @@ describe('actions', () => {
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).to.have.been.called;
+      expect(global.fetch).to.have.callCount(4);
       expect(app.createBookmark).to.have.been.called;
     });
   });
