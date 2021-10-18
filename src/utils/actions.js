@@ -296,17 +296,17 @@ const actions = [
                 response.json());
               let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
               if (automationPostData && autoInfo.hasinputs) {
-                const inputBlock = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+                const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
                   .then((response) => response.json())
                   .then((blocks) => {
-                    let item;
+                    let items;
                     for (let i = 0; i < blocks.blocks.length; i++) {
                       if (blocks.blocks[i].displayName === 'Inputs') {
-                        item = blocks.blocks[i];
+                        items = blocks.blocks[i].form;
                         break;
                       }
                     }
-                    return item.form[0].label.toLowerCase();
+                    return items;
                   });
                 const newDate = new Date();
                 const bmkProp = {
@@ -329,7 +329,7 @@ const actions = [
                   .createBookmark(bmkProp)
                   .then((bookmark) => bookmark.getLayout())
                   .then((layout) => layout.qInfo.qId);
-                executePath = `${executePath}&${inputBlock}=${bmk}`;
+                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
               }
               // execute the automation
               await fetch(executePath).then((response) => response.json());

@@ -157,9 +157,10 @@ export default function ext({ translator, automationsEnabled }) {
                 // item to select the automation for the button to trigger
                 automation: {
                   type: 'string',
-                  component: 'dropdown',
+                  component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
+                  dropdownOnly: true,
                   options: async () => {
                     const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then((response) =>
                       response.json());
