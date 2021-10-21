@@ -50,9 +50,9 @@
   "devDependencies": {
     "@after-work.js/aw": "6.0.14",
     "@babel/cli": "7.15.7",
-    "@babel/core": "7.15.5",
+    "@babel/core": "7.15.8",
     "@babel/helper-define-map": "7.15.4",
-    "@babel/preset-env": "7.15.6",
+    "@babel/preset-env": "7.15.8",
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-conventional": "12.1.4",
     "@nebula.js/cli": "1.7.0",
@@ -61,13 +61,13 @@
     "@nebula.js/cli-serve": "1.7.0",
     "@nebula.js/stardust": "1.7.0",
     "@nebula.js/test-utils": "0.6.0",
-    "babel-plugin-istanbul": "6.0.0",
+    "babel-plugin-istanbul": "6.1.1",
     "eslint": "7.32.0",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-import": "2.25.2",
     "eslint-plugin-mocha": "9.0.0",
-    "husky": "7.0.2",
-    "lint-staged": "11.1.2",
-    "mocha-junit-reporter": "2.0.0"
+    "husky": "7.0.4",
+    "lint-staged": "11.2.3",
+    "mocha-junit-reporter": "2.0.2"
   }
 }
