@@ -57,7 +57,7 @@
     "@commitlint/config-conventional": "12.1.4",
     "@nebula.js/cli": "1.7.0",
     "@nebula.js/cli-build": "1.7.0",
-    "@nebula.js/cli-sense": "1.7.0",
+    "@nebula.js/cli-sense": "2.1.0",
     "@nebula.js/cli-serve": "1.7.0",
     "@nebula.js/stardust": "1.7.0",
     "@nebula.js/test-utils": "0.6.0",
