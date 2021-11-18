@@ -329,7 +329,7 @@ const actions = [
                   .createBookmark(bmkProp)
                   .then((bookmark) => bookmark.getLayout())
                   .then((layout) => layout.qInfo.qId);
-                await app.doSave();
+                await app.SaveObjects();
                 executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
               }
               // execute the automation

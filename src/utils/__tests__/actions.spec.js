@@ -335,7 +335,7 @@ describe('actions', () => {
       await actionObject.getActionCall({ app, automation, automationPostData })();
       expect(global.fetch).to.have.callCount(4);
       expect(app.createBookmark).to.have.been.called;
-      expect(app.doSave).to.have.been.called;
+      expect(app.SaveObjects).to.have.been.called;
     });
   });
 
