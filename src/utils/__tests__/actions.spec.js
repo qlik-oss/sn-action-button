@@ -64,6 +64,7 @@ describe('actions', () => {
         evaluate: () => '43850;43881',
         doReload: sandbox.stub().returns(true),
         doSave: sandbox.spy(),
+        saveObjects: sandbox.spy()
       };
       global.fetch = sandbox
         .stub()
