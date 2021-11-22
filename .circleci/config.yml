@@ -48,10 +48,10 @@ jobs:
       - run:
           name: Unit tests
           command: |
-            yarn jest --coverage && cat ./tests/coverage/lcov.info
+            yarn jest --coverage
             if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
               echo "Uploading coverage results to coveralls.io..."
-              cat ./coverage/unit/lcov.info | npx coveralls
+              cat ./coverage/lcov.info | npx coveralls
             fi
 
       - run:
