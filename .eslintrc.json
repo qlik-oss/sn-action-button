@@ -35,7 +35,9 @@
         "expect": false,
         "sinon": false,
         "aw": false,
-        "page": false
+        "page": false,
+        "jest": false,
+        "window": true
       },
       "plugins": ["mocha"],
       "rules": {
