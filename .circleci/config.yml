@@ -48,11 +48,13 @@ jobs:
       - run:
           name: Unit tests
           command: |
-            yarn jest --coverage
+            yarn jest --coverage --reporters=default --reporters=jest-junit
             if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
               echo "Uploading coverage results to coveralls.io..."
               cat ./coverage/lcov.info | npx coveralls
             fi
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
 
       - run:
           name: Integration tests
