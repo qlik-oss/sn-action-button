@@ -64,6 +64,7 @@ describe('actions', () => {
         evaluate: () => '43850;43881',
         doReload: sandbox.stub().returns(true),
         doSave: sandbox.spy(),
+        saveObjects: sandbox.spy()
       };
       global.fetch = sandbox
         .stub()
@@ -328,13 +329,14 @@ describe('actions', () => {
       expect(global.fetch).to.not.have.been.called;
     });
 
-    it('should call executeAutomation with creation of bookmark', async () => {
+    it('should call executeAutomation with creation of bookmark and save app', async () => {
       hasinputs = true;
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
       expect(global.fetch).to.have.callCount(4);
       expect(app.createBookmark).to.have.been.called;
+      expect(app.saveObjects).to.have.been.called;
     });
   });
 
