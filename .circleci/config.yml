@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Unit tests
           command: |
-            npx aw -c aw.config.js --mocha.bail false --mocha.reporter mocha-junit-reporter --mocha.reporterOptions.mochaFile ./coverage/junit/junit.xml
+            yarn jest --coverage && cat ./tests/coverage/lcov.info
             if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
               echo "Uploading coverage results to coveralls.io..."
               cat ./coverage/unit/lcov.info | npx coveralls
