@@ -37,7 +37,7 @@
         "aw": false,
         "page": false,
         "jest": false,
-        "window": true
+        "window": false
       },
       "plugins": ["mocha"],
       "rules": {
