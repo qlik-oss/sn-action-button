@@ -25,7 +25,7 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, theme) => {
+const getColor = ({ useColorExpression = false, colorExpression = '', color = {} }, defaultColor, theme) => {
   let resolvedColor;
   if (useColorExpression) {
     resolvedColor = colorUtils.resolveExpression(colorExpression);
@@ -38,16 +38,16 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
 };
 
 export default {
-  getStyles({ style, disabled, theme, element }) {
+  getStyles({ style = {}, disabled, theme, element }) {
     let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;';
-    const { font, background, border } = style;
+    const { font = {}, background = {}, border = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
-    font.style.bold && (styles += formatProperty('font-weight', 'bold'));
-    font.style.italic && (styles += formatProperty('font-style', 'italic'));
+    font.style && font.style.bold && (styles += formatProperty('font-weight', 'bold'));
+    font.style && font.style.italic && (styles += formatProperty('font-style', 'italic'));
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
@@ -74,8 +74,8 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, theme, style, isSense }) {
-    const { icon, font, label } = style;
+  createLabelAndIcon({ button, theme, style = {}, isSense }) {
+    const { icon = {}, font = {}, label = 'Button' } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
@@ -86,7 +86,7 @@ export default {
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
-    font.style.underline && (textSpan.style.textDecoration = 'underline');
+    font.style && font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
@@ -96,7 +96,7 @@ export default {
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
       iconSpan.setAttribute('class', `lui-icon lui-icon--${iconType ? iconType.value : ''}`);
-      icon.position === 'left' ? text.insertBefore(iconSpan, textSpan) : text.appendChild(iconSpan);
+      icon.position === 'right' ? text.appendChild(iconSpan) : text.insertBefore(iconSpan, textSpan);
     }
     button.innerHTML = '';
     button.appendChild(text);
@@ -112,20 +112,21 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (font.style.italic) {
+    const fontScale = font.size || 0.5;
+    if (font.style && font.style.italic) {
       if (hasIcon) {
-        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.84, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
         text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
       } else {
-        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.9, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.9, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
       }
     } else if (hasIcon) {
-      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.88, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
-      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.92, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
