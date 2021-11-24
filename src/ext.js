@@ -145,7 +145,6 @@ export default function ext({ translator, automationsEnabled }) {
                   translation: 'properties.value',
                   expression: 'optional',
                   show: (data) => checkShowAction(data, 'value'),
-<<<<<<< Updated upstream
                 },
                 partial: {
                   type: 'boolean',
@@ -163,8 +162,9 @@ export default function ext({ translator, automationsEnabled }) {
                   ref: 'automation',
                   dropdownOnly: true,
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then((response) =>
-                      response.json());
+                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then(
+                      (response) => response.json()
+                    );
                     return automations.data.map((blend) => ({
                       value: blend.id,
                       label: blend.name,
@@ -181,8 +181,6 @@ export default function ext({ translator, automationsEnabled }) {
                   translation: 'Object.ActionButton.Automation.SendSelections',
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
-=======
->>>>>>> Stashed changes
                 },
               },
             },
@@ -280,10 +278,7 @@ export default function ext({ translator, automationsEnabled }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-<<<<<<< Updated upstream
-=======
               defaultValue: 1,
->>>>>>> Stashed changes
               show: (data) => data.useEnabledCondition,
             },
           },
@@ -341,10 +336,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.color',
                       translation: 'properties.color',
                       dualOutput: true,
-<<<<<<< Updated upstream
-=======
                       defaultValue: { index: -1, color: null },
->>>>>>> Stashed changes
                       show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                     colorExpression: {
@@ -353,10 +345,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-<<<<<<< Updated upstream
-=======
                       defaultValue: '',
->>>>>>> Stashed changes
                       show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                   },
@@ -453,10 +442,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.background.color',
                       translation: 'properties.color',
                       dualOutput: true,
-<<<<<<< Updated upstream
-=======
                       defaultValue: { index: -1, color: null },
->>>>>>> Stashed changes
                       show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                     colorExpression: {
@@ -465,10 +451,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.background.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-<<<<<<< Updated upstream
-=======
                       defaultValue: '',
->>>>>>> Stashed changes
                       show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                   },
@@ -610,10 +593,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-<<<<<<< Updated upstream
-=======
                       defaultValue: { index: -1, color: null },
->>>>>>> Stashed changes
                       show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         !propertyResolver.getValue(data, 'style.border.useColorExpression'),
