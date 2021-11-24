@@ -1,17 +1,7 @@
-import sinon from 'sinon';
 import styleFormatter from '../style-formatter';
 import defaultValues from '../../__tests__/default-button-props';
 
 describe('style-formatter', () => {
-  let sandbox;
-
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-  });
-  afterEach(() => {
-    sandbox.reset();
-  });
-
   describe('getStyles', () => {
     let style;
     const defaultStyle =
@@ -21,20 +11,21 @@ describe('style-formatter', () => {
     const someUrl = '/media/Logo/qlik.png';
     let theme;
     let layout;
-    beforeEach(() => {
-      const d = defaultValues(sandbox);
-      theme = d.theme;
-      layout = d.layout;
-    });
     const disabled = false;
     let element;
-
     beforeEach(() => {
+      const d = defaultValues();
+      theme = d.theme;
+      layout = d.layout;
       style = JSON.parse(JSON.stringify(layout.style));
       element = {
         offsetHeight: 200,
         offsetWidth: 100,
       };
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
 
     it('should return default styling', () => {
@@ -55,7 +46,6 @@ describe('style-formatter', () => {
     // font
     it('should return specified font color', () => {
       style.font.color = someColor;
-      theme.getColorPickerColor.withArgs(someColor).returns(someColor);
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
       expect(formattedStyle.includes(`color: ${someColor}`)).toBeTrue;
     });
@@ -85,7 +75,6 @@ describe('style-formatter', () => {
     // background
     it('should return specified background color', () => {
       style.background.color = someColor;
-      theme.getColorPickerColor.withArgs(someColor).returns(someColor);
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
       expect(formattedStyle.includes(`background-color: ${someColor}`)).toBeTrue;
     });
@@ -158,7 +147,7 @@ describe('style-formatter', () => {
           index: 2,
         },
       };
-      theme.getColorPickerColor.withArgs(style.border.color).returns('color2');
+      theme.getColorPickerColor = jest.fn(() => 'color2');
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element });
       expect(formattedStyle.includes('border: 5px solid color2')).toBeTrue;
     });
@@ -205,7 +194,7 @@ describe('style-formatter', () => {
     let style;
 
     beforeEach(() => {
-      const d = defaultValues(sandbox);
+      const d = defaultValues();
       theme = d.theme;
       style = d.layout.style;
 
@@ -227,12 +216,12 @@ describe('style-formatter', () => {
       });
 
       button = {
-        firstElementChild: { setAttribute: sinon.spy(), offsetHeight: 400, offsetWidth: 20 },
+        firstElementChild: { setAttribute: jest.fn(), offsetHeight: 400, offsetWidth: 20 },
         clientHeight: 100,
         clientWidth: 100,
         children: [],
         appendChild: (child) => {
-          child.setAttribute = sinon.spy();
+          child.setAttribute = jest.fn();
           child.offsetHeight = 400;
           child.offsetWidth = 20;
           button.children.push(child);
@@ -245,7 +234,7 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize and styling', () => {
-      theme.getStyle.withArgs('', '', 'fontFamily').returns('myFont');
+      theme.getStyle = jest.fn(() => 'myFont');
       styleFormatter.createLabelAndIcon({ theme, button, style });
       const text = button.children[0];
       expect(text.children[0].textContent).toEqual('Button');
@@ -259,7 +248,7 @@ describe('style-formatter', () => {
 
     it('should set fontSize to 8px for small font sizes', () => {
       button.appendChild = (child) => {
-        child.setAttribute = sinon.spy();
+        child.setAttribute = jest.fn();
         child.offsetHeight = 400;
         child.offsetWidth = 400;
         button.children.push(child);
@@ -270,7 +259,7 @@ describe('style-formatter', () => {
 
     it('should set fontSize when text offsetWidth is bigger than button', () => {
       button.appendChild = (child) => {
-        child.setAttribute = sinon.spy();
+        child.setAttribute = jest.fn();
         child.offsetHeight = 400;
         child.offsetWidth = 125;
         button.children.push(child);
@@ -284,7 +273,7 @@ describe('style-formatter', () => {
         italic: true,
       };
       button.appendChild = (child) => {
-        child.setAttribute = sinon.spy();
+        child.setAttribute = jest.fn();
         child.offsetHeight = 400;
         child.offsetWidth = 125;
         button.children.push(child);

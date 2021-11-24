@@ -1,8 +1,6 @@
-import sinon from 'sinon';
 import actions, { getValueList, checkShowAction } from '../actions';
 
 describe('actions', () => {
-  const sandbox = sinon.createSandbox();
   const qStateName = 'someState';
   let app;
   let createdBookmark;
@@ -53,12 +51,12 @@ describe('actions', () => {
       app = {
         applyBookmark: jest.fn(),
         clearAll: jest.fn(),
-        createBookmark: sandbox.stub().resolves(createdBookmark),
+        createBookmark: jest.fn(() => Promise.resolve(createdBookmark)),
         back: jest.fn(),
         forward: jest.fn(),
         getField: jest.fn(() => Promise.resolve(fieldObject)),
-        getFieldDescription: sandbox.stub().resolves(fieldInfoObject),
-        getVariableByName: sandbox.stub().resolves(variableObject),
+        getFieldDescription: jest.fn(() => Promise.resolve(fieldInfoObject)),
+        getVariableByName: jest.fn(() => Promise.resolve(variableObject)),
         lockAll: jest.fn(),
         unlockAll: jest.fn(),
         getBookmarkList: () => [{ qData: { title: 'findMyBookmark' }, qInfo: { qId: 'myBookmarkId' } }],
@@ -74,7 +72,7 @@ describe('actions', () => {
     afterEach(() => {
       hasinputs = false;
       automationPostData = false;
-      sandbox.verifyAndRestore();
+      jest.resetAllMocks();
     });
 
     it('should call applyBookmark', async () => {

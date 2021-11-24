@@ -33,7 +33,6 @@
       "globals": {
         "chai": false,
         "expect": false,
-        "sinon": false,
         "aw": false,
         "page": false,
         "jest": false,
