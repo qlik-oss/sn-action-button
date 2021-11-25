@@ -37,8 +37,7 @@
     "test:unit": "aw -c aw.config.js",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
     "prepublishOnly": "rm -rf dist && npm run build",
-    "prepare": "husky install",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js, jsx}": [
@@ -69,7 +68,6 @@
     "eslint-plugin-mocha": "9.0.0",
     "husky": "7.0.4",
     "lint-staged": "11.2.6",
-    "mocha-junit-reporter": "2.0.2",
-    "scriptappy-from-jsdoc": "0.7.0"
+    "mocha-junit-reporter": "2.0.2"
   }
 }
