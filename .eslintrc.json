@@ -33,9 +33,10 @@
       "globals": {
         "chai": false,
         "expect": false,
-        "sinon": false,
         "aw": false,
-        "page": false
+        "page": false,
+        "jest": false,
+        "window": false
       },
       "plugins": ["mocha"],
       "rules": {
