@@ -1,62 +1,62 @@
-// import { create } from '@nebula.js/test-utils';
-// import supernova from '../index';
-// import * as renderButton from '../components/action-button';
+import { create } from '@nebula.js/test-utils';
+import supernova from '../index';
+import * as renderButton from '../components/action-button';
 
-// describe('index', () => {
-//   const renderSpy = jest.spyOn(renderButton, 'renderButton').mockResolvedValue();
-//   afterEach(() => {
-//     jest.resetAllMocks();
-//   });
+describe('index', () => {
+  const renderSpy = jest.spyOn(renderButton, 'renderButton').mockResolvedValue();
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-//   global.document = {
-//     createElement: () => {
-//       const newElement = {
-//         setAttribute: () => {},
-//         removeAttribute: () => {},
-//         firstElementChild: { setAttribute: () => {} },
-//         style: {},
-//         children: [],
-//       };
-//       newElement.appendChild = (newChild) => {
-//         newElement.children.push(newChild);
-//       };
-//       return newElement;
-//     },
-//   };
-//   const thisElement = {
-//     appendChild: jest.fn(),
-//     firstElementChild: {
-//       setAttribute: () => {},
-//       removeAttribute: () => {},
-//       firstElementChild: { setAttribute: () => {}, text: {} },
-//       someProps: () => {},
-//       appendChild: () => {},
-//     },
-//   };
+  global.document = {
+    createElement: () => {
+      const newElement = {
+        setAttribute: () => {},
+        removeAttribute: () => {},
+        firstElementChild: { setAttribute: () => {} },
+        style: {},
+        children: [],
+      };
+      newElement.appendChild = (newChild) => {
+        newElement.children.push(newChild);
+      };
+      return newElement;
+    },
+  };
+  const thisElement = {
+    appendChild: jest.fn(),
+    firstElementChild: {
+      setAttribute: () => {},
+      removeAttribute: () => {},
+      firstElementChild: { setAttribute: () => {}, text: {} },
+      someProps: () => {},
+      appendChild: () => {},
+    },
+  };
 
-//   it('should render supernova', async () => {
-//     const result = supernova({
-//       sense: { navigation: 'nav' },
-//       translator: { get: () => '' },
-//       flags: { isEnabled: () => true },
-//     });
-//     const c = create(result.component, {
-//       element: thisElement,
-//       layout: 'layout',
-//       constraints: 'constraints',
-//     });
+  it('should render supernova', async () => {
+    const result = supernova({
+      sense: { navigation: 'nav' },
+      translator: { get: () => '' },
+      flags: { isEnabled: () => true },
+    });
+    const c = create(result.component, {
+      element: thisElement,
+      layout: 'layout',
+      constraints: 'constraints',
+    });
 
-//     await c.update();
+    await c.update();
 
-//     expect(thisElement.appendChild).toHaveBeenCalled;
-//     expect(renderSpy).toHaveBeenCalledWith({
-//       element: thisElement,
-//       layout: 'layout',
-//       app: undefined,
-//       constraints: 'constraints',
-//       theme: undefined,
-//       senseNavigation: 'nav',
-//       automationsEnabled: true,
-//     });
-//   });
-// });
+    expect(thisElement.appendChild).toHaveBeenCalled;
+    expect(renderSpy).toHaveBeenCalledWith({
+      element: thisElement,
+      layout: 'layout',
+      app: undefined,
+      constraints: 'constraints',
+      theme: undefined,
+      senseNavigation: 'nav',
+      automationsEnabled: true,
+    });
+  });
+});

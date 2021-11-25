@@ -30,7 +30,7 @@ if (watch) {
 }
 
 const main = async () => {
-  console.log('---> BUILDING SUPERNOVA', buildArgs);
+  console.log('---> BUILDING SUPERNOVA');
   build(buildArgs);
 };
 
