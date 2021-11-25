@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Table generic object definition",
-    "version": "1.6.0",
+    "version": "1.14.3",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
@@ -84,7 +84,7 @@
   },
   "definitions": {
     "Action": {
-      "description": "Defines what action to perform and options for that action type",
+      "description": "Defines what action to perform and options for that action type.",
       "kind": "object",
       "entries": {
         "actionLabel": {
@@ -166,6 +166,14 @@
             {
               "kind": "literal",
               "value": "'setVariable'"
+            },
+            {
+              "kind": "literal",
+              "value": "'doReload'"
+            },
+            {
+              "kind": "literal",
+              "value": "'executeAutomation'"
             }
           ],
           "type": "string"
@@ -176,12 +184,12 @@
           "type": "string"
         },
         "field": {
-          "description": "Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField' types",
+          "description": "Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'",
           "optional": true,
           "type": "string"
         },
         "softLock": {
-          "description": "Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect' types",
+          "description": "Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'",
           "optional": true,
           "type": "string"
         },
@@ -194,6 +202,21 @@
           "description": "Name of variable. Required for type 'setVariable'",
           "optional": true,
           "type": "string"
+        },
+        "partial": {
+          "description": "Set to true if you want to do a partial reload. Defaults to false",
+          "optional": true,
+          "type": "boolean"
+        },
+        "automation": {
+          "description": "ID of the automation. Required for type 'setVariable'",
+          "optional": true,
+          "type": "string"
+        },
+        "automationPostData": {
+          "description": "Set to true to include the current selections in the automation. Defaults to false",
+          "optional": true,
+          "type": "boolean"
         }
       }
     },
@@ -483,21 +506,69 @@
       }
     },
     "NavigationAction": {
-      "description": "Defines a navigation action to perform after the other actions. When the sn-action-button is used outside Qlik Sense you can only use this to navigate to a specified URL.",
+      "description": "Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.",
       "kind": "object",
       "entries": {
         "action": {
           "description": "Name of navigation action",
-          "kind": "literal",
-          "value": "'openWebsite'"
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'nextSheet'"
+            },
+            {
+              "kind": "literal",
+              "value": "'prevSheet'"
+            },
+            {
+              "kind": "literal",
+              "value": "'firstSheet'"
+            },
+            {
+              "kind": "literal",
+              "value": "'lastSheet'"
+            },
+            {
+              "kind": "literal",
+              "value": "'goToSheet'"
+            },
+            {
+              "kind": "literal",
+              "value": "'goToSheetById'"
+            },
+            {
+              "kind": "literal",
+              "value": "'goToSheetById'"
+            },
+            {
+              "kind": "literal",
+              "value": "'goToStory'"
+            },
+            {
+              "kind": "literal",
+              "value": "'openWebsite'"
+            }
+          ],
+          "type": "string"
+        },
+        "sheet": {
+          "description": "sheet ID. Required for 'goToSheet' and 'goToSheetById'",
+          "optional": true,
+          "type": "string"
+        },
+        "story": {
+          "description": "Story ID. Required for 'goToStory'",
+          "optional": true,
+          "type": "string"
         },
         "websiteUrl": {
-          "description": "URL",
+          "description": "URL for website. required for 'openWebsite'",
           "optional": true,
           "type": "string"
         },
         "sameWindow": {
-          "description": "Set to true to open in same window/tab. Defaults to false",
+          "description": "Set to true to open in same window/tab. Required for 'openWebsite'",
           "optional": true,
           "type": "boolean"
         }

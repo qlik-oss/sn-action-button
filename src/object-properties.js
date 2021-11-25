@@ -59,23 +59,28 @@ const properties = {
 };
 
 /**
- * Defines what action to perform and options for that action type
+ * Defines what action to perform and options for that action type.
  * @typedef {object} Action
  * @property {string} actionLabel - Label for reference
- * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable')} actionType - The type of action
+ * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable'|'doReload'|'executeAutomation')} actionType - The type of action
  * @property {string=} bookmark - ID of bookmark, required for type 'applyBookmark'
- * @property {string=} field - Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField' types
- * @property {string=} softLock - Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect' types
+ * @property {string=} field - Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'
+ * @property {string=} softLock - Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'
  * @property {string=} value - To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'
  * @property {string=} variable - Name of variable. Required for type 'setVariable'
+ * @property {boolean=} partial - Set to true if you want to do a partial reload. Defaults to false
+ * @property {string=} automation - ID of the automation. Required for type 'setVariable'
+ * @property {boolean=} automationPostData - Set to true to include the current selections in the automation. Defaults to false
  */
 
 /**
- * Defines a navigation action to perform after the other actions. When the sn-action-button is used outside Qlik Sense you can only use this to navigate to a specified URL.
+ * Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.
  * @typedef {object} NavigationAction
- * @property {'openWebsite'} action - Name of navigation action
- * @property {string=} websiteUrl - URL
- * @property {boolean=} sameWindow - Set to true to open in same window/tab. Defaults to false
+ * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'} action - Name of navigation action
+ * @property {string=} sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'
+ * @property {string=} story - Story ID. Required for 'goToStory'
+ * @property {string=} websiteUrl - URL for website. required for 'openWebsite'
+ * @property {boolean=} sameWindow - Set to true to open in same window/tab. Required for 'openWebsite'
  */
 
 /**
