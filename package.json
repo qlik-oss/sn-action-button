@@ -36,6 +36,7 @@
     "sense": "nebula sense",
     "test:unit": "jest",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
+    "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "rm -rf dist && npm run build",
     "prepare": "husky install"
   },
