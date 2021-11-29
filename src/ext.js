@@ -3,6 +3,7 @@ import navigationActions, { checkShowNavigation } from './utils/navigation-actio
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import DEFAULTS from './style-defaults';
 
 const colorOptions = [
   {
@@ -261,7 +262,6 @@ export default function ext({ translator, automationsEnabled }) {
               component: 'switch',
               translation: 'properties.enableToggle',
               ref: 'useEnabledCondition',
-              defaultValue: false,
               options: [
                 {
                   value: true,
@@ -278,7 +278,6 @@ export default function ext({ translator, automationsEnabled }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              defaultValue: 1,
               show: (data) => data.useEnabledCondition,
             },
           },
@@ -301,6 +300,7 @@ export default function ext({ translator, automationsEnabled }) {
                   ref: 'style.label',
                   translation: 'Common.Label',
                   expression: 'optional',
+                  defaultValue: DEFAULTS.LABEL,
                 },
               },
             },
@@ -317,7 +317,7 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'number',
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
-                      defaultValue: 0.5,
+                      defaultValue: DEFAULTS.FONT_SIZE,
                       min: 0.2,
                       max: 1,
                       step: 0.01,
@@ -336,7 +336,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
+                      defaultValue: DEFAULTS.FONT_STYLE,
                       show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                     colorExpression: {
@@ -360,7 +360,7 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.textStyle',
                       horizontal: true,
                       multipleSelect: true,
-                      defaultValue: { bold: true, italic: false, underline: false },
+                      defaultValue: DEFAULTS.FONT_STYLE,
                       items: [
                         {
                           component: 'icon-item',
@@ -391,7 +391,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.align',
                       translation: 'properties.Alignment',
                       horizontal: true,
-                      defaultValue: 'center',
+                      defaultValue: DEFAULTS.TEXT_ALIGN,
                       items: [
                         {
                           component: 'icon-item',
@@ -442,7 +442,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.background.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
+                      defaultValue: DEFAULTS.COLOR,
                       show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                     colorExpression: {
@@ -485,7 +485,7 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.backgroundImage.size',
                       type: 'string',
                       component: 'dropdown',
-                      defaultValue: 'auto',
+                      defaultValue: DEFAULTS.BACKGROUND_SIZE,
                       options: [
                         {
                           value: 'auto',
@@ -524,7 +524,7 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'Common.Position',
                       type: 'string',
                       component: 'align-matrix',
-                      defaultValue: 'centerCenter',
+                      defaultValue: DEFAULTS.BACKGROUND_POSITION,
                       show(data) {
                         return (
                           propertyResolver.getValue(data, 'style.background.useImage') &&
@@ -562,7 +562,7 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.border.radius',
                       type: 'number',
                       ref: 'style.border.radius',
-                      defaultValue: 0,
+                      defaultValue: DEFAULTS.BORDER_RADIUS,
                       min: 0,
                       max: 1,
                       step: 0.01,
@@ -573,7 +573,7 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'number',
                       ref: 'style.border.width',
                       translation: 'properties.border.width',
-                      defaultValue: 0,
+                      defaultValue: DEFAULTS.BORDER_WIDTH,
                       min: 0,
                       max: 0.5,
                       step: 0.005,
@@ -593,7 +593,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
+                      defaultValue: DEFAULTS.COLOR,
                       show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         !propertyResolver.getValue(data, 'style.border.useColorExpression'),
@@ -642,7 +642,7 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.icon.position',
                       component: 'dropdown',
                       translation: 'Common.Position',
-                      defaultValue: 'left',
+                      defaultValue: DEFAULTS.ICON_POSITION,
                       options: [
                         {
                           translation: 'properties.dock.left',
