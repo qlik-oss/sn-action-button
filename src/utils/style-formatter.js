@@ -1,6 +1,7 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import urlUtils from './url-utils';
+import DEFAULTS from '../style-defaults';
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -25,7 +26,11 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, theme) => {
+const getColor = (
+  { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
+  defaultColor,
+  theme
+) => {
   let resolvedColor;
   if (useColorExpression) {
     resolvedColor = colorUtils.resolveExpression(colorExpression);
@@ -38,16 +43,17 @@ const getColor = ({ useColorExpression, colorExpression, color }, defaultColor, 
 };
 
 export default {
-  getStyles({ style, disabled, theme, element }) {
+  getStyles({ style = {}, disabled, theme, element }) {
     let styles = 'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;';
-    const { font, background, border } = style;
+    const { font = {}, background = {}, border = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
-    font.style.bold && (styles += formatProperty('font-weight', 'bold'));
-    font.style.italic && (styles += formatProperty('font-style', 'italic'));
+    const fontStyle = font.style || DEFAULTS.FONT_STYLE;
+    fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+    fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
@@ -56,8 +62,11 @@ export default {
       if (bgUrl) {
         bgUrl = urlUtils.getImageUrl(bgUrl);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
-        styles += formatProperty('background-size', backgroundSize[background.size]);
-        styles += formatProperty('background-position', backgroundPosition[background.position]);
+        styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+        styles += formatProperty(
+          'background-position',
+          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+        );
         styles += formatProperty('background-repeat', 'no-repeat');
       }
     }
@@ -65,17 +74,20 @@ export default {
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
       const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
-      const borderSize = (border.width * lengthShortSide) / 2;
+      const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
-      styles += formatProperty('border-radius', `${(border.radius * lengthShortSide) / 2}px`);
+      styles += formatProperty(
+        'border-radius',
+        `${((border.radius || DEFAULTS.BORDER_RADIUS) * lengthShortSide) / 2}px`
+      );
     } else {
       styles += 'border: none;';
     }
 
     return styles;
   },
-  createLabelAndIcon({ button, theme, style, isSense }) {
-    const { icon, font, label } = style;
+  createLabelAndIcon({ button, theme, style = {}, isSense }) {
+    const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
@@ -86,7 +98,7 @@ export default {
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
-    font.style.underline && (textSpan.style.textDecoration = 'underline');
+    font.style && font.style.underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
@@ -96,7 +108,7 @@ export default {
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
       iconSpan.setAttribute('class', `lui-icon lui-icon--${iconType ? iconType.value : ''}`);
-      icon.position === 'left' ? text.insertBefore(iconSpan, textSpan) : text.appendChild(iconSpan);
+      icon.position === 'right' ? text.appendChild(iconSpan) : text.insertBefore(iconSpan, textSpan);
     }
     button.innerHTML = '';
     button.appendChild(text);
@@ -112,20 +124,21 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    if (font.style.italic) {
+    const fontScale = font.size || DEFAULTS.FONT_SIZE;
+    if (font.style && font.style.italic) {
       if (hasIcon) {
-        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.84, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
         text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
       } else {
-        text.style.fontSize = `${Math.max(newFontsize * font.size * 0.9, 8)}px`;
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.9, 8)}px`;
         text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
       }
     } else if (hasIcon) {
-      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.88, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.88, 8)}px`;
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
-      text.style.fontSize = `${Math.max(newFontsize * font.size * 0.92, 8)}px`;
+      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
