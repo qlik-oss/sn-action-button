@@ -41,7 +41,7 @@ const properties = {
       color: DEFAULTS.COLOR,
       colorExpression: '',
       size: DEFAULTS.FONT_SIZE,
-      style: DEFAULTS.FONT_SIZE,
+      style: DEFAULTS.FONT_STYLE,
       align: DEFAULTS.TEXT_ALIGN,
     },
     background: {
