@@ -30,7 +30,7 @@ describe('sn action button: Rendering tests', () => {
   });
 
   after(async () => {
-    // s.close();
+    s.close();
   });
 
   beforeEach(() => {
