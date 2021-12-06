@@ -261,7 +261,6 @@ export default function ext({ translator, automationsEnabled }) {
               component: 'switch',
               translation: 'properties.enableToggle',
               ref: 'useEnabledCondition',
-              defaultValue: false,
               options: [
                 {
                   value: true,
@@ -278,7 +277,6 @@ export default function ext({ translator, automationsEnabled }) {
               translation: 'properties.enableCondition',
               type: 'integer',
               expression: 'optional',
-              defaultValue: 1,
               show: (data) => data.useEnabledCondition,
             },
           },
@@ -317,7 +315,6 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'number',
                       ref: 'style.font.size',
                       translation: 'properties.fontSize',
-                      defaultValue: 0.5,
                       min: 0.2,
                       max: 1,
                       step: 0.01,
@@ -328,7 +325,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.fontColor',
                       component: 'dropdown',
                       options: colorOptions,
-                      defaultValue: false,
                     },
                     colorPicker: {
                       component: 'color-picker',
@@ -336,7 +332,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
                       show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                     colorExpression: {
@@ -345,7 +340,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-                      defaultValue: '',
                       show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
                     },
                   },
@@ -360,7 +354,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.textStyle',
                       horizontal: true,
                       multipleSelect: true,
-                      defaultValue: { bold: true, italic: false, underline: false },
                       items: [
                         {
                           component: 'icon-item',
@@ -391,7 +384,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.font.align',
                       translation: 'properties.Alignment',
                       horizontal: true,
-                      defaultValue: 'center',
                       items: [
                         {
                           component: 'icon-item',
@@ -434,7 +426,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'AppDetails.SheetBackgroundColor',
                       component: 'dropdown',
                       options: colorOptions,
-                      defaultValue: false,
                     },
                     colorPicker: {
                       component: 'color-picker',
@@ -442,7 +433,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.background.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
                       show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                     colorExpression: {
@@ -451,7 +441,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.background.colorExpression',
                       translation: 'Common.Expression',
                       expression: 'optional',
-                      defaultValue: '',
                       show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
                     },
                   },
@@ -464,7 +453,6 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'boolean',
                       translation: 'properties.backgroundImage.use',
                       component: 'switch',
-                      defaultValue: false,
                       options: toggleOptions,
                     },
                     backgroundUrl: {
@@ -475,7 +463,6 @@ export default function ext({ translator, automationsEnabled }) {
                       tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
                       type: 'string',
                       component: 'media',
-                      defaultValue: '',
                       show(data) {
                         return propertyResolver.getValue(data, 'style.background.useImage');
                       },
@@ -485,7 +472,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.backgroundImage.size',
                       type: 'string',
                       component: 'dropdown',
-                      defaultValue: 'auto',
                       options: [
                         {
                           value: 'auto',
@@ -524,7 +510,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'Common.Position',
                       type: 'string',
                       component: 'align-matrix',
-                      defaultValue: 'centerCenter',
                       show(data) {
                         return (
                           propertyResolver.getValue(data, 'style.background.useImage') &&
@@ -553,7 +538,6 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'boolean',
                       translation: 'properties.border.use',
                       component: 'switch',
-                      defaultValue: false,
                       options: toggleOptions,
                     },
                     borderRadius: {
@@ -562,7 +546,6 @@ export default function ext({ translator, automationsEnabled }) {
                       translation: 'properties.border.radius',
                       type: 'number',
                       ref: 'style.border.radius',
-                      defaultValue: 0,
                       min: 0,
                       max: 1,
                       step: 0.01,
@@ -573,7 +556,6 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'number',
                       ref: 'style.border.width',
                       translation: 'properties.border.width',
-                      defaultValue: 0,
                       min: 0,
                       max: 0.5,
                       step: 0.005,
@@ -584,7 +566,6 @@ export default function ext({ translator, automationsEnabled }) {
                       component: 'dropdown',
                       translation: 'properties.border.color',
                       ref: 'style.border.useColorExpression',
-                      defaultValue: '',
                       options: colorOptions,
                     },
                     colorPicker: {
@@ -593,7 +574,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.border.color',
                       translation: 'properties.color',
                       dualOutput: true,
-                      defaultValue: { index: -1, color: null },
                       show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
                         !propertyResolver.getValue(data, 'style.border.useColorExpression'),
@@ -602,7 +582,6 @@ export default function ext({ translator, automationsEnabled }) {
                       component: 'string',
                       type: 'string',
                       ref: 'style.border.colorExpression',
-                      defaultValue: '',
                       translation: 'Common.Expression',
                       show: (data) =>
                         propertyResolver.getValue(data, 'style.border.useBorder') &&
@@ -626,7 +605,6 @@ export default function ext({ translator, automationsEnabled }) {
                       type: 'boolean',
                       translation: 'properties.icon.use',
                       component: 'switch',
-                      defaultValue: false,
                       options: toggleOptions,
                     },
                     iconType: {
@@ -642,7 +620,6 @@ export default function ext({ translator, automationsEnabled }) {
                       ref: 'style.icon.position',
                       component: 'dropdown',
                       translation: 'Common.Position',
-                      defaultValue: 'left',
                       options: [
                         {
                           translation: 'properties.dock.left',
