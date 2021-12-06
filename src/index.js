@@ -13,7 +13,7 @@ import properties from './object-properties';
 import data from './data';
 import ext from './ext';
 
-import renderButton from './components/action-button';
+import { renderButton } from './components/action-button';
 
 export default function supernova(env) {
   const {

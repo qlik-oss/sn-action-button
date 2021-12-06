@@ -9,7 +9,7 @@ export const runActions = async (actionList) => {
   }
 };
 
-export default function renderButton({ layout, theme, app, constraints, senseNavigation, element }) {
+export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
@@ -78,4 +78,4 @@ export default function renderButton({ layout, theme, app, constraints, senseNav
     button.ontouchend = undefined;
     button.ontouchcancel = undefined;
   };
-}
+};
