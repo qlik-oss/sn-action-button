@@ -2,7 +2,7 @@
   "scriptappy": "1.0.0",
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
-    "description": "Table generic object definition",
+    "description": "Action button generic object definition",
     "version": "1.14.3",
     "license": "MIT",
     "stability": "experimental",
