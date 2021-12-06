@@ -16,100 +16,106 @@ describe('navigation actions', () => {
   describe('all navigation actions', () => {
     beforeEach(() => {
       senseNavigation = {
-        nextSheet: sinon.spy(),
-        prevSheet: sinon.spy(),
-        goToSheet: sinon.spy(),
-        goToStory: sinon.spy(),
+        nextSheet: jest.fn(),
+        prevSheet: jest.fn(),
+        goToSheet: jest.fn(),
+        goToStory: jest.fn(),
       };
-      global.window = {
-        open: sinon.spy(),
-      };
+
+      global.open = jest.fn();
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
     it('should not have navigation call for None', () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'none');
-      expect(navigationObject).to.not.have.property('navigationCall');
+      expect(navigationObject).not.toHaveProperty('navigationCall');
     });
     it('should call nextSheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'nextSheet');
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.nextSheet).to.have.been.called;
+      expect(senseNavigation.nextSheet).toHaveBeenCalled;
     });
     it('should call prevSheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'prevSheet');
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.prevSheet).to.have.been.called;
+      expect(senseNavigation.prevSheet).toHaveBeenCalled;
     });
     it('should call goToSheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
       await navigationObject.navigationCall({ senseNavigation, sheet });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith(sheet);
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet);
     });
     it('should NOT call goToSheet when no sheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheet');
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToSheet).to.not.have.been.called;
+      expect(senseNavigation.goToSheet).not.toHaveBeenCalled;
     });
     it('should call goToSheetById', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheetById');
       await navigationObject.navigationCall({ senseNavigation, sheet });
-      expect(senseNavigation.goToSheet).to.have.been.calledWith(sheet);
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet);
     });
     it('should NOT call goToSheetById when no sheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToSheetById');
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToSheet).to.not.have.been.called;
+      expect(senseNavigation.goToSheet).not.toHaveBeenCalled;
     });
     it('should call goToStory', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToStory');
       await navigationObject.navigationCall({ senseNavigation, story });
-      expect(senseNavigation.goToStory).to.have.been.calledWith(story);
+      expect(senseNavigation.goToStory).toHaveBeenCalledWith(story);
     });
     it('should NOT call goToStory when no sheet', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'goToStory');
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToStory).to.not.have.been.called;
+      expect(senseNavigation.goToStory).not.toHaveBeenCalled;
     });
     it('should NOT call openWebsite', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({});
-      expect(global.window.open).to.not.have.been.called;
+      expect(global.open).not.toHaveBeenCalled;
     });
     it('should call openWebsite with defaults', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: false });
-      expect(global.window.open).to.have.been.calledWith(websiteUrl, '');
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, '');
     });
     it('should call openWebsite and add http://', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl: 'myWebsite', sameWindow: false });
-      expect(global.window.open).to.have.been.calledWith('http://myWebsite', '');
+      expect(global.open).toHaveBeenCalledWith('http://myWebsite', '');
     });
     it('should call openWebsite in same window', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
-      expect(global.window.open).to.have.been.calledWith(websiteUrl, '_self');
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, '_self');
     });
     it('should call openWebsite in parent', async () => {
-      global.window.top = 12;
+      const { top } = window;
+      delete window.top;
+      window.top = {};
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
-      expect(global.window.open).to.have.been.calledWith(websiteUrl, '_parent');
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, '_parent');
+      window.top = top;
     });
     it('should call mailto', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
-      expect(global.window.open).to.have.been.calledWith(mailtoUrl, '');
+      expect(global.open).toHaveBeenCalledWith(mailtoUrl, '');
     });
     describe('sheets with show conditions', () => {
       it('should call lastSheet feature flag is on', async () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'lastSheet');
         await navigationObject.navigationCall({ app, senseNavigation });
-        expect(senseNavigation.goToSheet).to.have.been.calledWith('id7');
+        expect(senseNavigation.goToSheet).toHaveBeenCalledWith('id7');
       });
       it('should call firstSheet feature flag is on', async () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
         await navigationObject.navigationCall({ app, senseNavigation });
-        expect(senseNavigation.goToSheet).to.have.been.calledWith('id3');
+        expect(senseNavigation.goToSheet).toHaveBeenCalledWith('id3');
       });
     });
   });
@@ -125,16 +131,16 @@ describe('navigation actions', () => {
     });
     it('should return true when should be shown', () => {
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).to.be.true;
+      expect(result).toBeTrue;
     });
     it('should return undefined when no action found', () => {
       data.navigation.action = 'notAnAction';
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).to.be.undefined;
+      expect(result).toBeUndefined;
     });
     it('should return false when field not in required input', () => {
       const result = checkShowNavigation(data, 'websiteUrl');
-      expect(result).to.be.false;
+      expect(result).toBeFalse;
     });
   });
 
@@ -148,11 +154,11 @@ describe('navigation actions', () => {
     const fakeApp = { getSheetList: () => sheets };
     it('should return sheets in correct order', async () => {
       const result = await getOrderedSheets(fakeApp);
-      expect(result).to.have.length(4);
-      expect(result[0].qInfo.qId).to.equal('id1');
-      expect(result[1].qInfo.qId).to.equal('id1.5');
-      expect(result[2].qInfo.qId).to.equal('id7');
-      expect(result[3].qInfo.qId).to.equal('id15');
+      expect(result).toHaveLength(4);
+      expect(result[0].qInfo.qId).toEqual('id1');
+      expect(result[1].qInfo.qId).toEqual('id1.5');
+      expect(result[2].qInfo.qId).toEqual('id7');
+      expect(result[3].qInfo.qId).toEqual('id15');
     });
   });
 
@@ -168,11 +174,11 @@ describe('navigation actions', () => {
     const fakeApp = { getSheetList: () => sheets };
     it('should return visible sheets in correct order', async () => {
       const result = await getOrderedVisibleSheet(fakeApp);
-      expect(result).to.have.length(3);
-      expect(result[0].qInfo.qId).to.equal('id1');
-      expect(result[1].qInfo.qId).to.equal('id1.2');
-      expect(result[2].qInfo.qId).to.equal('id1.5');
-      expect(result[3]).to.equal(undefined);
+      expect(result).toHaveLength(3);
+      expect(result[0].qInfo.qId).toEqual('id1');
+      expect(result[1].qInfo.qId).toEqual('id1.2');
+      expect(result[2].qInfo.qId).toEqual('id1.5');
+      expect(result[3]).toEqual(undefined);
     });
   });
 });

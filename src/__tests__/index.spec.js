@@ -1,16 +1,11 @@
 import { create } from '@nebula.js/test-utils';
+import supernova from '../index';
+import * as renderButton from '../components/action-button';
 
 describe('index', () => {
-  let renderButton;
-  let sandbox;
-  let supernova;
-  before(() => {
-    sandbox = sinon.createSandbox();
-    renderButton = sandbox.stub();
-    [{ default: supernova }] = aw.mock([['**/action-button.js', () => renderButton]], ['../index.js']);
-  });
+  const renderSpy = jest.spyOn(renderButton, 'renderButton').mockResolvedValue();
   afterEach(() => {
-    sandbox.reset();
+    jest.resetAllMocks();
   });
 
   global.document = {
@@ -29,7 +24,7 @@ describe('index', () => {
     },
   };
   const thisElement = {
-    appendChild: sinon.spy(),
+    appendChild: jest.fn(),
     firstElementChild: {
       setAttribute: () => {},
       removeAttribute: () => {},
@@ -53,8 +48,8 @@ describe('index', () => {
 
     await c.update();
 
-    expect(thisElement.appendChild).to.have.been.called;
-    expect(renderButton).to.have.been.calledWithExactly({
+    expect(thisElement.appendChild).toHaveBeenCalled;
+    expect(renderSpy).toHaveBeenCalledWith({
       element: thisElement,
       layout: 'layout',
       app: undefined,

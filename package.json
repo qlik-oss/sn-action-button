@@ -34,7 +34,7 @@
     "lint": "eslint src",
     "start": "nebula serve",
     "sense": "nebula sense",
-    "test:unit": "aw -c aw.config.js",
+    "test:unit": "jest",
     "test:integration": "aw puppet --glob 'test/integration/**/*.spec.js'",
     "prepublishOnly": "rm -rf dist && npm run build",
     "prepare": "husky install",
@@ -68,6 +68,8 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-mocha": "9.0.0",
     "husky": "7.0.4",
+    "jest": "^27.3.1",
+    "jest-junit": "^13.0.0",
     "lint-staged": "11.2.6",
     "mocha-junit-reporter": "2.0.2",
     "scriptappy-from-jsdoc": "0.7.0"

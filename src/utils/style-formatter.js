@@ -1,6 +1,7 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import urlUtils from './url-utils';
+import DEFAULTS from '../style-defaults';
 
 const backgroundSize = {
   auto: 'auto auto',
@@ -25,7 +26,11 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
-const getColor = ({ useColorExpression = false, colorExpression = '', color = {} }, defaultColor, theme) => {
+const getColor = (
+  { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
+  defaultColor,
+  theme
+) => {
   let resolvedColor;
   if (useColorExpression) {
     resolvedColor = colorUtils.resolveExpression(colorExpression);
@@ -46,8 +51,9 @@ export default {
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
-    font.style && font.style.bold && (styles += formatProperty('font-weight', 'bold'));
-    font.style && font.style.italic && (styles += formatProperty('font-style', 'italic'));
+    const fontStyle = font.style || DEFAULTS.FONT_STYLE;
+    fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
+    fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
@@ -56,8 +62,11 @@ export default {
       if (bgUrl) {
         bgUrl = urlUtils.getImageUrl(bgUrl);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
-        styles += formatProperty('background-size', backgroundSize[background.size]);
-        styles += formatProperty('background-position', backgroundPosition[background.position]);
+        styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+        styles += formatProperty(
+          'background-position',
+          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+        );
         styles += formatProperty('background-repeat', 'no-repeat');
       }
     }
@@ -65,9 +74,12 @@ export default {
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
       const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
-      const borderSize = (border.width * lengthShortSide) / 2;
+      const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
-      styles += formatProperty('border-radius', `${(border.radius * lengthShortSide) / 2}px`);
+      styles += formatProperty(
+        'border-radius',
+        `${((border.radius || DEFAULTS.BORDER_RADIUS) * lengthShortSide) / 2}px`
+      );
     } else {
       styles += 'border: none;';
     }
@@ -75,7 +87,7 @@ export default {
     return styles;
   },
   createLabelAndIcon({ button, theme, style = {}, isSense }) {
-    const { icon = {}, font = {}, label = 'Button' } = style;
+    const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
@@ -112,7 +124,7 @@ export default {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    const fontScale = font.size || 0.5;
+    const fontScale = font.size || DEFAULTS.FONT_SIZE;
     if (font.style && font.style.italic) {
       if (hasIcon) {
         text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;

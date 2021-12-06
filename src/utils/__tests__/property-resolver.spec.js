@@ -7,14 +7,14 @@ describe('getValue', () => {
   });
   it('should return value if reference exists', () => {
     const result = propertyResolver.getValue(data, 'style.background.url');
-    expect(result).to.equal('url');
+    expect(result).toEqual('url');
   });
   it("should return default value if reference doesn't exist", () => {
     const result = propertyResolver.getValue(data, 'style.background.urlb', 'default');
-    expect(result).to.equal('default');
+    expect(result).toEqual('default');
   });
   it("should return default value if data doesn't exist", () => {
     const result = propertyResolver.getValue(undefined, 'style.background.url', 'default');
-    expect(result).to.equal('default');
+    expect(result).toEqual('default');
   });
 });
