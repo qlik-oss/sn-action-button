@@ -13,7 +13,7 @@ module.exports = {
     visibility: 'public',
     name: `${pkg.name}:properties`,
     version: pkg.version,
-    description: 'Table generic object definition',
+    description: 'Action button generic object definition',
   },
   output: {
     file: path.resolve(__dirname, '../api-specifications/properties.json'),
