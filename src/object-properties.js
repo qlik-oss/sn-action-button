@@ -1,4 +1,5 @@
 const properties = {
+  version: process.env.PACKAGE_VERSION,
   /**
    * @type {boolean}
    */
