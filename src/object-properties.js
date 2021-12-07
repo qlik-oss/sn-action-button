@@ -11,7 +11,7 @@ const properties = {
    * @type {string}
    * @default
    */
-  version: process.env.PACKAGE_VERSION,
+  version: (process && process.env && process.env.PACKAGE_VERSION) || '1.0.0',
   /**
    * Show title for the visualization
    * @type {boolean=}
