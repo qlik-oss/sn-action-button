@@ -47,10 +47,10 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - run:
-          name: Integration tests
+          name: Rendering tests
           command: yarn test:rendering
       - store_artifacts:
-          path: ./test/integration/__artifacts__
+          path: ./test/rendering/__artifacts__
       - store_test_results:
           path: coverage/junit
       - save_cache: *save_yarn_cache
