@@ -25,7 +25,7 @@
     "sn-action-button.qext"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=16"
   },
   "main": "dist/sn-action-button.js",
   "module": "dist/sn-action-button.esm.js",
