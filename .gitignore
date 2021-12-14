@@ -12,3 +12,6 @@ coverage
 dist/
 sn-action-button-ext/
 .zip
+
+**/test/*/__artifacts__/diff
+**/test/*/__artifacts__/regression

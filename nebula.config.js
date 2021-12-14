@@ -14,7 +14,7 @@ module.exports = {
           size: { width: 800, height: 600 },
         },
         layout: {
-          qInfo: { qId: 'CNaxMh', qType: 'action-button' },
+          qInfo: { qId: 'CNaxMh', qType: 'sn-action-button' },
           qSelectionInfo: {},
           actions: [],
           navigation: { action: 'none', sheet: '', story: '', websiteUrl: '', sameWindow: false },

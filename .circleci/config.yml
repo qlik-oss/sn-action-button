@@ -21,30 +21,21 @@ aliases:
 jobs:
   build:
     docker:
-      - image: circleci/node:12.16.3
-      - image: qlikcore/engine:12.1126.0
-        command: -S AcceptEULA=yes
-      - image: browserless/chrome:1.33.1-puppeteer-1.19.0
-
+      - image: circleci/node:16.7.0-browsers
+      - image: browserless/chrome:1.49.1-puppeteer-1.20.0
     working_directory: ~/project
-
     steps:
       - checkout
-
       - restore_cache: *restore_yarn_cache
-
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
-
       - run:
           name: Build
           command: yarn run build
-
       - run:
           name: Lint
           command: yarn run lint
-
       - run:
           name: Unit tests
           command: |
@@ -55,17 +46,11 @@ jobs:
             fi
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
-
       - run:
-          name: Integration tests
-          command: |
-            DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
-            APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
-
+          name: Rendering tests
+          command: yarn test:rendering
       - store_artifacts:
-          path: ./test/integration/__artifacts__
-
+          path: ./test/rendering/__artifacts__
       - store_test_results:
           path: coverage/junit
-
       - save_cache: *save_yarn_cache
