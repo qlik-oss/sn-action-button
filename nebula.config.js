@@ -60,6 +60,8 @@ module.exports = {
     ],
   },
   build: {
-    'process.env.PACKAGE_VERSION': JSON.stringify(version),
+    replacementStrings: {
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
+    },
   },
 };
