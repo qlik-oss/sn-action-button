@@ -5,7 +5,7 @@
     "description": "Action button generic object definition",
     "version": "1.14.3",
     "license": "MIT",
-    "stability": "experimental",
+    "stability": "stable",
     "x-qlik-visibility": "public"
   },
   "entries": {
