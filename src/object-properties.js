@@ -100,16 +100,16 @@ const properties = {
 /**
  * Defines what action to perform and options for that action type.
  * @typedef {object} Action
- * @property {string} actionLabel - Label for reference
- * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable'|'doReload'|'executeAutomation')} actionType - The type of action
- * @property {string=} bookmark - ID of bookmark, required for type 'applyBookmark'
- * @property {string=} field - Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'
- * @property {string=} softLock - Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'
- * @property {string=} value - To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'
- * @property {string=} variable - Name of variable. Required for type 'setVariable'
- * @property {boolean=} partial - Set to true if you want to do a partial reload. Defaults to false
- * @property {string=} automation - ID of the automation. Required for type 'setVariable'
- * @property {boolean=} automationPostData - Set to true to include the current selections in the automation. Defaults to false
+ * @property {string} [actionLabel=''] - Label for reference
+ * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable'|'doReload'|'executeAutomation')} [actionType=''] - The type of action
+ * @property {string=} [bookmark=''] - ID of bookmark, required for type 'applyBookmark'
+ * @property {string=} [field=''] - Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'
+ * @property {string=} [softLock=''] - Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'
+ * @property {string=} [value=''] - To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'
+ * @property {string=} [variable=''] - Name of variable. Required for type 'setVariable'
+ * @property {boolean=} [partial=false] - Set to true if you want to do a partial reload.
+ * @property {string=} [automation=''] - ID of the automation. Required for type 'setVariable'
+ * @property {boolean=} [automationPostData=false] - Set to true to include the current selections in the automation. Defaults to false
  */
 
 /**
@@ -125,7 +125,7 @@ const properties = {
 /**
  * Holds styling options
  * @typedef {object} Style
- * @property {string=} label - The text displayed on the button, defaults to 'Button'
+ * @property {string=} [label='Button'] - The text displayed on the button
  * @property {Font=} font - Styling for the label
  * @property {Background=} background - Styling for background, including image
  * @property {Border=} border - Styling for border
@@ -134,45 +134,46 @@ const properties = {
 
 /**
  * @typedef {object} Font
- * @property {number=} size - Relative size of label, must be greater than 0 and 1 fills the entire button, defaults to 0.5
- * @property {boolean=} useColorExpression - Set to true to use color expression, defaults to false
+ * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
- * @property {('left'|'center'|'right')=} align - Horizontal alignment, defaults to 'center'
- * @property {object=} style - Additional style options, text is bold as default
- * @property {boolean=} style.bold - Bold text
- * @property {boolean=} style.italic - Italic text
- * @property {boolean=} style.underline - Underlined text
+ * @property {number=} [size=0.5] - Relative[] size of label, must be greater than 0 and 1 fills the entire button
+ * @property {('left'|'center'|'right')=} [align='center'] - Horizontal alignment
+ * @property {object=} style - Additional style options
+ * @property {boolean=} [style.bold = true] - Bold text
+ * @property {boolean=} [style.italic = false] - Italic text
+ * @property {boolean=} [style.underline = false] - Underlined text
  */
 
 /**
  * @typedef {object} Background
- * @property {boolean=} useColorExpression - Set to true to use color expression, default is false
+ * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
- * @property {boolean=} useImage - Set to true to show background image, default is false
+ * @property {boolean=} [useImage=false] - Set to true to show background image
  * @property {object=} url - Contains the URL for the background image
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
- * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight')} position - Image position, defaults to 'centerCenter'
- * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} size - Size of the image, relative to the button, defaults to auto
+ * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight')} [position='centerCenter'] - Image position
+ * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
  */
 
 /**
  * @typedef {object} Border
- * @property {boolean=} useBorder - Set to true to use border expression, default is false
- * @property {number=} width - Relative width, 0 is no border and 1 make the border fill the entire button. Defaults to 0
- * @property {number=} radius - Relative border radius, 0 is no rounding and 1 will make the short side a half circle. Defaults to 0
- * @property {boolean=} useColorExpression - Set to true to use color expression, default is false
+ * @property {boolean=} [useBorder=false] - Set to true to use border expression
+ * @property {number=} [width=0] - Relative width, 0 is no border and 1 make the border fill the entire button
+ * @property {number=} [radius=0] - Relative border radius, 0 is no rounding and 1 will make the short side a half circle
+ * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {string=} colorExpression - Color defined by expression, needed if useColorExpression is true
  */
 
 /**
  * @typedef {object} Icon
- * @property {boolean=} useIcon - Set to true to show icon, default is false
- * @property {string=} iconType - Name of the icon
- * @property {('left'|'right')=} position - Defines which side of the label the icon will be, defaults to left
+ * @property {boolean=} [useIcon=false] - Set to true to show icon, default is false
+ * @property {object=} iconType - holds the name of the icon
+ * @property {string=} [iconType.value=''] - name of icon
+ * @property {('left'|'right')=} [position='left'] - Defines which side of the label the icon will be
  */
 
 /**

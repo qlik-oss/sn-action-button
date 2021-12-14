@@ -20,9 +20,7 @@ module.exports = {
   },
   parse: {
     types: {
-      'qae.GenericObjectProperties': {
-        url: 'https://core.qlik.com/services/qix-engine/apis/qix/definitions/#genericobjectproperties',
-      },
+      'qae.GenericObjectProperties': {},
     },
   },
 };
