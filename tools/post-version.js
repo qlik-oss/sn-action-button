@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 
 exec('yarn spec');
-exec('git commit -a -m "docs: bump api specs"');
+// exec('git commit -a -m "docs: bump api specs"');
 
 // bump qext
 // const copyQext = (folder) => {
