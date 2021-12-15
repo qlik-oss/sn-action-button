@@ -502,6 +502,7 @@
       }
     },
     "Icon": {
+      "description": "Icons are only available inside Qlik Sense",
       "kind": "object",
       "entries": {
         "useIcon": {

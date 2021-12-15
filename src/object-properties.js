@@ -169,6 +169,7 @@ const properties = {
  */
 
 /**
+ * Icons are only available inside Qlik Sense
  * @typedef {object} Icon
  * @property {boolean=} [useIcon=false] - Set to true to show icon, default is false
  * @property {object=} iconType - holds the name of the icon
