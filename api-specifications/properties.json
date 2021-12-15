@@ -252,7 +252,7 @@
           "type": "#/definitions/ColorExpression"
         },
         "useImage": {
-          "description": "Set to true to show background image. Only available inside Qlik Sense",
+          "description": "Set to true to show background image",
           "optional": true,
           "defaultValue": false,
           "type": "boolean"
