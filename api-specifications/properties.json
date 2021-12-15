@@ -252,7 +252,7 @@
           "type": "#/definitions/ColorExpression"
         },
         "useImage": {
-          "description": "Set to true to show background image",
+          "description": "Set to true to show background image. Only available inside Qlik Sense",
           "optional": true,
           "defaultValue": false,
           "type": "boolean"
@@ -502,6 +502,7 @@
       }
     },
     "Icon": {
+      "description": "Icons are only available inside Qlik Sense",
       "kind": "object",
       "entries": {
         "useIcon": {

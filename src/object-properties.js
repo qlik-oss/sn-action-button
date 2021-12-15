@@ -150,7 +150,7 @@ const properties = {
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
- * @property {boolean=} [useImage=false] - Set to true to show background image
+ * @property {boolean=} [useImage=false] - Set to true to show background image. Only available inside Qlik Sense
  * @property {object=} url - Contains the URL for the background image
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
@@ -169,6 +169,7 @@ const properties = {
  */
 
 /**
+ * Icons are only available inside Qlik Sense
  * @typedef {object} Icon
  * @property {boolean=} [useIcon=false] - Set to true to show icon, default is false
  * @property {object=} iconType - holds the name of the icon
