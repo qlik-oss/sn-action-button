@@ -1,0 +1,9 @@
+{
+  "name": "sn-action-button",
+  "version": "0.1.0",
+  "description": "Button chart for executing actions",
+  "author": "QlikTech International AB",
+  "icon": "extension",
+  "type": "visualization",
+  "supernova": true
+}
