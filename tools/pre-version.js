@@ -12,7 +12,7 @@ const contents = {
   name: vizName,
   description: pkg.description,
   author: pkg.author,
-  icon: 'asdf',
+  icon: 'extension',
   type: 'visualization',
   version: pkg.version,
   supernova: true,
