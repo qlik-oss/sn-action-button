@@ -1,4 +1,4 @@
-import actions, { getValueList, checkShowAction } from '../actions';
+import actions, { getValueList, checkShowAction, getFFEnabledOrDefaultActions } from '../actions';
 
 describe('actions', () => {
   const qStateName = 'someState';
@@ -334,6 +334,22 @@ describe('actions', () => {
       expect(app.createBookmark).toHaveBeenCalled;
       expect(app.saveObjects).toHaveBeenCalled;
     });
+
+    it('should call refreshDynamicViews', async () => {
+      const senseNavigation = {
+        refreshDynamicViews: jest.fn(),
+      };
+      const actionObject = actions.find((action) => action.value === 'refreshDynamicViews');
+      await actionObject.getActionCall({ senseNavigation })();
+      expect(senseNavigation.refreshDynamicViews).toHaveBeenCalled;
+    });
+
+    it('should not call refreshDynamicViews if not implemented in sense-client', async () => {
+      const senseNavigation = {};
+      const actionObject = actions.find((action) => action.value === 'refreshDynamicViews');
+      await actionObject.getActionCall({ senseNavigation })();
+      expect(senseNavigation.refreshDynamicViews).toNotHaveBeenCalled;
+    });
   });
 
   describe('getValueList', () => {
@@ -387,6 +403,22 @@ describe('actions', () => {
       data.actionType = 'notAnAction';
       const result = checkShowAction(data, 'bookmark');
       expect(result).toEqual(undefined);
+    });
+  });
+
+  describe('getFFEnabledOrDefaultActions', () => {
+    it('should return all but not FF disabled actions', () => {
+      const isEnabled = jest.fn().mockReturnValue(false);
+      const result = getFFEnabledOrDefaultActions(isEnabled);
+      expect(result.length).toBe(19);
+      expect(result.filter((a) => a.featureFlag).length).toBe(0);
+    });
+
+    it('should return all and FF enabled actions', () => {
+      const isEnabled = jest.fn().mockReturnValue(true);
+      const result = getFFEnabledOrDefaultActions(isEnabled);
+      expect(result.length).toBe(21);
+      expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
   });
 });

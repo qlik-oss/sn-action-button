@@ -13,7 +13,11 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
-  const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
+  const { navigation } = layout;
+  const { odagLink } = layout;
+  let disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
+  const isOdagLink = navigation.action === 'odagLink' && odagLink.length === 0;
+  disabled = isOdagLink ? true : disabled;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
   button.setAttribute('style', formattedStyles);
@@ -26,15 +30,20 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action }));
+        if (actionObj) {
+          if (actionObj.group === 'dynamicViews') {
+            actionCallList.push(actionObj.getActionCall({ app, senseNavigation }));
+          } else {
+            actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action }));
+          }
+        }
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
       if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
-        const { navigation } = layout;
         const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-          await navigationObject.navigationCall({ app, senseNavigation, ...navigation });
+          await navigationObject.navigationCall({ app, senseNavigation, ...navigation, odagLink, element });
         }
       }
       button.removeAttribute('disabled');

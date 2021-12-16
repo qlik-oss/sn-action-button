@@ -61,6 +61,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator, automationsEnabled }),
+    ext: ext({ translator, isEnabled, senseNavigation }),
   };
 }

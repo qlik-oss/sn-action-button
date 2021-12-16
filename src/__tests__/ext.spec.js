@@ -6,7 +6,11 @@ describe('ext', () => {
     get: (someString) => someString,
   };
   let data;
-  const props = ext({ translator });
+  const isEnabled = jest.fn();
+  const senseNavigation = {
+    getOdagLinks: () => Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }])
+  };
+  const props = ext({ translator, isEnabled, senseNavigation });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
@@ -167,6 +171,15 @@ describe('ext', () => {
       expect(options[0].label).toEqual(blendName);
     });
 
+    it('Should return an array of odag app links', async () => {
+      const odagLinks = [{
+        label: 'TestOdagLink',
+        value: 'TestOdagLink'
+      }];
+      options = await navigationItems.odagLink.options(null, handler);
+      expect(options).toHaveLength(1);
+      expect(options).toStrictEqual(odagLinks);
+    });
     it('Should return an array with all sheets', async () => {
       options = await navigationItems.sheet.options(null, handler);
       expect(options).toHaveLength(2);

@@ -131,6 +131,34 @@ describe('action button', () => {
       defaults.element.firstElementChild.ontouchcancel();
       expect(defaults.element.firstElementChild.style.transform).toEqual('');
     });
+    it('should not act on click when `On-demand app` navigation is selected but odag link is not selected', async () => {
+      defaults.layout.navigation = { action: 'odagLink' };
+      defaults.layout.odagLink = '';
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).not.toHaveBeenCalledWith('disabled', true);
+    });
+    it('should act on click when `On-demand app` navigation and odag link are selected', async () => {
+      defaults.layout.navigation = { action: 'odagLink' };
+      defaults.layout.odagLink = 'odagLinkId';
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).toHaveBeenCalledWith('disabled', true);
+      expect(button.removeAttribute).toHaveBeenCalledWith('disabled');
+    });
+    it('should navigate to Odag Popup', async () => {
+      defaults.layout.navigation = { action: 'odagLink' };
+      defaults.layout.odagLink = 'odagLinkId';
+      defaults.senseNavigation = {
+        openOdagPopup: jest.fn(),
+        getCurrentStoryId: () => false,
+      };
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).toHaveBeenCalledWith('disabled', true);
+      expect(button.removeAttribute).toHaveBeenCalledWith('disabled');
+      expect(defaults.senseNavigation.openOdagPopup).toHaveBeenCalled;
+    });
   });
   describe('runActions', () => {
     beforeEach(() => {
