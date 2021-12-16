@@ -34,6 +34,7 @@
     "build:dev": "node ./tools/build.js --core --mode development && shx cp assets/* dist",
     "build:watch": "node ./tools/build.js --mode development -w",
     "lint": "eslint src",
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve",
     "sense": "nebula sense",
     "test:unit": "jest",
@@ -41,7 +42,7 @@
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js"
+    "postversion": "./tools/post-version.js"
   },
   "lint-staged": {
     "*.{js, jsx}": [
