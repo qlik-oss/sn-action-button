@@ -17,7 +17,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
   const { odagLink } = layout;
   let disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isOdagLink = navigation.action === 'odagLink' && odagLink.length === 0;
-  disabled = isOdagLink ? true : disabled;
+  disabled = isOdagLink || disabled;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
   button.setAttribute('style', formattedStyles);

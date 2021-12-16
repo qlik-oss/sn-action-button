@@ -298,6 +298,11 @@ describe('ext', () => {
       expect(result).toBeTrue;
     });
 
+    it('should return true when odagLink needs to show', () => {
+      const result = navigationItems.odagLink.show({ navigation: { action: 'odagLink' } });
+      expect(result).toBeTrue;
+    });
+
     it('should return true when enableCondition needs to show', () => {
       data.useEnabledCondition = true;
       const result = props.definition.items.enableCondition.items.condition.show(data);
