@@ -1,9 +1,9 @@
 {
   "name": "sn-action-button",
-  "version": "0.1.0",
-  "description": "Button chart for executing actions",
+  "description": "Supernova action button",
   "author": "QlikTech International AB",
-  "icon": "extension",
+  "icon": "asdf",
   "type": "visualization",
+  "version": "1.14.4",
   "supernova": true
 }

@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-action-button",
-  "version": "1.14.4",
+  "version": "1.14.3",
   "description": "Supernova action button",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -42,7 +42,8 @@
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
-    "postversion": "./tools/post-version.js"
+    "preversion": "./tools/post-version.js",
+    "postversion": "git push && git push tags"
   },
   "lint-staged": {
     "*.{js, jsx}": [
