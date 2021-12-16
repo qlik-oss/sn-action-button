@@ -141,7 +141,7 @@ describe('action button', () => {
     it('should act on click when `On-demand app` navigation and odag link are selected', async () => {
       defaults.layout.navigation = { action: 'odagLink' };
       defaults.layout.odagLink = 'odagLinkId';
-      defaults.layout.actions = [{ actionType: 'dynamicViews' }];
+      defaults.layout.actions = [{ actionType: 'refreshDynamicViews' }];
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.setAttribute).toHaveBeenCalledWith('disabled', true);
