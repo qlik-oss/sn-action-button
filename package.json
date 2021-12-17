@@ -1,7 +1,7 @@
 {
   "name": "@nebula.js/sn-action-button",
   "version": "1.14.3",
-  "description": "Supernova action button",
+  "description": "Button chart for executing actions",
   "license": "MIT",
   "author": "QlikTech International AB",
   "keywords": [
@@ -22,7 +22,8 @@
   "files": [
     "dist",
     "api-specifications",
-    "core"
+    "core",
+    "sn-action-button-ext"
   ],
   "engines": {
     "node": ">=16"
@@ -30,9 +31,9 @@
   "main": "dist/sn-action-button.js",
   "module": "dist/sn-action-button.esm.js",
   "scripts": {
-    "build": "node ./tools/build.js --core && shx cp assets/* dist",
-    "build:dev": "node ./tools/build.js --core --mode development && shx cp assets/* dist",
-    "build:watch": "node ./tools/build.js --mode development -w",
+    "build": "node ./tools/build.js --core --ext && shx cp assets/* dist",
+    "build:dev": "node ./tools/build.js --core --ext --mode development",
+    "build:watch": "node ./tools/build.js --ext --mode development -w",
     "lint": "eslint src",
     "start": "nebula serve",
     "sense": "nebula sense",
