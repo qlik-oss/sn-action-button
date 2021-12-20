@@ -42,8 +42,7 @@
     "test:rendering": "aw puppet --testExt '*.spec.js' --glob 'test/rendering/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
-    "preversion": "./tools/pre-version.js"
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js"
   },
   "lint-staged": {
     "*.{js, jsx}": [
