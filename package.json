@@ -1,7 +1,7 @@
 {
   "name": "@nebula.js/sn-action-button",
   "version": "1.14.3",
-  "description": "Button chart for executing actions",
+  "description": "Action button supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
   "keywords": [
