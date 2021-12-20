@@ -11,6 +11,7 @@ node_modules
 coverage
 dist/
 sn-action-button-ext/
+core/esm
 .zip
 
 **/test/*/__artifacts__/diff
