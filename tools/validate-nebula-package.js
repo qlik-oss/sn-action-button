@@ -53,12 +53,6 @@ const validateFiles = (pkg) => {
   ];
   // files
   const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-action-button-ext'];
-  if (pkg.qext) {
-    const qextName = /^@nebula\.js\/([a-z-]+)$/.exec(pkg.name)[1];
-    mustHaveFiles.push('qext');
-    mustHaveFiles.push(`${qextName}.qext`);
-    mustHaveFiles.push(`${qextName}.js`);
-  }
   const allowedFiles = ['assets', ...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
   if (missing.length) {
