@@ -31,7 +31,7 @@
   "main": "dist/sn-action-button.js",
   "module": "dist/sn-action-button.esm.js",
   "scripts": {
-    "build": "node ./tools/build.js --core --ext && shx cp assets/* dist",
+    "build": "node ./tools/build.js --core --ext",
     "build:dev": "node ./tools/build.js --core --ext --mode development",
     "build:watch": "node ./tools/build.js --ext --mode development -w",
     "lint": "eslint src",
