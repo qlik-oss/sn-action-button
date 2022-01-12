@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const validateScripts = (pkg) => {
-  if (pkg.scripts.build !== 'node ./tools/build.js --core && shx cp assets/* dist') {
+  if (pkg.scripts.build !== 'node ./tools/build.js --core --ext') {
     throw new Error('package.json does not have correct build script');
   }
   if (pkg.scripts.prepublishOnly !== 'NODE_ENV=production yarn run build && yarn spec') {
@@ -23,10 +23,6 @@ const validatePackageJsonContent = (pkg) => {
 
   if (!pkg.scripts) {
     throw new Error('package.json does not have any build script');
-  }
-
-  if ((/--ext/.test(pkg.scripts.build) && !pkg.qext) || (!/--ext/.test(pkg.scripts.build) && pkg.qext)) {
-    throw new Error('package.json has a mismatch of qext and --ext');
   }
 
   if (/--native/.test(pkg.scripts.build)) {
@@ -56,13 +52,7 @@ const validateFiles = (pkg) => {
     'peerDependencies',
   ];
   // files
-  const mustHaveFiles = ['dist', 'core', 'api-specifications'];
-  if (pkg.qext) {
-    const qextName = /^@nebula\.js\/([a-z-]+)$/.exec(pkg.name)[1];
-    mustHaveFiles.push('qext');
-    mustHaveFiles.push(`${qextName}.qext`);
-    mustHaveFiles.push(`${qextName}.js`);
-  }
+  const mustHaveFiles = ['dist', 'core', 'api-specifications', 'sn-action-button-ext'];
   const allowedFiles = ['assets', ...mustHaveFiles];
   const missing = mustHaveFiles.filter((f) => (pkg.files || []).indexOf(f) === -1);
   if (missing.length) {
