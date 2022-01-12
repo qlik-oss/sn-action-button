@@ -2,9 +2,9 @@
 
 1. Install with `yarn`
 1. Transpile code: `yarn build` (or `yarn build:watch`)
-1. Link to Sense Desktop (locally on your computer):
+1. Link to sense-client (locally on your computer):
    1. In this repo: `yarn link`
-   1. In sense-client repo: `yarn link "@nebula.js/sn-kpi"`
+   1. In sense-client repo: `yarn link "@nebula.js/sn-action-button"`
 1. Or, run it using nebula with `yarn start`
 
 ## Testing
