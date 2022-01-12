@@ -32,11 +32,3 @@ nuked.render({
 ```
 
 [See full example](./example)
-
-## How to release
-
-1. Create a release branch version/1.x.x
-2. Run `npm version patch/minor`
-3. Run `git push && git push --tags`
-4. Merge the branch
-5. Run `npm publish`
