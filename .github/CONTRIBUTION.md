@@ -37,7 +37,7 @@ Currently only admins are able to create a release. A release consists of the fo
 ### Step-By-Step
 
 1. Check out master and run `git pull`.
-1. Run `git clean -dfx && yarn` to make sure depenencies are up-to-date.
+1. Run `yarn` to make sure depenencies are up-to-date.
 1. Run `npm version [major | minor | patch] -m "chore(release): v%s"`. Use semver string based on conventional commits since last release. Ex: `npm version patch -m "chore(release): v%s"`.
 1. Run `git push && git push --tags` to push commit and tag.
 1. Make sure all checks pass, then Circle CI automatically publishes to NPM.
