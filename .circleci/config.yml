@@ -1,5 +1,9 @@
 version: 2
 
+defaults: &defaults
+  working_directory: ~/action-button
+  # Available images https://hub.docker.com/r/circleci/node/tags/
+
 aliases:
   - &restore_yarn_cache
     name: Restore yarn cache
@@ -19,17 +23,32 @@ aliases:
     at: ~/project
 
 jobs:
-  build:
+  install:
+    <<: *defaults
     docker:
-      - image: circleci/node:16.7.0-browsers
-      - image: browserless/chrome:1.49.1-puppeteer-1.20.0
-    working_directory: ~/project
+      - image: circleci/node:16.7.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
+      - save_cache: *save_yarn_cache
+      - store_artifacts:
+          path: package.json
+      - persist_to_workspace:
+          root: ~/action-button
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    docker:
+      - image: circleci/node:16.7.0-browsers
+      - image: browserless/chrome:1.50.0-puppeteer-1.20.0
+    steps:
+      - attach_workspace:
+          at: ~/action-button
       - run:
           name: Build
           command: yarn run build
@@ -37,7 +56,10 @@ jobs:
           name: Lint
           command: yarn run lint
       - run:
-          name: Unit tests
+          name: Update spec
+          command: yarn run spec
+      - run:
+          name: Run unit tests and upload to coveralls
           command: |
             yarn jest --coverage --reporters=default --reporters=jest-junit
             if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
@@ -53,4 +75,96 @@ jobs:
           path: ./test/rendering/__artifacts__
       - store_test_results:
           path: coverage/junit
-      - save_cache: *save_yarn_cache
+      - persist_to_workspace:
+          root: ~/action-button
+          paths:
+            - dist
+            - package.json
+            - core
+
+  # publish-dev:
+  #   <<: *defaults
+  #   docker:
+  #     - image: circleci/node:16.7.0
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/action-button
+  #     - run: mv ./dist sn-action-button && zip -r "sn-action-button.zip" "./sn-action-button"
+  #     - store_artifacts:
+  #         path: ./sn-action-button.zip
+
+  publish:
+    <<: *defaults
+    docker:
+      - image: circleci/node:16.7.0
+    steps:
+      - attach_workspace:
+          at: ~/action-button
+      - run:
+          name: Setup npm
+          command: |
+            set -eo pipefail
+            # Amend auth token for access to public npm registry for @nebula.js packages
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
+          name: Publish
+          command: |
+            set -euo pipefail
+            PROJ_VER=v$(cat package.json | jq -r '.version')
+            TAG_NAME=$(git tag --points-at HEAD)
+
+            if [ "$TAG_NAME" == "$PROJ_VER" ]
+            then
+              echo "Running >> npm publish"
+              npm publish
+            fi
+
+  api-governance:
+    machine: true
+    working_directory: ~/project
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Login for Docker
+          command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
+      - run:
+          name: API Governance Compliance
+          command: |
+            docker pull qlik/asmquery
+            docker create -v /specs --name specs alpine:3.4 /bin/true
+            docker cp ./api-specifications/properties.json specs:/specs
+            docker run --volumes-from specs \
+            -e target=Colony \
+            -e runMode=failBuild \
+            -e apiId=b96971ec-2f58-4ba3-9213-440e689471a0 \
+            -e specPath='/specs/properties.json' \
+            -e commit="$CIRCLE_SHA1" qlik/asmquery
+
+workflows:
+  version: 2
+  build-all:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - api-governance:
+          filters:
+            branches:
+              # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
+              ignore: /pull\/[0-9]+/
+            tags:
+              only:
+                - /v.*/
+      # - publish-dev:
+      #     requires:
+      #       - build
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
