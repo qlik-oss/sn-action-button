@@ -138,7 +138,7 @@ jobs:
             docker run --volumes-from specs \
             -e target=Colony \
             -e runMode=failBuild \
-            -e apiId=b96971ec-2f58-4ba3-9213-440e689471a0 \
+            -e apiId=a8ca346c-62df-4988-b040-59962008eeeb \
             -e specPath='/specs/properties.json' \
             -e commit="$CIRCLE_SHA1" qlik/asmquery
 
