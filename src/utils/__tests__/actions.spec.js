@@ -11,7 +11,7 @@ describe('actions', () => {
   let bookmark;
   let variable;
   let automation;
-  let inputs = false;
+  let inputs = [];
   let automationPostData = false;
   const value = 'someValue';
   const softLock = true;
@@ -70,7 +70,7 @@ describe('actions', () => {
     });
 
     afterEach(() => {
-      inputs = false;
+      inputs = [];
       automationPostData = false;
       jest.resetAllMocks();
     });
@@ -306,7 +306,7 @@ describe('actions', () => {
     });
 
     it('should call executeAutomation', async () => {
-      inputs = false;
+      inputs = [];
       automationPostData = false;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
@@ -326,7 +326,7 @@ describe('actions', () => {
     });
 
     it('should call executeAutomation with creation of bookmark and save app', async () => {
-      inputs = true;
+      inputs = [];
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
