@@ -118,7 +118,7 @@ const navigationActions = [
   },
 ];
 
-export const getFFEnabledOrDefaultNavigations = (isEnabled) => navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
+export const getNavigationsList = (isEnabled) => navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);

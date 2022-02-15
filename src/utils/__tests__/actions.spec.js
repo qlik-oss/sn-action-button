@@ -1,4 +1,4 @@
-import actions, { getValueList, checkShowAction, getFFEnabledOrDefaultActions } from '../actions';
+import actions, { getValueList, checkShowAction, getActionsList } from '../actions';
 
 describe('actions', () => {
   const qStateName = 'someState';
@@ -409,14 +409,14 @@ describe('actions', () => {
   describe('getFFEnabledOrDefaultActions', () => {
     it('should return all but not FF disabled actions', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
-      const result = getFFEnabledOrDefaultActions(isEnabled);
+      const result = getActionsList(isEnabled);
       expect(result.length).toBe(19);
       expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
 
     it('should return all and FF enabled actions', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
-      const result = getFFEnabledOrDefaultActions(isEnabled);
+      const result = getActionsList(isEnabled);
       expect(result.length).toBe(21);
       expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });

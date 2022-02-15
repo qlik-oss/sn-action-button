@@ -1,5 +1,5 @@
-import actions, { checkShowAction, getFFEnabledOrDefaultActions } from './utils/actions';
-import { checkShowNavigation, getFFEnabledOrDefaultNavigations } from './utils/navigation-actions';
+import actions, { checkShowAction, getActionsList } from './utils/actions';
+import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
@@ -71,7 +71,7 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: getFFEnabledOrDefaultActions(isEnabled),
+                  options: getActionsList(isEnabled),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -193,7 +193,7 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   translation: 'Object.ActionButton.Navigation',
                   component: 'expression-with-dropdown',
                   defaultValue: null,
-                  options: getFFEnabledOrDefaultNavigations(isEnabled),
+                  options: getNavigationsList(isEnabled),
                   dropdownOnly: true,
                 },
                 sheetId: {

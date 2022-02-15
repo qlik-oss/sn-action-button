@@ -2,7 +2,7 @@ import navigationActions, {
   checkShowNavigation,
   getOrderedSheets,
   getOrderedVisibleSheet,
-  getFFEnabledOrDefaultNavigations,
+  getNavigationsList,
 } from '../navigation-actions';
 import defaultValues from '../../__tests__/default-button-props';
 
@@ -121,20 +121,18 @@ describe('navigation actions', () => {
     });
 
     describe('odag navigation popup', () => {
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'odagLink');
       it('should not call openOdagPopup when openOdagPopup is undefined', async () => {
-        const navigationObject = navigationActions.find((navigation) => navigation.value === 'odagLink');
         await navigationObject.navigationCall({ app, senseNavigation });
         expect(senseNavigation.openOdagPopup).toBeUndefined();
       });
       it('should not call openOdagPopup when odagLink is undefined', async () => {
         senseNavigation.openOdagPopup = jest.fn();
-        const navigationObject = navigationActions.find((navigation) => navigation.value === 'odagLink');
         await navigationObject.navigationCall({ app, senseNavigation });
         expect(senseNavigation.openOdagPopup).toHaveBeenCalledTimes(0);
       });
       it('should call openOdagPopup when openOdagPopup & odagLink are defined', async () => {
         senseNavigation.openOdagPopup = jest.fn();
-        const navigationObject = navigationActions.find((navigation) => navigation.value === 'odagLink');
         await navigationObject.navigationCall({ app, senseNavigation, odagLink: 'odagLinkId' });
         expect(senseNavigation.openOdagPopup).toHaveBeenCalledTimes(1);
         expect(senseNavigation.openOdagPopup).toHaveBeenCalledWith(app, 'odagLinkId', undefined);
@@ -207,14 +205,14 @@ describe('navigation actions', () => {
   describe('getFFEnabledOrDefaultNavigations', () => {
     it('should return all but not FF disabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
-      const result = getFFEnabledOrDefaultNavigations(isEnabled);
+      const result = getNavigationsList(isEnabled);
       expect(result.length).toBe(9);
       expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
 
     it('should return all and FF enabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
-      const result = getFFEnabledOrDefaultNavigations(isEnabled);
+      const result = getNavigationsList(isEnabled);
       expect(result.length).toBe(10);
       expect(result.filter((a) => a.featureFlag).length).toBe(1);
     });

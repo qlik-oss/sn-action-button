@@ -360,7 +360,7 @@ const actions = [
   },
 ];
 
-export const getFFEnabledOrDefaultActions = (isEnabled) => actions.filter((a) => !a.featureFlag || isEnabled(a.featureFlag));
+export const getActionsList = (isEnabled) => actions.filter((a) => !a.featureFlag || isEnabled(a.featureFlag));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);

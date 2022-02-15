@@ -31,11 +31,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
         if (actionObj) {
-          if (actionObj.group === 'dynamicViews') {
-            actionCallList.push(actionObj.getActionCall({ app, senseNavigation }));
-          } else {
-            actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action }));
-          }
+          actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation }));
         }
       });
       button.setAttribute('disabled', true);
