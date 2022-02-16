@@ -13,11 +13,8 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName } = layout;
-  const { navigation } = layout;
-  const { odagLink } = layout;
-  let disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
-  const isOdagLink = navigation.action === 'odagLink' && odagLink.length === 0;
-  disabled = isOdagLink || disabled;
+  const { navigation, odagLink } = layout;
+  const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
   button.setAttribute('style', formattedStyles);
@@ -30,9 +27,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        if (actionObj) {
-          actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation }));
-        }
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation }));
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);

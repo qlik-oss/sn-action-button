@@ -109,7 +109,7 @@ const navigationActions = [
     value: 'odagLink',
     navigationCall:
       async ({ app, senseNavigation, odagLink, element }) => {
-        if (typeof senseNavigation.openOdagPopup === 'function' && odagLink) {
+        if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
           await senseNavigation.openOdagPopup(app, odagLink, element);
         }
       },
