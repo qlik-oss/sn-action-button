@@ -406,7 +406,7 @@ describe('actions', () => {
     });
   });
 
-  describe('getFFEnabledOrDefaultActions', () => {
+  describe('getActionsList', () => {
     it('should return all but not FF disabled actions', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
       const result = getActionsList(isEnabled);

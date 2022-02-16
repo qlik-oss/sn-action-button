@@ -202,7 +202,7 @@ describe('navigation actions', () => {
     });
   });
 
-  describe('getFFEnabledOrDefaultNavigations', () => {
+  describe('getNavigationsList', () => {
     it('should return all but not FF disabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
       const result = getNavigationsList(isEnabled);
