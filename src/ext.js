@@ -250,7 +250,7 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                 },
                 odagLink: {
                   type: 'string',
-                  ref: 'odagLink',
+                  ref: 'navigation.odagLink',
                   component: 'expression-with-dropdown',
                   translation: 'ExpressionEditor.SetExpresions.OdagAppLinks',
                   dropdownOnly: true,

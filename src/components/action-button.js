@@ -12,8 +12,7 @@ export const runActions = async (actionList) => {
 export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
-  const { style, qStateName } = layout;
-  const { navigation, odagLink } = layout;
+  const { style, qStateName, navigation } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
@@ -34,7 +33,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
         const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-          await navigationObject.navigationCall({ app, senseNavigation, ...navigation, odagLink, element });
+          await navigationObject.navigationCall({ app, senseNavigation, ...navigation, element });
         }
       }
       button.removeAttribute('disabled');
