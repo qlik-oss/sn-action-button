@@ -131,6 +131,28 @@ describe('action button', () => {
       defaults.element.firstElementChild.ontouchcancel();
       expect(defaults.element.firstElementChild.style.transform).toEqual('');
     });
+    it('should act on click when `On-demand app` navigation and odag link are selected', async () => {
+      defaults.layout.navigation = { action: 'odagLink' };
+      defaults.layout.odagLink = 'odagLinkId';
+      defaults.layout.actions = [{ actionType: 'refreshDynamicViews' }];
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).toHaveBeenCalledWith('disabled', true);
+      expect(button.removeAttribute).toHaveBeenCalledWith('disabled');
+    });
+    it('should navigate to Odag Popup', async () => {
+      defaults.layout.navigation = { action: 'odagLink' };
+      defaults.layout.odagLink = 'odagLinkId';
+      defaults.senseNavigation = {
+        openOdagPopup: jest.fn(),
+        getCurrentStoryId: () => false,
+      };
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(button.setAttribute).toHaveBeenCalledWith('disabled', true);
+      expect(button.removeAttribute).toHaveBeenCalledWith('disabled');
+      expect(defaults.senseNavigation.openOdagPopup).toHaveBeenCalled;
+    });
   });
   describe('runActions', () => {
     beforeEach(() => {

@@ -104,7 +104,21 @@ const navigationActions = [
     },
     requiredInput: ['websiteUrl'],
   },
+  {
+    translation: 'Object.ActionButton.SelectOdagApp',
+    value: 'odagLink',
+    navigationCall:
+      async ({ app, senseNavigation, odagLink, element }) => {
+        if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
+          await senseNavigation.openOdagPopup(app, odagLink, element);
+        }
+      },
+    requiredInput: ['odagLink'],
+    featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
+  },
 ];
+
+export const getNavigationsList = (isEnabled) => navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);

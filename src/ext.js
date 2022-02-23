@@ -1,5 +1,5 @@
-import actions, { checkShowAction } from './utils/actions';
-import navigationActions, { checkShowNavigation } from './utils/navigation-actions';
+import actions, { checkShowAction, getActionsList } from './utils/actions';
+import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
@@ -26,7 +26,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator, automationsEnabled }) {
+export default function ext({ translator, isEnabled, senseNavigation }) {
   return {
     definition: {
       type: 'items',
@@ -71,7 +71,7 @@ export default function ext({ translator, automationsEnabled }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: actions.filter((action) => action.value !== 'executeAutomation' || automationsEnabled),
+                  options: getActionsList(isEnabled),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -193,7 +193,7 @@ export default function ext({ translator, automationsEnabled }) {
                   translation: 'Object.ActionButton.Navigation',
                   component: 'expression-with-dropdown',
                   defaultValue: null,
-                  options: navigationActions,
+                  options: getNavigationsList(isEnabled),
                   dropdownOnly: true,
                 },
                 sheetId: {
@@ -247,6 +247,21 @@ export default function ext({ translator, automationsEnabled }) {
                   translation: 'properties.sameWindow',
                   show: (data) => checkShowNavigation(data, 'websiteUrl'),
                   defaultValue: false,
+                },
+                odagLink: {
+                  type: 'string',
+                  ref: 'navigation.odagLink',
+                  component: 'dropdown',
+                  translation: 'ExpressionEditor.SetExpresions.OdagAppLinks',
+                  options: async (action, hyperCubeHandler) => {
+                    const odagLinks = await senseNavigation.getOdagLinks(hyperCubeHandler.app);
+                    return odagLinks.filter((link) => link.properties.type === 'odaglink')
+                      .map((odagLink) => ({
+                        label: odagLink.properties.data.name,
+                        value: odagLink.properties.data.id
+                      }));
+                  },
+                  show: (data) => checkShowNavigation(data, 'odagLink'),
                 },
               },
             },

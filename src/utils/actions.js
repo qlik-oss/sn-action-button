@@ -342,8 +342,25 @@ const actions = [
           }
         },
     requiredInput: ['automation'],
+    featureFlag: 'ACTION_BUTTON_AUTOMATIONS',
+  },
+  {
+    value: 'refreshDynamicViews',
+    translation: 'Object.ActionButton.RefreshDynamicViews',
+    group: 'dynamicViews',
+    getActionCall:
+      ({ senseNavigation }) =>
+        async () => {
+          if (typeof senseNavigation.refreshDynamicViews === 'function') {
+            await senseNavigation.refreshDynamicViews();
+          }
+        },
+    requiredInput: [],
+    featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
   },
 ];
+
+export const getActionsList = (isEnabled) => actions.filter((a) => !a.featureFlag || isEnabled(a.featureFlag));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);
