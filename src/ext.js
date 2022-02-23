@@ -251,9 +251,8 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                 odagLink: {
                   type: 'string',
                   ref: 'navigation.odagLink',
-                  component: 'expression-with-dropdown',
+                  component: 'dropdown',
                   translation: 'ExpressionEditor.SetExpresions.OdagAppLinks',
-                  dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const odagLinks = await senseNavigation.getOdagLinks(hyperCubeHandler.app);
                     return odagLinks.filter((link) => link.properties.type === 'odaglink')
