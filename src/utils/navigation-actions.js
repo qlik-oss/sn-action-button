@@ -102,7 +102,24 @@ const navigationActions = [
         // no-op
       }
     },
-    requiredInput: ['websiteUrl'],
+    requiredInput: ['websiteUrl', 'sameWindow'],
+  },
+  {
+    translation: 'Document chain',
+    value: 'openChainedApp',
+    navigationCall: async ({ app, sameWindow, appId, sheet }) => {
+      const tempBookmark = await app.storeTempSelectionState();
+      let target = '';
+      if (sameWindow) {
+        target = inIframe() ? '_parent' : '_self';
+      }
+      const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
+        sheet
+      )}/bookmark/${encodeURIComponent(tempBookmark)}`;
+      console.log(url);
+      window.open(url, target);
+    },
+    requiredInput: ['sameWindow', 'appId', 'sheetId'],
   },
 ];
 
