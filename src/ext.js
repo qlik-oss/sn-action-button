@@ -162,13 +162,23 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   ref: 'automation',
                   dropdownOnly: true,
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then(
-                      (response) => response.json()
-                    );
-                    return automations.data.map((blend) => ({
-                      value: blend.id,
-                      label: blend.name,
-                    }));
+                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100')
+                      .then((response) => response.json());
+                    const promises = automations.data.filter(async (blend) => {
+                      const autoInfo = await fetch(`../api/v1/automations/${blend.resourceId}`)
+                        .then((response) => response.json());
+                      return autoInfo.run_mode.toLowerCase() === 'triggered';
+                    }).map((item) => {
+                      const autoPath = `../api/v1/automations/${item.guid}/actions/execute?X-Execution-Token=${item.execution_token}`;
+                      return {
+                        value: {
+                          executePath: autoPath,
+                          resourceId: item.guid
+                        },
+                        label: item.name,
+                      };
+                    });
+                    return Promise.all(promises);
                   },
                   show: (data) => checkShowAction(data, 'automation'),
                 },

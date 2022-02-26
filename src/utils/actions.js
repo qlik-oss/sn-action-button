@@ -290,13 +290,9 @@ const actions = [
         async () => {
           if (automation !== undefined) {
             try {
-              automation = encodeURIComponent(automation);
-              const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
-              const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
-                response.json());
-              let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
+              let { runPath: executePath } = automation.executePath;
               if (automationPostData) {
-                const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+                const inputBlocks = await fetch(`../api/v1/automations/${automation.resourceId}/blocks`)
                   .then((response) => response.json())
                   .then((blocks) => {
                     let items = [];
@@ -313,7 +309,7 @@ const actions = [
                   const bmkProp = {
                     qProp: {
                       qInfo: {
-                        qId: `automation_${app.id}_${automation}_${newDate.getTime()}`,
+                        qId: `automation_${app.id}_${automation.resourceId}_${newDate.getTime()}`,
                         qType: 'bookmark',
                       },
                       qMetaDef: {
@@ -322,7 +318,7 @@ const actions = [
                         _createdBy: 'sn-action-button',
                         _createdFor: 'automation',
                         _createdOn: `${newDate.toISOString()}`,
-                        _id: `automation_${encodeURIComponent(app.id)}_${automation}_${newDate.getTime()}`,
+                        _id: `automation_${encodeURIComponent(app.id)}_${automation.resourceId}_${newDate.getTime()}`,
                       },
                     },
                   };
