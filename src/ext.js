@@ -164,16 +164,12 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   options: async () => {
                     const automations = await fetch('../api/v1/items?resourceType=automation&limit=100')
                       .then((response) => response.json());
-                    const promises = automations.data.filter(async (blend) => {
-                      await fetch(`../api/v1/automations/${blend.resourceId}`)
-                        .then((response) => response.json())
-                        .then((info) => {
-                          if (info.run_mode === 'triggered') {
-                            return true;
-                          }
-                          return false;
-                        });
-                    }).map((item) => {
+                    const promises = automations.data.map(async blend => {
+                      const autoInfo = await fetch(`../api/v1/automations/${blend.resourceId}`);
+                      return autoInfo;
+                    });
+                    const automationDetails = await Promise.all(promises);
+                    return automationDetails.filter((automationDetail) => automationDetail.run_mode === 'triggered').map((item) => {
                       const autoPath = `../api/v1/automations/${item.guid}/actions/execute?X-Execution-Token=${item.execution_token}`;
                       return {
                         value: {
@@ -183,7 +179,6 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                         label: item.name,
                       };
                     });
-                    return Promise.all(promises);
                   },
                   show: (data) => checkShowAction(data, 'automation'),
                 },
