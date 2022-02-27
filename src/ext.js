@@ -167,7 +167,10 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                     const promises = automations.data.filter(async (blend) => {
                       const autoInfo = await fetch(`../api/v1/automations/${blend.resourceId}`)
                         .then((response) => response.json());
-                      return autoInfo.run_mode.toLowerCase() === 'triggered';
+                      if (autoInfo.run_mode.toLowerCase() === 'triggered') {
+                        return true;
+                      }
+                      return false;
                     }).map((item) => {
                       const autoPath = `../api/v1/automations/${item.guid}/actions/execute?X-Execution-Token=${item.execution_token}`;
                       return {
