@@ -164,14 +164,16 @@ describe('ext', () => {
         executePath: 'someAutomationExecutionUrl',
         resourceId: 'someAutomationResourceId'
       });
-      const parsedItemId = JSON.parse(itemId);
-      const { resourceId } = parsedItemId;
       const blendName = 'fakeBlendName';
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ resource_Id: resourceId, data: [{ id: itemId, name: blendName }] }) }));
+      const resourceIds = ['guid1', 'guid2', 'guid3'];
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
       options = await actionItems.automation.options();
       expect(global.fetch).toHaveBeenCalled;
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations');
+      expect(resourceIds).toEqual(expect.any(Array));
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[0]}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[1]}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[2]}`);
       expect(options).toHaveLength(1);
       expect(options[0].value).toEqual(itemId);
       expect(options[0].label).toEqual(blendName);
