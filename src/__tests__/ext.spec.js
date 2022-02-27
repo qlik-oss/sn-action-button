@@ -164,11 +164,12 @@ describe('ext', () => {
         executePath: 'someAutomationExecutionUrl',
         resourceId: 'someAutomationResourceId'
       });
-      const resourceId = 'someResourceId';
+      const parsedItemId = JSON.parse(itemId);
+      const { resourceId } = parsedItemId;
       const blendName = 'fakeBlendName';
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: resourceId }] }) }));
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
       options = await actionItems.automation.options();
-      expect(global.fetch).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalled;
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
       expect(options).toHaveLength(1);
