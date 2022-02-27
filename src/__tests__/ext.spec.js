@@ -171,7 +171,7 @@ describe('ext', () => {
       options = await actionItems.automation.options();
       expect(global.fetch).toHaveBeenCalled;
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations');
       expect(options).toHaveLength(1);
       expect(options[0].value).toEqual(itemId);
       expect(options[0].label).toEqual(blendName);
