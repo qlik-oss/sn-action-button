@@ -290,9 +290,11 @@ const actions = [
         async () => {
           if (automation !== undefined) {
             try {
-              let { runPath: executePath } = automation.executePath;
+              const automationObject = JSON.parse(automation);
+              let { executePath } = automationObject;
+              const { resourceId } = automationObject;
               if (automationPostData) {
-                const inputBlocks = await fetch(`../api/v1/automations/${automation.resourceId}/blocks`)
+                const inputBlocks = await fetch(`../api/v1/automations/${resourceId}/blocks`)
                   .then((response) => response.json())
                   .then((blocks) => {
                     let items = [];
@@ -309,7 +311,7 @@ const actions = [
                   const bmkProp = {
                     qProp: {
                       qInfo: {
-                        qId: `automation_${app.id}_${automation.resourceId}_${newDate.getTime()}`,
+                        qId: `automation_${app.id}_${resourceId}_${newDate.getTime()}`,
                         qType: 'bookmark',
                       },
                       qMetaDef: {
@@ -318,7 +320,7 @@ const actions = [
                         _createdBy: 'sn-action-button',
                         _createdFor: 'automation',
                         _createdOn: `${newDate.toISOString()}`,
-                        _id: `automation_${encodeURIComponent(app.id)}_${automation.resourceId}_${newDate.getTime()}`,
+                        _id: `automation_${encodeURIComponent(app.id)}_${resourceId}_${newDate.getTime()}`,
                       },
                     },
                   };
