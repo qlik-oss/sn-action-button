@@ -160,16 +160,16 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      const itemId = {
+      const itemId = JSON.stringify({
         executePath: 'someAutomationExecutionUrl',
         resourceId: 'someAutomationResourceId'
-      };
+      });
       const blendName = 'fakeBlendName';
       global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
       options = await actionItems.automation.options();
-      expect(global.fetch).toHaveBeenCalledTwice();
+      expect(global.fetch).toHaveBeenCalled();
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations/someResourceId/actions/execute?X-Execution-Token=someExecutionToken');
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations/someResourceId');
       expect(options).toHaveLength(1);
       expect(options[0].value).toEqual(itemId);
       expect(options[0].label).toEqual(blendName);
