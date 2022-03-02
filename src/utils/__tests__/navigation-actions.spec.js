@@ -213,8 +213,8 @@ describe('navigation actions', () => {
     it('should return all and FF enabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
       const result = getNavigationsList(isEnabled);
-      expect(result.length).toBe(10);
-      expect(result.filter((a) => a.featureFlag).length).toBe(1);
+      expect(result.length).toBe(11);
+      expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
   });
 });
