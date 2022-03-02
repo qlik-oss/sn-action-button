@@ -12,6 +12,7 @@ describe('navigation actions', () => {
   const story = 'storyIdHere';
   const websiteUrl = 'https://myUrlHere';
   const mailtoUrl = 'mailto:me@example';
+  const appId = 'selectedApp';
   const { app } = defaultValues();
 
   describe('all navigation actions', () => {
@@ -117,6 +118,17 @@ describe('navigation actions', () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'firstSheet');
         await navigationObject.navigationCall({ app, senseNavigation });
         expect(senseNavigation.goToSheet).toHaveBeenCalledWith('id3');
+      });
+    });
+
+    describe('Document chaining', () => {
+      it('should call storeTempSelectionState and open url', async () => {
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: false, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          ''
+        );
       });
     });
 
