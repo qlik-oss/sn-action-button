@@ -105,10 +105,10 @@ const navigationActions = [
     requiredInput: ['websiteUrl', 'sameWindow'],
   },
   {
-    translation: 'Document chain',
+    translation: 'Object.ActionButton.DocumentChain',
     value: 'openChainedApp',
     navigationCall: async ({ app, sameWindow, appId, sheet }) => {
-      const tempBookmark = await app.storeTempSelectionState();
+      const tempBookmark = app.storeTempSelectionState && (await app.storeTempSelectionState());
       let target = '';
       if (sameWindow) {
         target = inIframe() ? '_parent' : '_self';
@@ -116,26 +116,26 @@ const navigationActions = [
       const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
         sheet
       )}/bookmark/${encodeURIComponent(tempBookmark)}`;
-      console.log(url);
       window.open(url, target);
     },
     requiredInput: ['sameWindow', 'appId', 'sheetId'],
+    featureFlag: 'ACTION_BUTTON_DOCUMENT_CHAINING',
   },
   {
     translation: 'Object.ActionButton.SelectOdagApp',
     value: 'odagLink',
-    navigationCall:
-      async ({ app, senseNavigation, odagLink, element }) => {
-        if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
-          await senseNavigation.openOdagPopup(app, odagLink, element);
-        }
-      },
+    navigationCall: async ({ app, senseNavigation, odagLink, element }) => {
+      if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
+        await senseNavigation.openOdagPopup(app, odagLink, element);
+      }
+    },
     requiredInput: ['odagLink'],
     featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
   },
 ];
 
-export const getNavigationsList = (isEnabled) => navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
+export const getNavigationsList = (isEnabled) =>
+  navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);
