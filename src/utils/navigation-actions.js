@@ -115,7 +115,7 @@ const navigationActions = [
       }
       const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
         sheet
-      )}/bookmark/${encodeURIComponent(tempBookmark)}`;
+      )}/tempBookmark/${encodeURIComponent(tempBookmark)}`;
       window.open(url, target);
     },
     requiredInput: ['sameWindow', 'appId', 'sheetId'],
