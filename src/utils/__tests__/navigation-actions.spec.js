@@ -130,6 +130,14 @@ describe('navigation actions', () => {
           ''
         );
       });
+      it('should call storeTempSelectionState and open url in same window', async () => {
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          '_self'
+        );
+      });
     });
 
     describe('odag navigation popup', () => {
@@ -163,7 +171,7 @@ describe('navigation actions', () => {
     });
     it('should return true when should be shown', () => {
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).toBeTrue;
+      expect(result).toBe(true);
     });
     it('should return undefined when no action found', () => {
       data.navigation.action = 'notAnAction';
@@ -172,7 +180,7 @@ describe('navigation actions', () => {
     });
     it('should return false when field not in required input', () => {
       const result = checkShowNavigation(data, 'websiteUrl');
-      expect(result).toBeFalse;
+      expect(result).toBe(false);
     });
   });
 

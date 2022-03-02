@@ -74,7 +74,7 @@ describe('conversion', () => {
       expect(newProperties.actions[0].field).toEqual(action.selectedField);
       expect(newProperties.actions[0].variable).toEqual(action.variable);
       expect(newProperties.actions[0].value).toEqual(action.value);
-      expect(newProperties.actions[0].softLock).toBeTrue;
+      expect(newProperties.actions[0].softLock).toBe(true);
       expect(newProperties.actions[0].cId).toEqual(action.cId);
     });
 
@@ -128,7 +128,7 @@ describe('conversion', () => {
       expect(result.qProperty.actions).toHaveLength(0);
       expect(result.qProperty.props.useEnabledCondition).toEqual(null);
       expect(result.qProperty.props.fullWidth).toEqual('auto');
-      expect(result.qProperty.showTitles).toBeFalse;
+      expect(result.qProperty.showTitles).toBe(true);
       expect(result.qProperty.title).toEqual('');
       expect(result.qProperty.footnote).toEqual('');
       expect(result.qProperty.navigation.action).toEqual('none');
@@ -205,7 +205,7 @@ describe('conversion', () => {
       exportedFmt.properties.subtitle = 'hello2';
       exportedFmt.properties.footnote = 'hello3';
       const result = importProperties(exportedFmt, initialProperties);
-      expect(result.qProperty.showTitles).toBeTrue;
+      expect(result.qProperty.showTitles).toBe(true);
       expect(result.qProperty.title).toEqual('hello1');
       expect(result.qProperty.subtitle).toEqual('hello2');
       expect(result.qProperty.footnote).toEqual('hello3');
