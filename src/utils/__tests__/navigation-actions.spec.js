@@ -138,6 +138,18 @@ describe('navigation actions', () => {
           '_self'
         );
       });
+      it('should call storeTempSelectionState and open url in same window', async () => {
+        const { top } = window;
+        delete window.top;
+        window.top = {};
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          '_parent'
+        );
+        window.top = top;
+      });
     });
 
     describe('odag navigation popup', () => {
