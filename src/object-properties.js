@@ -120,7 +120,7 @@ const properties = {
  * @property {string=} story - Story ID. Required for 'goToStory'
  * @property {string=} websiteUrl - URL for website. required for 'openWebsite'
  * @property {boolean=} sameWindow - Set to true to open in same window/tab. Required for 'openWebsite'
- * @property {string=} odagLinkName - odagLink name. Required for 'odagLink'
+ * @property {string=} odagLink - ODAG link name. Required for 'odagLink'
  */
 
 /**
