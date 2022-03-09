@@ -18,7 +18,6 @@ describe('actions', () => {
   const resourceId = 'fakeResourceId';
   const guid = 'fakeGuid';
   const executionToken = 'fakeExecutionToken';
-  const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }, { label: 'blockLabel' }] }];
 
   describe('all actions', () => {
     beforeEach(() => {
@@ -66,7 +65,7 @@ describe('actions', () => {
         saveObjects: jest.fn(),
       };
       global.fetch = jest.fn(() =>
-        Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, inputs, blocks }) }));
+        Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, inputs }) }));
     });
 
     afterEach(() => {
@@ -310,12 +309,7 @@ describe('actions', () => {
       automationPostData = false;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       await actionObject.getActionCall({ app, automation, automationPostData })();
-      // expect(global.fetch).toHaveBeenCalledThrice;
-      // expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
-      // expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
-      // expect(global.fetch).toHaveBeenCalledWith(
-      //   `../api/v1/automations/${guid}/actions/execute?X-Execution-Token=${executionToken}`)
-      expect(global.fetch).toNotHaveBeenCalled;
+      expect(global.fetch).toHaveBeenCalled;
     });
 
     it('should NOT call executeAutomation when no automation', async () => {

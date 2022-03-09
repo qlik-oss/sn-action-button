@@ -1,5 +1,6 @@
 import ext from '../ext';
 import objectProperties from '../object-properties';
+import getAutomationData from '../utils/automations-utils';
 
 describe('ext', () => {
   const translator = {
@@ -160,23 +161,34 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      const itemId = JSON.stringify({
-        executePath: 'someAutomationExecutionUrl',
-        resourceId: 'someAutomationResourceId'
-      });
-      const blendName = 'fakeBlendName';
-      const resourceIds = ['guid1', 'guid2', 'guid3'];
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
-      options = await actionItems.automation.options();
+      const inputs = [
+        {
+          guid: 'someFakeGUID',
+          field_name: 'fakeInputName',
+          order: 0
+        },
+        {
+          guid: 'someFakeGUID',
+          field_name: 'fakeInputName',
+          order: 1
+        }
+      ];
+      const autoDef = [{
+        value: JSON.stringify({
+          executePath: 'someFakePath',
+          resourceId: 'someFakeResourceId',
+          inputBlocks: inputs
+        }),
+        label: 'someBlendName'
+      }];
+
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => (autoDef) }));
+
+      options = await getAutomationData();
       expect(global.fetch).toHaveBeenCalled;
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
-      expect(resourceIds).toEqual(expect.any(Array));
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[0]}`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[1]}`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceIds[2]}`);
       expect(options).toHaveLength(1);
-      expect(options[0].value).toEqual(itemId);
-      expect(options[0].label).toEqual(blendName);
+      expect(options[0].value).toEqual(autoDef[0].value);
+      expect(options[0].label).toEqual(autoDef[0].label);
     });
 
     it('Should return an array of odag app links', async () => {
@@ -188,6 +200,7 @@ describe('ext', () => {
       expect(options).toHaveLength(1);
       expect(options).toStrictEqual(odagLinks);
     });
+
     it('Should return an array with all sheets', async () => {
       options = await navigationItems.sheet.options(null, handler);
       expect(options).toHaveLength(2);

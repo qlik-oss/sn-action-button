@@ -292,45 +292,31 @@ const actions = [
             try {
               const automationObject = JSON.parse(automation);
               let { executePath } = automationObject;
-              const { resourceId } = automationObject;
-              if (automationPostData) {
-                const inputBlocks = await fetch(`../api/v1/automations/${resourceId}/blocks`)
-                  .then((response) => response.json())
-                  .then((blocks) => {
-                    let items = [];
-                    for (let i = 0; i < blocks.blocks.length; i++) {
-                      if (blocks.blocks[i].displayName === 'Inputs') {
-                        items = blocks.blocks[i].form;
-                        break;
-                      }
-                    }
-                    return items;
-                  });
-                if (inputBlocks.length > 0) {
-                  const newDate = new Date();
-                  const bmkProp = {
-                    qProp: {
-                      qInfo: {
-                        qId: `automation_${app.id}_${resourceId}_${newDate.getTime()}`,
-                        qType: 'bookmark',
-                      },
-                      qMetaDef: {
-                        title: `Generated automation bookmark on ${newDate.toISOString()}`,
-                        description: 'Generated to provide target automation with bookmark to get current selection state',
-                        _createdBy: 'sn-action-button',
-                        _createdFor: 'automation',
-                        _createdOn: `${newDate.toISOString()}`,
-                        _id: `automation_${encodeURIComponent(app.id)}_${resourceId}_${newDate.getTime()}`,
-                      },
+              const { resourceId, inputBlocks } = automationObject;
+              if (automationPostData && inputBlocks.length > 0) {
+                const newDate = new Date();
+                const bmkProp = {
+                  qProp: {
+                    qInfo: {
+                      qId: `automation_${app.id}_${resourceId}_${newDate.getTime()}`,
+                      qType: 'bookmark',
                     },
-                  };
-                  const bmk = await app
-                    .createBookmark(bmkProp)
-                    .then((bookmark) => bookmark.getLayout())
-                    .then((layout) => layout.qInfo.qId);
-                  await app.saveObjects();
-                  executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
-                }
+                    qMetaDef: {
+                      title: `Generated automation bookmark on ${newDate.toISOString()}`,
+                      description: 'Generated to provide target automation with bookmark to get current selection state',
+                      _createdBy: 'sn-action-button',
+                      _createdFor: 'automation',
+                      _createdOn: `${newDate.toISOString()}`,
+                      _id: `automation_${encodeURIComponent(app.id)}_${resourceId}_${newDate.getTime()}`,
+                    },
+                  },
+                };
+                const bmk = await app
+                  .createBookmark(bmkProp)
+                  .then((bookmark) => bookmark.getLayout())
+                  .then((layout) => layout.qInfo.qId);
+                await app.saveObjects();
+                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
               }
               // execute the automation
               await fetch(executePath).then((response) => response.json());

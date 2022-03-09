@@ -3,6 +3,7 @@ import { checkShowNavigation, getNavigationsList } from './utils/navigation-acti
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import getAutomationData from './utils/automations-utils';
 
 const colorOptions = [
   {
@@ -161,28 +162,7 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   translation: 'Object.ActionButton.Automation',
                   ref: 'automation',
                   dropdownOnly: true,
-                  options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100')
-                      .then((response) => response.json());
-                    const promises = automations.data.map(async blend => {
-                      const autoInfo = await fetch(`../api/v1/automations/${blend.resourceId}`)
-                        .then((response) => response.json());
-                      return autoInfo;
-                    });
-                    const automationDetails = await Promise.all(promises);
-                    const triggeredAutomations = automationDetails.filter((automationDetail) => automationDetail.run_mode === 'triggered');
-                    return triggeredAutomations.map((item) => {
-                      const autoPath = `../api/v1/automations/${item.guid}/actions/execute?X-Execution-Token=${item.execution_token}`;
-                      const autoDef = {
-                        value: JSON.stringify({
-                          executePath: autoPath,
-                          resourceId: item.guid
-                        }),
-                        label: item.name
-                      };
-                      return autoDef;
-                    });
-                  },
+                  options: getAutomationData,
                   show: (data) => checkShowAction(data, 'automation'),
                 },
                 // Boolean property to instruct the automation action to create a
