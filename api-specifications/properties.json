@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.16.0",
+    "version": "1.16.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -178,6 +178,10 @@
             {
               "kind": "literal",
               "value": "'executeAutomation'"
+            },
+            {
+              "kind": "literal",
+              "value": "'refreshDynamicViews'"
             }
           ],
           "type": "string"
@@ -586,6 +590,10 @@
             {
               "kind": "literal",
               "value": "'openWebsite'"
+            },
+            {
+              "kind": "literal",
+              "value": "'odagLink'"
             }
           ],
           "type": "string"
@@ -609,6 +617,11 @@
           "description": "Set to true to open in same window/tab. Required for 'openWebsite'",
           "optional": true,
           "type": "boolean"
+        },
+        "odagLink": {
+          "description": "ODAG link name. Required for 'odagLink'",
+          "optional": true,
+          "type": "string"
         }
       }
     },
