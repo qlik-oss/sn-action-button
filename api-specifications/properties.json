@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.16.1",
+    "version": "1.17.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
