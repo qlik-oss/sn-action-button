@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.17.0",
+    "version": "1.18.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -594,8 +594,17 @@
             {
               "kind": "literal",
               "value": "'odagLink'"
+            },
+            {
+              "kind": "literal",
+              "value": "'openChainedApp'"
             }
           ],
+          "type": "string"
+        },
+        "appId": {
+          "description": "app ID. Required for 'openChainedApp'",
+          "optional": true,
           "type": "string"
         },
         "sheet": {
