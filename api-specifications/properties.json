@@ -594,17 +594,8 @@
             {
               "kind": "literal",
               "value": "'odagLink'"
-            },
-            {
-              "kind": "literal",
-              "value": "'openChainedApp'"
             }
           ],
-          "type": "string"
-        },
-        "appId":{
-          "description": "app ID. Required for 'openChainedApp'",
-          "optional": true,
           "type": "string"
         },
         "sheet": {
