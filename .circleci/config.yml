@@ -183,6 +183,7 @@ workflows:
       - publish:
           requires:
             - build
+            - api-governance
           filters:
             branches:
               only:
