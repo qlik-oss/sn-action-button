@@ -12,6 +12,7 @@ describe('navigation actions', () => {
   const story = 'storyIdHere';
   const websiteUrl = 'https://myUrlHere';
   const mailtoUrl = 'mailto:me@example';
+  const appId = 'selectedApp';
   const { app } = defaultValues();
 
   describe('all navigation actions', () => {
@@ -120,6 +121,37 @@ describe('navigation actions', () => {
       });
     });
 
+    describe('Document chaining', () => {
+      it('should call storeTempSelectionState and open url', async () => {
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: false, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          ''
+        );
+      });
+      it('should call storeTempSelectionState and open url in same window', async () => {
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          '_self'
+        );
+      });
+      it('should call storeTempSelectionState and open url in same window', async () => {
+        const { top } = window;
+        delete window.top;
+        window.top = {};
+        const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
+        await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
+        expect(global.open).toHaveBeenCalledWith(
+          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          '_parent'
+        );
+        window.top = top;
+      });
+    });
+
     describe('odag navigation popup', () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'odagLink');
       it('should not call openOdagPopup when openOdagPopup is undefined', async () => {
@@ -151,7 +183,7 @@ describe('navigation actions', () => {
     });
     it('should return true when should be shown', () => {
       const result = checkShowNavigation(data, 'sheet');
-      expect(result).toBeTrue;
+      expect(result).toBe(true);
     });
     it('should return undefined when no action found', () => {
       data.navigation.action = 'notAnAction';
@@ -160,7 +192,7 @@ describe('navigation actions', () => {
     });
     it('should return false when field not in required input', () => {
       const result = checkShowNavigation(data, 'websiteUrl');
-      expect(result).toBeFalse;
+      expect(result).toBe(false);
     });
   });
 
@@ -213,8 +245,8 @@ describe('navigation actions', () => {
     it('should return all and FF enabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
       const result = getNavigationsList(isEnabled);
-      expect(result.length).toBe(10);
-      expect(result.filter((a) => a.featureFlag).length).toBe(1);
+      expect(result.length).toBe(11);
+      expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
   });
 });

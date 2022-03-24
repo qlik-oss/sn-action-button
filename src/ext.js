@@ -196,6 +196,13 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   options: getNavigationsList(isEnabled),
                   dropdownOnly: true,
                 },
+                appId: {
+                  type: 'string',
+                  expression: 'optional',
+                  ref: 'navigation.appId',
+                  translation: 'properties.appId',
+                  show: (data) => checkShowNavigation(data, 'appId'),
+                },
                 sheetId: {
                   type: 'string',
                   ref: 'navigation.sheet',
@@ -245,7 +252,7 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   type: 'boolean',
                   ref: 'navigation.sameWindow',
                   translation: 'properties.sameWindow',
-                  show: (data) => checkShowNavigation(data, 'websiteUrl'),
+                  show: (data) => checkShowNavigation(data, 'sameWindow'),
                   defaultValue: false,
                 },
                 odagLink: {

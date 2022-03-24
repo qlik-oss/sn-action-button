@@ -102,23 +102,40 @@ const navigationActions = [
         // no-op
       }
     },
-    requiredInput: ['websiteUrl'],
+    requiredInput: ['websiteUrl', 'sameWindow'],
+  },
+  {
+    translation: 'Object.ActionButton.DocumentChain',
+    value: 'openChainedApp',
+    navigationCall: async ({ app, sameWindow, appId, sheet }) => {
+      const tempBookmark = app.storeTempSelectionState && (await app.storeTempSelectionState());
+      let target = '';
+      if (sameWindow) {
+        target = inIframe() ? '_parent' : '_self';
+      }
+      const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
+        sheet
+      )}/tempBookmark/${encodeURIComponent(tempBookmark)}`;
+      window.open(url, target);
+    },
+    requiredInput: ['sameWindow', 'appId', 'sheetId'],
+    featureFlag: 'ACTION_BUTTON_DOCUMENT_CHAINING',
   },
   {
     translation: 'Object.ActionButton.SelectOdagApp',
     value: 'odagLink',
-    navigationCall:
-      async ({ app, senseNavigation, odagLink, element }) => {
-        if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
-          await senseNavigation.openOdagPopup(app, odagLink, element);
-        }
-      },
+    navigationCall: async ({ app, senseNavigation, odagLink, element }) => {
+      if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
+        await senseNavigation.openOdagPopup(app, odagLink, element);
+      }
+    },
     requiredInput: ['odagLink'],
     featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
   },
 ];
 
-export const getNavigationsList = (isEnabled) => navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
+export const getNavigationsList = (isEnabled) =>
+  navigationActions.filter((n) => !n.featureFlag || isEnabled(n.featureFlag));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);

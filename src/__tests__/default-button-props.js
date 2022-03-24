@@ -31,6 +31,7 @@ const defaultValues = () => ({
     getSheetList: () => sheets,
     getOrderedVisibleSheet: () => sheets,
     getBookmarkList: () => [],
+    storeTempSelectionState: () => 'tempBookmarkId',
   },
   constraints: {},
   senseNavigation: {},

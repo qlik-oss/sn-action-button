@@ -115,7 +115,8 @@ const properties = {
 /**
  * Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.
  * @typedef {object} NavigationAction
- * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'|'odagLink'} action - Name of navigation action
+ * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'|'odagLink'|'openChainedApp'} action - Name of navigation action
+ * @property {string=} appId - app ID. Required for 'openChainedApp'
  * @property {string=} sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'
  * @property {string=} story - Story ID. Required for 'goToStory'
  * @property {string=} websiteUrl - URL for website. required for 'openWebsite'

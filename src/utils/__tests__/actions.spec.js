@@ -391,12 +391,12 @@ describe('actions', () => {
 
     it('should return true when field required', () => {
       const result = checkShowAction(data, 'bookmark');
-      expect(result).toBeTrue;
+      expect(result).toBe(true);
     });
 
     it('should return false when field is not required', () => {
       const result = checkShowAction(data, 'notTheField');
-      expect(result).toBeFalse;
+      expect(result).toBe(false);
     });
 
     it('should return undefined when action is not found', () => {
