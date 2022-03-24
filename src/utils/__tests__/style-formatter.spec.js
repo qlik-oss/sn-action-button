@@ -5,7 +5,7 @@ describe('style-formatter', () => {
   describe('getStyles', () => {
     let style;
     const defaultStyle =
-      'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;';
+      'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;';
     const someColor = '#ffff00';
     const someColorExpression = 'rgb(255,255,0)';
     const someUrl = '/media/Logo/qlik.png';

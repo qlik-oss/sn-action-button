@@ -101,7 +101,7 @@ const properties = {
  * Defines what action to perform and options for that action type.
  * @typedef {object} Action
  * @property {string} [actionLabel=''] - Label for reference
- * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable'|'doReload'|'executeAutomation')} [actionType=''] - The type of action
+ * @property {('applyBookmark'|'back'|'forward'|'clearAll'|'clearAllButThis'|'clearField'|'selectAll'|'selectValues'|'selectMatchingValues'|'selectAlternative'|'selectExcluded'|'selectPossible'|'toggleSelect'|'lockAll'|'lockField'|'unlockAll'|'unlockField'|'setVariable'|'doReload'|'executeAutomation'|'refreshDynamicViews')} [actionType=''] - The type of action
  * @property {string=} [bookmark=''] - ID of bookmark, required for type 'applyBookmark'
  * @property {string=} [field=''] - Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'
  * @property {string=} [softLock=''] - Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'
@@ -115,11 +115,12 @@ const properties = {
 /**
  * Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.
  * @typedef {object} NavigationAction
- * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'} action - Name of navigation action
+ * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'|'odagLink'} action - Name of navigation action
  * @property {string=} sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'
  * @property {string=} story - Story ID. Required for 'goToStory'
  * @property {string=} websiteUrl - URL for website. required for 'openWebsite'
  * @property {boolean=} sameWindow - Set to true to open in same window/tab. Required for 'openWebsite'
+ * @property {string=} odagLink - ODAG link name. Required for 'odagLink'
  */
 
 /**
