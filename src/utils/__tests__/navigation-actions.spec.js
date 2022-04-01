@@ -126,7 +126,7 @@ describe('navigation actions', () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
         await navigationObject.navigationCall({ app, sameWindow: false, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
-          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
           ''
         );
       });
@@ -134,7 +134,7 @@ describe('navigation actions', () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
         await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
-          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
           '_self'
         );
       });
@@ -145,7 +145,7 @@ describe('navigation actions', () => {
         const navigationObject = navigationActions.find((navigation) => navigation.value === 'openChainedApp');
         await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
-          `../sense/app/${appId}/sheet/${sheet}/tempBookmark/tempBookmarkId`,
+          `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
           '_parent'
         );
         window.top = top;
