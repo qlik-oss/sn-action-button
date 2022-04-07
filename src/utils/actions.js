@@ -294,20 +294,9 @@ const actions = [
               const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
               const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
                 response.json());
-              let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
-              if (automationPostData) {
-                const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
-                  .then((response) => response.json())
-                  .then((blocks) => {
-                    let items = [];
-                    for (let i = 0; i < blocks.blocks.length; i++) {
-                      if (blocks.blocks[i].displayName === 'Inputs') {
-                        items = blocks.blocks[i].form;
-                        break;
-                      }
-                    }
-                    return items;
-                  });
+              let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
+              if (automationPostData) {          
+                const inputBlocks = autoInfo.workspace.blocks.find(block => block.type === 'FormBlock').form ?? []
                 if (inputBlocks.length > 0) {
                   const newDate = new Date();
                   const bmkProp = {
