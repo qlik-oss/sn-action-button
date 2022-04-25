@@ -35,6 +35,7 @@
     "build:dev": "node ./tools/build.js --core --ext --mode development",
     "build:watch": "node ./tools/build.js --ext --mode development -w",
     "lint": "eslint src",
+    "format": "prettier --write 'src/**'",
     "start": "nebula serve",
     "sense": "nebula sense",
     "test:unit": "jest",
@@ -49,6 +50,9 @@
   "lint-staged": {
     "*.{js, jsx}": [
       "eslint --cache --fix"
+    ],
+    "*.{json,css,md}": [
+      "yarn format"
     ]
   },
   "peerDependencies": {
@@ -71,16 +75,19 @@
     "babel-plugin-istanbul": "6.1.1",
     "eslint": "8.13.0",
     "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-mocha": "10.0.4",
-    "fs-extra": "^10.1.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "fs-extra": "10.1.0",
     "husky": "7.0.4",
-    "jest": "^27.5.1",
-    "jest-junit": "^13.1.0",
+    "jest": "27.5.1",
+    "jest-junit": "13.1.0",
     "lint-staged": "12.3.8",
     "mocha-junit-reporter": "2.0.2",
-    "shx": "^0.3.4",
-    "yargs": "^17.4.1",
-    "scriptappy-from-jsdoc": "0.7.0"
+    "prettier": "2.6.2",
+    "scriptappy-from-jsdoc": "0.7.0",
+    "shx": "0.3.4",
+    "yargs": "17.4.1"
   }
 }
