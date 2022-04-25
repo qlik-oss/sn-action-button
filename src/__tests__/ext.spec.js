@@ -7,11 +7,12 @@ describe('ext', () => {
   };
   let data;
   const isEnabled = jest.fn();
+  const isUnsupportedFeature = jest.fn();
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
   };
-  const props = ext({ translator, isEnabled, senseNavigation });
+  const props = ext({ translator, isEnabled, senseNavigation, isUnsupportedFeature });
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;

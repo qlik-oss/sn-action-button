@@ -237,14 +237,16 @@ describe('navigation actions', () => {
   describe('getNavigationsList', () => {
     it('should return all but not FF disabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
-      const result = getNavigationsList(isEnabled);
+      const isUnsupportedFeature = jest.fn().mockReturnValue(false);
+      const result = getNavigationsList(isEnabled, isUnsupportedFeature);
       expect(result.length).toBe(9);
       expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
 
     it('should return all and FF enabled navigations', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
-      const result = getNavigationsList(isEnabled);
+      const isUnsupportedFeature = jest.fn().mockReturnValue(false);
+      const result = getNavigationsList(isEnabled, isUnsupportedFeature);
       expect(result.length).toBe(11);
       expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });

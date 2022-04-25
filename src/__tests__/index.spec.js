@@ -36,7 +36,7 @@ describe('index', () => {
 
   it('should render supernova', async () => {
     const result = supernova({
-      sense: { navigation: 'nav' },
+      sense: { navigation: 'nav', isUnsupportedFeature: () => false },
       translator: { get: () => '' },
       flags: { isEnabled: () => true },
     });
