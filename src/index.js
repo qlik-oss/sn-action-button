@@ -21,9 +21,11 @@ export default function supernova(env) {
     translator,
     flags: { isEnabled },
   } = env;
-  const senseNavigation = sense && sense.navigation;
+  const senseNavigation = sense?.navigation;
+  const isUnsupportedFeature = sense?.isUnsupportedFeature;
   const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
+
   return {
     qae: {
       properties,
@@ -61,6 +63,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator, isEnabled, senseNavigation }),
+    ext: ext({ translator, isEnabled, senseNavigation, isUnsupportedFeature }),
   };
 }
