@@ -18,7 +18,7 @@ const actions = [
     value: 'applyBookmark',
     translation: 'Object.ActionButton.ApplyBookmark',
     group: 'bookmark',
-    feature: 'bookmarks',
+    hide: (isHidden) => isHidden?.('bookmarks'),
     getActionCall:
       ({ app, bookmark }) =>
       async () => {
@@ -261,7 +261,7 @@ const actions = [
     value: 'doReload',
     translation: 'Object.ActionButton.DoReload',
     group: 'reload',
-    feature: 'reloadData',
+    hide: (isHidden) => isHidden?.('reloadData'),
     getActionCall:
       ({ app, partial }) =>
       async () => {
@@ -367,8 +367,8 @@ const actions = [
   },
 ];
 
-export const getActionsList = (isEnabled, isUnsupportedFeature) =>
-  actions.filter((a) => (!a.featureFlag || isEnabled(a.featureFlag)) && !isUnsupportedFeature?.(a.feature));
+export const getActionsList = (isEnabled, isHidden) =>
+  actions.filter((a) => (!a.featureFlag || isEnabled(a.featureFlag)) && !a.hide?.(isHidden));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);

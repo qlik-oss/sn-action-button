@@ -79,7 +79,7 @@ const navigationActions = [
   },
   {
     translation: 'Object.ActionButton.GoToStory',
-    feature: 'storytelling',
+    hide: (isHidden) => isHidden?.('storytelling'),
     value: 'goToStory',
     navigationCall: async ({ senseNavigation, story }) => {
       story && (await senseNavigation.goToStory(story));
@@ -108,7 +108,7 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.DocumentChain',
     value: 'openChainedApp',
-    feature: 'bookmarks',
+    hide: (isHidden) => isHidden?.('bookmarks'),
     navigationCall: async ({ app, sameWindow, appId, sheet }) => {
       const tempBookmark = app.storeTempSelectionState && (await app.storeTempSelectionState());
       let target = '';
@@ -126,7 +126,6 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.SelectOdagApp',
     value: 'odagLink',
-    feature: 'onDemandApp',
     navigationCall: async ({ app, senseNavigation, odagLink, element }) => {
       if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
         await senseNavigation.openOdagPopup(app, odagLink, element);
@@ -137,8 +136,8 @@ const navigationActions = [
   },
 ];
 
-export const getNavigationsList = (isEnabled, isUnsupportedFeature) =>
-  navigationActions.filter((n) => (!n.featureFlag || isEnabled(n.featureFlag)) && !isUnsupportedFeature?.(n.feature));
+export const getNavigationsList = (isEnabled, isHidden) =>
+  navigationActions.filter((n) => (!n.featureFlag || isEnabled(n.featureFlag)) && !n.hide?.(isHidden));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);
