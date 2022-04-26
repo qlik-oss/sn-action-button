@@ -31,9 +31,7 @@
         "mocha": true
       },
       "globals": {
-        "chai": false,
         "expect": false,
-        "aw": false,
         "page": false,
         "jest": false,
         "window": false
