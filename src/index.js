@@ -25,7 +25,7 @@ export default function supernova(env) {
   const senseNavigation = sense?.navigation;
   const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
-  const isHidden = (feature) => isFeatureBlacklisted?.(feature) && isUnsupportedFeature?.(feature);
+  const isHidden = (feature) => isFeatureBlacklisted?.(feature) || isUnsupportedFeature?.(feature);
   const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
 

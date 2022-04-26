@@ -410,16 +410,16 @@ describe('actions', () => {
   describe('getActionsList', () => {
     it('should return all but not FF disabled actions', () => {
       const isEnabled = jest.fn().mockReturnValue(false);
-      const isUnsupportedFeature = jest.fn().mockReturnValue(false);
-      const result = getActionsList(isEnabled, isUnsupportedFeature);
+      const isHidden = jest.fn().mockReturnValue(false);
+      const result = getActionsList(isEnabled, isHidden);
       expect(result.length).toBe(19);
       expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
 
     it('should return all and FF enabled actions', () => {
       const isEnabled = jest.fn().mockReturnValue(true);
-      const isUnsupportedFeature = jest.fn().mockReturnValue(false);
-      const result = getActionsList(isEnabled, isUnsupportedFeature);
+      const isHidden = jest.fn().mockReturnValue(false);
+      const result = getActionsList(isEnabled, isHidden);
       expect(result.length).toBe(21);
       expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
