@@ -138,7 +138,7 @@ const navigationActions = [
 ];
 
 export const getNavigationsList = (isEnabled, isUnsupportedFeature) =>
-  navigationActions.filter((n) => (!n.featureFlag || isEnabled(n.featureFlag)) && !isUnsupportedFeature(n.feature));
+  navigationActions.filter((n) => (!n.featureFlag || isEnabled(n.featureFlag)) && !isUnsupportedFeature?.(n.feature));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);

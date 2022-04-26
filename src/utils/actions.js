@@ -368,7 +368,7 @@ const actions = [
 ];
 
 export const getActionsList = (isEnabled, isUnsupportedFeature) =>
-  actions.filter((a) => (!a.featureFlag || isEnabled(a.featureFlag)) && !isUnsupportedFeature(a.feature));
+  actions.filter((a) => (!a.featureFlag || isEnabled(a.featureFlag)) && !isUnsupportedFeature?.(a.feature));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);
