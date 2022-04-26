@@ -262,10 +262,11 @@ export default function ext({ translator, isEnabled, senseNavigation }) {
                   translation: 'ExpressionEditor.SetExpresions.OdagAppLinks',
                   options: async (action, hyperCubeHandler) => {
                     const odagLinks = await senseNavigation.getOdagLinks(hyperCubeHandler.app);
-                    return odagLinks.filter((link) => link.properties.type === 'odaglink')
+                    return odagLinks
+                      .filter((link) => link.properties.type === 'odaglink')
                       .map((odagLink) => ({
                         label: odagLink.properties.data.name,
-                        value: odagLink.properties.data.id
+                        value: odagLink.properties.data.id,
                       }));
                   },
                   show: (data) => checkShowNavigation(data, 'odagLink'),

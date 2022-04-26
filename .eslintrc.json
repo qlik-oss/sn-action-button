@@ -6,7 +6,7 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "extends": ["airbnb-base"],
+  "extends": ["airbnb-base", "prettier"],
   "rules": {
     "arrow-parens": 0,
     "comma-dangle": 0,
@@ -38,7 +38,7 @@
         "jest": false,
         "window": false
       },
-      "plugins": ["mocha"],
+      "plugins": ["prettier", "mocha"],
       "rules": {
         "mocha/no-exclusive-tests": "error"
       }

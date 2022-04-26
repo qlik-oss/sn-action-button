@@ -66,7 +66,8 @@ describe('actions', () => {
         saveObjects: jest.fn(),
       };
       global.fetch = jest.fn(() =>
-        Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, inputs, blocks }) }));
+        Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, inputs, blocks }) })
+      );
     });
 
     afterEach(() => {
