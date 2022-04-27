@@ -79,7 +79,7 @@ const navigationActions = [
   },
   {
     translation: 'Object.ActionButton.GoToStory',
-    hide: (isHidden) => isHidden?.('storytelling'),
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('storytelling'),
     value: 'goToStory',
     navigationCall: async ({ senseNavigation, story }) => {
       story && (await senseNavigation.goToStory(story));
@@ -108,7 +108,8 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.DocumentChain',
     value: 'openChainedApp',
-    hide: (isHidden) => isHidden?.('bookmarks'),
+    hide: ({ isEnabled, isUnsupportedFeature }) =>
+      !isEnabled?.('ACTION_BUTTON_DOCUMENT_CHAINING') || isUnsupportedFeature?.('bookmarks'),
     navigationCall: async ({ app, sameWindow, appId, sheet }) => {
       const tempBookmark = app.storeTempSelectionState && (await app.storeTempSelectionState());
       let target = '';
@@ -121,7 +122,6 @@ const navigationActions = [
       window.open(url, target);
     },
     requiredInput: ['sameWindow', 'appId', 'sheetId'],
-    featureFlag: 'ACTION_BUTTON_DOCUMENT_CHAINING',
   },
   {
     translation: 'Object.ActionButton.SelectOdagApp',
@@ -132,12 +132,11 @@ const navigationActions = [
       }
     },
     requiredInput: ['odagLink'],
-    featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
+    hide: ({ isEnabled }) => !isEnabled?.('REFRESH_DYNAMIC_VIEWS_ODAG_POPUP'),
   },
 ];
 
-export const getNavigationsList = (isEnabled, isHidden) =>
-  navigationActions.filter((n) => (!n.featureFlag || isEnabled(n.featureFlag)) && !n.hide?.(isHidden));
+export const getNavigationsList = (shouldHide) => navigationActions.filter((n) => !n.hide?.(shouldHide));
 
 export const checkShowNavigation = (data, field) => {
   const nav = navigationActions.find((navigation) => data.navigation.action === navigation.value);

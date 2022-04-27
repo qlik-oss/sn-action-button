@@ -18,7 +18,7 @@ const actions = [
     value: 'applyBookmark',
     translation: 'Object.ActionButton.ApplyBookmark',
     group: 'bookmark',
-    hide: (isHidden) => isHidden?.('bookmarks'),
+    hide: ({ isUnsupportedFeature }) => isUnsupportedFeature?.('bookmarks'),
     getActionCall:
       ({ app, bookmark }) =>
       async () => {
@@ -261,7 +261,7 @@ const actions = [
     value: 'doReload',
     translation: 'Object.ActionButton.DoReload',
     group: 'reload',
-    hide: (isHidden) => isHidden?.('reloadData'),
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('reloadData'),
     getActionCall:
       ({ app, partial }) =>
       async () => {
@@ -349,7 +349,7 @@ const actions = [
         }
       },
     requiredInput: ['automation'],
-    featureFlag: 'ACTION_BUTTON_AUTOMATIONS',
+    hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
   },
   {
     value: 'refreshDynamicViews',
@@ -363,12 +363,11 @@ const actions = [
         }
       },
     requiredInput: [],
-    featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
+    hide: ({ isEnabled }) => !isEnabled?.('REFRESH_DYNAMIC_VIEWS_ODAG_POPUP'),
   },
 ];
 
-export const getActionsList = (isEnabled, isHidden) =>
-  actions.filter((a) => (!a.featureFlag || isEnabled(a.featureFlag)) && !a.hide?.(isHidden));
+export const getActionsList = (shouldHide) => actions.filter((a) => !a.hide?.(shouldHide));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);

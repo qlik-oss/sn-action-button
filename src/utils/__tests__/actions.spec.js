@@ -409,19 +409,40 @@ describe('actions', () => {
 
   describe('getActionsList', () => {
     it('should return all but not FF disabled actions', () => {
-      const isEnabled = jest.fn().mockReturnValue(false);
-      const isHidden = jest.fn().mockReturnValue(false);
-      const result = getActionsList(isEnabled, isHidden);
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(false),
+      };
+      const result = getActionsList(shouldHide);
       expect(result.length).toBe(19);
-      expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
-
-    it('should return all and FF enabled actions', () => {
-      const isEnabled = jest.fn().mockReturnValue(true);
-      const isHidden = jest.fn().mockReturnValue(false);
-      const result = getActionsList(isEnabled, isHidden);
+    it('should return all but not unsupported feature navigations', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(true),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getActionsList(shouldHide);
+      expect(result.length).toBe(20);
+    });
+    it('should return all but not feature blacklisted navigations', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(true),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getActionsList(shouldHide);
+      expect(result.length).toBe(20);
+    });
+    it('should return all', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getActionsList(shouldHide);
       expect(result.length).toBe(21);
-      expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
   });
 });

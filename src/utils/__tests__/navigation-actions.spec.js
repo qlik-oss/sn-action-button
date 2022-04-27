@@ -236,19 +236,40 @@ describe('navigation actions', () => {
 
   describe('getNavigationsList', () => {
     it('should return all but not FF disabled navigations', () => {
-      const isEnabled = jest.fn().mockReturnValue(false);
-      const isHidden = jest.fn().mockReturnValue(false);
-      const result = getNavigationsList(isEnabled, isHidden);
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(false),
+      };
+      const result = getNavigationsList(shouldHide);
       expect(result.length).toBe(9);
-      expect(result.filter((a) => a.featureFlag).length).toBe(0);
     });
-
-    it('should return all and FF enabled navigations', () => {
-      const isEnabled = jest.fn().mockReturnValue(true);
-      const isHidden = jest.fn().mockReturnValue(false);
-      const result = getNavigationsList(isEnabled, isHidden);
+    it('should return all but not unsupported feature navigations', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(true),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getNavigationsList(shouldHide);
+      expect(result.length).toBe(10);
+    });
+    it('should return all but not feature blacklisted navigations', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(true),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getNavigationsList(shouldHide);
+      expect(result.length).toBe(10);
+    });
+    it('should return all', () => {
+      const shouldHide = {
+        isUnsupportedFeature: jest.fn().mockReturnValue(false),
+        isFeatureBlacklisted: jest.fn().mockReturnValue(false),
+        isEnabled: jest.fn().mockReturnValue(true),
+      };
+      const result = getNavigationsList(shouldHide);
       expect(result.length).toBe(11);
-      expect(result.filter((a) => a.featureFlag).length).toBe(2);
     });
   });
 });

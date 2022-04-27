@@ -26,7 +26,7 @@ const toggleOptions = [
   },
 ];
 
-export default function ext({ translator, isEnabled, senseNavigation, isHidden }) {
+export default function ext({ translator, shouldHide, senseNavigation }) {
   return {
     definition: {
       type: 'items',
@@ -71,7 +71,7 @@ export default function ext({ translator, isEnabled, senseNavigation, isHidden }
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Action',
                   defaultValue: '',
-                  options: getActionsList(isEnabled, isHidden),
+                  options: getActionsList(shouldHide),
                   dropdownOnly: true,
                 },
                 bookmark: {
@@ -193,7 +193,7 @@ export default function ext({ translator, isEnabled, senseNavigation, isHidden }
                   translation: 'Object.ActionButton.Navigation',
                   component: 'expression-with-dropdown',
                   defaultValue: null,
-                  options: getNavigationsList(isEnabled, isHidden),
+                  options: getNavigationsList(shouldHide),
                   dropdownOnly: true,
                 },
                 appId: {
