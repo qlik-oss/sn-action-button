@@ -132,7 +132,6 @@ const navigationActions = [
       }
     },
     requiredInput: ['odagLink'],
-    hide: ({ isEnabled }) => !isEnabled?.('REFRESH_DYNAMIC_VIEWS_ODAG_POPUP'),
   },
 ];
 

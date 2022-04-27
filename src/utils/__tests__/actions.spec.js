@@ -415,7 +415,7 @@ describe('actions', () => {
         isEnabled: jest.fn().mockReturnValue(false),
       };
       const result = getActionsList(shouldHide);
-      expect(result.length).toBe(19);
+      expect(result.length).toBe(20);
     });
     it('should return all but not unsupported feature navigations', () => {
       const shouldHide = {
