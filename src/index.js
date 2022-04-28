@@ -22,7 +22,6 @@ export default function supernova(env) {
     flags: { isEnabled },
   } = env;
   const senseNavigation = sense && sense.navigation;
-  const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
   return {
     qae: {
@@ -43,7 +42,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, automationsEnabled });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
 
       useEffect(
         () => () => {
