@@ -20,10 +20,15 @@ export default function supernova(env) {
     sense,
     translator,
     flags: { isEnabled },
+    anything,
   } = env;
-  const senseNavigation = sense && sense.navigation;
+  const senseNavigation = sense?.navigation;
+  const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
+  const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
+  const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
   const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
+
   return {
     qae: {
       properties,
@@ -61,6 +66,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator, isEnabled, senseNavigation }),
+    ext: ext({ translator, shouldHide, senseNavigation }),
   };
 }

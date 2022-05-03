@@ -18,6 +18,7 @@ const actions = [
     value: 'applyBookmark',
     translation: 'Object.ActionButton.ApplyBookmark',
     group: 'bookmark',
+    hide: ({ isUnsupportedFeature }) => isUnsupportedFeature?.('bookmarks'),
     getActionCall:
       ({ app, bookmark }) =>
       async () => {
@@ -260,6 +261,7 @@ const actions = [
     value: 'doReload',
     translation: 'Object.ActionButton.DoReload',
     group: 'reload',
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('reloadData'),
     getActionCall:
       ({ app, partial }) =>
       async () => {
@@ -347,7 +349,7 @@ const actions = [
         }
       },
     requiredInput: ['automation'],
-    featureFlag: 'ACTION_BUTTON_AUTOMATIONS',
+    hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
   },
   {
     value: 'refreshDynamicViews',
@@ -361,11 +363,11 @@ const actions = [
         }
       },
     requiredInput: [],
-    featureFlag: 'REFRESH_DYNAMIC_VIEWS_ODAG_POPUP',
+    hide: ({ isEnabled }) => !isEnabled?.('REFRESH_DYNAMIC_VIEWS_ODAG_POPUP'),
   },
 ];
 
-export const getActionsList = (isEnabled) => actions.filter((a) => !a.featureFlag || isEnabled(a.featureFlag));
+export const getActionsList = (shouldHide) => actions.filter((a) => !a.hide?.(shouldHide));
 
 export function checkShowAction(data, field) {
   const act = actions.find((action) => data.actionType === action.value);
