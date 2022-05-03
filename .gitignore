@@ -1,4 +1,4 @@
-*.log
+# misc
 *.log
 .cache
 .DS_Store
@@ -7,12 +7,17 @@
 .npmrc
 .eslintcache
 
+# dependencies
 node_modules
-coverage
+
+# production
 dist/
 sn-action-button-ext/
 core/esm
 .zip
 
-**/test/*/__artifacts__/diff
-**/test/*/__artifacts__/regression
+# testing
+coverage
+test/rendering/artifacts
+test/rendering/test-report
+test/rendering/state.json

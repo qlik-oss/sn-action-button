@@ -45,7 +45,7 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:16.7.0-browsers
-      - image: browserless/chrome:1.52.1-puppeteer-1.20.0
+      - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
           at: ~/action-button
@@ -69,12 +69,17 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - run:
+          name: Install Playwright supported browsers
+          command: npx playwright install
+      - run:
           name: Rendering tests
           command: yarn test:rendering
       - store_artifacts:
-          path: ./test/rendering/__artifacts__
-      - store_test_results:
-          path: coverage/junit
+          path: test/rendering/action-button.render.ts-snapshots
+      - store_artifacts:
+          path: test/rendering/artifacts
+      - store_artifacts:
+          path: test/rendering/test-report
       - persist_to_workspace:
           root: ~/action-button
           paths:
@@ -130,15 +135,15 @@ jobs:
       - run:
           name: Create version.txt
           command: |
-              set -x
-              if [ -n "${CIRCLE_TAG}" ]; then
-                  version=${CIRCLE_TAG#v}
-              else
-                  version=$(git describe --tags --abbrev=7 --match "v*")
-                  version=${version#v}
-              fi
-              echo "$version" > ./version.txt
-              echo "Building $version"
+            set -x
+            if [ -n "${CIRCLE_TAG}" ]; then
+                version=${CIRCLE_TAG#v}
+            else
+                version=$(git describe --tags --abbrev=7 --match "v*")
+                version=${version#v}
+            fi
+            echo "$version" > ./version.txt
+            echo "Building $version"
       - run:
           name: Prepare API Compliance
           command: |

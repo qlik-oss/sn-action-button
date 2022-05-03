@@ -4,7 +4,8 @@
     "browser": true
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 2020
   },
   "extends": ["airbnb-base", "prettier"],
   "rules": {
@@ -31,9 +32,7 @@
         "mocha": true
       },
       "globals": {
-        "chai": false,
         "expect": false,
-        "aw": false,
         "page": false,
         "jest": false,
         "window": false
