@@ -22,11 +22,10 @@ export default function supernova(env) {
     flags: { isEnabled },
     anything,
   } = env;
-  const senseNavigation = sense?.navigation;
   const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
   const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
-  const automationsEnabled = isEnabled('ACTION_BUTTON_AUTOMATIONS');
+  const senseNavigation = sense?.navigation;
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
 
   return {
@@ -48,7 +47,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, automationsEnabled });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
 
       useEffect(
         () => () => {
