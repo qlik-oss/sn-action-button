@@ -69,7 +69,7 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT_DIR: ./coverage/junit/
       - run:
-          name: Install playwright
+          name: Install Playwright supported browsers
           command: npx playwright install
       - run:
           name: Rendering tests
