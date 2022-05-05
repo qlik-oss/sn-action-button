@@ -363,7 +363,6 @@ const actions = [
         }
       },
     requiredInput: [],
-    hide: ({ isEnabled }) => !isEnabled?.('REFRESH_DYNAMIC_VIEWS_ODAG_POPUP'),
   },
 ];
 

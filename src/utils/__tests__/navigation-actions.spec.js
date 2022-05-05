@@ -242,7 +242,7 @@ describe('navigation actions', () => {
         isEnabled: jest.fn().mockReturnValue(false),
       };
       const result = getNavigationsList(shouldHide);
-      expect(result.length).toBe(9);
+      expect(result.length).toBe(10);
     });
     it('should return all but not unsupported feature navigations', () => {
       const shouldHide = {
