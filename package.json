@@ -62,10 +62,10 @@
   },
   "devDependencies": {
     "@babel/cli": "7.17.10",
-    "@babel/core": "7.17.10",
+    "@babel/core": "7.17.12",
     "@babel/helper-define-map": "7.16.7",
-    "@babel/preset-env": "7.17.10",
-    "@commitlint/cli": "16.2.4",
+    "@babel/preset-env": "7.17.12",
+    "@commitlint/cli": "16.3.0",
     "@commitlint/config-conventional": "16.2.4",
     "@nebula.js/cli": "2.10.0",
     "@nebula.js/cli-build": "2.10.0",
@@ -73,9 +73,9 @@
     "@nebula.js/cli-serve": "2.10.0",
     "@nebula.js/stardust": "2.10.0",
     "@nebula.js/test-utils": "0.6.0",
-    "@playwright/test": "1.21.1",
+    "@playwright/test": "1.22.1",
     "babel-plugin-istanbul": "6.1.1",
-    "eslint": "8.14.0",
+    "eslint": "8.15.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
@@ -90,6 +90,6 @@
     "prettier": "2.6.2",
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
-    "yargs": "17.4.1"
+    "yargs": "17.5.1"
   }
 }
