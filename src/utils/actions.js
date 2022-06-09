@@ -298,9 +298,9 @@ const actions = [
             const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
               response.json()
             );
-            let executePath = `../api/v1/automations/${autoInfo.guid}/actions/execute?X-Execution-Token=${autoInfo.execution_token}`;
+            let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
             if (automationPostData) {
-              const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+              const inputBlocks = autoInfo.workspace.blocks.find(block => block.type === 'FormBlock').form ?? []
                 .then((response) => response.json())
                 .then((blocks) => {
                   let items = [];
