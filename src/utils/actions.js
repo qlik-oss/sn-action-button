@@ -300,12 +300,12 @@ const actions = [
             );
             let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
             if (automationPostData) {
-              const inputBlocks = autoInfo.workspace.blocks.find(block => block.type === 'FormBlock').form ?? []
+              const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
                 .then((response) => response.json())
                 .then((blocks) => {
                   let items = [];
                   for (let i = 0; i < blocks.blocks.length; i++) {
-                    if (blocks.blocks[i].displayName === 'Inputs') {
+                    if (blocks.blocks[i].type === 'FormBlock') {
                       items = blocks.blocks[i].form;
                       break;
                     }
