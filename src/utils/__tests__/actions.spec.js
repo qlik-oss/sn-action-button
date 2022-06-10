@@ -16,7 +16,7 @@ describe('actions', () => {
   const value = 'someValue';
   const softLock = true;
   const resourceId = 'fakeResourceId';
-  const guid = 'fakeGuid';
+  const id = 'fakeId';
   const executionToken = 'fakeExecutionToken';
   const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }, { label: 'blockLabel' }] }];
 
@@ -66,7 +66,7 @@ describe('actions', () => {
         saveObjects: jest.fn(),
       };
       global.fetch = jest.fn(() =>
-        Promise.resolve({ json: () => ({ resourceId, guid, execution_token: executionToken, inputs, blocks }) })
+        Promise.resolve({ json: () => ({ resourceId, id, executionToken, inputs, blocks }) })
       );
     });
 
@@ -315,7 +315,7 @@ describe('actions', () => {
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
       expect(global.fetch).toHaveBeenCalledWith(
-        `../api/v1/automations/${guid}/actions/execute?X-Execution-Token=${executionToken}`
+        `../api/v1/automations/${id}/actions/execute?X-Execution-Token=${executionToken}`
       );
     });
 
