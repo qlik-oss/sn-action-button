@@ -161,34 +161,54 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      const inputs = [
+      const autoInfos = [
         {
-          guid: 'someFakeGUID',
-          field_name: 'fakeInputName',
-          order: 0
+          value: JSON.stringify({
+            executePath: '../api/v1/automations/foo/actions/execute?X-Execution-Token=abc',
+            id: 1,
+            inputBlocks: [
+              {
+                id: 'inputs-input-0',
+                type: 'input',
+                label: 'app-id'
+              },
+              {
+                id: 'inputs-input-1',
+                type: 'input',
+                label: 'bookmarkid'
+              }
+            ],
+          }),
+          label: 'foo'
         },
         {
-          guid: 'someFakeGUID',
-          field_name: 'fakeInputName',
-          order: 1
+          value: JSON.stringify({
+            executePath: '../api/v1/automations/bar/actions/execute?X-Execution-Token=123',
+            id: 2,
+            inputBlocks: [
+              {
+                id: 'inputs-input-0',
+                type: 'input',
+                label: 'app-id'
+              },
+              {
+                id: 'inputs-input-1',
+                type: 'input',
+                label: 'bookmarkid'
+              }
+            ],
+          }),
+          label: 'bar'
         }
       ];
-      const autoDef = [{
-        value: JSON.stringify({
-          executePath: 'someFakePath',
-          resourceId: 'someFakeResourceId',
-          inputBlocks: inputs
-        }),
-        label: 'someBlendName'
-      }];
 
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => (autoDef) }));
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ autoInfos }) }));
 
       options = await getAutomationData();
-      expect(global.fetch).toHaveBeenCalled;
+      expect(global.fetch).toBeCalledTimes(2);
       expect(options).toHaveLength(1);
-      expect(options[0].value).toEqual(autoDef[0].value);
-      expect(options[0].label).toEqual(autoDef[0].label);
+      expect(options[0].value).toEqual(autoInfos[0].value);
+      expect(options[0].label).toEqual(autoInfos[0].label);
     });
 
     it('Should return an array of odag app links', async () => {

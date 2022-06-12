@@ -292,13 +292,13 @@ const actions = [
             try {
               const automationObject = JSON.parse(automation);
               let { executePath } = automationObject;
-              const { resourceId, inputBlocks } = automationObject;
+              const { id, inputBlocks } = automationObject;
               if (automationPostData && inputBlocks.length > 0) {
                 const newDate = new Date();
                 const bmkProp = {
                   qProp: {
                     qInfo: {
-                      qId: `automation_${app.id}_${resourceId}_${newDate.getTime()}`,
+                      qId: `automation_${app.id}_${id}_${newDate.getTime()}`,
                       qType: 'bookmark',
                     },
                     qMetaDef: {
@@ -307,16 +307,17 @@ const actions = [
                       _createdBy: 'sn-action-button',
                       _createdFor: 'automation',
                       _createdOn: `${newDate.toISOString()}`,
-                      _id: `automation_${encodeURIComponent(app.id)}_${resourceId}_${newDate.getTime()}`,
+                      _id: `automation_${encodeURIComponent(app.id)}_${id}_${newDate.getTime()}`,
                     },
                   },
                 };
-                const bmk = await app
-                  .createBookmark(bmkProp)
-                  .then((bookmark) => bookmark.getLayout())
+                const bmkObject = await app.createBookmark(bmkProp);
+                await bmkObject.publish();
+                const bmkId = await bmkObject.getLayout()
                   .then((layout) => layout.qInfo.qId);
                 await app.saveObjects();
-                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
+                // console.log(`bookmark ${bmkId} saved`);
+                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(app.id)}&${inputBlocks[1].label.toLowerCase()}=${bmkId}`;
               }
               // execute the automation
               await fetch(executePath).then((response) => response.json());

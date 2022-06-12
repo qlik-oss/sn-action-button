@@ -1,25 +1,25 @@
 export default async function getAutomationData() {
-  const automations = await fetch('../api/v1/items?resourceType=automation&limit=100')
+  const automations = await fetch('../api/v1/automations?limit=100&filter=runMode eq "triggered"')
     .then((response) => response.json());
+  // console.log(automations);
   const promises = automations.data.map(async blend => {
-    const autoInfo = await fetch(`../api/v1/automations/${blend.resourceId}`)
+    const autoInfo = await fetch(`../api/v1/automations/${blend.id}`)
       .then((response) => response.json());
     return autoInfo;
   });
   const automationDetails = await Promise.all(promises);
-  const triggeredAutomations = automationDetails.filter((automationDetail) => automationDetail.run_mode === 'triggered');
-  const promises2 = triggeredAutomations.map(async item => {
-    const autoPath = `../api/v1/automations/${item.guid}/actions/execute?X-Execution-Token=${item.execution_token}`;
+  const moreDetes = automationDetails.map(async item => {
+    const autoPath = `../api/v1/automations/${item.id}/actions/execute?X-Execution-Token=${item.executionToken}`;
     const autoDef = {
       value: JSON.stringify({
         executePath: autoPath,
-        resourceId: item.guid,
-        inputBlocks: item.inputs
+        id: item.id,
+        inputBlocks: item.workspace.blocks.find(block => block.type === 'FormBlock').form || []
       }),
       label: item.name
     };
     return autoDef;
   });
-  const autoInfos = await Promise.all(promises2);
-  return autoInfos;
+  const autoDefInfo = await Promise.all(moreDetes);
+  return autoDefInfo;
 }
