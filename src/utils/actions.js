@@ -145,6 +145,7 @@ const actions = [
           await fieldObj.selectAlternative(softLock);
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field', 'softLock'],
   },
   {
@@ -159,6 +160,7 @@ const actions = [
           await fieldObj.selectExcluded(softLock);
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field', 'softLock'],
   },
   {
@@ -173,6 +175,7 @@ const actions = [
           await fieldObj.selectPossible(softLock);
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field', 'softLock'],
   },
   {
@@ -198,6 +201,7 @@ const actions = [
       async () => {
         await app.lockAll();
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: [],
   },
   {
@@ -212,6 +216,7 @@ const actions = [
           await fieldObj.lock();
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field'],
   },
   {
@@ -223,6 +228,7 @@ const actions = [
       async () => {
         await app.unlockAll();
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: [],
   },
   {
@@ -237,6 +243,7 @@ const actions = [
           await fieldObj.unlock();
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field'],
   },
   {

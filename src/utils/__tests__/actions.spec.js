@@ -433,7 +433,7 @@ describe('actions', () => {
         isEnabled: jest.fn().mockReturnValue(true),
       };
       const result = getActionsList(shouldHide);
-      expect(result.length).toBe(20);
+      expect(result.length).toBe(13);
     });
     it('should return all', () => {
       const shouldHide = {
