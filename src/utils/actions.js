@@ -175,6 +175,7 @@ const actions = [
           await fieldObj.selectPossible(softLock);
         }
       },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
     requiredInput: ['field', 'softLock'],
   },
   {
