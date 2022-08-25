@@ -317,6 +317,9 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 details: {
                   show: false,
                 },
+                cellNavMenu: {
+                  show: false,
+                },
                 label: {
                   component: 'string',
                   ref: 'style.label',
