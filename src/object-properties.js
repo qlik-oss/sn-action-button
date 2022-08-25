@@ -65,8 +65,10 @@ const properties = {
       color: DEFAULTS.COLOR,
       colorExpression: '',
       size: DEFAULTS.FONT_SIZE,
+      sizeFixed: DEFAULTS.FONT_SIZE_FIXED,
       style: DEFAULTS.FONT_STYLE,
       align: DEFAULTS.TEXT_ALIGN,
+      sizeBehavior: DEFAULTS.SIZE_BEHAVIOR,
     },
     background: {
       useColorExpression: false,
@@ -140,11 +142,13 @@ const properties = {
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
  * @property {number=} [size=0.5] - Relative[] size of label, must be greater than 0 and 1 fills the entire button
+ * @property {number=} [sizeFixed=20] - Fixed size of the label in pixels. Must be bigger than 5. Only active when sizeBehavior is fixed.
  * @property {('left'|'center'|'right')=} [align='center'] - Horizontal alignment
  * @property {object=} style - Additional style options
  * @property {boolean=} [style.bold = true] - Bold text
  * @property {boolean=} [style.italic = false] - Italic text
  * @property {boolean=} [style.underline = false] - Underlined text
+ * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='responsive'] - Setting to determine how the fontsize of the label is calculated.
  */
 
 /**

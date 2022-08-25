@@ -26,7 +26,23 @@ const toggleOptions = [
   },
 ];
 
+const fontSizeOptions = [
+  {
+    value: 'responsive',
+    translation: 'properties.responsive',
+  },
+  {
+    value: 'relative',
+    translation: 'properties.fluid',
+  },
+  {
+    value: 'fixed',
+    translation: 'properties.fixed',
+  },
+];
+
 export default function ext({ translator, shouldHide, senseNavigation }) {
+  const { isEnabled } = shouldHide;
   return {
     definition: {
       type: 'items',
@@ -333,6 +349,14 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 sizeAndColor: {
                   type: 'items',
                   items: {
+                    fontSizeBehavior: {
+                      component: 'dropdown',
+                      ref: 'style.font.sizeBehavior',
+                      options: fontSizeOptions,
+                      translation: 'properties.kpi.layoutBehavior',
+                      defaultValue: 'responsive',
+                      show: () => isEnabled('IM_324_ACTION_BUTTON_SIZES'),
+                    },
                     fontSize: {
                       component: 'slider',
                       type: 'number',
@@ -341,6 +365,19 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       min: 0.2,
                       max: 1,
                       step: 0.01,
+                      show: (data) =>
+                        !isEnabled('IM_324_ACTION_BUTTON_SIZES') ||
+                        !data.style.font.sizeBehavior ||
+                        data.style.font.sizeBehavior !== 'fixed',
+                    },
+                    fontSizeFixed: {
+                      type: 'number',
+                      ref: 'style.font.sizeFixed',
+                      expression: 'optional',
+                      min: 5,
+                      defaultValue: 20,
+                      show: (data) =>
+                        isEnabled('IM_324_ACTION_BUTTON_SIZES') && data.style.font.sizeBehavior === 'fixed',
                     },
                     useFontColorExpression: {
                       ref: 'style.font.useColorExpression',

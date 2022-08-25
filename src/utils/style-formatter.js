@@ -42,6 +42,14 @@ const getColor = (
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
+export function measureText(text, font) {
+  const canvas = measureText.canvas || (measureText.canvas = document.createElement('canvas'));
+  const context = canvas.getContext('2d');
+  context.font = font;
+  const metrics = context.measureText(text);
+  return metrics;
+}
+
 export default {
   getStyles({ style = {}, disabled, theme, element }) {
     let styles =
@@ -91,12 +99,12 @@ export default {
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
-    text.style.whiteSpace = 'nowrap';
+    text.style.whiteSpace = 'pre';
     text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;
-    textSpan.style.whiteSpace = 'nowrap';
+    textSpan.style.whiteSpace = 'pre';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
     font.style && font.style.underline && (textSpan.style.textDecoration = 'underline');
@@ -114,32 +122,42 @@ export default {
     button.innerHTML = '';
     button.appendChild(text);
 
-    // Calculations on font size.
-    // 1. Setting font size to height of button container
-    text.style.fontSize = `${button.clientHeight}px`;
-    // 2. Adjust the font size to the height ratio between button container and text box
-    let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
-    text.style.fontSize = `${newFontsize}px`;
-    // 3. Adjust the font size to the width ratio between button container and text box
-    if (text.offsetWidth > button.clientWidth) {
-      newFontsize *= button.clientWidth / text.offsetWidth;
-    }
-    // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    const fontScale = font.size || DEFAULTS.FONT_SIZE;
-    if (font.style && font.style.italic) {
-      if (hasIcon) {
-        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
-        text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
-        text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
-      } else {
-        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.9, 8)}px`;
-        text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
-      }
-    } else if (hasIcon) {
-      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.88, 8)}px`;
-      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+    if (font.sizeBehavior === 'relative') {
+      const calculatedWidth =
+        (8 / font.size) *
+        measureText('M', `10px ${theme.getStyle('object.button', 'label.value', 'fontFamily')}`).width;
+      const fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * font.size * 0.8);
+      text.style.fontSize = `${fontSize}px`;
+    } else if (font.sizeBehavior === 'fixed') {
+      text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
     } else {
-      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
+      // Calculations on font size.
+      // 1. Setting font size to height of button container
+      text.style.fontSize = `${button.clientHeight}px`;
+      // 2. Adjust the font size to the height ratio between button container and text box
+      let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+      text.style.fontSize = `${newFontsize}px`;
+      // 3. Adjust the font size to the width ratio between button container and text box
+      if (text.offsetWidth > button.clientWidth) {
+        newFontsize *= button.clientWidth / text.offsetWidth;
+      }
+      // 4. Setting final font size by scaling with the font size from the layout + other font styling
+      const fontScale = font.size || DEFAULTS.FONT_SIZE;
+      if (font.style && font.style.italic) {
+        if (hasIcon) {
+          text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
+          text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+          text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
+        } else {
+          text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.9, 8)}px`;
+          text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
+        }
+      } else if (hasIcon) {
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.88, 8)}px`;
+        text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+      } else {
+        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
+      }
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
