@@ -238,7 +238,7 @@ describe('style-formatter', () => {
       styleFormatter.createLabelAndIcon({ theme, button, style });
       const text = button.children[0];
       expect(text.children[0].textContent).toEqual('Button');
-      expect(text.style.whiteSpace).toEqual('nowrap');
+      expect(text.style.whiteSpace).toEqual('pre');
       expect(text.style.fontFamily).toEqual('myFont');
       expect(text.style.fontSize).toEqual('11.5px');
       expect(text.style.display).toEqual('flex');
