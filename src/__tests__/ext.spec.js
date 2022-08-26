@@ -6,7 +6,7 @@ describe('ext', () => {
     get: (someString) => someString,
   };
   let data;
-  const shouldHide = jest.fn();
+  const shouldHide = { isEnabled: () => true };
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -339,13 +339,26 @@ describe('ext', () => {
       expect(resultPicker).toBe(false);
     });
 
+    it('should return true for fontSize and false for fontSizeFixed when relative font size', () => {
+      expect(font.items.sizeAndColor.items.fontSize.show(data)).toBe(true);
+      expect(font.items.sizeAndColor.items.fontSizeFixed.show(data)).toBe(false);
+      expect(font.items.sizeAndColor.items.fontSizeBehavior.show(data)).toBe(true);
+    });
+
+    it('should return false for fontSize and true for fontSizeFixed when fixed font size', () => {
+      data.style.font.sizeBehavior = 'fixed';
+      expect(font.items.sizeAndColor.items.fontSize.show(data)).toBe(false);
+      expect(font.items.sizeAndColor.items.fontSizeFixed.show(data)).toBe(true);
+    });
+
+    // background
     it('should return false for expression and true for picker when background.useColorExpression is false', () => {
       const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
       const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
       expect(resultExpression).toBe(false);
       expect(resultPicker).toBe(true);
     });
-    // background
+
     it('should return true for expression and false for picker when background.useColorExpression is true', () => {
       data.style.background.useColorExpression = true;
       const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
