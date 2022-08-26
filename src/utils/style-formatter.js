@@ -42,14 +42,6 @@ const getColor = (
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
-export function measureText(text, font) {
-  const canvas = measureText.canvas || (measureText.canvas = document.createElement('canvas'));
-  const context = canvas.getContext('2d');
-  context.font = font;
-  const metrics = context.measureText(text);
-  return metrics;
-}
-
 export default {
   getStyles({ style = {}, disabled, theme, element }) {
     let styles =
@@ -123,13 +115,14 @@ export default {
     button.appendChild(text);
 
     if (font.sizeBehavior === 'relative') {
-      const calculatedWidth =
-        (8 / font.size) *
-        measureText('M', `10px ${theme.getStyle('object.button', 'label.value', 'fontFamily')}`).width;
+      // 40 here is just a hard coded value which seems to work quite well.
+      const calculatedWidth = 40 / font.size;
       const fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * font.size * 0.8);
       text.style.fontSize = `${fontSize}px`;
+      textSpan.style.overflow = 'hidden';
     } else if (font.sizeBehavior === 'fixed') {
       text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
+      textSpan.style.overflow = 'hidden';
     } else {
       // Calculations on font size.
       // 1. Setting font size to height of button container
