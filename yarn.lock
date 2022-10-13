@@ -2544,7 +2544,14 @@
     import-cwd "3.0.0"
     yargs "17.5.1"
 
-"@nebula.js/stardust@2.13.0", "@nebula.js/stardust@^2.13.0":
+"@nebula.js/stardust@3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-3.0.4.tgz#aabe6ca12b5b7bee3ab437df92e4ab68173621c0"
+  integrity sha512-lBMXkbxVLRC8qKsW4vmyCc4zAAyBthGlcm0z1ZbtwrSQyt53SEtD2vZw/mp5CM5GQZO6mE6bC9ABpAMhUOWRyQ==
+  dependencies:
+    "@types/qlik-engineapi" "12.67.12"
+
+"@nebula.js/stardust@^2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.13.0.tgz#71028476a0c96cab974afb2cc37ee0c1189dc410"
   integrity sha512-/WyeSWq+4YfgfbCBhbplSkvMZZK7IaHuLMghtWlvJPJ4U+rpT8cn9oaTZ88xGd1D3merkvLFFUaOavj96cywzA==
