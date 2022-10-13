@@ -45,6 +45,7 @@
     "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh",
     "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
     "prepack": "./tools/prepare-sn-pack.js",
+    "prepare": "husky install",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
