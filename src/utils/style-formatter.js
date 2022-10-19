@@ -12,6 +12,15 @@ const backgroundSize = {
   alwaysFill: 'cover',
 };
 
+const imageSizingToCssProperty = {
+  originalSize: 'auto auto',
+  alwaysFit: 'contain',
+  fitWidth: '100% auto',
+  fitHeight: 'auto 100%',
+  stretchFit: '100% 100%',
+  alwaysFill: 'cover',
+};
+
 const backgroundPosition = {
   topLeft: '0% 0%', // top left
   centerLeft: '50% 0%', // center left
@@ -31,35 +40,87 @@ const getColor = (
   defaultColor,
   theme
 ) => {
+  console.log("color=>",color,theme?.getColorPickerColor(color),theme.getStyle('', '', 'backgroundColor'))
   let resolvedColor;
   if (useColorExpression) {
     resolvedColor = colorUtils.resolveExpression(colorExpression);
   } else if (typeof color === 'string') {
+    console.log("2")
     resolvedColor = color;
   } else if (color) {
+    console.log("3")
     resolvedColor = theme.getColorPickerColor(color);
   }
+  console.log("getColor resolvedColor return =====>",resolvedColor)
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
 export default {
-  getStyles({ style = {}, disabled, theme, element }) {
+  getStyles({ style = {}, disabled, theme, element ,layout},flag) {
+    console.log("getStyles=========>",theme,style,layout);
+    let { font = {}, background = {}, border = {} } = style;
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
-    const { font = {}, background = {}, border = {} } = style;
+
+
+    if(flag.isEnabled("SENSECLIENT_IM_1525_BUTTON") === true){
+      //bgcolor
+      const result = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
+      console.log("RESULT=>",result)
+  
+      background = result?.style  ? result?.style?.background : style.background;
+
+      //BgImage and positioning
+      const bgImageComp = layout?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
+      console.log("bgImageComp in style-formatter =>",bgImageComp,layout?.components?.find((comp) => comp.key === 'button-bgimage'))
+      let mediaUrl = '';
+      if (bgImageComp?.mode === 'media') {
+        mediaUrl = bgImageComp?.mediaUrl?.qStaticContentUrl?.qUrl
+          ? decodeURIComponent(bgImageComp.mediaUrl.qStaticContentUrl.qUrl)
+          : undefined;
+      } else if (bgImageComp?.mode === 'expression') {
+        mediaUrl = bgImageComp?.expressionUrl ? decodeURIComponent(bgImageComp.expressionUrl) : undefined;
+      } else {
+        mediaUrl = undefined;
+      }
+      console.log("mediaUrl=>",mediaUrl)
+      styles += formatProperty('background-image', `url('${mediaUrl}')`);
+      styles += formatProperty('background-size', bgImageComp?.sizing
+      ? imageSizingToCssProperty[bgImageComp.sizing]
+      : imageSizingToCssProperty.originalSize);
+      styles += formatProperty(
+        'background-position',
+        bgImageComp?.position ? bgImageComp?.position?.replace('-', ' ') : 'center center'
+      );
+      styles += formatProperty('background-repeat', 'no-repeat');
+
+      //border
+      const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
+      console.log("bgBorderComp=>",bgBorderComp,bgBorderComp?.border)
+      border = (bgBorderComp?.border) ? (bgBorderComp?.border) : style.border;
+      console.log("border=>",border)
+    }
+
+    //const { font = {}, background = {}, border = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
-    styles += formatProperty('color', getColor(font, '#ffffff', theme));
+    styles += formatProperty('color', getColor(font, '#ff ffff', theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
+    console.log("background===dsd=>",background)
+
+
+
+
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
+      console.log("bgUrl=====>",bgUrl)
       if (bgUrl) {
         bgUrl = urlUtils.getImageUrl(bgUrl);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
@@ -87,8 +148,13 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, theme, style = {}, isSense }) {
+  createLabelAndIcon({ button, theme, style = {}, isSense ,layout},flag) {
+    console.log("createLabelAndIcon=>",layout,style)
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
+
+    if(flag.isEnabled("SENSECLIENT_IM_1525_BUTTON") === true){
+    }
+
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
@@ -103,9 +169,11 @@ export default {
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
+    console.log("hasIcon=>",hasIcon)
     if (hasIcon) {
       const iconSpan = document.createElement('span');
       const iconType = luiIcons.find((iconObj) => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
+      console.log('iconType=>',iconType)
       iconSpan.style.textDecoration = 'none';
       iconSpan.style.fontSize = 'inherit';
       iconSpan.setAttribute('class', `lui-icon lui-icon--${iconType ? iconType.value : ''}`);

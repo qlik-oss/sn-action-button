@@ -9,16 +9,18 @@ export const runActions = async (actionList) => {
   }
 };
 
-export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element }) => {
+export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element },flag) => {
+  console.log("renderButton=>",layout)
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
+  console.log("action-button=>",style)
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element ,layout},flag);
   button.setAttribute('style', formattedStyles);
   button.setAttribute('tabindex', '-1');
-  styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
+  styleFormatter.createLabelAndIcon({ button, theme, style, isSense , layout},flag);
 
   button.onclick = async () => {
     if (isClickable) {

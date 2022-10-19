@@ -34,6 +34,7 @@ export default function supernova(env) {
       data,
     },
     component() {
+      console.log("FLAGS=>",env)
       const element = useElement();
       const theme = useTheme();
 
@@ -47,7 +48,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation},env.flags);
 
       useEffect(
         () => () => {
