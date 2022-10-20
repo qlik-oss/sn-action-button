@@ -64,13 +64,13 @@ export default {
 
 
     if(flag.isEnabled("SENSECLIENT_IM_1525_BUTTON") === true){
-      //bgcolor
+      //bgcolor - NEW
       const result = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
       console.log("RESULT=>",result)
   
       background = result?.style  ? result?.style?.background : style.background;
 
-      //BgImage and positioning
+      //BgImage and positioning - NEW
       const bgImageComp = layout?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
       console.log("bgImageComp in style-formatter =>",bgImageComp,layout?.components?.find((comp) => comp.key === 'button-bgimage'))
       let mediaUrl = '';
@@ -94,11 +94,27 @@ export default {
       );
       styles += formatProperty('background-repeat', 'no-repeat');
 
-      //border
+      //border - NEW
       const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
       console.log("bgBorderComp=>",bgBorderComp,bgBorderComp?.border)
       border = (bgBorderComp?.border) ? (bgBorderComp?.border) : style.border;
       console.log("border=>",border)
+
+      //font - NEW
+      const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
+      let fontStyleToMap = {bold:false,italic:false,underline:false}
+      if(btnlabelComp?.style?.font?.style){
+        (btnlabelComp?.style?.font?.style).filter(function(style_name){
+          console.log("style_name",style_name)
+          if(style_name in fontStyleToMap){
+            fontStyleToMap[style_name] = true
+          }
+        })
+      }
+      console.log("fontStyleToMap",fontStyleToMap)
+      font.style = btnlabelComp?.style?.font?.style  ? fontStyleToMap : style.font.style;
+      
+
     }
 
     //const { font = {}, background = {}, border = {} } = style;
@@ -110,6 +126,8 @@ export default {
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
+    fontStyle.underline && (styles += formatProperty('text-decoration', 'underline'));
+
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
@@ -150,15 +168,39 @@ export default {
   },
   createLabelAndIcon({ button, theme, style = {}, isSense ,layout},flag) {
     console.log("createLabelAndIcon=>",layout,style)
-    const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
+    let { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
 
     if(flag.isEnabled("SENSECLIENT_IM_1525_BUTTON") === true){
+      //label align - NEW
+      const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
+      console.log("btnlabelComp 2=>",btnlabelComp)
+      font = btnlabelComp?.style  ? btnlabelComp?.style?.font : style.font;
+      console.log("font=>",font)
+
+
+      let fontStyleToMap = {bold:false,italic:false,underline:false}
+      if(btnlabelComp?.style?.font?.style){
+        (btnlabelComp?.style?.font?.style).filter(function(style_name){
+          console.log("style_name",style_name)
+          if(style_name in fontStyleToMap){
+            fontStyleToMap[style_name] = true
+          }
+        })
+      }
+      console.log("fontStyleToMap",fontStyleToMap)
+      font.style = btnlabelComp?.style?.font?.style  ? fontStyleToMap : style.font.style;
+
+
+      
     }
 
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-    text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
+    //text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
+    text.style.fontFamily = font?.fontFamily || theme.getStyle('', '', 'fontFamily');
+    
+    console.log("text.style.fontFamily=>",text.style.fontFamily)
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;
@@ -192,8 +234,11 @@ export default {
     if (text.offsetWidth > button.clientWidth) {
       newFontsize *= button.clientWidth / text.offsetWidth;
     }
+
+    console.log("font before font size=>",font)
     // 4. Setting final font size by scaling with the font size from the layout + other font styling
     const fontScale = font.size || DEFAULTS.FONT_SIZE;
+    console.log("fontScale=newFontsize>",fontScale,newFontsize)
     if (font.style && font.style.italic) {
       if (hasIcon) {
         text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
@@ -208,6 +253,7 @@ export default {
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
       text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
+      //text.style.fontSize = fontScale;
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
