@@ -112,8 +112,8 @@ export default {
         })
       }
       console.log("fontStyleToMap",fontStyleToMap)
-      font.style = btnlabelComp?.style?.font?.style  ? fontStyleToMap : style.font.style;
-      
+      font.style = btnlabelComp?.style?.font?.style  ? fontStyleToMap : style.font.style; // label font styles
+      font.color = btnlabelComp?.style?.font?.color  ? btnlabelComp?.style?.font?.color : style.font.color; //label font color
 
     }
 
@@ -122,6 +122,7 @@ export default {
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
+    console.log("FFFFFFFF",font)
     styles += formatProperty('color', getColor(font, '#ff ffff', theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
@@ -253,7 +254,7 @@ export default {
       text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
     } else {
       text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
-      //text.style.fontSize = fontScale;
+      text.style.fontSize = fontScale;
     }
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {

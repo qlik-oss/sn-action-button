@@ -58,7 +58,7 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
 export default function ext({ translator, shouldHide, senseNavigation }) {
 
   const fontSizeOptions = FONT_SIZES.map((size) => ({
-    value: `${size}px`,
+    value: `${parseInt(size)+parseInt(40)}px`,
     label: size + translator.get('Common.px'),
   }));
 
@@ -357,116 +357,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
 
             },
           },
-          font: {
-            grouped: true,
-            type: 'items',
-            translation: 'properties.font',
-            items: {
-              sizeAndColor: {
-                type: 'items',
-                items: {
-                  fontSize: {
-                    component: 'slider',
-                    type: 'number',
-                    ref: 'style.font.size',
-                    translation: 'properties.fontSize',
-                    min: 0.2,
-                    max: 1,
-                    step: 0.01,
-                  },
-                  useFontColorExpression: {
-                    ref: 'style.font.useColorExpression',
-                    type: 'boolean',
-                    translation: 'properties.fontColor',
-                    component: 'dropdown',
-                    options: colorOptions,
-                  },
-                  colorPicker: {
-                    component: 'color-picker',
-                    type: 'object',
-                    ref: 'style.font.color',
-                    translation: 'properties.color',
-                    dualOutput: true,
-                    show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
-                  },
-                  colorExpression: {
-                    component: 'string',
-                    type: 'string',
-                    ref: 'style.font.colorExpression',
-                    translation: 'Common.Expression',
-                    expression: 'optional',
-                    show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
-                  },
-                },
-              },
-              stylingAndAlign: {
-                type: 'items',
-                items: {
-                  fontStyling: {
-                    component: 'item-selection-list',
-                    type: 'string',
-                    ref: 'style.font.style',
-                    translation: 'properties.textStyle',
-                    horizontal: true,
-                    multipleSelect: true,
-                    items: [
-                      {
-                        component: 'icon-item',
-                        icon: 'bold',
-                        value: 'bold',
-                        translation: 'Common.bold',
-                        labelPlacement: 'bottom',
-                      },
-                      {
-                        component: 'icon-item',
-                        icon: 'italic',
-                        value: 'italic',
-                        translation: 'Common.italic',
-                        labelPlacement: 'bottom',
-                      },
-                      {
-                        component: 'icon-item',
-                        icon: 'underline',
-                        value: 'underline',
-                        translation: 'Common.underline',
-                        labelPlacement: 'bottom',
-                      },
-                    ],
-                  },
-                  textAlign: {
-                    component: 'item-selection-list',
-                    type: 'string',
-                    ref: 'style.font.align',
-                    translation: 'properties.Alignment',
-                    horizontal: true,
-                    items: [
-                      {
-                        component: 'icon-item',
-                        icon: 'align_left',
-                        value: 'left',
-                        translation: 'properties.dock.left',
-                        labelPlacement: 'bottom',
-                      },
-                      {
-                        component: 'icon-item',
-                        icon: 'align_center',
-                        value: 'center',
-                        translation: 'Common.Center',
-                        labelPlacement: 'bottom',
-                      },
-                      {
-                        component: 'icon-item',
-                        icon: 'align_right',
-                        value: 'right',
-                        translation: 'properties.dock.right',
-                        labelPlacement: 'bottom',
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          },
+          
 
         },
       },
@@ -521,7 +412,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                           component: 'color-picker',
                           width: false,
                           ref: 'style.font.color',
-                          translation: 'properties.color',
+                          //translation: 'properties.color',
 
                           //defaultValue: { color: getPlaceholderFromTheme('title.main.color', chartType) },
 
@@ -1022,6 +913,116 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
             expression: 'optional',
           }
         }
+      },
+      font: {
+        grouped: true,
+        type: 'items',
+        translation: 'properties.font',
+        items: {
+          sizeAndColor: {
+            type: 'items',
+            items: {
+              fontSize: {
+                component: 'slider',
+                type: 'number',
+                ref: 'style.font.size',
+                translation: 'properties.fontSize',
+                min: 0.2,
+                max: 1,
+                step: 0.01,
+              },
+              useFontColorExpression: {
+                ref: 'style.font.useColorExpression',
+                type: 'boolean',
+                translation: 'properties.fontColor',
+                component: 'dropdown',
+                options: colorOptions,
+              },
+              colorPicker: {
+                component: 'color-picker',
+                type: 'object',
+                ref: 'style.font.color',
+                translation: 'properties.color',
+                dualOutput: true,
+                show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
+              },
+              colorExpression: {
+                component: 'string',
+                type: 'string',
+                ref: 'style.font.colorExpression',
+                translation: 'Common.Expression',
+                expression: 'optional',
+                show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
+              },
+            },
+          },
+          stylingAndAlign: {
+            type: 'items',
+            items: {
+              fontStyling: {
+                component: 'item-selection-list',
+                type: 'string',
+                ref: 'style.font.style',
+                translation: 'properties.textStyle',
+                horizontal: true,
+                multipleSelect: true,
+                items: [
+                  {
+                    component: 'icon-item',
+                    icon: 'bold',
+                    value: 'bold',
+                    translation: 'Common.bold',
+                    labelPlacement: 'bottom',
+                  },
+                  {
+                    component: 'icon-item',
+                    icon: 'italic',
+                    value: 'italic',
+                    translation: 'Common.italic',
+                    labelPlacement: 'bottom',
+                  },
+                  {
+                    component: 'icon-item',
+                    icon: 'underline',
+                    value: 'underline',
+                    translation: 'Common.underline',
+                    labelPlacement: 'bottom',
+                  },
+                ],
+              },
+              textAlign: {
+                component: 'item-selection-list',
+                type: 'string',
+                ref: 'style.font.align',
+                translation: 'properties.Alignment',
+                horizontal: true,
+                items: [
+                  {
+                    component: 'icon-item',
+                    icon: 'align_left',
+                    value: 'left',
+                    translation: 'properties.dock.left',
+                    labelPlacement: 'bottom',
+                  },
+                  {
+                    component: 'icon-item',
+                    icon: 'align_center',
+                    value: 'center',
+                    translation: 'Common.Center',
+                    labelPlacement: 'bottom',
+                  },
+                  {
+                    component: 'icon-item',
+                    icon: 'align_right',
+                    value: 'right',
+                    translation: 'properties.dock.right',
+                    labelPlacement: 'bottom',
+                  },
+                ],
+              },
+            },
+          },
+        },
       },
       icon : {
         type: 'items',
