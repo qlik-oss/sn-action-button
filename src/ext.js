@@ -58,7 +58,7 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
 export default function ext({ translator, shouldHide, senseNavigation }) {
 
   const fontSizeOptions = FONT_SIZES.map((size) => ({
-    value: `${parseInt(size)+parseInt(40)}px`,
+    value: `${parseInt(size)}px`,
     label: size + translator.get('Common.px'),
   }));
 
@@ -391,7 +391,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       component: 'dropdown',
                       ref: 'style.font.fontFamily',
                       options: fontFamilyOptions,
-                      //defaultValue: getPlaceholderFromTheme('title.main.fontFamily', chartType),
                     },
                     labelFontWrapperItem: {
                       component: 'inline-wrapper',
@@ -406,17 +405,11 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                           component: 'dropdown',
                           ref: 'style.font.size',
                           options: fontSizeOptions,
-                          //defaultValue: getPlaceholderFromTheme('title.main.fontSize', chartType),
                         },
                         labelFontColorItem: {
                           component: 'color-picker',
                           width: false,
-                          ref: 'style.font.color',
-                          //translation: 'properties.color',
-
-                          //defaultValue: { color: getPlaceholderFromTheme('title.main.color', chartType) },
-
-                          
+                          ref: 'style.font.color', 
                         },
                       },
                     },
@@ -466,20 +459,16 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         },
                         colorPicker: {
                           component: 'color-picker',
-                          // type: 'object',
                           width: 3,
                           ref: 'style.background.color',
                           translation: 'properties.color',
-                          // dualOutput: true,
                           defaultValue: { color: 'none' },
                           show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                         },
                         colorExpression: {
                           component: 'input-field-expression',
-                          //type: 'string',
                           ref: 'style.background.colorExpression',
                           translation: 'Common.Expression',
-                          //expression: 'optional',
                           show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
                         },
                       },
@@ -513,7 +502,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         },
                       ],
                       change(data, handler, properties, args) {
-                        console.log("onchange ML dropdown=>", args)
                         const bgImageComp = args?.properties?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
                         if (bgImageComp) {
                           bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
