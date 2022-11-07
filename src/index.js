@@ -34,7 +34,6 @@ export default function supernova(env) {
       data,
     },
     component() {
-      console.log("FLAGS=>",env)
       const element = useElement();
       const theme = useTheme();
 
