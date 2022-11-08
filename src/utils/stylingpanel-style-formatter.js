@@ -1,16 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
-import urlUtils from './url-utils';
 import DEFAULTS from '../style-defaults';
-
-const backgroundSize = {
-    auto: 'auto auto',
-    alwaysFit: 'contain',
-    fitWidth: '100% auto',
-    fitHeight: 'auto 100%',
-    fill: '100% 100%',
-    alwaysFill: 'cover',
-};
 
 const imageSizingToCssProperty = {
     originalSize: 'auto auto',
@@ -19,18 +9,6 @@ const imageSizingToCssProperty = {
     fitHeight: 'auto 100%',
     stretchFit: '100% 100%',
     alwaysFill: 'cover',
-};
-
-const backgroundPosition = {
-    topLeft: '0% 0%', // top left
-    centerLeft: '50% 0%', // center left
-    bottomLeft: '100% 0%', // bottom left
-    topCenter: '0% 50%', // top center
-    centerCenter: '50% 50%', // center center
-    bottomCenter: '100% 50%', // bottom center
-    topRight: '0% 100%', // top right
-    centerRight: '50% 100%', // center right
-    bottomRight: '100% 100%', // bottom right
 };
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
@@ -58,11 +36,11 @@ export default {
 
         let { font = {}, background = {}, border = {} } = style;
 
-        //bgcolor
+        // bgcolor
         const bgColorComp = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
         background = bgColorComp?.style ? bgColorComp?.style?.background : style.background;
 
-        //BgImage and positioning
+        // BgImage and positioning
         const bgImageComp = layout?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
         let mediaUrl = '';
         if (bgImageComp?.mode === 'media') {
@@ -84,17 +62,17 @@ export default {
         );
         styles += formatProperty('background-repeat', 'no-repeat');
 
-        //border
+        // border
         const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
         border = (bgBorderComp?.border) ? (bgBorderComp?.border) : style.border;
 
-        //font
+        // font
         const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
-        let fontStyleToMap = { bold: false, italic: false, underline: false }
+        const fontStyleToMap = { bold: false, italic: false, underline: false }
         if (btnlabelComp?.style?.font?.style) {
-            (btnlabelComp?.style?.font?.style).filter(function (style_name) {
-                if (style_name in fontStyleToMap) {
-                    fontStyleToMap[style_name] = true
+            (btnlabelComp?.style?.font?.style).filter( (styleName) => {
+                if (styleName in fontStyleToMap) {
+                    return fontStyleToMap[styleName] = true
                 }
             })
         }
@@ -138,9 +116,9 @@ export default {
 
         let fontStyleToMap = { bold: false, italic: false, underline: false }
         if (btnlabelComp?.style?.font?.style) {
-            (btnlabelComp?.style?.font?.style).filter(function (style_name) {
-                if (style_name in fontStyleToMap) {
-                    fontStyleToMap[style_name] = true
+            (btnlabelComp?.style?.font?.style).filter(function (styleName) {
+                if (styleName in fontStyleToMap) {
+                    fontStyleToMap[styleName] = true
                 }
             })
         }
@@ -151,7 +129,6 @@ export default {
         text.style.whiteSpace = 'nowrap';
         text.style.fontFamily = font?.fontFamily || theme.getStyle('', '', 'fontFamily');
 
-        console.log("text.style.fontFamily=>", text.style.fontFamily)
         // label
         const textSpan = document.createElement('span');
         textSpan.textContent = label;

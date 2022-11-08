@@ -58,7 +58,7 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
 export default function ext({ translator, shouldHide, senseNavigation }) {
 
   const fontSizeOptions = FONT_SIZES.map((size) => ({
-    value: `${parseInt(size)}px`,
+    value: `${size}px`,
     label: size + translator.get('Common.px'),
   }));
 
@@ -424,7 +424,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         },
                         {
                           value: 'center',
-                          translation: 'center',//trannslation has to be added
+                          translation: 'center',// trannslation has to be added
                         },
                         {
                           value: 'right',
