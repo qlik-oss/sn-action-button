@@ -34,7 +34,8 @@ export default {
         let styles =
             'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
 
-        let { font = {}, background = {}, border = {} } = style;
+        const { font = {} } = style;
+        let { background = {}, border = {} } = style;
 
         // bgcolor
         const bgColorComp = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
@@ -69,15 +70,17 @@ export default {
         // font
         const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
         const fontStyleToMap = { bold: false, italic: false, underline: false }
-        if (btnlabelComp?.style?.font?.style) {
-            (btnlabelComp?.style?.font?.style).filter( (styleName) => {
+        const btnStyle = btnlabelComp?.style?.font?.style
+        if (btnStyle) {
+            btnStyle.map(styleName => {
                 if (styleName in fontStyleToMap) {
-                    return fontStyleToMap[styleName] = true
+                    fontStyleToMap[styleName] = true
                 }
+                return fontStyleToMap
             })
         }
         font.style = btnlabelComp?.style?.font?.style ? fontStyleToMap : style.font.style; // label font styles
-        font.color = btnlabelComp?.style?.font?.color ? btnlabelComp?.style?.font?.color : style.font.color; //label font color
+        font.color = btnlabelComp?.style?.font?.color ? btnlabelComp?.style?.font?.color : style.font.color; // label font color
 
         const primaryColor = theme.getDataColorSpecials().primary;
         // enable
@@ -110,16 +113,19 @@ export default {
         return styles;
     },
     createLabelAndIcon({ button, theme, style = {}, isSense, layout }) {
-        let { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
+        let { font = {} } = style
+        const { icon = {},  label = DEFAULTS.LABEL } = style;
         const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
         font = btnlabelComp?.style ? btnlabelComp?.style?.font : style.font;
 
-        let fontStyleToMap = { bold: false, italic: false, underline: false }
-        if (btnlabelComp?.style?.font?.style) {
-            (btnlabelComp?.style?.font?.style).filter(function (styleName) {
+        const fontStyleToMap = { bold: false, italic: false, underline: false }
+        const btnStyle = btnlabelComp?.style?.font?.style
+        if (btnStyle) {
+            btnStyle.map((styleName) => {
                 if (styleName in fontStyleToMap) {
                     fontStyleToMap[styleName] = true
                 }
+                return fontStyleToMap
             })
         }
         font.style = btnlabelComp?.style?.font?.style ? fontStyleToMap : style.font.style;

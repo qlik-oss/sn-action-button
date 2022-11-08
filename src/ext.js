@@ -462,7 +462,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                           width: 3,
                           ref: 'style.background.color',
                           translation: 'properties.color',
-                          defaultValue: { color: 'none' },
                           show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
                         },
                         colorExpression: {
