@@ -363,7 +363,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
       },
     },
   }
-  if (shouldHide.isEnabled('SENSECLIENT_IM_1525_BUTTON')) {
+  if (shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_BUTTON')) {
     definition.items.settings.items.presentation = {
       type: 'items',
       grouped: false,
