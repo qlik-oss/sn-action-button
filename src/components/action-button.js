@@ -10,13 +10,13 @@ export const runActions = async (actionList) => {
   }
 };
 
-export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element },flag) => {
+export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element ,flag}) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  if(flag.isEnabled("SENSECLIENT_IM_1525_BUTTON")){
+  if(flag){
     button.setAttribute('style', stylingPanelStyleFormatter.getStyles({ style, disabled, theme, element ,layout}));
     stylingPanelStyleFormatter.createLabelAndIcon({ button, theme, style, isSense , layout},flag);
   }else{
