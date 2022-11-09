@@ -1,5 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
+import urlUtils from './url-utils';
 import DEFAULTS from '../style-defaults';
 
 const imageSizingToCssProperty = {
@@ -10,6 +11,18 @@ const imageSizingToCssProperty = {
     stretchFit: '100% 100%',
     alwaysFill: 'cover',
 };
+
+const backgroundPosition = {
+    topLeft: '0% 0%', // top left
+    centerLeft: '50% 0%', // center left
+    bottomLeft: '100% 0%', // bottom left
+    topCenter: '0% 50%', // top center
+    centerCenter: '50% 50%', // center center
+    bottomCenter: '100% 50%', // bottom center
+    topRight: '0% 100%', // top right
+    centerRight: '50% 100%', // center right
+    bottomRight: '100% 100%', // bottom right
+  };
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
@@ -40,7 +53,6 @@ export default {
         // bgcolor
         const bgColorComp = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
         background = bgColorComp?.style ? bgColorComp?.style?.background : style.background;
-
         // BgImage and positioning
         const bgImageComp = layout?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
         let mediaUrl = '';
@@ -53,7 +65,9 @@ export default {
         } else {
             mediaUrl = undefined;
         }
-        styles += formatProperty('background-image', `url('${mediaUrl}')`);
+
+        if(bgImageComp && bgImageComp!== 'undefined'){
+            styles += formatProperty('background-image', `url('${mediaUrl}')`);
         styles += formatProperty('background-size', bgImageComp?.sizing
             ? imageSizingToCssProperty[bgImageComp.sizing]
             : imageSizingToCssProperty.originalSize);
@@ -62,6 +76,20 @@ export default {
             bgImageComp?.position ? bgImageComp?.position?.replace('-', ' ') : 'center center'
         );
         styles += formatProperty('background-repeat', 'no-repeat');
+        }else{
+            let bgUrl = background?.url?.qStaticContentUrl?.qUrl;
+            if (bgUrl) {
+              bgUrl = urlUtils.getImageUrl(bgUrl);
+              styles += formatProperty('background-image', `url('${bgUrl}')`);
+              styles += formatProperty('background-size', imageSizingToCssProperty[background.size] || DEFAULTS.BACKGROUND_SIZE);
+              styles += formatProperty(
+                'background-position',
+                backgroundPosition[background.position] || 'center center'
+              );
+              styles += formatProperty('background-repeat', 'no-repeat');
+            }
+        }
+        
 
         // border
         const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
@@ -86,7 +114,7 @@ export default {
         // enable
         styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
         // font
-        styles += formatProperty('color', getColor(font, '#ff ffff', theme));
+        styles += formatProperty('color', getColor(font, '#ffffff', theme));
         const fontStyle = font.style || DEFAULTS.FONT_STYLE;
         fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
         fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
