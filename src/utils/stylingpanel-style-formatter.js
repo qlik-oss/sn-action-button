@@ -22,7 +22,7 @@ const backgroundPosition = {
     topRight: '0% 100%', // top right
     centerRight: '50% 100%', // center right
     bottomRight: '100% 100%', // bottom right
-  };
+};
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
@@ -41,6 +41,17 @@ const getColor = (
     }
     return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
+
+const fontStyleMapping = (btnStyle, fontStyleToMap) => {
+    if (btnStyle) {
+        btnStyle.forEach(styleName => {
+            if (styleName in fontStyleToMap) {
+                fontStyleToMap[styleName] = true
+            }
+        })
+    }
+    return fontStyleToMap
+}
 
 export default {
     getStyles({ style = {}, disabled, theme, element, layout }) {
@@ -66,30 +77,30 @@ export default {
             mediaUrl = undefined;
         }
 
-        if(bgImageComp && bgImageComp!== 'undefined'){
+        if (bgImageComp && bgImageComp !== 'undefined') {
             styles += formatProperty('background-image', `url('${mediaUrl}')`);
-        styles += formatProperty('background-size', bgImageComp?.sizing
-            ? imageSizingToCssProperty[bgImageComp.sizing]
-            : imageSizingToCssProperty.originalSize);
-        styles += formatProperty(
-            'background-position',
-            bgImageComp?.position ? bgImageComp?.position?.replace('-', ' ') : 'center center'
-        );
-        styles += formatProperty('background-repeat', 'no-repeat');
-        }else{
+            styles += formatProperty('background-size', bgImageComp?.sizing
+                ? imageSizingToCssProperty[bgImageComp.sizing]
+                : imageSizingToCssProperty.originalSize);
+            styles += formatProperty(
+                'background-position',
+                bgImageComp?.position ? bgImageComp?.position?.replace('-', ' ') : 'center center'
+            );
+            styles += formatProperty('background-repeat', 'no-repeat');
+        } else {
             let bgUrl = background?.url?.qStaticContentUrl?.qUrl;
             if (bgUrl) {
-              bgUrl = urlUtils.getImageUrl(bgUrl);
-              styles += formatProperty('background-image', `url('${bgUrl}')`);
-              styles += formatProperty('background-size', imageSizingToCssProperty[background.size] || DEFAULTS.BACKGROUND_SIZE);
-              styles += formatProperty(
-                'background-position',
-                backgroundPosition[background.position] || 'center center'
-              );
-              styles += formatProperty('background-repeat', 'no-repeat');
+                bgUrl = urlUtils.getImageUrl(bgUrl);
+                styles += formatProperty('background-image', `url('${bgUrl}')`);
+                styles += formatProperty('background-size', imageSizingToCssProperty[background.size] || DEFAULTS.BACKGROUND_SIZE);
+                styles += formatProperty(
+                    'background-position',
+                    backgroundPosition[background.position] || 'center center'
+                );
+                styles += formatProperty('background-repeat', 'no-repeat');
             }
         }
-        
+
 
         // border
         const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
@@ -99,15 +110,9 @@ export default {
         const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
         const fontStyleToMap = { bold: false, italic: false, underline: false }
         const btnStyle = btnlabelComp?.style?.font?.style
-        if (btnStyle) {
-            btnStyle.map(styleName => {
-                if (styleName in fontStyleToMap) {
-                    fontStyleToMap[styleName] = true
-                }
-                return fontStyleToMap
-            })
-        }
-        font.style = btnlabelComp?.style?.font?.style ? fontStyleToMap : style.font.style; // label font styles
+        const updatedFontStyle = fontStyleMapping(btnStyle, fontStyleToMap);
+        
+        font.style = btnlabelComp?.style?.font?.style ? updatedFontStyle : style.font.style; // label font styles
         font.color = btnlabelComp?.style?.font?.color ? btnlabelComp?.style?.font?.color : style.font.color; // label font color
 
         const primaryColor = theme.getDataColorSpecials().primary;
@@ -142,21 +147,15 @@ export default {
     },
     createLabelAndIcon({ button, theme, style = {}, isSense, layout }) {
         let { font = {} } = style
-        const { icon = {},  label = DEFAULTS.LABEL } = style;
+        const { icon = {}, label = DEFAULTS.LABEL } = style;
         const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
         font = btnlabelComp?.style ? btnlabelComp?.style?.font : style.font;
 
         const fontStyleToMap = { bold: false, italic: false, underline: false }
         const btnStyle = btnlabelComp?.style?.font?.style
-        if (btnStyle) {
-            btnStyle.map((styleName) => {
-                if (styleName in fontStyleToMap) {
-                    fontStyleToMap[styleName] = true
-                }
-                return fontStyleToMap
-            })
-        }
-        font.style = btnlabelComp?.style?.font?.style ? fontStyleToMap : style.font.style;
+        const updatedFontStyle = fontStyleMapping(btnStyle, fontStyleToMap);
+
+        font.style = btnlabelComp?.style?.font?.style ? updatedFontStyle : style.font.style;
 
         // text element wrapping label and icon
         const text = document.createElement('text');
@@ -190,4 +189,6 @@ export default {
         text.style.alignItems = 'center';
         text.style.justifyContent = font.align === 'left' ? 'flex-start' : font.align === 'right' ? 'flex-end' : 'center';
     },
+
+
 };

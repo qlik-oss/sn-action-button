@@ -185,6 +185,12 @@ describe('stylingpanel-style-formatter', () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
       expect(formattedStyle.includes('border: none')).toBe(true);
     });
+
+    it('test for fontstylemap', () => {
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
+      expect(formattedStyle.includes('border: none')).toBe(true);
+    });
+
   });
 
   describe('createLabelAndIcon', () => {
@@ -287,6 +293,36 @@ describe('stylingpanel-style-formatter', () => {
       const text = button.children[0];
       expect(text.children[0].textContent).toEqual('Button');
       expect(text.children[1].style.textDecoration).toEqual('none');
+    });
+  });
+
+  describe('fontStyleMapping', () => {
+    let style;
+    let theme;
+    let layout;
+    const disabled = false;
+    beforeEach(() => {
+      const d = defaultValues();
+      theme = d.theme;
+      layout = d.layout;
+      style = JSON.parse(JSON.stringify(layout.style));
+    });
+    it('should return font-style: italic when italic is selected', () => {
+      style.font.style = {
+        italic: true,
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
+      expect(formattedStyle.includes('font-style: italic')).toBe(true);
+    });
+
+    it('should map the font style', () => {
+      style.font.style = {
+        italic: true,
+        bold: true,
+        underline: true
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme });
+      expect(formattedStyle.includes('font-style: italic')).toBe(true);
     });
   });
 });

@@ -708,7 +708,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
         }
       }
     }
-
   } else {
     definition.items.settings.items = {
       background : {
