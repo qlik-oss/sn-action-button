@@ -6,7 +6,8 @@ describe('ext', () => {
     get: (someString) => someString,
   };
   let data;
-  const shouldHide = jest.fn();
+  let shouldHide = jest.fn();
+  console.log("shouldHide spec=>", shouldHide)
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -15,10 +16,14 @@ describe('ext', () => {
   const actionItems = props.definition.items.actions.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
+  let presentationTab;
 
   it('should return properties object', () => {
     expect(props).toBeInstanceOf(Object);
   });
+
+  
+
 
   describe('itemTitleRef', () => {
     const { itemTitleRef } = props.definition.items.actions.items.actions;
@@ -457,6 +462,96 @@ describe('ext', () => {
       data = JSON.parse(JSON.stringify(objectProperties));
       const result = background.items.backgroundImage.items.backgroundPosition.currentSize(data);
       expect(result).toEqual('auto');
+    });
+  });
+
+  describe('Styling Panel', () => {
+    beforeEach(() => {
+      shouldHide = {
+        isEnabled: () => true,
+        isUnsupportedFeature: () => false,
+        isFeatureBlacklisted: () => false,
+      }
+      const SPprops = ext({ translator, shouldHide, senseNavigation });
+      presentationTab = SPprops.definition.items.settings.items.presentation;
+      data = JSON.parse(JSON.stringify(objectProperties));
+    });
+
+    it('should show presentation tab if FF is enabled', () => {   
+      const emptyObject = Object.keys(presentationTab).length === 0 && presentationTab.constructor === Object
+      expect(emptyObject).toBe(false);
+    });
+
+    it('should not show presentation tab if FF is enabled', () => {
+      shouldHide = {
+        isEnabled: () => false,
+        isUnsupportedFeature: () => false,
+        isFeatureBlacklisted: () => false,
+      }
+      const SPprops = ext({ translator, shouldHide, senseNavigation });
+      presentationTab = SPprops.definition.items.settings.items.presentation;
+      expect(presentationTab).toBe(undefined);
+    });
+
+    it('should return false for expression and true for picker when font.useColorExpression is false in styling panel', () => {
+      data.style.font.useColorExpression = true;
+      const resultExpression = presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorExpression.show(data);
+      const resultPicker = presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorPicker.show(data);
+      expect(resultExpression).toBe(false);
+      expect(resultPicker).toBe(true);
+    });
+
+    it('should show all border settings when border is used in styling panel', () => {
+      data.style.border.useBorder = true;
+      const resultRadius = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
+      const resultWidth = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
+      const resultDropdown = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
+      expect(resultRadius).toBe(true);
+      expect(resultWidth).toBe(true);
+      expect(resultDropdown).toBe(true);
+    });
+
+    it('should show no border settings when border is not used in styling panel', () => {
+      data.style.border.useBorder = false;
+      const resultRadius = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
+      const resultWidth = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
+      const resultDropdown = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
+      expect(resultRadius).toBe(false);
+      expect(resultWidth).toBe(false);
+      expect(resultDropdown).toBe(false);
+    });
+
+    it('should show borderColor when no expression is used', () => {
+      data.style.border.useBorder = true;
+      const borderColor = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
+      const borderColorExpression = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
+      expect(borderColor).toBe(true);
+      expect(borderColorExpression).toBe(false);
+    });
+
+    it('should show borderColorExpression when expression is used in styling panel', () => {     
+      data.style.border.useBorder = true;
+      data.style.border.useColorExpression = true;
+      const borderColor = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
+      const borderColorExpression = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
+      expect(borderColor).toBe(false);
+      expect(borderColorExpression).toBe(true);
+    });
+
+    it('should return true for iconType in styling panel', () => {     
+      data.style.icon.useIcon = true;
+      const resultType = presentationTab.items.icon.items.iconSettings.items.iconType.show(data);
+      const resultPosition = presentationTab.items.icon.items.iconSettings.items.iconPosition.show(data);
+      expect(resultType).toBe(true);
+      expect(resultPosition).toBe(true);
+    });
+
+    it('should return false for iconType', () => {      
+      data.style.icon.useIcon = false;
+      const resultType = presentationTab.items.icon.items.iconSettings.items.iconType.show(data);
+      const resultPosition = presentationTab.items.icon.items.iconSettings.items.iconPosition.show(data);
+      expect(resultType).toBe(false);
+      expect(resultPosition).toBe(false);
     });
   });
 });
