@@ -95,6 +95,11 @@ const properties = {
       position: DEFAULTS.ICON_POSITION,
     },
   },
+
+  bgImage:{
+    mode: 'none',
+    position: 'center-center'
+  }
 };
 
 /**

@@ -17,6 +17,8 @@ describe('ext', () => {
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
   let presentationTab;
+  const mediaUrlInput =
+  "https://c4.wallpaperflare.com/wallpaper/272/491/637/ocean-sea-waves-underwater-animals-dolphins-exotic-colorful-fish-sip-corals-underwater-landscape-paradise-art-paintings-marine-animals-1920%C3%971200-wallpaper-preview.jpg";
 
   it('should return properties object', () => {
     expect(props).toBeInstanceOf(Object);
@@ -223,6 +225,8 @@ describe('ext', () => {
       expect(resultSoftLock).toBe(false);
       const resultValue = actionItems.value.show(actionObject);
       expect(resultValue).toBe(false);
+      const resultPartial = actionItems.partial.show(actionObject);
+      expect(resultPartial).toBe(false);
       const resultAutomation = actionItems.automation.show(actionObject);
       expect(resultAutomation).toBe(false);
     });
@@ -466,6 +470,29 @@ describe('ext', () => {
   });
 
   describe('Styling Panel', () => {
+    const args = {
+      properties: {
+        qInfo: {
+          qType: "button",
+        },
+        components: [
+          {
+            key: "button-bgimage",
+            bgImage: {
+              mediaUrl: {
+                qStaticContentUrlDef: {
+                  qUrl: mediaUrlInput,
+                },
+              },
+            },
+          },
+        ],
+      },
+      handler: {},
+      mediaLibraryService: {
+        show: jest.fn(() => 0),
+      },
+    };
     beforeEach(() => {
       shouldHide = {
         isEnabled: () => true,
@@ -552,6 +579,48 @@ describe('ext', () => {
       const resultPosition = presentationTab.items.icon.items.iconSettings.items.iconPosition.show(data);
       expect(resultType).toBe(false);
       expect(resultPosition).toBe(false);
+    });
+
+    it('should show medialibrary when media mode is selected in styling panel', () => {
+      data.bgImage.mode = 'media';
+
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.mediaLibraryItem.show(data);
+      expect(backImage).toBe('media');
+    });
+
+    it('should show sizeitem when media mode and image is selected is selected in styling panel', () => {
+      data.bgImage.mode = 'media';
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(data,args.handler,args);
+     expect(backImage).toBe(true);
+    });
+
+    it('should show sizeitem when none mode and image is selected is selected in styling panel', () => {
+      data.bgImage.mode = 'none';
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(data,args.handler,args);
+     expect(backImage).toBe(false);
+    });
+
+    it('should show positiongrid when media mode is selected in styling panel', () => {
+      data.bgImage.mode = 'media';
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(data,args.handler,args);
+      expect(backImage).toBe(true);
+    });
+
+    it('should show positiongrid when none is selected in styling panel', () => {
+      data.bgImage.mode = 'none';
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(data,args.handler,args);
+      expect(backImage).toBe(false);
+    });
+
+    it('change function on mode type in styling panel', () => {
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.bgItem.change(data,args.handler,args.properties,args);
+      expect(backImage).toBe(undefined);
+    });
+
+    it('change function on sizeitem in styling panel', () => {
+      data.bgImage.position = 'center-center';
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.change(data);
+     expect(backImage).toBe(undefined);
     });
   });
 });
