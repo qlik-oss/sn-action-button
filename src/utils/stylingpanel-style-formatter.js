@@ -31,6 +31,7 @@ const getColor = (
     defaultColor,
     theme
 ) => {
+    console.log("getcolor color=>",useColorExpression,colorExpression,color)
     let resolvedColor;
     if (useColorExpression) {
         resolvedColor = colorUtils.resolveExpression(colorExpression);
@@ -39,6 +40,7 @@ const getColor = (
     } else if (color) {
         resolvedColor = theme.getColorPickerColor(color);
     }
+    console.log("resolvedColor=>",resolvedColor)
     return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
@@ -55,6 +57,7 @@ const fontStyleMapping = (btnStyle, fontStyleToMap) => {
 
 export default {
     getStyles({ style = {}, disabled, theme, element, layout }) {
+        console.log("layout=>",style,layout)
         let styles =
             'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
 
@@ -62,10 +65,14 @@ export default {
         let { background = {}, border = {} } = style;
 
         // bgcolor
-        const bgColorComp = layout?.components?.find((comp) => comp.key === 'button-bgcolor');
-        background = bgColorComp?.style ? bgColorComp?.style?.background : style.background;
+        const bgStyleComp = layout?.components?.find((comp) => comp.key === 'actionbutton')?.style;
+        background = bgStyleComp?.background ? bgStyleComp?.background : style.background;
+        
+        // border
+        border = (bgStyleComp?.border) ? (bgStyleComp?.border) : style.border;
+        
         // BgImage and positioning
-        const bgImageComp = layout?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
+        const bgImageComp = layout?.components?.find((comp) => comp.key === 'actionbutton')?.bgImage;
         let mediaUrl = '';
         if (bgImageComp?.mode === 'media') {
             mediaUrl = bgImageComp?.mediaUrl?.qStaticContentUrl?.qUrl
@@ -101,13 +108,8 @@ export default {
             }
         }
 
-
-        // border
-        const bgBorderComp = layout?.components?.find((comp) => comp.key === 'button-border')?.style;
-        border = (bgBorderComp?.border) ? (bgBorderComp?.border) : style.border;
-
         // font
-        const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
+        const btnlabelComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
         const fontStyleToMap = { bold: false, italic: false, underline: false }
         const btnStyle = btnlabelComp?.style?.font?.style
         const updatedFontStyle = fontStyleMapping(btnStyle, fontStyleToMap);
@@ -142,13 +144,12 @@ export default {
         } else {
             styles += 'border: none;';
         }
-
         return styles;
     },
     createLabelAndIcon({ button, theme, style = {}, isSense, layout }) {
         let { font = {} } = style
         const { icon = {}, label = DEFAULTS.LABEL } = style;
-        const btnlabelComp = layout?.components?.find((comp) => comp.key === 'button-label');
+        const btnlabelComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
         font = btnlabelComp?.style ? btnlabelComp?.style?.font : style.font;
 
         const fontStyleToMap = { bold: false, italic: false, underline: false }

@@ -477,7 +477,7 @@ describe('ext', () => {
         },
         components: [
           {
-            key: "button-bgimage",
+            key: "actionbutton",
             bgImage: {
               mediaUrl: {
                 qStaticContentUrlDef: {

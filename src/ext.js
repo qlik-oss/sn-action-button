@@ -56,7 +56,6 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
 }));
 
 export default function ext({ translator, shouldHide, senseNavigation }) {
-
   const fontSizeOptions = FONT_SIZES.map((size) => ({
     value: `${size}px`,
     label: size + translator.get('Common.px'),
@@ -357,8 +356,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
 
             },
           },
-          
-
         },
       },
     },
@@ -385,7 +382,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 labelItem: {
                   component: 'items',
                   ref: 'components',
-                  key: 'button-label',
+                  key: 'actionbutton',
                   items: {
                     labelFontFamilyItem: {
                       component: 'dropdown',
@@ -424,7 +421,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         },
                         {
                           value: 'center',
-                          translation: 'center',// trannslation has to be added
+                          translation: 'center',
                         },
                         {
                           value: 'right',
@@ -444,7 +441,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 bgColorItem: {
                   component: 'items',
                   ref: 'components',
-                  key: 'button-bgcolor',
+                  key: 'actionbutton',
                   items: {
                     bgColorWrapper: {
                       component: 'inline-wrapper',
@@ -484,7 +481,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 bgImageItems: {
                   component: 'items',
                   ref: 'components',
-                  key: 'button-bgimage',
+                  key: 'actionbutton',
                   items: {
                     bgItem: {
                       component: 'dropdown',
@@ -493,7 +490,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       options: [
                         {
                           value: 'none',
-                          translation: 'Background.None', // Needs translation
+                          translation: 'Background.None',
                         },
                         {
                           value: 'media',
@@ -501,7 +498,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         },
                       ],
                       change(data, handler, properties, args) {
-                        const bgImageComp = args?.properties?.components?.find((comp) => comp.key === 'button-bgimage')?.bgImage;
+                        const bgImageComp = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.bgImage;
                         if (bgImageComp) {
                           bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
                           bgImageComp.expressionUrl = undefined;
@@ -512,7 +509,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       component: 'media-library-button',
                       ref: 'bgImage.mediaUrl',
                       translation: 'MediaLibrary.Header',
-                      itemKey: 'button-bgimage',
+                      itemKey: 'actionbutton',
                       show(data) {
                         return propertyResolver.getValue(data, 'bgImage.mode');
                       },
@@ -527,7 +524,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         }
                       },
                       show(data, handler, args) {
-                        const bgImageComp = args.properties.components.find((comp) => comp.key === 'button-bgimage').bgImage;
+                        const bgImageComp = args.properties.components.find((comp) => comp.key === 'actionbutton').bgImage;
                         if (
                           data?.bgImage?.mode !== 'none' &&
                           (bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl || bgImageComp?.expressionUrl)
@@ -569,7 +566,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       ref: 'bgImage.position',
                       defaultValue: 'center-center',
                       show(data, handler, args) {
-                        const bgImageComp = args.properties.components.find((comp) => comp.key === 'button-bgimage').bgImage;
+                        const bgImageComp = args.properties.components.find((comp) => comp.key === 'actionbutton').bgImage;
                         if (
                           data?.bgImage?.mode !== 'none' &&
                           (bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl || bgImageComp?.expressionUrl) &&
@@ -591,7 +588,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 bgBorderItems: {
                   component: 'items',
                   ref: 'components',
-                  key: 'button-border',
+                  key: 'actionbutton',
                   items: {
                     useBorder: {
                       ref: 'style.border.useBorder',
