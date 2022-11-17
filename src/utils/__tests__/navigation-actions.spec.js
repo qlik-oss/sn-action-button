@@ -94,6 +94,24 @@ describe('navigation actions', () => {
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith(websiteUrl, '_self');
     });
+    it('should call openWebsite with encoded url and https protocol', async () => {
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
+      await navigationObject.navigationCall({
+        websiteUrl: 'https://mozilla.org/?x=äáöå',
+        sameWindow: false,
+        encodeURL: true,
+      });
+      expect(global.open).toHaveBeenCalledWith('https://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5', '_blank');
+    });
+    it('should call openWebsite with encoded url and http protocol', async () => {
+      const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
+      await navigationObject.navigationCall({
+        websiteUrl: 'http://mozilla.org/?x=äáöå',
+        sameWindow: false,
+        encodeURL: true,
+      });
+      expect(global.open).toHaveBeenCalledWith('http://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5', '_blank');
+    });
     it('should call openWebsite in parent', async () => {
       const { top } = window;
       delete window.top;

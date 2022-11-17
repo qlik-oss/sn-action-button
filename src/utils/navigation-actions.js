@@ -118,7 +118,7 @@ const navigationActions = [
         if (websiteUrl) {
           let protocol;
           if (websiteUrl.startsWith(HTTP_PROTOCOL)) {
-            protocol = HTTPS_PROTOCOL;
+            protocol = HTTP_PROTOCOL;
           }
           if (websiteUrl.startsWith(HTTPS_PROTOCOL)) {
             protocol = HTTPS_PROTOCOL;
