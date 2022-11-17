@@ -23,7 +23,7 @@ const HTTP_PROTOCOL = 'http://';
 const HTTPS_PROTOCOL = 'https://';
 
 const removeHTTP = (s) => {
-  let res;
+  let res = s;
   if (s.startsWith(HTTP_PROTOCOL)) {
     res = s.slice(HTTP_PROTOCOL.length);
   }
@@ -116,6 +116,13 @@ const navigationActions = [
     navigationCall: async ({ websiteUrl, sameWindow, encodeURL }) => {
       try {
         if (websiteUrl) {
+          let protocol;
+          if (websiteUrl.startsWith(HTTP_PROTOCOL)) {
+            protocol = HTTPS_PROTOCOL;
+          }
+          if (websiteUrl.startsWith(HTTPS_PROTOCOL)) {
+            protocol = HTTPS_PROTOCOL;
+          }
           const url = removeHTTP(websiteUrl);
           const isE = isEmail(url);
           let target = '';
@@ -124,9 +131,9 @@ const navigationActions = [
           }
           if (!isE && !sameWindow && encodeURL) {
             const encoded = encodeURI(url);
-            window.open(`http://${encoded}`, '_blank');
+            window.open(`${protocol}${encoded}`, '_blank');
           } else {
-            window.open(isE ? url : `http://${url}`, target);
+            window.open(isE ? url : `${protocol || 'http://'}${url}`, target);
           }
         }
       } catch (error) {
