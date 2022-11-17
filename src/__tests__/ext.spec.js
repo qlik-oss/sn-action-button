@@ -274,6 +274,8 @@ describe('ext', () => {
       expect(resultWebsiteUrl).toBe(false);
       const resultSameWindow = navigationItems.sameWindow.show(navigationObject);
       expect(resultSameWindow).toBe(false);
+      const resultEncodeURL = navigationItems.encodeURL.show(navigationObject);
+      expect(resultEncodeURL).toBe(false);
       const appId = navigationItems.appId.show(navigationObject);
       expect(appId).toBe(false);
     });
@@ -300,6 +302,11 @@ describe('ext', () => {
 
     it('should return true when sameWindow needs to show', () => {
       const result = navigationItems.sameWindow.show({ navigation: { action: 'openWebsite' } });
+      expect(result).toBe(true);
+    });
+
+    it('should return true when encodeURL needs to show', () => {
+      const result = navigationItems.encodeURL.show({ navigation: { action: 'openWebsite' } });
       expect(result).toBe(true);
     });
 

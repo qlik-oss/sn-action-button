@@ -79,6 +79,7 @@ const importProperties = (exportedFmt, initialProperties) => {
             story: props.selectedStory,
             websiteUrl: props.websiteUrl,
             sameWindow: props.sameWindow,
+            encodeURL: props.encodeURL,
           };
           break;
         case 'qStateName':

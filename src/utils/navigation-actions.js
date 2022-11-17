@@ -19,6 +19,30 @@ export const getOrderedVisibleSheet = async (app) => {
   return visibleSheets.sort((current, next) => current.qData.rank - next.qData.rank);
 };
 
+const HTTP_PROTOCOL = 'http://';
+const HTTPS_PROTOCOL = 'https://';
+
+const removeHTTP = (s) => {
+  let res;
+  if (s.startsWith(HTTP_PROTOCOL)) {
+    res = s.slice(HTTP_PROTOCOL.length);
+  }
+  if (s.startsWith(HTTPS_PROTOCOL)) {
+    res = s.slice(HTTPS_PROTOCOL.length);
+  }
+  return res;
+};
+
+const isEmail = (string) => {
+  let url;
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === 'mailto:';
+};
+
 const navigationActions = [
   {
     translation: 'Object.ActionButton.NoNavigation',
@@ -89,21 +113,27 @@ const navigationActions = [
   {
     translation: 'Object.ActionButton.OpenWebsiteEmail',
     value: 'openWebsite',
-    navigationCall: async ({ websiteUrl, sameWindow }) => {
+    navigationCall: async ({ websiteUrl, sameWindow, encodeURL }) => {
       try {
         if (websiteUrl) {
-          const url = websiteUrl.match(/^(https?:\/\/|mailto:)/) ? websiteUrl : `http://${websiteUrl}`;
+          const url = removeHTTP(websiteUrl);
+          const isE = isEmail(url);
           let target = '';
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
           }
-          window.open(url, target);
+          if (!isE && !sameWindow && encodeURL) {
+            const encoded = encodeURI(url);
+            window.open(`http://${encoded}`, '_blank');
+          } else {
+            window.open(isE ? url : `http://${url}`, target);
+          }
         }
       } catch (error) {
         // no-op
       }
     },
-    requiredInput: ['websiteUrl', 'sameWindow'],
+    requiredInput: ['websiteUrl', 'sameWindow', 'encodeURL'],
   },
   {
     translation: 'Object.ActionButton.DocumentChain',

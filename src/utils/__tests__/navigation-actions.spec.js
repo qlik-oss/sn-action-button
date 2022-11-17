@@ -81,17 +81,17 @@ describe('navigation actions', () => {
     });
     it('should call openWebsite with defaults', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
-      await navigationObject.navigationCall({ websiteUrl, sameWindow: false });
+      await navigationObject.navigationCall({ websiteUrl, sameWindow: false, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith(websiteUrl, '');
     });
     it('should call openWebsite and add http://', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
-      await navigationObject.navigationCall({ websiteUrl: 'myWebsite', sameWindow: false });
+      await navigationObject.navigationCall({ websiteUrl: 'myWebsite', sameWindow: false, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith('http://myWebsite', '');
     });
     it('should call openWebsite in same window', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
-      await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
+      await navigationObject.navigationCall({ websiteUrl, sameWindow: true, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith(websiteUrl, '_self');
     });
     it('should call openWebsite in parent', async () => {
@@ -99,13 +99,13 @@ describe('navigation actions', () => {
       delete window.top;
       window.top = {};
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
-      await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
+      await navigationObject.navigationCall({ websiteUrl, sameWindow: true, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith(websiteUrl, '_parent');
       window.top = top;
     });
     it('should call mailto', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
-      await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
+      await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false, encodeURL: false });
       expect(global.open).toHaveBeenCalledWith(mailtoUrl, '');
     });
     describe('sheets with show conditions', () => {
