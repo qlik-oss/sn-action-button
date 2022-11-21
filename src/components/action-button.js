@@ -15,7 +15,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
   const { style, qStateName, navigation } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element });
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
   button.setAttribute('style', formattedStyles);
   button.setAttribute('tabindex', '-1');
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
