@@ -26,7 +26,8 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation }));
+        const buttonId = layout.qInfo.qId;
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation, buttonId }));
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);

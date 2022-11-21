@@ -338,7 +338,7 @@ const actions = [
               const automationData = {
                 guid: automationId,
                 inputs,
-                context: 'editor'
+                context: 'api_sync'
               }
               const csrfResponse = await fetch('../api/v1/csrf-token');
               const headers = {
