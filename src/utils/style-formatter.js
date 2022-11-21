@@ -114,13 +114,7 @@ export default {
     button.innerHTML = '';
     button.appendChild(text);
 
-    if (font.sizeBehavior === 'relative') {
-      // 40 here is just a hard coded value which seems to work quite well.
-      const calculatedWidth = 40 / font.size;
-      const fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * font.size * 0.8);
-      text.style.fontSize = `${fontSize}px`;
-      textSpan.style.overflow = 'hidden';
-    } else if (font.sizeBehavior === 'fixed') {
+    if (font.sizeBehavior === 'fixed') {
       text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
       textSpan.style.overflow = 'hidden';
     } else {

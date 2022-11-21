@@ -32,10 +32,6 @@ const fontSizeOptions = [
     translation: 'properties.responsive',
   },
   {
-    value: 'relative',
-    translation: 'properties.fluid',
-  },
-  {
     value: 'fixed',
     translation: 'properties.fixed',
   },

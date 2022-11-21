@@ -296,20 +296,6 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).toEqual('16px');
     });
 
-    it('should calculate correct font size when behavior is relative', () => {
-      button.appendChild = (child) => {
-        child.setAttribute = jest.fn();
-        child.offsetHeight = 400;
-        child.offsetWidth = 400;
-        button.children.push(child);
-      };
-      style.font.sizeBehavior = 'relative';
-      style.label =
-        'a very very very very very very very very very very very very very very very very very very very very long title';
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      expect(button.children[0].style.fontSize).toEqual('12.5px');
-    });
-
     it('should set fontSize when italic is selected', () => {
       style.font.style = {
         italic: true,
