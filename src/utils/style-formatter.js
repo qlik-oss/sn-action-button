@@ -43,7 +43,7 @@ const getColor = (
 };
 
 export default {
-  getStyles({ style = {}, disabled, theme, element }) {
+  getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     const { font = {}, background = {}, border = {} } = style;
@@ -61,7 +61,7 @@ export default {
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
-        bgUrl = urlUtils.getImageUrl(bgUrl);
+        bgUrl = urlUtils.getImageUrl(bgUrl, app);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
         styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
         styles += formatProperty(
