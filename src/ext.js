@@ -155,19 +155,18 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
                 // adds automation to actions and adds a dropdown property panel
                 // item to select the automation for the button to trigger
-                automation: {
+                automationId: {
                   type: 'string',
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Automation',
-                  ref: 'automation',
+                  ref: 'automationId',
                   dropdownOnly: true,
                   options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then(
-                      (response) => response.json()
-                    );
-                    return automations.data.map((blend) => ({
-                      value: blend.id,
-                      label: blend.name,
+                    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+                    const automations = await automationsResponse.json();
+                    return automations.data.map((automation) => ({
+                      value: automation.resourceId,
+                      label: automation.name,
                     }));
                   },
                   show: (data) => checkShowAction(data, 'automation'),
@@ -182,6 +181,29 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
                 },
+                automationShowTriggered: {
+                  type: 'boolean',
+                  ref: 'automationShowTriggered',
+                  show: () => false,
+                  default: false,
+                },
+                automationTriggered: {
+                  type: 'boolean',
+                  ref: 'automationTriggered',
+                  translation: 'Run mode triggered',
+                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                  defaultValue: false,
+                },
+                automationTriggeredText: {
+                  label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
+                  component: 'text',
+                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                },
+                automationExecutionToken: {
+                  type: 'string',
+                  ref: 'automationExecutionToken',
+                  show: () => false,
+                }
               },
             },
             navigation: {

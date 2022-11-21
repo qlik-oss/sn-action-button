@@ -10,7 +10,7 @@ describe('actions', () => {
   let field;
   let bookmark;
   let variable;
-  let automation;
+  let automationId;
   let inputs = [];
   let automationPostData = false;
   const value = 'someValue';
@@ -25,7 +25,7 @@ describe('actions', () => {
       field = 'someField';
       bookmark = 'someBookmark';
       variable = 'someVariable';
-      automation = 'someAutomation';
+      automationId = 'someAutomation';
       fieldObject = {
         clear: jest.fn(),
         clearAllButThis: jest.fn(),
@@ -310,19 +310,18 @@ describe('actions', () => {
       inputs = [];
       automationPostData = false;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationPostData })();
+      await actionObject.getActionCall({ app, automationId, automationPostData })();
       expect(global.fetch).toHaveBeenCalledThrice;
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${automationId}`);
       expect(global.fetch).toHaveBeenCalledWith(
-        `../api/v1/automations/${id}/actions/execute?X-Execution-Token=${executionToken}`
+        `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${executionToken}`
       );
     });
 
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      automation = undefined;
-      await actionObject.getActionCall({ app, automation, automationPostData })();
+      automationId = undefined;
+      await actionObject.getActionCall({ app, automationId, automationPostData })();
       expect(global.fetch).toNotHaveBeenCalled;
     });
 
@@ -330,7 +329,7 @@ describe('actions', () => {
       inputs = [];
       automationPostData = true;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationPostData })();
+      await actionObject.getActionCall({ app, automationId, automationPostData })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(app.createBookmark).toHaveBeenCalled;
       expect(app.saveObjects).toHaveBeenCalled;
