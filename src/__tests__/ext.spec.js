@@ -7,7 +7,6 @@ describe('ext', () => {
   };
   let data;
   let shouldHide = jest.fn();
-  console.log("shouldHide spec=>", shouldHide)
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -18,14 +17,11 @@ describe('ext', () => {
   const { font, background, border, icon } = props.definition.items.settings.items;
   let presentationTab;
   const mediaUrlInput =
-  "https://c4.wallpaperflare.com/wallpaper/272/491/637/ocean-sea-waves-underwater-animals-dolphins-exotic-colorful-fish-sip-corals-underwater-landscape-paradise-art-paintings-marine-animals-1920%C3%971200-wallpaper-preview.jpg";
+    'https://c4.wallpaperflare.com/wallpaper/272/491/637/ocean-sea-waves-underwater-animals-dolphins-exotic-colorful-fish-sip-corals-underwater-landscape-paradise-art-paintings-marine-animals-1920%C3%971200-wallpaper-preview.jpg';
 
   it('should return properties object', () => {
     expect(props).toBeInstanceOf(Object);
   });
-
-  
-
 
   describe('itemTitleRef', () => {
     const { itemTitleRef } = props.definition.items.actions.items.actions;
@@ -473,11 +469,11 @@ describe('ext', () => {
     const args = {
       properties: {
         qInfo: {
-          qType: "button",
+          qType: 'button',
         },
         components: [
           {
-            key: "actionbutton",
+            key: 'actionbutton',
             bgImage: {
               mediaUrl: {
                 qStaticContentUrlDef: {
@@ -498,14 +494,14 @@ describe('ext', () => {
         isEnabled: () => true,
         isUnsupportedFeature: () => false,
         isFeatureBlacklisted: () => false,
-      }
+      };
       const SPprops = ext({ translator, shouldHide, senseNavigation });
       presentationTab = SPprops.definition.items.settings.items.presentation;
       data = JSON.parse(JSON.stringify(objectProperties));
     });
 
-    it('should show presentation tab if FF is enabled', () => {   
-      const emptyObject = Object.keys(presentationTab).length === 0 && presentationTab.constructor === Object
+    it('should show presentation tab if FF is enabled', () => {
+      const emptyObject = Object.keys(presentationTab).length === 0 && presentationTab.constructor === Object;
       expect(emptyObject).toBe(false);
     });
 
@@ -514,7 +510,7 @@ describe('ext', () => {
         isEnabled: () => false,
         isUnsupportedFeature: () => false,
         isFeatureBlacklisted: () => false,
-      }
+      };
       const SPprops = ext({ translator, shouldHide, senseNavigation });
       presentationTab = SPprops.definition.items.settings.items.presentation;
       expect(presentationTab).toBe(undefined);
@@ -522,17 +518,26 @@ describe('ext', () => {
 
     it('should return false for expression and true for picker when font.useColorExpression is false in styling panel', () => {
       data.style.font.useColorExpression = true;
-      const resultExpression = presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorExpression.show(data);
-      const resultPicker = presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorPicker.show(data);
+      const resultExpression =
+        presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorExpression.show(
+          data
+        );
+      const resultPicker =
+        presentationTab.items.styleEditor.items.bgColorSection.items.bgColorItem.items.bgColorWrapper.items.colorPicker.show(
+          data
+        );
       expect(resultExpression).toBe(false);
       expect(resultPicker).toBe(true);
     });
 
     it('should show all border settings when border is used in styling panel', () => {
       data.style.border.useBorder = true;
-      const resultRadius = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
-      const resultWidth = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
-      const resultDropdown = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
+      const resultRadius =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
+      const resultWidth =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
+      const resultDropdown =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
       expect(resultRadius).toBe(true);
       expect(resultWidth).toBe(true);
       expect(resultDropdown).toBe(true);
@@ -540,9 +545,12 @@ describe('ext', () => {
 
     it('should show no border settings when border is not used in styling panel', () => {
       data.style.border.useBorder = false;
-      const resultRadius = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
-      const resultWidth = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
-      const resultDropdown = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
+      const resultRadius =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderRadius.show(data);
+      const resultWidth =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.borderWidth.show(data);
+      const resultDropdown =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorDropdown.show(data);
       expect(resultRadius).toBe(false);
       expect(resultWidth).toBe(false);
       expect(resultDropdown).toBe(false);
@@ -550,22 +558,26 @@ describe('ext', () => {
 
     it('should show borderColor when no expression is used', () => {
       data.style.border.useBorder = true;
-      const borderColor = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
-      const borderColorExpression = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
+      const borderColor =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
+      const borderColorExpression =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
       expect(borderColor).toBe(true);
       expect(borderColorExpression).toBe(false);
     });
 
-    it('should show borderColorExpression when expression is used in styling panel', () => {     
+    it('should show borderColorExpression when expression is used in styling panel', () => {
       data.style.border.useBorder = true;
       data.style.border.useColorExpression = true;
-      const borderColor = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
-      const borderColorExpression = presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
+      const borderColor =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorPicker.show(data);
+      const borderColorExpression =
+        presentationTab.items.styleEditor.items.bgBorderSection.items.bgBorderItems.items.colorExpression.show(data);
       expect(borderColor).toBe(false);
       expect(borderColorExpression).toBe(true);
     });
 
-    it('should return true for iconType in styling panel', () => {     
+    it('should return true for iconType in styling panel', () => {
       data.style.icon.useIcon = true;
       const resultType = presentationTab.items.icon.items.iconSettings.items.iconType.show(data);
       const resultPosition = presentationTab.items.icon.items.iconSettings.items.iconPosition.show(data);
@@ -573,7 +585,7 @@ describe('ext', () => {
       expect(resultPosition).toBe(true);
     });
 
-    it('should return false for iconType', () => {      
+    it('should return false for iconType', () => {
       data.style.icon.useIcon = false;
       const resultType = presentationTab.items.icon.items.iconSettings.items.iconType.show(data);
       const resultPosition = presentationTab.items.icon.items.iconSettings.items.iconPosition.show(data);
@@ -584,43 +596,68 @@ describe('ext', () => {
     it('should show medialibrary when media mode is selected in styling panel', () => {
       data.bgImage.mode = 'media';
 
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.mediaLibraryItem.show(data);
+      const backImage =
+        presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.mediaLibraryItem.show(data);
       expect(backImage).toBe('media');
     });
 
     it('should show sizeitem when media mode and image is selected is selected in styling panel', () => {
       data.bgImage.mode = 'media';
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(data,args.handler,args);
-     expect(backImage).toBe(true);
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(
+        data,
+        args.handler,
+        args
+      );
+      expect(backImage).toBe(true);
     });
 
     it('should show sizeitem when none mode and image is selected is selected in styling panel', () => {
       data.bgImage.mode = 'none';
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(data,args.handler,args);
-     expect(backImage).toBe(false);
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.show(
+        data,
+        args.handler,
+        args
+      );
+      expect(backImage).toBe(false);
     });
 
     it('should show positiongrid when media mode is selected in styling panel', () => {
       data.bgImage.mode = 'media';
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(data,args.handler,args);
+      const backImage =
+        presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(
+          data,
+          args.handler,
+          args
+        );
       expect(backImage).toBe(true);
     });
 
     it('should show positiongrid when none is selected in styling panel', () => {
       data.bgImage.mode = 'none';
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(data,args.handler,args);
+      const backImage =
+        presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.positionGridItem.show(
+          data,
+          args.handler,
+          args
+        );
       expect(backImage).toBe(false);
     });
 
     it('change function on mode type in styling panel', () => {
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.bgItem.change(data,args.handler,args.properties,args);
+      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.bgItem.change(
+        data,
+        args.handler,
+        args.properties,
+        args
+      );
       expect(backImage).toBe(undefined);
     });
 
     it('change function on sizeitem in styling panel', () => {
       data.bgImage.position = 'center-center';
-      const backImage = presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.change(data);
-     expect(backImage).toBe(undefined);
+      const backImage =
+        presentationTab.items.styleEditor.items.bgImageSection.items.bgImageItems.items.sizeItem.change(data);
+      expect(backImage).toBe(undefined);
     });
   });
 });
