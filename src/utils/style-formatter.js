@@ -115,8 +115,12 @@ export default {
     button.appendChild(text);
 
     if (font.sizeBehavior === 'fixed') {
-      text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
+      const fontSize = font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED;
+      text.style.fontSize = `${fontSize}px`;
       textSpan.style.overflow = 'hidden';
+      if (hasIcon) {
+        text.children[0].style.marginRight = `${fontSize * 0.3}px`;
+      }
     } else {
       // Calculations on font size.
       // 1. Setting font size to height of button container

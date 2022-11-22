@@ -212,9 +212,6 @@ describe('style-formatter', () => {
           firstElementChild: { setAttribute: () => {} },
           style: {},
           children: [],
-          getContext: () => ({
-            measureText: () => ({ width: 8 }),
-          }),
         };
         newElement.appendChild = (newChild) => {
           newElement.children.push(newChild);
