@@ -103,11 +103,11 @@ describe('navigation actions', () => {
     it('should call openWebsite and expect encoded result with http:// protocol', async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === 'openWebsite');
       await navigationObject.navigationCall({
-        websiteUrl: 'https://mozilla.org/?x=äáöå&myOtherParam=2´5%€',
+        websiteUrl: 'http://mozilla.org/?x=äáöå&myOtherParam=2´5%€',
         sameWindow: false,
       });
       expect(global.open).toHaveBeenCalledWith(
-        'https://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5&myOtherParam=2%C2%B45%25%E2%82%AC',
+        'http://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5&myOtherParam=2%C2%B45%25%E2%82%AC',
         ''
       );
     });
