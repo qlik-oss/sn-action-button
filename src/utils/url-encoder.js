@@ -1,8 +1,22 @@
-export const HTTP_PROTOCOL = 'http://';
-export const HTTPS_PROTOCOL = 'https://';
+const HTTP_PROTOCOL = 'http://';
+const HTTPS_PROTOCOL = 'https://';
+const EMAIL_PROTOCOL = 'mailto:';
+
+export const getCurrentProtocol = (s) => {
+  if (s.startsWith(HTTP_PROTOCOL)) {
+    return HTTP_PROTOCOL;
+  }
+  if (s.startsWith(HTTPS_PROTOCOL)) {
+    return HTTPS_PROTOCOL;
+  }
+  if (s.startsWith(EMAIL_PROTOCOL)) {
+    return EMAIL_PROTOCOL;
+  }
+  return '';
+};
 
 export const removeProtocolHttp = (s) => {
-  let res;
+  let res = s;
   if (s.startsWith(HTTP_PROTOCOL)) {
     res = s.slice(HTTP_PROTOCOL.length);
   }
@@ -19,7 +33,7 @@ export const urlHasEmailProtocol = (string) => {
   } catch (_) {
     return false;
   }
-  return url.protocol === 'mailto:';
+  return url.protocol === EMAIL_PROTOCOL;
 };
 
 /**
