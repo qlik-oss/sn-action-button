@@ -17,7 +17,7 @@ module.exports = {
           qInfo: { qId: 'CNaxMh', qType: 'sn-action-button' },
           qSelectionInfo: {},
           actions: [],
-          navigation: { action: 'none', sheet: '', story: '', websiteUrl: '', sameWindow: false, encodeURL: false },
+          navigation: { action: 'none', sheet: '', story: '', websiteUrl: '', sameWindow: false },
           useEnabledCondition: false,
           enabledCondition: 1,
           showTitles: true,

@@ -255,13 +255,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   show: (data) => checkShowNavigation(data, 'sameWindow'),
                   defaultValue: false,
                 },
-                encodeURL: {
-                  type: 'boolean',
-                  ref: 'navigation.encodeURL',
-                  translation: 'properties.encodeURL',
-                  show: (data) => checkShowNavigation(data, 'encodeURL'),
-                  defaultValue: false,
-                },
                 odagLink: {
                   type: 'string',
                   ref: 'navigation.odagLink',

@@ -18,7 +18,6 @@ export default () => ({
           story: '',
           websiteUrl: '',
           sameWindow: false,
-          encodeURL: false,
         },
         useEnabledCondition: false,
         enabledCondition: 1,

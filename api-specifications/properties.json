@@ -627,11 +627,6 @@
           "optional": true,
           "type": "boolean"
         },
-        "encodeURL": {
-          "description": "Set to true to open encode the url",
-          "optional": true,
-          "type": "boolean"
-        },
         "odagLink": {
           "description": "ODAG link name. Required for 'odagLink'",
           "optional": true,

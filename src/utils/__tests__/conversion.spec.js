@@ -151,7 +151,6 @@ describe('conversion', () => {
         selectedStory: 'thisStory',
         websiteUrl: 'thisUrl',
         sameWindow: false,
-        encodeURL: false,
         actionItems: [
           {
             actionType: 'someAction',
@@ -172,7 +171,6 @@ describe('conversion', () => {
       expect(result.qProperty.navigation).toEqual({
         action: 'thisNavigationAction',
         sameWindow: false,
-        encodeURL: false,
         sheet: 'thisSheet',
         story: 'thisStory',
         websiteUrl: 'thisUrl',
