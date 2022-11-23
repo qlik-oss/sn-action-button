@@ -98,7 +98,7 @@ const navigationActions = [
           const isEmail = urlHasEmailProtocol(url);
           let target = '';
           if (isEmail) {
-            window.open(url);
+            window.open(url, target);
           }
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
@@ -106,7 +106,7 @@ const navigationActions = [
           }
           if (!isEmail && !sameWindow) {
             const encoded = encodeUrl(url);
-            window.open(`${protocol}${encoded}`);
+            window.open(`${protocol}${encoded}`, target);
           }
         }
       } catch (error) {

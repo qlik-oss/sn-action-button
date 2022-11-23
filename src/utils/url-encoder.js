@@ -12,7 +12,7 @@ export const getCurrentProtocol = (s) => {
   if (s.startsWith(EMAIL_PROTOCOL)) {
     return EMAIL_PROTOCOL;
   }
-  return '';
+  return HTTP_PROTOCOL;
 };
 
 export const removeProtocolHttp = (s) => {
