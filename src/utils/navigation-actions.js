@@ -1,4 +1,5 @@
 import Util from './util';
+import { HTTP_PROTOCOL, removeProtocolHttp, urlHasEmailProtocol, encodeUrl } from './url-encoder';
 
 const inIframe = () => {
   try {
@@ -92,12 +93,24 @@ const navigationActions = [
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
         if (websiteUrl) {
-          const url = websiteUrl.match(/^(https?:\/\/|mailto:)/) ? websiteUrl : `http://${websiteUrl}`;
+          const url = removeProtocolHttp(websiteUrl);
+          const isEmail = urlHasEmailProtocol(url);
+          console.log('url', url);
+          console.log('isEmail', isEmail);
           let target = '';
+          if (isEmail) {
+            window.open(url);
+          }
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
+            window.open(`${HTTP_PROTOCOL}${url}`, target);
           }
-          window.open(url, target);
+          if (!isEmail && !sameWindow) {
+            console.log('i try to encode');
+            const encoded = encodeUrl(url);
+            console.log('encoded', encoded);
+            window.open(`${HTTP_PROTOCOL}${encoded}`, '_blank');
+          }
         }
       } catch (error) {
         // no-op
