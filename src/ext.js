@@ -30,8 +30,8 @@ const toggleOptions = [
 
 
 export default function ext({ translator, shouldHide, senseNavigation }) {
-  const stylingPanelEnabled = shouldHide?.isEnabled('SENSECLIENT_IM_1525_BUTTON');
-  const bkgOptionsEnabled = shouldHide?.isEnabled('BUTTON_BKG_OPTIONS');
+  const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_BUTTON');
+  const bkgOptionsEnabled = shouldHide.isEnabled && shouldHide.isEnabled('BUTTON_BKG_OPTIONS');
   return {
     definition: {
       type: 'items',
