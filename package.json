@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-action-button",
-  "version": "1.24.0",
+  "version": "1.26.0",
   "description": "Action button supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -29,7 +29,7 @@
     "node": ">=16"
   },
   "main": "dist/sn-action-button.js",
-  "module": "dist/sn-action-button.esm.js",
+  "systemjs": "dist/sn-action-button.systemjs.js",
   "scripts": {
     "build": "node ./tools/build.js --core --ext",
     "build:dev": "node ./tools/build.js --core --ext --mode development",
