@@ -3,6 +3,7 @@ import { checkShowNavigation, getNavigationsList } from './utils/navigation-acti
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import getStylingPanelDefinition from './styling-panel-definition';
 
 const colorOptions = [
   {
@@ -26,7 +27,11 @@ const toggleOptions = [
   },
 ];
 
+
+
 export default function ext({ translator, shouldHide, senseNavigation }) {
+  const stylingPanelEnabled = shouldHide.isEnabled('SENSECLIENT_IM_1525_BUTTON');
+  const bkgOptionsEnabled = shouldHide.isEnabled('BUTTON_BKG_OPTIONS');
   return {
     definition: {
       type: 'items',
@@ -662,6 +667,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
+            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled) : undefined,
           },
         },
       },
