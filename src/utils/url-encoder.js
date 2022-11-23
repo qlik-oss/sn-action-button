@@ -57,6 +57,7 @@ const UNMATCHED_SURROGATE_PAIR_REGEXP = /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\u
 const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2';
 
 /**
+ * https://www.npmjs.com/package/encodeurl
  * Encode a URL to a percent-encoded form, excluding already-encoded sequences.
  *
  * This function will take an already-encoded URL and encode all the non-URL
