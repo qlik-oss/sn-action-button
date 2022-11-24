@@ -1,4 +1,4 @@
-import { getUser, getSheetId, getSpaceId, getAutomationFromItem } from "./automationHelper";
+import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken } from "./automationHelper";
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -300,63 +300,58 @@ const actions = [
     getActionCall:
       ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId }) =>
         async () => {
-            try {
-              let automationUrl
-              if(automation !== undefined) {
-                const a = await getAutomationFromItem(automation);
-                automationUrl = `../api/v1/automations/${a.id}/runs`;
+          let automationUrl
+          if (automation !== undefined) {
+            const a = await getAutomationFromItem(automation);
+            automationUrl = `../api/v1/automations/${a.id}/runs`;
+          }
+          else if (automationId !== undefined && automationTriggered) {
+            automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
+          }
+          else if (automationId !== undefined && !automationTriggered) {
+            automationUrl = `../api/v1/automations/${automationId}/runs`;
+          }
+          else {
+            return;
+          }
+          let bookmark
+          if (automationPostData) {
+            const bookmarkProps = {
+              qOptions: {
+                qIncludeVariables: true,
+                qIncludeAllPatches: true
               }
-              else if (automationId !== undefined && automationTriggered) {
-                automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
-              }
-              else if (automationId !== undefined && !automationTriggered)  {
-                automationUrl = `../api/v1/automations/${automationId}/runs`;
-              }
-              else {
-                return;
-              }
-              let bookmark
-              if (automationPostData) {
-                const bookmarkProps = {
-                  qOptions: {
-                    qIncludeVariables: true,
-                    qIncludeAllPatches: true
-                  }
-                };
-                bookmark = await app.createTemporaryBookmark(bookmarkProps);
-              }
-              const user = await getUser();
-              const inputs = {
-                app: app.id,
-                bookmark: automationPostData ? bookmark : '',
-                sheet: await getSheetId(app, buttonId),
-                user: user.subject,
-                space: await getSpaceId(app.id),
-                tenant: user.tenantId,
-                time: new Date(),
-              }
-              const automationData = {
-                guid: automationId,
-                inputs,
-                context: 'api_sync'
-              }
-              const csrfResponse = await fetch('../api/v1/csrf-token');
-              const headers = {
-                'Content-Type': 'application/json',
-                'qlik-csrf-token': csrfResponse.headers.get('qlik-csrf-token')
-              }
-              if(automationTriggered) {
-                headers['X-Execution-Token'] = automationExecutionToken;
-              }
-              const postOptions = {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(automationTriggered ? inputs : automationData),
-              }
-              await fetch(automationUrl, postOptions)
-            } catch {
-              // continue
-            }
+            };
+            bookmark = await app.createTemporaryBookmark(bookmarkProps);
+          }
+          const user = await getUser();
+          const inputs = {
+            app: app.id,
+            bookmark: automationPostData ? bookmark : '',
+            sheet: await getSheetId(app, buttonId),
+            user: user.subject,
+            space: await getSpaceId(app.id),
+            tenant: user.tenantId,
+            time: new Date(),
+          }
+          const automationData = {
+            guid: automationId,
+            inputs,
+            context: 'api_sync'
+          }
+          const headers = {
+            'Content-Type': 'application/json',
+            'qlik-csrf-token': await getCsrfToken()
+          }
+          if (automationTriggered) {
+            headers['X-Execution-Token'] = automationExecutionToken;
+          }
+          const postOptions = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(automationTriggered ? inputs : automationData),
+          }
+          await fetch(automationUrl, postOptions);
         },
     requiredInput: ['automation'],
     hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
