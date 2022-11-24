@@ -1,5 +1,6 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
+import { inputBlock } from './utils/automationHelper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
@@ -171,6 +172,20 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                   show: (data) => checkShowAction(data, 'automation'),
                 },
+                automationLink: {
+                  translation: "Automation link",
+                  component: "link",
+                  url: (data) => `/automations/${data.automationId}/editor`,
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
+                },
+                copyBlock: {
+                  component: 'button',
+                  translation: 'Copy input block',
+                  action () {
+                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
+                  },
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
+                },                
                 // Boolean property to instruct the automation action to create a
                 // bookmark and send it to the selected automation in the
                 // property panel.
