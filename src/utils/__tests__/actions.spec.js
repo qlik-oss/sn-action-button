@@ -1,4 +1,5 @@
 import actions, { getValueList, checkShowAction, getActionsList } from '../actions';
+import * as autoUtils from '../../utils/automationHelper';
 
 describe('actions', () => {
   const qStateName = 'someState';
