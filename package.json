@@ -59,7 +59,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "2.x"
+    "@nebula.js/stardust": ">=2.x"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
