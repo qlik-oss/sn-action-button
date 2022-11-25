@@ -287,7 +287,7 @@ describe('style-formatter', () => {
       expect(button.children[0].style.fontSize).toEqual('20px');
     });
 
-    it('should use fixed font size when size behavior is fixed', () => {
+    it('should use specified fixed font size when size behavior is fixed', () => {
       button.appendChild = (child) => {
         child.setAttribute = jest.fn();
         child.offsetHeight = 400;
