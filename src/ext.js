@@ -203,6 +203,50 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'string',
                   ref: 'automationExecutionToken',
                   show: () => false,
+                },
+                showNotification: {
+                  ref: 'showNotification',
+                  type: 'boolean',
+                  translation: 'Show notification',
+                  component: 'switch',
+                  options: [
+                    {
+                      value: true,
+                      translation: 'properties.on',
+                    },
+                    {
+                      value: false,
+                      translation: 'properties.off',
+                    },
+                  ],
+                  defaultValue: true,
+                  show: (data) => checkShowAction(data, 'automation')
+                },
+                openInNewTab: {
+                  ref: 'openLinkInNewTab',
+                  type: 'boolean',
+                  translation: 'Open links in new tab',
+                  component: 'switch',
+                  options: [
+                    {
+                      value: true,
+                      translation: 'properties.on',
+                    },
+                    {
+                      value: false,
+                      translation: 'properties.off',
+                    },
+                  ],
+                  defaultValue: true,
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
+                },
+                notificationDuration: {
+                  type: 'number',
+                  ref: 'notificationDuration',
+                  label: 'Notification duration (seconds)',
+                  defaultValue: 4,
+                  expression: 'optional',
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
                 }
               },
             },

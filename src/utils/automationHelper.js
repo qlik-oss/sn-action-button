@@ -1,3 +1,5 @@
+const DEFAULT_AUTOMATION_MSG = 'Automation finished';
+
 export const getUser = async () => {
     const response = await fetch(`../api/v1/users/me`);
     const data = await response.json();
@@ -125,5 +127,195 @@ export const setTriggered = async (app, index, buttonId, triggered) => {
         }]
     }
     await thisObject.applyPatches(patchParams);
+}
+
+const getAutomationRun = async (automationId, runId) => fetch(`../api/v1/automations/${automationId}/runs/${runId}`).then(res => res.json());
+
+// eslint-disable-next-line no-promise-executor-return
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+const automationRunPolling = async (automationId, runId) => {
+    const runningStatuses = ['queued', 'running', 'not started', 'starting']
+    // Max sleep time ~10 minutes
+    const sleepTimes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 15, 15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 60, 60]
+    let finalStatus
+    for (let i = 0; i < sleepTimes.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const automationRun = await getAutomationRun(automationId, runId);
+        const { status } = automationRun;
+        if (!runningStatuses.includes(status)) {
+            finalStatus = status
+            break;
+        }
+        else {
+            // eslint-disable-next-line no-await-in-loop
+            await sleep(sleepTimes[i] * 1000)
+        }
+    }
+    let msg
+    switch (finalStatus) {
+        case 'finished': {
+            msg = { message: DEFAULT_AUTOMATION_MSG, ok: true };
+            break;
+        }
+        case 'failed': {
+            msg = { message: 'Automation failed', ok: false };
+            break;
+        }
+        case 'finished with warnings': {
+            msg = { message: 'Automation finished with warnings', ok: false };
+            break;
+        }
+        case 'must stop':
+        case 'stopped': {
+            msg = { message: 'Automation stopped', ok: false };
+            break;
+        }
+        default: {
+            msg = { message: DEFAULT_AUTOMATION_MSG, ok: true }
+        }
+    }
+    return msg;
+}
+
+const parseOutput = (data) => {
+    if (typeof data !== 'undefined') {
+        try {
+            const message = JSON.parse(data);
+            message.ok = true;
+            return message;
+        }
+        catch {
+            if (typeof data === 'object') {
+                return { message: data.length > 0 ? data.join(' ') : DEFAULT_AUTOMATION_MSG, ok: true }
+            }
+            return { message: data, ok: true }
+        }
+    }
+    return { message: DEFAULT_AUTOMATION_MSG, ok: true }
+}
+
+export const getAutomationMsg = async (automationId, triggered, response) => {
+    let message
+    switch (response.status) {
+        case 200:
+        case 201: {
+            const data = await response.json();
+            const { status, guid, id } = data;
+            const queued = status === 'queued'
+            const runId = (typeof id === 'undefined') ? guid : id;
+            if (!triggered || queued) {
+                message = automationRunPolling(automationId, runId);
+            }
+            else {
+                message = parseOutput(data)
+            }
+            break;
+        }
+        case 400: {
+            message = { message: 'Bad request', ok: false }
+            break;
+        }
+        case 401:
+        case 403: {
+            message = { message: 'You are not authorized to run this automation', ok: false }
+            break;
+        }
+        case 404: {
+            message = { message: 'Automation not found', ok: false }
+            break;
+        }
+        case 500:
+        case 503: {
+            message = { message: 'Automation error', ok: false }
+            break;
+        }
+        default: {
+            message = { message: 'There was an unknown error', ok: false };
+        }
+    }
+    return message
+}
+
+const applyStyles = (element, styles) => {
+    Object.keys(styles).forEach((key) => {
+        element.style[key] = styles[key]
+    })
+}
+
+export const createSnackbar = (message, duration) => {
+    const randomId = (Math.random() + 1).toString(36).substring(7)
+    const snackbarId = `sn-action-button-snackbar-${randomId}`;
+    const snackContainer = document.createElement('div');
+    snackContainer.setAttribute('id', snackbarId)
+    const snackContainerStyles = {
+        'width': '400px',
+        'height': '35px',
+        'background-color': '#FFFFFF',
+        'position': 'fixed',
+        'left': 'calc(50% - 200px)',
+        'right': 'auto',
+        'bottom': '24px',
+        'box-shadow': '0px 1px 2px 0px rgb(0 0 0 / 15%)',
+        'padding': '6px 16px',
+        'border-radius': '3px',
+        'z-index': 1000,
+    }
+    applyStyles(snackContainer, snackContainerStyles)
+    const contentContainer = document.createElement('div')
+    const contentStyles = {
+        'display': 'flex',
+        'justify-content': 'space-between',
+        'height': '100%',
+        'align-items': 'center'
+    }
+    applyStyles(contentContainer, contentStyles)
+    const status = document.createElement('span')
+    const iconStyles = {
+        'textDecoration': 'none',
+        'fontSize': 'inherit',
+    }
+    applyStyles(status, iconStyles)
+    const statusIcon = message.ok ? 'tick' : 'warning'
+    status.setAttribute('class', `lui-icon lui-icon--${statusIcon}`);
+    const msg = document.createElement('span')
+    const msgStyles = {
+        'overflow': 'hidden',
+        'white-space': 'nowrap',
+        'text-overflow': 'ellipsis',
+    }
+    applyStyles(msg, msgStyles)
+    msg.innerText = message.message
+    let link
+    if (message.url) {
+        link = document.createElement('a')
+        const linkStyles = {
+            'margin-left': '6px'
+        }
+        applyStyles(link, linkStyles)
+        link.href = message.url
+        link.target = '_blank';
+        link.innerText = message.urlText || 'Open';
+        msg.appendChild(link)
+    }
+    const close = document.createElement('span')
+    iconStyles.cursor = 'pointer'
+    applyStyles(close, iconStyles)
+    close.setAttribute('class', `lui-icon lui-icon--remove`);
+    close.addEventListener('click', () => {
+        document.querySelector(`#${snackbarId}`).remove()
+    })
+    contentContainer.appendChild(status)
+    contentContainer.appendChild(msg)
+    contentContainer.appendChild(close)
+    snackContainer.appendChild(contentContainer)
+    const body = document.querySelector('body')
+    body.appendChild(snackContainer)
+    setTimeout(() => {
+        const el = document.querySelector(`#${snackbarId}`)
+        if (typeof (el) !== 'undefined' && el != null) {
+            el.remove()
+        }
+    }, duration * 1000);
 }
 

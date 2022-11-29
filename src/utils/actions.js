@@ -1,4 +1,4 @@
-import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken } from "./automationHelper";
+import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken, createSnackbar, getAutomationMsg } from "./automationHelper";
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -298,7 +298,7 @@ const actions = [
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId }) =>
+      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId }) =>
         async () => {
           let automationUrl
           if (automation !== undefined) {
@@ -351,7 +351,11 @@ const actions = [
             headers,
             body: JSON.stringify(automationTriggered ? inputs : automationData),
           }
-          await fetch(automationUrl, postOptions);
+          const response = await fetch(automationUrl, postOptions);
+          const msg = await getAutomationMsg(automationId, automationTriggered, response);
+          if(showNotification) {
+            createSnackbar(msg, notificationDuration)
+          }
         },
     requiredInput: ['automation'],
     hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
