@@ -1,4 +1,4 @@
-import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken } from "./automation-helper";
+import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken, createSnackbar, getAutomationMsg } from "./automationHelper";
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -301,7 +301,7 @@ const actions = [
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId, multiUserAutomation }) =>
+      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId, multiUserAutomation }) =>
         async () => {
           if (multiUserAutomation) {
             let automationUrl
@@ -360,7 +360,7 @@ const actions = [
           else if (automation !== undefined) {
               try {
                 automation = encodeURIComponent(automation);
-                const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
+                const itemInfo = const response = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
                 const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
                   response.json()
                 );
@@ -413,6 +413,10 @@ const actions = [
                 // no-op
               }
             }
+          const msg = await getAutomationMsg(automationId, automationTriggered, response);
+          if(showNotification) {
+            createSnackbar(msg, notificationDuration)
+          }
         },
     requiredInput: ['automation'],
     hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
