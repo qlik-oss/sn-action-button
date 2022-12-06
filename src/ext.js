@@ -27,6 +27,44 @@ const toggleOptions = [
 ];
 
 export default function ext({ translator, shouldHide, senseNavigation }) {
+  const multiUserAutomation = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
+  let automation;
+  if(multiUserAutomation) {
+    automation = {
+      type: 'string',
+      component: 'expression-with-dropdown',
+      translation: 'Object.ActionButton.Automation',
+      ref: 'automationId',
+      dropdownOnly: true,
+      options: async () => {
+        const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+        const automations = await automationsResponse.json();
+          return automations.data.map((a) => ({
+            value: a.resourceId,
+            label: a.name,
+          }));
+      },
+      show: (data) => checkShowAction(data, 'automation'),
+    }
+  }
+  else {
+    automation = {
+      type: 'string',
+      component: 'expression-with-dropdown',
+      translation: 'Object.ActionButton.Automation',
+      ref: 'automation',
+      dropdownOnly: true,
+      options: async () => {
+        const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+        const automations = await automationsResponse.json();
+          return automations.data.map((a) => ({
+            value: a.id,
+            label: a.name,
+          }));
+      },
+      show: (data) => checkShowAction(data, 'automation'),
+    }
+  }
   return {
     definition: {
       type: 'items',
@@ -155,25 +193,11 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
                 // adds automation to actions and adds a dropdown property panel
                 // item to select the automation for the button to trigger
-                automationId: {
-                  type: 'string',
-                  component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Automation',
-                  ref: 'automationId',
-                  dropdownOnly: true,
-                  options: async () => {
-                    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
-                    const automations = await automationsResponse.json();
-                    return automations.data.map((automation) => ({
-                      value: automation.resourceId,
-                      label: automation.name,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, 'automation'),
-                },
+                
                 // Boolean property to instruct the automation action to create a
                 // bookmark and send it to the selected automation in the
                 // property panel.
+                automation,
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
@@ -191,13 +215,13 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'boolean',
                   ref: 'automationTriggered',
                   translation: 'Run mode triggered',
-                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                   defaultValue: false,
                 },
                 automationTriggeredText: {
                   label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },
                 automationExecutionToken: {
                   type: 'string',

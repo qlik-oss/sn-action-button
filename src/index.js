@@ -34,6 +34,7 @@ export default function supernova(env) {
   const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
   const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
+  const multiUserAutomation = isEnabled?.('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER')
   const senseNavigation = sense?.navigation;
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
 
@@ -56,7 +57,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, multiUserAutomation });
 
       useEffect(
         () => () => {
@@ -68,7 +69,7 @@ export default function supernova(env) {
       const automationActions = () => layout.actions.filter(action => action.actionType === 'executeAutomation');
 
       useEffect(() => {
-        if (constraints.active) {
+        if (constraints.active && multiUserAutomation) {
           layout.actions.forEach(async (action, index) => {
             if (action.actionType === 'executeAutomation' && 'automationId' in action) {
               try {
@@ -85,7 +86,7 @@ export default function supernova(env) {
       }, [JSON.stringify(automationActions().map((action) => action.automationId))]);
 
       useEffect(() => {
-        if (constraints.active) {
+        if (constraints.active && multiUserAutomation) {
           layout.actions.forEach(async (action, index) => {
             if (action.actionType === 'executeAutomation' && 'automationId' in action) {
               try {
@@ -106,7 +107,7 @@ export default function supernova(env) {
       }, [JSON.stringify(automationActions().map((action) => action.automationTriggered))]);
 
       useEffect(() => {
-        if (constraints.active) {
+        if (constraints.active && multiUserAutomation) {
           layout.actions.forEach(async (action, index) => {
             if (action.actionType === 'executeAutomation') {
               try {
