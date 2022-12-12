@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-action-button",
-  "version": "1.26.0",
+  "version": "1.27.1",
   "description": "Action button supernova",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -59,7 +59,7 @@
     ]
   },
   "peerDependencies": {
-    "@nebula.js/stardust": "2.x"
+    "@nebula.js/stardust": ">=2.x"
   },
   "devDependencies": {
     "@babel/cli": "7.19.3",
