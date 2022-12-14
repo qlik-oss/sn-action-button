@@ -138,13 +138,13 @@ const automationRunPolling = async (automationId, runId) => {
     const runningStatuses = ['queued', 'running', 'not started', 'starting']
     // Max sleep time ~10 minutes
     const sleepTimes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 15, 15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 60, 60]
-    let finalStatus
+    let finalRun
     for (let i = 0; i < sleepTimes.length; i++) {
         // eslint-disable-next-line no-await-in-loop
         const automationRun = await getAutomationRun(automationId, runId);
         const { status } = automationRun;
         if (!runningStatuses.includes(status)) {
-            finalStatus = status
+            finalRun = automationRun
             break;
         }
         else {
@@ -153,26 +153,26 @@ const automationRunPolling = async (automationId, runId) => {
         }
     }
     let msg
-    switch (finalStatus) {
+    switch (finalRun.status) {
         case 'finished': {
-            msg = { message: DEFAULT_AUTOMATION_MSG, ok: true };
+            msg = { message: finalRun.title?.length > 0 ? finalRun.title : DEFAULT_AUTOMATION_MSG, ok: true };
             break;
         }
         case 'failed': {
-            msg = { message: 'Automation failed', ok: false };
+            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation failed', ok: false };
             break;
         }
         case 'finished with warnings': {
-            msg = { message: 'Automation finished with warnings', ok: false };
+            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation finished with warnings', ok: false };
             break;
         }
         case 'must stop':
         case 'stopped': {
-            msg = { message: 'Automation stopped', ok: false };
+            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation stopped', ok: false };
             break;
         }
         default: {
-            msg = { message: DEFAULT_AUTOMATION_MSG, ok: true }
+            msg = { message: finalRun.title?.length > 0 ? finalRun.title : DEFAULT_AUTOMATION_MSG, ok: true }
         }
     }
     return msg;
