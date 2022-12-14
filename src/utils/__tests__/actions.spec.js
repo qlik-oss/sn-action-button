@@ -1,5 +1,4 @@
 import actions, { getValueList, checkShowAction, getActionsList } from '../actions';
-import * as autoUtils from '../../utils/automationHelper';
 
 describe('actions', () => {
   const qStateName = 'someState';
@@ -385,7 +384,7 @@ describe('actions', () => {
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${app.id}`);
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/csrf-token');
       const automationData = {
-        guid: automationId,
+        id: automationId,
         inputs: {
           app: app.id,
           bookmark: '',

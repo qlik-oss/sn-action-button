@@ -108,6 +108,7 @@ const properties = {
  * @property {string=} [value=''] - To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'
  * @property {string=} [variable=''] - Name of variable. Required for type 'setVariable'
  * @property {boolean=} [partial=false] - Set to true if you want to do a partial reload.
+ * @property {string=} [automation=''] - Item ID of the automation. Required for type 'executeAutomation'
  * @property {string=} [automationId=''] - ID of the automation. Required for type 'executeAutomation'
  * @property {boolean=} [automationPostData=false] - Set to true to include the current selections in the automation. Defaults to false
  * @property {boolean=} [automationShowTriggered=false] - Set to true when the selected automation is capable of have a triggered run mode

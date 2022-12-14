@@ -1,8 +1,24 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
+import { getAutomation } from './utils/automationHelper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+
+let automationsList = null;
+
+const getAutomations = async () => {
+  if (!automationsList) {
+    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+    const automations = await automationsResponse.json();
+    automationsList = automations.data.map((a) => ({
+        value: a.resourceId,
+        label: a.name,
+        itemId: a.id,
+      }));
+  }
+  return automationsList;
+}
 
 const colorOptions = [
   {
@@ -28,43 +44,7 @@ const toggleOptions = [
 
 export default function ext({ translator, shouldHide, senseNavigation }) {
   const multiUserAutomation = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
-  let automation;
-  if(multiUserAutomation) {
-    automation = {
-      type: 'string',
-      component: 'expression-with-dropdown',
-      translation: 'Object.ActionButton.Automation',
-      ref: 'automationId',
-      dropdownOnly: true,
-      options: async () => {
-        const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
-        const automations = await automationsResponse.json();
-          return automations.data.map((a) => ({
-            value: a.resourceId,
-            label: a.name,
-          }));
-      },
-      show: (data) => checkShowAction(data, 'automation'),
-    }
-  }
-  else {
-    automation = {
-      type: 'string',
-      component: 'expression-with-dropdown',
-      translation: 'Object.ActionButton.Automation',
-      ref: 'automation',
-      dropdownOnly: true,
-      options: async () => {
-        const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
-        const automations = await automationsResponse.json();
-          return automations.data.map((a) => ({
-            value: a.id,
-            label: a.name,
-          }));
-      },
-      show: (data) => checkShowAction(data, 'automation'),
-    }
-  }
+
   return {
     definition: {
       type: 'items',
@@ -193,11 +173,45 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
                 // adds automation to actions and adds a dropdown property panel
                 // item to select the automation for the button to trigger
-                
+
                 // Boolean property to instruct the automation action to create a
                 // bookmark and send it to the selected automation in the
                 // property panel.
-                automation,
+                automation: {
+                  type: 'string',
+                  component: 'expression-with-dropdown',
+                  translation: 'Object.ActionButton.Automation',
+                  ref: 'automation',
+                  dropdownOnly: true,
+                  options: async () => {
+                    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+                    const automations = await automationsResponse.json();
+                    return automations.data.map((a) => ({
+                      value: a.id,
+                      label: a.name,
+                    }));
+                  },
+                  show: (data) => checkShowAction(data, 'automation') && !multiUserAutomation,
+                },
+                automationId: {
+                  type: 'string',
+                  component: 'expression-with-dropdown',
+                  translation: 'Object.ActionButton.Automation',
+                  ref: 'automationId',
+                  dropdownOnly: true,
+                  options: async () => getAutomations(),
+                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation,
+                  change: async (data) => {
+                    const a = await getAutomation(data.automationId)
+                    data.automationShowTriggered = a.runMode === 'triggered';
+                    if(data.automationTriggered) {
+                      data.automationExecutionToken = a.executionToken
+                    }
+                    else {
+                      data.automationExecutionToken = ''
+                    }
+                  },
+                },
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
@@ -217,6 +231,15 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   translation: 'Run mode triggered',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                   defaultValue: false,
+                  change: async (data) => {
+                    const a = await getAutomation(data.automationId)
+                    if(data.automationTriggered) {
+                      data.automationExecutionToken = a.executionToken;
+                    }
+                    else {
+                      data.automationExecutionToken = '';
+                    }
+                  },
                 },
                 automationTriggeredText: {
                   label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
