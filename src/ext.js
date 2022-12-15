@@ -242,7 +242,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
                 automationTriggeredText: {
-                  label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
+                  label: `Set your automation to run mode triggered to allow every user to run the automation`,
                   component: 'text',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },

@@ -338,7 +338,7 @@ const actions = [
             const automationData = {
               id: automationId,
               inputs,
-              context: 'api_sync'
+              context: 'api_async'
             }
             const headers = {
               'Content-Type': 'application/json',

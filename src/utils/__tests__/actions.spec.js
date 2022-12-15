@@ -394,7 +394,7 @@ describe('actions', () => {
           tenant: tenantId,
           time
         },
-        context: 'api_sync'
+        context: 'api_async'
       }
       const headers = {
         'Content-Type': 'application/json',
