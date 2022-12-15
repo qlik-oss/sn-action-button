@@ -131,6 +131,32 @@ export const setTriggered = async (app, index, buttonId, triggered) => {
 
 const getAutomationRun = async (automationId, runId) => fetch(`../api/v1/automations/${automationId}/runs/${runId}`).then(res => res.json());
 
+const checkMessage = (data) => {
+    if (Array.isArray(data)) {
+        return { message: data.join(' ').length > 0 ? data.join(' ') : DEFAULT_AUTOMATION_MSG }
+    }
+    if(Object.keys(data).includes('message')) {
+        return data
+    }
+    return { message: DEFAULT_AUTOMATION_MSG }
+}
+
+const parseOutput = (data) => {
+    if (typeof data !== 'undefined') {
+        try {
+            const message = JSON.parse(data);
+            return checkMessage(message);
+        }
+        catch {
+            if (typeof data === 'object') {
+                return checkMessage(data)
+            }
+            return { message: data }
+        }
+    }
+    return { message: DEFAULT_AUTOMATION_MSG }
+}
+
 // eslint-disable-next-line no-promise-executor-return
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -155,45 +181,60 @@ const automationRunPolling = async (automationId, runId) => {
     let msg
     switch (finalRun.status) {
         case 'finished': {
-            msg = { message: finalRun.title?.length > 0 ? finalRun.title : DEFAULT_AUTOMATION_MSG, ok: true };
+            if (finalRun.title?.length > 0) {
+                msg = parseOutput(finalRun.title)
+                msg.ok = true
+            }
+            else {
+                msg = { message: DEFAULT_AUTOMATION_MSG, ok: true };
+            }
             break;
         }
         case 'failed': {
-            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation failed', ok: false };
+            if (finalRun.title?.length > 0) {
+                msg = parseOutput(finalRun.title)
+                msg.ok = false
+            }
+            else {
+                msg = { message: 'Automation failed', ok: true };
+            }
             break;
         }
         case 'finished with warnings': {
-            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation finished with warnings', ok: false };
+            if (finalRun.title?.length > 0) {
+                msg = parseOutput(finalRun.title)
+                msg.ok = false
+            }
+            else {
+                msg = { message: 'Automation finished with warnings', ok: true };
+            }
             break;
         }
         case 'must stop':
         case 'stopped': {
-            msg = { message: finalRun.title?.length > 0 ? finalRun.title : 'Automation stopped', ok: false };
+            if (finalRun.title?.length > 0) {
+                msg = parseOutput(finalRun.title)
+                msg.ok = false
+            }
+            else {
+                msg = { message: 'Automation stopped', ok: true };
+            }
             break;
         }
         default: {
-            msg = { message: finalRun.title?.length > 0 ? finalRun.title : DEFAULT_AUTOMATION_MSG, ok: true }
+            if (finalRun.title?.length > 0) {
+                msg = parseOutput(finalRun.title)
+                msg.ok = true
+            }
+            else {
+                msg = { message: DEFAULT_AUTOMATION_MSG, ok: true };
+            }
         }
     }
     return msg;
 }
 
-const parseOutput = (data) => {
-    if (typeof data !== 'undefined') {
-        try {
-            const message = JSON.parse(data);
-            message.ok = true;
-            return message;
-        }
-        catch {
-            if (typeof data === 'object') {
-                return { message: data.length > 0 ? data.join(' ') : DEFAULT_AUTOMATION_MSG, ok: true }
-            }
-            return { message: data, ok: true }
-        }
-    }
-    return { message: DEFAULT_AUTOMATION_MSG, ok: true }
-}
+
 
 export const getAutomationMsg = async (automationId, triggered, response) => {
     let message
@@ -209,6 +250,7 @@ export const getAutomationMsg = async (automationId, triggered, response) => {
             }
             else {
                 message = parseOutput(data)
+                message.ok = true
             }
             break;
         }
