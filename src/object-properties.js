@@ -58,6 +58,18 @@ const properties = {
    * All styling options
    * @type {Style}
    */
+  //  defaultValues: {
+  //   // used by style editor
+  //   key: 'general',
+  //   backgroundColor: {
+  //     useColorExpression: false,
+  //     colorExpression: '',
+  //     color: {
+  //       color: null,
+  //       index: -1,
+  //     },
+  //   },
+  // },
   style: {
     label: DEFAULTS.LABEL,
     font: {
