@@ -177,15 +177,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   component: "link",
                   url: (data) => `/automations/${data.automationId}/editor`,
                   show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
-                },
-                copyBlock: {
-                  component: 'button',
-                  translation: 'Copy input block',
-                  action () {
-                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
-                  },
-                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
-                },                
+                },             
                 // Boolean property to instruct the automation action to create a
                 // bookmark and send it to the selected automation in the
                 // property panel.
@@ -195,6 +187,11 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   translation: 'Object.ActionButton.Automation.SendSelections',
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
+                },
+                includeSelectionsText: {
+                  label: `When Include selections is enabled, a bookmark containing all user selections and variables will be created and sent to the automation`,
+                  component: 'text',
+                  show: (data) => checkShowAction(data, 'automation') && data.automationPostData,
                 },
                 automationShowTriggered: {
                   type: 'boolean',
@@ -212,13 +209,21 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 automationTriggeredText: {
                   label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered && data.automationTriggered,
                 },
                 automationExecutionToken: {
                   type: 'string',
                   ref: 'automationExecutionToken',
                   show: () => false,
-                }
+                },
+                copyBlock: {
+                  component: 'button',
+                  translation: 'Copy input block',
+                  action () {
+                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
+                  },
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
+                },   
               },
             },
             navigation: {
