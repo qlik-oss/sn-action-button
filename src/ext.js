@@ -197,7 +197,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 automationTriggeredText: {
                   label: `When Run mode triggered is enabled, all users with access to this app can trigger the selected automation, otherwise the automation can only be run by users who have access to the shared automation`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered,
+                  show: (data) => checkShowAction(data, 'automation') && data.automationShowTriggered && data.automationTriggered,
                 },
                 automationExecutionToken: {
                   type: 'string',
@@ -222,6 +222,19 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   defaultValue: true,
                   show: (data) => checkShowAction(data, 'automation')
                 },
+                notificationDuration: {
+                  type: 'number',
+                  ref: 'notificationDuration',
+                  label: 'Notification duration (seconds)',
+                  defaultValue: 4,
+                  expression: 'optional',
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
+                },
+                notificationDurationHelp: {
+                  label: `This setting determines how many seconds the notification will remain visible`,
+                  component: 'text',
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification,
+                },
                 openInNewTab: {
                   ref: 'openLinkInNewTab',
                   type: 'boolean',
@@ -240,14 +253,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   defaultValue: true,
                   show: (data) => checkShowAction(data, 'automation') && data.showNotification
                 },
-                notificationDuration: {
-                  type: 'number',
-                  ref: 'notificationDuration',
-                  label: 'Notification duration (seconds)',
-                  defaultValue: 4,
-                  expression: 'optional',
-                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
-                }
               },
             },
             navigation: {

@@ -298,7 +298,7 @@ const actions = [
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId }) =>
+      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId, openLinkInNewTab }) =>
         async () => {
           let automationUrl
           if (automation !== undefined) {
@@ -354,7 +354,7 @@ const actions = [
           const response = await fetch(automationUrl, postOptions);
           const msg = await getAutomationMsg(automationId, automationTriggered, response);
           if(showNotification) {
-            createSnackbar(msg, notificationDuration)
+            createSnackbar(msg, notificationDuration,openLinkInNewTab)
           }
         },
     requiredInput: ['automation'],
