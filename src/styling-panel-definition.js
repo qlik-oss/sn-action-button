@@ -48,13 +48,48 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
           translation: 'Label',
           component: 'panel-section',
           show(data, handler, args) {
+            console.log("show=>labelSection=>", args, args?.properties?.components?.find((comp) => comp.key === 'actionbutton'),args?.handler?.layout?.style?.background.size)
             const components = args?.properties?.components
             if (!components) {
               args.properties.components = []
             }
+            // if (!args?.properties?.components?.find((comp) => comp.key === 'actionbutton')) {
+            //   args.properties.components.push({ key: 'actionbutton', style: args?.handler?.layout?.style })
+            // }
+
             if (!args?.properties?.components?.find((comp) => comp.key === 'actionbutton')) {
-              args.properties.components.push({ key: 'actionbutton', style: args?.handler?.layout?.style })
+              const obj = { key: 'actionbutton' };
+
+              // obj.font = args?.handler?.layout?.style?.font;
+              obj.font = {
+                color : args?.handler?.layout?.style?.font.color,
+                useColorExpression : args?.handler?.layout?.style?.font.useColorExpression,
+                colorExpression : args?.handler?.layout?.style?.font.colorExpression,
+                align : args?.handler?.layout?.style?.font.align,
+                size : args?.handler?.layout?.style?.font.size,
+                style : args?.handler?.layout?.style?.font.style
+
+              }
+              obj.border = args?.handler?.layout?.style?.border;
+              obj.bgColor = {
+                'color': args?.handler?.layout?.style?.background.color,
+                'colorExpression': args?.handler?.layout?.style?.background.colorExpression,
+                'useColorExpression': args?.handler?.layout?.style?.background.useColorExpression,
+              };
+              obj.bgImage = {
+                'mode' : (args?.handler?.layout?.style?.background.useImage === true) ? 'media' : 'none',
+                'position': args?.handler?.layout?.style?.background.position,
+                'sizing': (args?.handler?.layout?.style?.background.size === 'auto') ? 'originalSize' : args?.handler?.layout?.style?.background.size,
+                'mediaUrl': {
+                  qStaticContentUrl: {
+                    qUrl : args?.handler?.layout?.style?.background.url.qStaticContentUrl.qUrl
+                  }
+                }
+              }
+              obj.icon = args?.handler?.layout?.style?.icon;
+              args.properties.components.push(obj)
             }
+            console.log("show=>labelSection=end>", args)
 
             return true;
           },
@@ -66,24 +101,46 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
               items: {
                 labelFontFamilyItem: {
                   component: 'dropdown',
-                  ref: 'style.font.fontFamily',
+                  ref: 'font.fontFamily',
                   options: fontFamilyOptions,
                 },
                 labelFontWrapperItem: {
-                  component: 'inline-wrapper',
-                  items: {
-                    labelFontStyleItem: {
-                      component: 'font-style-buttons',
-                      width: false,
-                      ref: 'style.font.style',
-                      defaultValue: ['bold'],
-                    },
-                  },
+                  component: 'font-style-buttons',
+                  width: false,
+                  ref: 'font.style',
+                  defaultValue: ['bold'],
+                  // show(data, handler, args) {
+                  //   console.log("show= font style>", data, handler, args);
+                  //   const fontComp = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.font;
+                  //   console.log("fontComp.style=>", fontComp, fontComp?.style);
+                  //   if (fontComp?.style) {
+                  //     fontComp.style = Object.keys(args?.handler?.layout?.style?.font?.style).filter(key => args?.handler?.layout?.style?.font?.style[key] == true);
+                  //   }
+                  //   console.log("show=>font style=>end=>", data, handler, args);
+                  //   return true;
+                  // }
+                  // component: 'inline-wrapper',
+                  // items: {
+                  //   labelFontStyleItem: {
+                  //     component: 'font-style-buttons',
+                  //     width: false,
+                  //     ref: 'font.style',
+                  //     defaultValue: ['bold'],
+                  //     change(data, handler, properties, args) {
+                  //       console.log("onchange=>",data, handler, properties, args)
+                  //       // const bgColorComp = args?.properties?.components?.find((comp) => comp.key === 'general')?.bgColor;
+                  //       // if (bgColorComp?.color || bgColorComp?.colorExpression) {
+                  //       //   bgColorComp.color = undefined;
+                  //       //   bgColorComp.colorExpression = undefined;
+                  //       // }
+                  //     },
+                  //   },
+                  // },
                 },
                 labelTextAlign: {
                   type: 'string',
                   component: 'buttongroup',
-                  ref: 'style.font.align',
+                  ref: 'font.align',
                   options: [
                     {
                       value: 'left',
@@ -103,19 +160,19 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                 labelFontSize: {
                   component: 'slider',
                   type: 'number',
-                  ref: 'style.font.size',
+                  ref: 'font.size',
                   translation: 'properties.fontSize',
                   min: 0.2,
                   max: 1,
                   step: 0.01,
-
+                  defaultValue : 0.5
                 },
                 fontSizeAndColor: {
                   component: 'inline-wrapper',
                   type: 'items',
                   items: {
                     useFontColorExpression: {
-                      ref: 'style.font.useColorExpression',
+                      ref: 'font.useColorExpression',
                       type: 'boolean',
                       translation: 'properties.fontColor',
                       component: 'dropdown',
@@ -124,35 +181,20 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                     },
                     colorPicker: {
                       component: 'color-picker',
-                      // type: 'object',
-                      ref: 'style.font.color',
+                      type: 'object',
+                      ref: 'font.color',
                       translation: 'properties.color',
                       // dualOutput: true,
                       width: 12,
-                      // show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
-                      show(data, handler, args) {
-                        const fontColorObj = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.style;
-                        if (fontColorObj) {
-                          if (fontColorObj?.font?.color) {
-                            args.properties.components.find((comp) => comp.key === 'actionbutton').style.font.color.color = args?.handler?.layout?.style.font.color.color;
-                          } else {
-                            args.properties.components.find((comp) => comp.key === 'actionbutton').style = { font: { color: { color: args?.handler?.layout?.style.font.color.color } } }
-                          }
-                        }
-                        return !propertyResolver.getValue(data, 'style.font.useColorExpression')
-                      },
-
+                      show: (data) => !propertyResolver.getValue(data, 'font.useColorExpression'),
                     },
                     colorExpression: {
                       component: 'input-field-expression',
                       type: 'string',
-                      ref: 'style.font.colorExpression',
+                      ref: 'font.colorExpression',
                       translation: 'Common.Expression',
                       // expression: 'optional',
-
-                      show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
-
-
+                      show: (data) => propertyResolver.getValue(data, 'font.useColorExpression'),
                     },
                   }
                 }
@@ -173,7 +215,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                   component: 'inline-wrapper',
                   items: {
                     useColorExpression: {
-                      ref: 'style.background.useColorExpression',
+                      ref: 'bgColor.useColorExpression',
                       width: 9,
                       type: 'boolean',
                       translation: 'AppDetails.SheetBackgroundColor',
@@ -183,26 +225,15 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                     colorPicker: {
                       component: 'color-picker',
                       width: 3,
-                      ref: 'style.background.color',
+                      ref: 'bgColor.color',
                       translation: 'properties.color',
-                      // show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
-                      show(data, handler, args) {
-                        const bgColorObj = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.style;
-                        if (bgColorObj) {
-                          if (bgColorObj?.background?.color) {
-                            args.properties.components.find((comp) => comp.key === 'actionbutton').style.background.color.color = args?.handler?.layout?.style.background.color.color;
-                          } else {
-                            args.properties.components.find((comp) => comp.key === 'actionbutton').style = { background: { color: { color: args?.handler?.layout?.style.background.color.color } } }
-                          }
-                        }
-                        return !propertyResolver.getValue(data, 'style.background.useColorExpression')
-                      },
+                      show: (data) => !propertyResolver.getValue(data, 'bgColor.useColorExpression'),
                     },
                     colorExpression: {
                       component: 'input-field-expression',
-                      ref: 'style.background.colorExpression',
+                      ref: 'bgColor.colorExpression',
                       translation: 'Common.Expression',
-                      show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                      show: (data) => propertyResolver.getValue(data, 'bgColor.useColorExpression'),
                     },
                   },
                 },
@@ -237,7 +268,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                     const bgImageComp = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.bgImage;
                     if (bgImageComp) {
                       bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
-                      bgImageComp.expressionUrl = undefined;
                     }
                   },
                 },
@@ -246,8 +276,17 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                   ref: 'bgImage.mediaUrl',
                   translation: 'MediaLibrary.Header',
                   itemKey: 'actionbutton',
-                  show(data) {
-                    return propertyResolver.getValue(data, 'bgImage.mode');
+                  show(data,handler,args) {
+                    console.log("ML show=>",data,handler,args)
+                    if (data.bgImage?.mode === 'media') {
+                      const bgImageComp = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.bgImage;
+                      console.log("ML show=>",bgImageComp)
+                      if (bgImageComp) {
+                        bgImageComp.mediaUrl = { qStaticContentUrlDef: { qUrl : '/media/356dafb55261dbd4fb094ee008ab1c6a/galaxy.jpeg'} };
+                      }
+                      return true;
+                    }
+                    return false;
                   },
                 },
                 sizeItem: {
@@ -263,7 +302,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                     const bgImageComp = args.properties.components.find((comp) => comp.key === 'actionbutton').bgImage;
                     if (
                       data?.bgImage?.mode !== 'none' &&
-                      (bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl || bgImageComp?.expressionUrl)
+                      bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl
                     ) {
                       return true;
                     }
@@ -305,7 +344,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
                     const bgImageComp = args.properties.components.find((comp) => comp.key === 'actionbutton').bgImage;
                     if (
                       data?.bgImage?.mode !== 'none' &&
-                      (bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl || bgImageComp?.expressionUrl) &&
+                      bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl &&
                       data?.bgImage?.sizing !== 'stretchFit'
                     ) {
                       return true;
@@ -317,6 +356,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
             },
           },
         },
+
         bgBorderSection: {
           translation: 'Background Border',
           component: "panel-section",
@@ -327,67 +367,57 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, translator, colorOptions, 
               key: 'actionbutton',
               items: {
                 useBorder: {
-                  ref: 'style.border.useBorder',
+                  ref: 'border.useBorder',
                   type: 'boolean',
                   translation: 'properties.border.use',
                   component: 'switch',
                   options: toggleOptions,
                   defaultValue: false,
+
                 },
                 colorDropdown: {
                   type: 'string',
-                  show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+                  show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
                   component: 'dropdown',
                   translation: 'properties.border.color',
-                  ref: 'style.border.useColorExpression',
+                  ref: 'border.useColorExpression',
                   options: colorOptions,
                 },
                 colorPicker: {
                   component: 'color-picker',
                   type: 'object',
-                  ref: 'style.border.color',
+                  ref: 'border.color',
                   translation: 'properties.color',
                   dualOutput: true,
-                  // show: (data) =>
-                  //   propertyResolver.getValue(data, 'style.border.useBorder') &&
-                  //   !propertyResolver.getValue(data, 'style.border.useColorExpression'),
-
-                  show(data, handler, args) {
-                    const borderColorObj = args?.properties?.components?.find((comp) => comp.key === 'actionbutton')?.style;
-                    if (borderColorObj) {
-                      if (borderColorObj?.border?.color) {
-                        args.properties.components.find((comp) => comp.key === 'actionbutton').style.border.color.color = args?.handler?.layout?.style.border.color.color;
-                      } else {
-                        args.properties.components.find((comp) => comp.key === 'actionbutton').style = { border: { color: { color: args?.handler?.layout?.style.border.color.color } } }
-                      }
-                    }
-                    return propertyResolver.getValue(data, 'style.border.useBorder') && !propertyResolver.getValue(data, 'style.border.useColorExpression')
-                  },
+                  show: (data) =>
+                    propertyResolver.getValue(data, 'border.useBorder') &&
+                    !propertyResolver.getValue(data, 'border.useColorExpression'),
                 },
                 colorExpression: {
                   component: 'input-field-expression',
-                  ref: 'style.border.colorExpression',
+                  ref: 'border.colorExpression',
                   translation: 'Common.Expression',
                   show: (data) =>
-                    propertyResolver.getValue(data, 'style.border.useBorder') &&
-                    propertyResolver.getValue(data, 'style.border.useColorExpression'),
+                    propertyResolver.getValue(data, 'border.useBorder') &&
+                    propertyResolver.getValue(data, 'border.useColorExpression'),
                 },
                 borderWidth: {
                   component: 'slider',
-                  show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+                  show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
                   type: 'number',
-                  ref: 'style.border.width',
+                  ref: 'border.width',
                   translation: 'properties.border.width',
                   min: 0,
                   max: 0.5,
                   step: 0.005,
+
                 },
                 borderRadius: {
                   component: 'slider',
-                  show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+                  show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
                   translation: 'properties.border.radius',
                   type: 'number',
-                  ref: 'style.border.radius',
+                  ref: 'border.radius',
                   min: 0,
                   max: 1,
                   step: 0.01,

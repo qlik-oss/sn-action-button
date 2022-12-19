@@ -52,20 +52,22 @@ const getColor = (
   return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
 };
 
-// const fontStyleMapping = (btnStyle, fontStyleToMap) => {
-//   console.log("innn fontStyleMapping=>",typeof(btnStyle),typeof(fontStyleToMap))
-//   if (btnStyle) {
-//     console.log("if true")
-//     btnStyle.forEach(styleName => {
-//       console.log("foreach=>",styleName)
-//       if (styleName in fontStyleToMap) {
-//         console.log("innner if=>")
-//         fontStyleToMap[styleName] = true
-//       }
-//     })
-//   }
-//   return fontStyleToMap
-// }
+const fontStyleMapping = (btnStyle, fontStyleToMap) => {
+  console.log("fun btnStyle=>",btnStyle,typeof(btnStyle),fontStyleToMap)
+  if (btnStyle) {
+    if(Array.isArray(btnStyle)){
+      btnStyle.forEach(styleName => {
+        console.log("in=>",styleName,styleName in fontStyleToMap)
+        if (styleName in fontStyleToMap) {
+          fontStyleToMap[styleName] = true
+        }
+      })
+    }else{
+      fontStyleToMap = btnStyle
+    }
+  }
+  return fontStyleToMap;
+}
 
 export default {
   getStyles({ style = {}, disabled, theme, element, app, layout, flag }) {
@@ -74,20 +76,18 @@ export default {
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     // const { font = {}, background = {}, border = {} } = style;
 
-   const { font = {} } = style;
-    let { background = {}, border = {} } = style;
+   const { font = {}} = style;
+    let { background = {}, border = {}} = style;
 
 
     if (flag) {
       const btnStyleComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
 console.log("btnStyleComp=>",btnStyleComp)
       // bgcolor
-      background = btnStyleComp?.style?.background ? btnStyleComp?.style?.background : style.background;
-      console.log("background=>",background)
+      background = btnStyleComp?.background ? btnStyleComp?.background : style.background;
 
       // border
-      border = (btnStyleComp?.style?.border) ? (btnStyleComp?.style?.border) : style.border;
-      console.log("border=>",border)
+      border = (btnStyleComp?.border) ? (btnStyleComp?.border) : style.border;
 
       // BgImage and positioning
       let mediaUrl = '';
@@ -98,7 +98,6 @@ console.log("btnStyleComp=>",btnStyleComp)
       } else {
         mediaUrl = undefined;
       }
-      console.log("mediaUrl=>",mediaUrl)
 
       if (btnStyleComp?.bgImage && btnStyleComp?.bgImage !== 'undefined') {
         styles += formatProperty('background-image', `url('${mediaUrl}')`);
@@ -111,23 +110,22 @@ console.log("btnStyleComp=>",btnStyleComp)
         );
         styles += formatProperty('background-repeat', 'no-repeat');
       }
-      console.log("styles=>",styles)
 
       // font
-      // const fontStyleToMap = { bold: false, italic: false, underline: false }
-      // const btnStyle = btnStyleComp?.style?.font?.style
-     // console.log("btnStyle,,,fontStyleToMap=>",btnStyle,fontStyleToMap)
+      const fontStyleToMap = { bold: false, italic: false, underline: false }
+      // const btnStyle = btnStyleComp?.font?.style ? btnStyleComp?.font?.style : style.font.style;
+      const updatedFontStyle = fontStyleMapping(btnStyleComp?.font?.style, fontStyleToMap);
+      // console.log("updatedFontStyle 1=>",updatedFontStyle)
+      // ( { font } = btnStyleComp?.style ? btnStyleComp?.style : style);
 
-      // const updatedFontStyle = fontStyleMapping(btnStyle, fontStyleToMap);
-      // console.log("updatedFontStyle=>",updatedFontStyle)
-      console.log("btnStyleComp?.style?.font=>",btnStyleComp?.style?.font,style.font);
-      // font  = btnStyleComp?.style?.font ? btnStyleComp?.style?.font : style.font;
+      // font.style = btnStyleComp?.font?.style ? btnStyleComp?.font?.style : style.font.style; // label font styles
+      font.style = btnStyleComp?.font?.style ? updatedFontStyle : style.font.style; // label font styles
+      font.color = btnStyleComp?.font?.color ? btnStyleComp?.font?.color : style.font.color; // label font color
 
-      font.style = btnStyleComp?.style?.font?.style ? btnStyleComp?.style?.font?.style : style.font.style; // label font styles
-      font.color = btnStyleComp?.style?.font?.color ? btnStyleComp?.style?.font?.color : style.font.color; // label font color
-      font.useColorExpression = btnStyleComp?.style?.font?.useColorExpression ? btnStyleComp?.style?.font?.useColorExpression : style.font.useColorExpression; // label font color
-      font.colorExpression = btnStyleComp?.style?.font?.colorExpression ? btnStyleComp?.style?.font?.colorExpression : style.font.colorExpression
-console.log("font=>",font)
+      font.useColorExpression = btnStyleComp?.font?.useColorExpression ? btnStyleComp?.font?.useColorExpression : style.font.useColorExpression; // label font color
+      font.colorExpression = btnStyleComp?.font?.colorExpression ? btnStyleComp?.font?.colorExpression : style.font.colorExpression
+      font.size = btnStyleComp?.font?.size ? btnStyleComp?.font?.size : style.font.size; 
+      console.log("FONT=>",font)
     }
 
 
@@ -137,13 +135,12 @@ console.log("font=>",font)
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
-    console.log("fontStyle=>",fontStyle,typeof(fontStyle),fontStyle.bold,formatProperty('font-weight', 'bold'))
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     console.log("styles=>",styles)
     // background
+    console.log("BACKGROUND=>",background)
     const backgroundColor = getColor(background, primaryColor, theme);
-    console.log("backgroundColor=>",backgroundColor)
     styles += formatProperty('background-color', backgroundColor);
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
@@ -158,6 +155,7 @@ console.log("font=>",font)
         styles += formatProperty('background-repeat', 'no-repeat');
       }
     }
+    console.log("BG styles=>",styles)
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
@@ -180,17 +178,16 @@ console.log("font=>",font)
     const { icon = {}, label = DEFAULTS.LABEL } = style;
     if (flag) {
       const btnlabelComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
-      font = btnlabelComp?.style?.font ? btnlabelComp?.style?.font : style.font;
-      // const fontStyleToMap = { bold: false, italic: false, underline: false }
-      // const btnStyle = btnlabelComp?.style?.font?.style
-      // const updatedFontStyle = fontStyleMapping(btnStyle, fontStyleToMap);
-      font.style = btnlabelComp?.style?.font?.style ? btnlabelComp?.style?.font?.style : style.font.style;
+      font = btnlabelComp ? btnlabelComp?.font : style.font;
+      const fontStyleToMap = { bold: false, italic: false, underline: false }
+      // const btnStyle = btnlabelComp?.font?.style ? btnlabelComp?.font?.style : style.font.style;
+      const updatedFontStyle = fontStyleMapping(btnlabelComp?.font?.style, fontStyleToMap);
+      console.log("updatedFontStyle 2=>",updatedFontStyle)
 
-      // font  = btnlabelComp?.style?.font ? btnlabelComp?.style?.font : style.font;
-      // console.log("font=>createlabel",font)
+      // font.style = btnlabelComp?.font?.style ? btnlabelComp?.font?.style : style.font.style;
+      font.style = btnlabelComp?.font?.style ? updatedFontStyle : style.font.style;
 
     }
-
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
