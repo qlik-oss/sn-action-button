@@ -285,7 +285,7 @@ const applyStyles = (element, styles) => {
     })
 }
 
-export const createSnackbar = (message, duration) => {
+export const createSnackbar = (message, duration, newTab) => {
     const randomId = (Math.random() + 1).toString(36).substring(7)
     const snackbarId = `sn-action-button-snackbar-${randomId}`;
     const snackContainer = document.createElement('div');
@@ -336,7 +336,9 @@ export const createSnackbar = (message, duration) => {
         }
         applyStyles(link, linkStyles)
         link.href = message.url
-        link.target = '_blank';
+        if(newTab) {
+            link.target = '_blank';
+        }
         link.innerText = message.urlText || 'Open';
         msg.appendChild(link)
     }

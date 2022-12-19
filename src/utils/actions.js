@@ -301,7 +301,7 @@ const actions = [
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId, multiUserAutomation }) =>
+      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId, openLinkInNewTab, multiUserAutomation }) =>
         async () => {
           if (multiUserAutomation) {
             let automationUrl
@@ -415,7 +415,7 @@ const actions = [
             }
           const msg = await getAutomationMsg(automationId, automationTriggered, response);
           if(showNotification) {
-            createSnackbar(msg, notificationDuration)
+            createSnackbar(msg, notificationDuration,openLinkInNewTab)
           }
         },
     requiredInput: ['automation'],
