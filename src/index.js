@@ -36,6 +36,7 @@ export default function supernova(env) {
     component() {
       const element = useElement();
       const theme = useTheme();
+      const flag = isEnabled('SENSECLIENT_IM_1525_BTN_BG');
 
       useMemo(() => {
         const button = document.createElement('button');
@@ -47,7 +48,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, flag});
 
       useEffect(
         () => () => {

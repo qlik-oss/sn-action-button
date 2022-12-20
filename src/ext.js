@@ -325,7 +325,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 cellNavMenu: {
                   show: false,
                 },
-                label: {
+                label: stylingPanelEnabled ? undefined : {
                   component: 'string',
                   ref: 'style.label',
                   translation: 'Common.Label',
@@ -333,7 +333,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            font: {
+            font: stylingPanelEnabled ? undefined : {
               grouped: true,
               type: 'items',
               translation: 'properties.font',
@@ -443,7 +443,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            background: {
+            background: stylingPanelEnabled ? undefined : {
               grouped: true,
               type: 'items',
               translation: 'properties.background',
@@ -556,7 +556,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            border: {
+            border: stylingPanelEnabled ? undefined : {
               type: 'items',
               grouped: true,
               translation: 'properties.border',
@@ -623,7 +623,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            icon: {
+            icon: stylingPanelEnabled ? undefined : {
               type: 'items',
               grouped: true,
               translation: 'properties.icon',
@@ -667,7 +667,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled) : undefined,
+            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled,colorOptions,toggleOptions) : undefined,
           },
         },
       },

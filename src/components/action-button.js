@@ -9,16 +9,35 @@ export const runActions = async (actionList) => {
   }
 };
 
-export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element }) => {
+export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element, flag}) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
-  button.setAttribute('style', formattedStyles);
+
+  if(flag){
+    console.log("RENDER - SP")
+    if(!layout.components){
+      console.log("RENDER - SE from SP")
+      button.setAttribute('style', styleFormatter.getStyles({ style, disabled, theme, element, app}));
+      styleFormatter.createLabelAndIcon({ button, theme, style, isSense});
+    }else{
+      button.setAttribute('style', styleFormatter.getStylesStylingPanel({ style, disabled, theme, element ,app, layout}));
+    styleFormatter.createLabelAndIconStylingPanel({ button, theme, style, isSense, layout});
+    }
+  }else{
+    console.log("RENDER - SE")
+    button.setAttribute('style', styleFormatter.getStyles({ style, disabled, theme, element, app}));
+    styleFormatter.createLabelAndIcon({ button, theme, style, isSense});
+
+  }
+
+
+  // const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
+  // button.setAttribute('style', formattedStyles);
   button.setAttribute('tabindex', '-1');
-  styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
+  // styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
 
   button.onclick = async () => {
     if (isClickable) {
