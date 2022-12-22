@@ -54,10 +54,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, colorOptions, toggleOption
             if (!components) {
               args.properties.components = []
             }
-            // if (!args?.properties?.components?.find((comp) => comp.key === 'actionbutton')) {
-            //   args.properties.components.push({ key: 'actionbutton', style: args?.handler?.layout?.style })
-            // }
-
             // To convert the font style object to array, as the designs of font style is different in editor and panel
             const styleArr = [];
             Object.keys(args?.handler?.layout?.style?.font.style).forEach(styleName => {
@@ -69,7 +65,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, colorOptions, toggleOption
             if (!args?.properties?.components?.find((comp) => comp.key === 'actionbutton')) {
               const obj = { key: 'actionbutton' };
 
-              // obj.font = args?.handler?.layout?.style?.font;
               obj.font = {
                 'color': args?.handler?.layout?.style?.font.color,
                 'useColorExpression': args?.handler?.layout?.style?.font.useColorExpression,
@@ -98,7 +93,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, colorOptions, toggleOption
               obj.label = args?.handler?.layout?.style?.label;
               args.properties.components.push(obj)
             }
-            console.log("show=>labelSection=end>", args)
             return true;
           },
           items: {
@@ -257,9 +251,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, colorOptions, toggleOption
                   itemKey: 'actionbutton',
                   show(data, handler, args) {
                     if (data.bgImage?.mode === 'media') {
-                      args.handler.layout.style?.background.url.qStaticContentUrl.qUrl
-                     // bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
-
                       return true;
                     }
                     return false;

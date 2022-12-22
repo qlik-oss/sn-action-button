@@ -43,19 +43,16 @@ const getColor = (
 };
 
 const fontStyleMapping = (btnStyle, fontStyleToMap) => {
-  console.log("fun btnStyle=>",btnStyle,typeof(btnStyle),fontStyleToMap)
   if (btnStyle) {
     if(Array.isArray(btnStyle)){
       btnStyle.forEach(styleName => {
-        console.log("in=>",styleName,styleName in fontStyleToMap)
         if (styleName in fontStyleToMap) {
           fontStyleToMap[styleName] = true
         }
       });
       return fontStyleToMap;
     }
-      return btnStyle;
-    
+    return btnStyle;
   }
   return DEFAULTS.FONT_STYLE;
 }
@@ -172,23 +169,18 @@ export default {
   },
 
 
-  // STYLING PANEL
+  // STYLING PANEL - Created different functions for styling panel implementation to keep the editor code intact
 
-  getStylesStylingPanel({ style = {}, disabled, theme, element, app, layout }) {
+  getStylesStylingPanel({ disabled, theme, element, app, layout }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
-    console.log("SP getStylesStylingPanel= style, layout>", style, layout)
-
-    console.log("getStylesStylingPanel=>",)
     const btnStyleComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
-    console.log("btnStyleComp=>", btnStyleComp)
     const { font = {}, bgColor = {}, bgImage = {}, border = {} } = btnStyleComp;
 
     const fontStyleToMap = { bold: false, italic: false, underline: false }
     const updatedFontStyle = fontStyleMapping(font.style, fontStyleToMap);
     font.style = updatedFontStyle; // label font styles
 
-    console.log("FONT 1=>", font)
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
@@ -231,16 +223,13 @@ export default {
     return styles;
   },
 
-  createLabelAndIconStylingPanel({ button, theme, style = {}, isSense, layout }) {
+  createLabelAndIconStylingPanel({ button, theme, isSense, layout }) {
     const btnStyleComp = layout?.components?.find((comp) => comp.key === 'actionbutton');
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = btnStyleComp;
 
     const fontStyleToMap = { bold: false, italic: false, underline: false }
-    // const btnStyle = btnStyleComp?.font?.style ? btnStyleComp?.font?.style : style.font.style;
     const updatedFontStyle = fontStyleMapping(font.style, fontStyleToMap);
     font.style = updatedFontStyle; // label font styles
-
-    console.log("FONT 2=>", font,style)
 
     // text element wrapping label and icon
     const text = document.createElement('text');

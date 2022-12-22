@@ -17,20 +17,16 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
   const isClickable = !disabled && !constraints.active;
 
   if(flag){
-    console.log("RENDER - SP")
     if(!layout.components){
-      console.log("RENDER - SE from SP")
       button.setAttribute('style', styleFormatter.getStyles({ style, disabled, theme, element, app}));
       styleFormatter.createLabelAndIcon({ button, theme, style, isSense});
     }else{
-      button.setAttribute('style', styleFormatter.getStylesStylingPanel({ style, disabled, theme, element ,app, layout}));
-    styleFormatter.createLabelAndIconStylingPanel({ button, theme, style, isSense, layout});
+      button.setAttribute('style', styleFormatter.getStylesStylingPanel({ disabled, theme, element ,app, layout}));
+      styleFormatter.createLabelAndIconStylingPanel({ button, theme, isSense, layout});
     }
   }else{
-    console.log("RENDER - SE")
     button.setAttribute('style', styleFormatter.getStyles({ style, disabled, theme, element, app}));
     styleFormatter.createLabelAndIcon({ button, theme, style, isSense});
-
   }
 
 
