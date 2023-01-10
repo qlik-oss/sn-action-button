@@ -62,6 +62,7 @@ describe('index', () => {
       constraints: 'constraints',
       theme: undefined,
       senseNavigation: 'nav',
+      multiUserAutomation: true
     });
   });
 });

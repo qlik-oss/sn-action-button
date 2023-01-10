@@ -7,6 +7,7 @@ describe('ext', () => {
   };
   let data;
   const shouldHide = jest.fn();
+  shouldHide.isEnabled = jest.fn(feature => feature === 'SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER' && true)
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),

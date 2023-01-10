@@ -4,6 +4,7 @@ describe('actions', () => {
   const qStateName = 'someState';
   let app;
   let buttonId;
+  let multiUserAutomation;
   let createdBookmark;
   let createdTemporaryBookmark;
   let fieldObject;
@@ -337,11 +338,12 @@ describe('actions', () => {
       automationPostData = false;
       automationTriggered = true;
       buttonId = 'fakeButtonId';
+      multiUserAutomation = true;
       const time = new Date(2022, 10, 1);
       jest.useFakeTimers('modern');
       jest.setSystemTime(time);
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId })();
+      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId, multiUserAutomation })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${appId}`);
@@ -378,7 +380,7 @@ describe('actions', () => {
       jest.useFakeTimers('modern');
       jest.setSystemTime(time);
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId })();
+      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId, multiUserAutomation })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${app.id}`);
@@ -412,7 +414,7 @@ describe('actions', () => {
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
       automationId = undefined;
-      await actionObject.getActionCall({ app, automationId, automationPostData })();
+      await actionObject.getActionCall({ app, automationId, automationPostData, multiUserAutomation })();
       expect(global.fetch).toNotHaveBeenCalled;
     });
 
@@ -421,7 +423,7 @@ describe('actions', () => {
       automationPostData = true;
       let automation;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId })();
+      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId, multiUserAutomation })();
       expect(app.createTemporaryBookmark).toHaveBeenCalled;
     });
 
@@ -430,7 +432,7 @@ describe('actions', () => {
       automationPostData = false;
       let automation;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId })();
+      await actionObject.getActionCall({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, buttonId, multiUserAutomation })();
       expect(app.createTemporaryBookmark).toNotHaveBeenCalled;
     });
 

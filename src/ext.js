@@ -198,7 +198,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   component: 'expression-with-dropdown',
                   translation: 'Object.ActionButton.Automation',
                   ref: 'automationId',
-                  dropdownOnly: true,
+                  dropdownOnly: false,
                   options: async () => getAutomations(),
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation,
                   change: async (data) => {
@@ -228,7 +228,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 automationTriggered: {
                   type: 'boolean',
                   ref: 'automationTriggered',
-                  translation: 'Run mode triggered',
+                  translation: 'Object.ActionButton.Automation.RunModeTriggered',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                   defaultValue: false,
                   change: async (data) => {
@@ -242,7 +242,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
                 automationTriggeredText: {
-                  label: `Set your automation to run mode triggered to allow every user to run the automation`,
+                  label: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
                   component: 'text',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },
