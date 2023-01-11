@@ -1,4 +1,4 @@
-import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken } from "./automationHelper";
+import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken } from "./automation-helper";
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -289,10 +289,13 @@ const actions = [
      *
      * ARGS
      * app - Reference to current app inherited from index.js
-     * automation - the item id of the automation to contact the items api
-     * automationPostData - boolean value. If true, creates a bookmark of the
-     * current selections and sends the resulting bookmark id as an input
-     * parameter to the selected automation.
+     * automation - the item id of the automation to contact the items api. Only needed if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is not enabled
+     * automationId - the automation id of the automation. Needed if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is enabled
+     * automationTriggered - If true, triggers the automation using the automations webhook URL, otherwise it will trigger the automation using the automations run API
+     * automationExecutionToken - token which is needed if triggering the automation using the automations webhook URL
+     * automationPostData - If true, creates a temporary bookmark and posts the resulting temporary bookmark id to the automation
+     * buttonId - the id of the button itself. Used to get the sheet id which the button is on to post the sheet id as an to the automation
+     * multiUserAutomation - Determines if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is enabled or not
      */
 
     translation: 'Object.ActionButton.ExecuteAutomation',
