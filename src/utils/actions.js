@@ -302,14 +302,14 @@ const actions = [
         async () => {
           if (multiUserAutomation) {
             let automationUrl
-            if (typeof automation !== 'undefined' && automationId.length < 1) {
+            if (automation !== undefined && automationId.length < 1) {
               const a = await getAutomationFromItem(automation);
               automationUrl = `../api/v1/automations/${a.id}/runs`;
             }
-            else if (typeof automationId !== 'undefined' && automationTriggered) {
+            else if (automationId !== undefined && automationTriggered) {
               automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
             }
-            else if (typeof automationId !== 'undefined' && !automationTriggered) {
+            else if (automationId !== undefined && !automationTriggered) {
               automationUrl = `../api/v1/automations/${automationId}/runs`;
             }
             else {
