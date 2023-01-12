@@ -1,6 +1,6 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
-import { getAutomation } from './utils/automationHelper';
+import { getAutomation } from './utils/automation-helper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
