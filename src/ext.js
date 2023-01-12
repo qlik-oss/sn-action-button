@@ -218,12 +218,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
                 },
-                automationShowTriggered: {
-                  type: 'boolean',
-                  ref: 'automationShowTriggered',
-                  show: () => false,
-                  default: false,
-                },
                 automationTriggered: {
                   type: 'boolean',
                   ref: 'automationTriggered',
