@@ -164,10 +164,10 @@ describe('ext', () => {
     it('Should return an array with all automations', async () => {
       const automationId = 'automationId';
       const automationName = 'fakeAutomationName';
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({data: [{ resourceId: automationId, name: automationName }]} ) }));
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({data: [{ id: automationId, name: automationName }]} ) }));
       options = await actionItems.automationId.options();
       expect(global.fetch).toHaveBeenCalled;
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations?limit=100');
       expect(options).toHaveLength(1);
       expect(options[0].value).toEqual(automationId);
       expect(options[0].label).toEqual(automationName);
