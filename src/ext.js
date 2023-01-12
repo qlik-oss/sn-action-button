@@ -9,12 +9,11 @@ let automationsList = null;
 
 const getAutomations = async () => {
   if (!automationsList) {
-    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
+    const automationsResponse = await fetch('../api/v1/automations?limit=100');
     const automations = await automationsResponse.json();
     automationsList = automations.data.map((a) => ({
-        value: a.resourceId,
-        label: a.name,
-        itemId: a.id,
+        value: a.id,
+        label: a.name
       }));
   }
   return automationsList;
