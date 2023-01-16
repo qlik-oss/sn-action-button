@@ -239,11 +239,6 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   component: 'text',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },
-                automationExecutionToken: {
-                  type: 'string',
-                  ref: 'automationExecutionToken',
-                  show: () => false,
-                }
               },
             },
             navigation: {
