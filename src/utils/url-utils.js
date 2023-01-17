@@ -27,7 +27,7 @@ const getImageUrl = (imgUrl, app) => {
   imgUrl = imgUrl.replace(/"/g, '\\"');
   imgUrl = imgUrl.replace(/'/g, "\\'");
   const baseUrl = getSenseServerUrl(app);
-  const rootPath = `${baseUrl }/`;
+  const rootPath = `${baseUrl}/`;
   imgUrl = rootPath + (imgUrl[0] === '/' ? imgUrl.substr(1) : imgUrl);
   return imgUrl;
 };

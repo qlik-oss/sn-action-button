@@ -4,6 +4,7 @@ import { getAutomation } from './utils/automation-helper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import getStylingPanelDefinition from './styling-panel-definition';
 
 let automationsList = null;
 
@@ -41,9 +42,12 @@ const toggleOptions = [
   },
 ];
 
+
+
 export default function ext({ translator, shouldHide, senseNavigation }) {
   const multiUserAutomation = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
-
+  const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON');
+  const bkgOptionsEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_BTN_BG');
   return {
     definition: {
       type: 'items',
@@ -719,6 +723,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
+            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled) : undefined,
           },
         },
       },
