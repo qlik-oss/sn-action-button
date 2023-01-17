@@ -396,7 +396,7 @@ describe('actions', () => {
           tenant: tenantId,
           time
         },
-        context: 'api_async'
+        context: 'qsbutton'
       }
       const headers = {
         'Content-Type': 'application/json',

@@ -341,7 +341,7 @@ const actions = [
             const automationData = {
               id: automationId,
               inputs,
-              context: 'api_async'
+              context: 'qsbutton'
             }
             const headers = {
               'Content-Type': 'application/json',
