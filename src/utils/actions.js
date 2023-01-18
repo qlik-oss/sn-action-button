@@ -1,4 +1,12 @@
-import { getUser, getSheetId, getSpaceId, getAutomationFromItem, getCsrfToken, createSnackbar, getAutomationMsg } from "./automationHelper";
+import {
+  getUser,
+  getSheetId,
+  getSpaceId,
+  getAutomationFromItem,
+  getCsrfToken,
+  createSnackbar,
+  getAutomationMsg,
+} from './automationHelper';
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -301,123 +309,131 @@ const actions = [
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationId, automationTriggered, automationExecutionToken, automationPostData, showNotification, notificationDuration, buttonId, openLinkInNewTab, multiUserAutomation }) =>
-        async () => {
-          if (multiUserAutomation) {
-            let automationUrl
-            if (automation !== undefined && automationId.length < 1) {
-              const a = await getAutomationFromItem(automation);
-              automationUrl = `../api/v1/automations/${a.id}/runs`;
-            }
-            else if (automationId !== undefined && automationTriggered) {
-              automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
-            }
-            else if (automationId !== undefined && !automationTriggered) {
-              automationUrl = `../api/v1/automations/${automationId}/runs`;
-            }
-            else {
-              return;
-            }
-            let bookmark
-            if (automationPostData) {
-              const bookmarkProps = {
-                qOptions: {
-                  qIncludeVariables: true,
-                  qIncludeAllPatches: true
-                }
-              };
-              bookmark = await app.createTemporaryBookmark(bookmarkProps);
-            }
-            const user = await getUser();
-            const inputs = {
-              app: app.id,
-              bookmark: automationPostData ? bookmark : '',
-              sheet: await getSheetId(app, buttonId),
-              user: user.subject,
-              space: await getSpaceId(app.id),
-              tenant: user.tenantId,
-              time: new Date(),
-            }
-            const automationData = {
-              id: automationId,
-              inputs,
-              context: 'qsbutton'
-            }
-            const headers = {
-              'Content-Type': 'application/json',
-              'qlik-csrf-token': await getCsrfToken()
-            }
-            if (automationTriggered) {
-              headers['X-Execution-Token'] = automationExecutionToken;
-            }
-            const postOptions = {
-              method: 'POST',
-              headers,
-              body: JSON.stringify(automationTriggered ? inputs : automationData),
-            }
-            await fetch(automationUrl, postOptions);
+      ({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        showNotification,
+        notificationDuration,
+        buttonId,
+        openLinkInNewTab,
+        multiUserAutomation,
+      }) =>
+      async () => {
+        if (multiUserAutomation) {
+          let automationUrl;
+          if (automation !== undefined && automationId.length < 1) {
+            const a = await getAutomationFromItem(automation);
+            automationUrl = `../api/v1/automations/${a.id}/runs`;
+          } else if (automationId !== undefined && automationTriggered) {
+            automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
+          } else if (automationId !== undefined && !automationTriggered) {
+            automationUrl = `../api/v1/automations/${automationId}/runs`;
+          } else {
+            return;
           }
-          else if (automation !== undefined) {
-              try {
-                automation = encodeURIComponent(automation);
-                const itemInfo = const response = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
-                const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
-                  response.json()
-                );
-                let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
-                if (automationPostData) {
-                  const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
-                    .then((response) => response.json())
-                    .then((blocks) => {
-                      let items = [];
-                      for (let i = 0; i < blocks.blocks.length; i++) {
-                        if (blocks.blocks[i].type === 'FormBlock') {
-                          items = blocks.blocks[i].form;
-                          break;
-                        }
-                      }
-                      return items;
-                    });
-                  if (inputBlocks.length > 0) {
-                    const newDate = new Date();
-                    const bmkProp = {
-                      qProp: {
-                        qInfo: {
-                          qId: `automation_${app.id}_${automation}_${newDate.getTime()}`,
-                          qType: 'bookmark',
-                        },
-                        qMetaDef: {
-                          title: `Generated automation bookmark on ${newDate.toISOString()}`,
-                          description:
-                            'Generated to provide target automation with bookmark to get current selection state',
-                          _createdBy: 'sn-action-button',
-                          _createdFor: 'automation',
-                          _createdOn: `${newDate.toISOString()}`,
-                          _id: `automation_${encodeURIComponent(app.id)}_${automation}_${newDate.getTime()}`,
-                        },
-                      },
-                    };
-                    const bmk = await app
-                      .createBookmark(bmkProp)
-                      .then((bookmark) => bookmark.getLayout())
-                      .then((layout) => layout.qInfo.qId);
-                    await app.saveObjects();
-                    executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(
-                      app.id
-                    )}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
+          let bookmark;
+          if (automationPostData) {
+            const bookmarkProps = {
+              qOptions: {
+                qIncludeVariables: true,
+                qIncludeAllPatches: true,
+              },
+            };
+            bookmark = await app.createTemporaryBookmark(bookmarkProps);
+          }
+          const user = await getUser();
+          const inputs = {
+            app: app.id,
+            bookmark: automationPostData ? bookmark : '',
+            sheet: await getSheetId(app, buttonId),
+            user: user.subject,
+            space: await getSpaceId(app.id),
+            tenant: user.tenantId,
+            time: new Date(),
+          };
+          const automationData = {
+            id: automationId,
+            inputs,
+            context: 'qsbutton',
+          };
+          const headers = {
+            'Content-Type': 'application/json',
+            'qlik-csrf-token': await getCsrfToken(),
+          };
+          if (automationTriggered) {
+            headers['X-Execution-Token'] = automationExecutionToken;
+          }
+          const postOptions = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(automationTriggered ? inputs : automationData),
+          };
+          const response = await fetch(automationUrl, postOptions);
+          const msg = await getAutomationMsg(automationId, automationTriggered, response);
+          if (showNotification) {
+            createSnackbar(msg, notificationDuration, openLinkInNewTab);
+          }
+        } else if (automation !== undefined) {
+          try {
+            automation = encodeURIComponent(automation);
+            const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
+            const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
+              response.json()
+            );
+            let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
+            if (automationPostData) {
+              const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
+                .then((response) => response.json())
+                .then((blocks) => {
+                  let items = [];
+                  for (let i = 0; i < blocks.blocks.length; i++) {
+                    if (blocks.blocks[i].type === 'FormBlock') {
+                      items = blocks.blocks[i].form;
+                      break;
+                    }
                   }
-                }
-                // execute the automation
-                await fetch(executePath).then((response) => response.json());
-              } catch (e) {
-                // no-op
+                  return items;
+                });
+              if (inputBlocks.length > 0) {
+                const newDate = new Date();
+                const bmkProp = {
+                  qProp: {
+                    qInfo: {
+                      qId: `automation_${app.id}_${automation}_${newDate.getTime()}`,
+                      qType: 'bookmark',
+                    },
+                    qMetaDef: {
+                      title: `Generated automation bookmark on ${newDate.toISOString()}`,
+                      description:
+                        'Generated to provide target automation with bookmark to get current selection state',
+                      _createdBy: 'sn-action-button',
+                      _createdFor: 'automation',
+                      _createdOn: `${newDate.toISOString()}`,
+                      _id: `automation_${encodeURIComponent(app.id)}_${automation}_${newDate.getTime()}`,
+                    },
+                  },
+                };
+                const bmk = await app
+                  .createBookmark(bmkProp)
+                  .then((bookmark) => bookmark.getLayout())
+                  .then((layout) => layout.qInfo.qId);
+                await app.saveObjects();
+                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(
+                  app.id
+                )}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
               }
             }
-          const msg = await getAutomationMsg(automationId, automationTriggered, response);
-          if(showNotification) {
-            createSnackbar(msg, notificationDuration,openLinkInNewTab)
+            // execute the automation
+            await fetch(executePath).then((response) => response.json());
+          } catch (e) {
+            // no-op
           }
-        },
+        }
+      },
     requiredInput: ['automation'],
     hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
   },
