@@ -9,10 +9,11 @@ export const runActions = async (actionList) => {
   }
 };
 
-export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element }) => {
+export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element, multiUserAutomation }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
+  const buttonId = layout.qInfo.qId;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
@@ -26,7 +27,7 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation }));
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation, buttonId, multiUserAutomation }));
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);
