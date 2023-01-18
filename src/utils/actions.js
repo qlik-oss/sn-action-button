@@ -6,7 +6,7 @@ import {
   getCsrfToken,
   createSnackbar,
   getAutomationMsg,
-} from './automationHelper';
+} from './automation-helper';
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');

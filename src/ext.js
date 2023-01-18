@@ -1,6 +1,6 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
-import { getAutomation } from './utils/automation-helper';
+import { inputBlock, getAutomation } from './utils/automation-helper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
@@ -215,12 +215,32 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                     }
                   },
                 },
+                automationLink: {
+                  translation: "Automation link",
+                  component: "link",
+                  url: (data) => `/automations/${data.automationId}/editor`,
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
+                },             
+                // Boolean property to instruct the automation action to create a
+                // bookmark and send it to the selected automation in the
+                // property panel.
                 automationPostData: {
                   type: 'boolean',
                   ref: 'automationPostData',
                   translation: 'Object.ActionButton.Automation.SendSelections',
                   show: (data) => checkShowAction(data, 'automation'),
                   defaultValue: false,
+                },
+                includeSelectionsText: {
+                  label: `When Include selections is enabled, a bookmark containing all user selections and variables will be created and sent to the automation`,
+                  component: 'text',
+                  show: (data) => checkShowAction(data, 'automation') && data.automationPostData,
+                },
+                automationShowTriggered: {
+                  type: 'boolean',
+                  ref: 'automationShowTriggered',
+                  show: () => false,
+                  default: false,
                 },
                 automationTriggered: {
                   type: 'boolean',
@@ -247,6 +267,14 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'string',
                   ref: 'automationExecutionToken',
                   show: () => false,
+                },
+                copyBlock: {
+                  component: 'button',
+                  translation: 'Copy input block',
+                  action () {
+                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
+                  },
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
                 },
                 showNotification: {
                   ref: 'showNotification',
