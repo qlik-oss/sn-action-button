@@ -216,10 +216,10 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
                 automationLink: {
-                  translation: "Automation link",
+                  translation: "Object.ActionButton.Automation.Link",
                   component: "link",
                   url: (data) => `/automations/${data.automationId}/editor`,
-                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
+                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1 && multiUserAutomation
                 },             
                 // Boolean property to instruct the automation action to create a
                 // bookmark and send it to the selected automation in the
@@ -232,15 +232,9 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   defaultValue: false,
                 },
                 includeSelectionsText: {
-                  label: `When Include selections is enabled, a bookmark containing all user selections and variables will be created and sent to the automation`,
+                  translation: `Object.ActionButton.Automation.SendSelectionsHelp`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && data.automationPostData,
-                },
-                automationShowTriggered: {
-                  type: 'boolean',
-                  ref: 'automationShowTriggered',
-                  show: () => false,
-                  default: false,
+                  show: (data) => checkShowAction(data, 'automation') && data.automationPostData && multiUserAutomation,
                 },
                 automationTriggered: {
                   type: 'boolean',
@@ -263,23 +257,10 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   component: 'text',
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered && data.automationTriggered,
                 },
-                automationExecutionToken: {
-                  type: 'string',
-                  ref: 'automationExecutionToken',
-                  show: () => false,
-                },
-                copyBlock: {
-                  component: 'button',
-                  translation: 'Copy input block',
-                  action () {
-                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
-                  },
-                  show: (data) => checkShowAction(data, 'automation') && data.automationId.length > 1
-                },
                 showNotification: {
                   ref: 'showNotification',
                   type: 'boolean',
-                  translation: 'Show notification',
+                  translation: 'Object.ActionButton.Automation.ShowNotification',
                   component: 'switch',
                   options: [
                     {
@@ -291,26 +272,26 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       translation: 'properties.off',
                     },
                   ],
-                  defaultValue: true,
-                  show: (data) => checkShowAction(data, 'automation')
+                  defaultValue: false,
+                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation
                 },
                 notificationDuration: {
                   type: 'number',
                   ref: 'notificationDuration',
-                  label: 'Notification duration (seconds)',
+                  translation: 'Object.ActionButton.Automation.NotificationDuration',
                   defaultValue: 4,
                   expression: 'optional',
-                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification && multiUserAutomation
                 },
                 notificationDurationHelp: {
-                  label: `This setting determines how many seconds the notification will remain visible`,
+                  translation: `Object.ActionButton.Automation.NotificationDurationHelp`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && data.showNotification,
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification && multiUserAutomation,
                 },
                 openInNewTab: {
                   ref: 'openLinkInNewTab',
                   type: 'boolean',
-                  translation: 'Open links in new tab',
+                  translation: 'Object.ActionButton.Automation.OpenLinkInNewTab',
                   component: 'switch',
                   options: [
                     {
@@ -323,7 +304,15 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                     },
                   ],
                   defaultValue: true,
-                  show: (data) => checkShowAction(data, 'automation') && data.showNotification
+                  show: (data) => checkShowAction(data, 'automation') && data.showNotification && multiUserAutomation
+                },
+                copyBlock: {
+                  component: 'button',
+                  translation: 'Object.ActionButton.Automation.CopyInputBlock',
+                  action () {
+                    navigator.clipboard.writeText(JSON.stringify(inputBlock));
+                  },
+                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation
                 },
               },
             },

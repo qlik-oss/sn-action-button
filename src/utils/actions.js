@@ -2,7 +2,6 @@ import {
   getUser,
   getSheetId,
   getSpaceId,
-  getAutomationFromItem,
   getCsrfToken,
   createSnackbar,
   getAutomationMsg,
@@ -321,19 +320,21 @@ const actions = [
         buttonId,
         openLinkInNewTab,
         multiUserAutomation,
+        translator
       }) =>
       async () => {
-        if (multiUserAutomation) {
+        if (multiUserAutomation && automationId.length ) {
           let automationUrl;
-          if (automation !== undefined && automationId.length < 1) {
-            const a = await getAutomationFromItem(automation);
-            automationUrl = `../api/v1/automations/${a.id}/runs`;
-          } else if (automationId !== undefined && automationTriggered) {
-            automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
-          } else if (automationId !== undefined && !automationTriggered) {
-            automationUrl = `../api/v1/automations/${automationId}/runs`;
-          } else {
-            return;
+          if (automationId !== undefined && automationId.length > 1) {
+            if(automationTriggered) {
+              automationUrl = `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
+            }
+            else {
+              automationUrl = `../api/v1/automations/${automationId}/runs`;
+            }
+          }
+          else {
+            return
           }
           let bookmark;
           if (automationPostData) {
@@ -373,7 +374,7 @@ const actions = [
             body: JSON.stringify(automationTriggered ? inputs : automationData),
           };
           const response = await fetch(automationUrl, postOptions);
-          const msg = await getAutomationMsg(automationId, automationTriggered, response);
+          const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
           if (showNotification) {
             createSnackbar(msg, notificationDuration, openLinkInNewTab);
           }
