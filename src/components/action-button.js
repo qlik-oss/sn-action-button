@@ -25,7 +25,7 @@ export const renderButton = ({
   const buttonId = layout.qInfo.qId;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
+  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app, layout });
   button.setAttribute('style', formattedStyles);
   button.setAttribute('tabindex', '-1');
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
@@ -37,6 +37,8 @@ export const renderButton = ({
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
         actionObj &&
+          actionCallList.push(
+        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation, buttonId, multiUserAutomation }));
           actionCallList.push(
             actionObj.getActionCall({
               app,

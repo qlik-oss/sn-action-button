@@ -48,6 +48,10 @@ const properties = {
    */
   actions: [],
   /**
+   * @type {('responsive'|'fixed'|'relative')=}
+   */
+  layoutBehavior: 'relative',
+  /**
    * Navigation action to move to new sheet/URL, performed after all other actions
    * @type {NavigationAction}
    */
@@ -84,6 +88,16 @@ const properties = {
       },
       size: DEFAULTS.BACKGROUND_SIZE,
       position: DEFAULTS.BACKGROUND_POSITION,
+    },
+    bgImage: {
+      mode: DEFAULTS.BGIMAGE_MODE,
+      mediaUrl: {
+        qStaticContentUrlDef: {
+          qUrl: '',
+        },
+      },
+      sizing: DEFAULTS.BGIMAGE_SIZING,
+      position: DEFAULTS.BGIMAGE_POSITION,
     },
     border: {
       useColorExpression: false,
@@ -177,6 +191,16 @@ const properties = {
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
  * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight'|'top-left'|'center-left'|'bottom-left'|'top-center'|'center-center'|'top-right'|'center-right'|'bottom-right')} [position='center-center'] - Image position
  * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
+ */
+
+/**
+ * @typedef {object} BgImage
+ * @property {object=} [mode = 'none'] - Set to media library to show background image
+ * @property {object=} mediaUrl - Contains the URL for the background image
+ * @property {object=} mediaUrl.qStaticContentUrlDef
+ * @property {string=} [mediaUrl.qStaticContentUrlDef.qUrl=''] - URL represented as a string
+ * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight')} [position='center-center'] - Image position
+ * @property {('OriginalSize'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [sizing='OriginalSize'] - Size of the image, relative to the button
  */
 
 /**
