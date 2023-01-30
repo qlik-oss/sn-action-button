@@ -3,6 +3,29 @@ import luiIcons from './lui-icons';
 import urlUtils from './url-utils';
 import DEFAULTS from '../style-defaults';
 
+const FONT_FAMILIES = [
+  'American Typewriter, serif',
+  'Andalé Mono, monospace',
+  'Arial Black, sans-serif',
+  'Arial, sans-serif',
+  'Bradley Hand, cursive',
+  'Brush Script MT, cursive',
+  'Comic Sans MS, cursive',
+  'Courier, monospace',
+  'Didot, serif',
+  'Georgia, serif',
+  'Impact, sans-serif',
+  'Lucida Console, monospace',
+  'Luminari, fantasy',
+  'Monaco, monospace',
+  'QlikView Sans, sans-serif',
+  'Source Sans Pro, sans-serif',
+  'Tahoma, sans-serif',
+  'Times New Roman, serif',
+  'Trebuchet MS, sans-serif',
+  'Verdana, sans-serif',
+];
+
 const backgroundSize = {
   auto: 'auto auto',
   alwaysFit: 'contain',
@@ -26,6 +49,21 @@ const backgroundPosition = {
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
+const getFirstFont = (s) => s.split(',')[0];
+const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
+  value: font,
+  label: getFirstFont(font),
+}));
+
+const getFontStyle = (labelStyle, fontStyle) => {
+  if (labelStyle) {
+    Object.keys(fontStyle).forEach(key => {
+      labelStyle.includes(key) ? fontStyle[key] = true : fontStyle[key] = false;
+     });
+  }
+  return fontStyle;
+};
+
 const getColor = (
   { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
   defaultColor,
@@ -43,6 +81,7 @@ const getColor = (
 };
 
 export default {
+  fontFamilyOptions,
   getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
@@ -52,9 +91,10 @@ export default {
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
-    const fontStyle = font.style || DEFAULTS.FONT_STYLE;
+    const fontStyle = getFontStyle(font.labelStyle, font.style);
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
+
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
@@ -92,7 +132,8 @@ export default {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-    text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
+    text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily');
+
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;

@@ -1,10 +1,10 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
+import styleEditor from './utils/styling-panel-properties';
 import { getAutomation } from './utils/automation-helper';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
-import getStylingPanelDefinition from './styling-panel-definition';
 
 let automationsList = null;
 
@@ -13,12 +13,12 @@ const getAutomations = async () => {
     const automationsResponse = await fetch('../api/v1/automations?limit=100');
     const automations = await automationsResponse.json();
     automationsList = automations.data.map((a) => ({
-        value: a.id,
-        label: a.name
-      }));
+      value: a.id,
+      label: a.name,
+    }));
   }
   return automationsList;
-}
+};
 
 const colorOptions = [
   {
@@ -42,12 +42,10 @@ const toggleOptions = [
   },
 ];
 
-
-
 export default function ext({ translator, shouldHide, senseNavigation }) {
-  const multiUserAutomation = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
+  const multiUserAutomation =
+    shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
   const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON');
-  const bkgOptionsEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_BTN_BG');
   return {
     definition: {
       type: 'items',
@@ -205,13 +203,12 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   options: async () => getAutomations(),
                   show: (data) => checkShowAction(data, 'automation') && multiUserAutomation,
                   change: async (data) => {
-                    const a = await getAutomation(data.automationId)
+                    const a = await getAutomation(data.automationId);
                     data.automationShowTriggered = a.runMode === 'triggered';
-                    if(data.automationTriggered) {
-                      data.automationExecutionToken = a.executionToken
-                    }
-                    else {
-                      data.automationExecutionToken = ''
+                    if (data.automationTriggered) {
+                      data.automationExecutionToken = a.executionToken;
+                    } else {
+                      data.automationExecutionToken = '';
                     }
                   },
                 },
@@ -226,14 +223,14 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'boolean',
                   ref: 'automationTriggered',
                   translation: 'Object.ActionButton.Automation.RunModeTriggered',
-                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
+                  show: (data) =>
+                    checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                   defaultValue: false,
                   change: async (data) => {
-                    const a = await getAutomation(data.automationId)
-                    if(data.automationTriggered) {
+                    const a = await getAutomation(data.automationId);
+                    if (data.automationTriggered) {
                       data.automationExecutionToken = a.executionToken;
-                    }
-                    else {
+                    } else {
                       data.automationExecutionToken = '';
                     }
                   },
@@ -241,7 +238,8 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 automationTriggeredText: {
                   label: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
                   component: 'text',
-                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
+                  show: (data) =>
+                    checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },
               },
             },
@@ -498,6 +496,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             background: {
               grouped: true,
@@ -723,7 +722,362 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled) : undefined,
+            presentation: {
+              type: 'items',
+              grouped: false,
+              translation: 'properties.presentation',
+              items: {
+                ButtonStyling: stylingPanelEnabled && styleEditor,
+                // styleEditor: getStyleEditorDefinition(),
+                // styleEditor: {
+                //   ref: 'components',
+                //   component: 'styling-panel',
+                //   translation: 'LayerStyleEditor.component.styling',
+                //   chartTitle: 'Object.ActionButton',
+                //   subtitle: 'LayerStyleEditor.component.styling',
+                //   useGeneral: true,
+                //   useBackground: true,
+                //   items: {
+                //     labelSection: {
+                //       component: 'panel-section',
+                //       translation: 'Common.Label',
+                //       items: {
+                //         labelItems: {
+                //           component: 'items',
+                //           ref: 'components',
+                //           key: 'general',
+                //           items: {
+                //             // fontWrapperItem: {
+                //             //   component: 'inline-wrapper',
+                //             //   items: {
+                //             //     fontStyleItem: {
+                //             //       component: 'font-style-buttons',
+                //             //       width: false,
+                //             //       ref: 'title.main.fontStyle',
+                //             //       defaultValue: ['bold'],
+                //             //     },
+                //             //     fontSizeItem: {
+                //             //       component: 'dropdown',
+                //             //       ref: 'title.main.fontSize',
+                //             //       options: () =>
+                //             //         isEnabledIm2420 ? getFontSizes('title.main', themeStyleResolver) : fontSizeOptions,
+                //             //       defaultValue: () =>
+                //             //         isEnabledIm2420
+                //             //           ? getPlaceholder('title.main.fontSize', 'fontSize', themeStyleResolver, false)
+                //             //           : getPlaceholderFromTheme('title.main.fontSize', chartType),
+                //             //     },
+                //             //     fontColorItem: {
+                //             //       component: 'color-picker',
+                //             //       width: false,
+                //             //       ref: 'title.main.color',
+                //             //       defaultValue: { color: getPlaceholderFromTheme('title.main.color', chartType) },
+                //             //     },
+                //             //   },
+                //             // },
+                //           },
+                //         },
+                //       },
+                //     },
+                //     // label: {
+                //     // component: 'panel-section',
+                //     // translation: 'Common.Label',
+                //     // key: 'chart',
+                //     // items: {
+                //     //   fontFamilyItem: {
+                //     //     type: 'string',
+                //     //     component: 'dropdown',
+                //     //     ref: 'style.font.fontFamily',
+                //     //     options: styleFormatter.fontFamilyOptions,
+                //     //     defaultValue: styleDefaults.FONT_FAMILY,
+                //     //   },
+                //     //   fontWrapperItem: {
+                //     //     component: 'inline-wrapper',
+                //     //     type: 'items',
+                //     //     items: {
+                //     //       fontStyleItem: {
+                //     //         component: 'font-style-buttons',
+                //     //         type: 'string',
+                //     //         width: false,
+                //     //         ref: 'style.font.labelStyle',
+                //     //         multipleSelect: true,
+                //     //         defaultValue: ['bold'],
+                //     //       },
+                //     //       fontSizeItem: {
+                //     //         component: 'dropdown',
+                //     //         ref: 'title.main.fontSize',
+                //     //         // options: () =>
+                //     //         //   isEnabledIm2420 ? getFontSizes('title.main', themeStyleResolver) : fontSizeOptions,
+                //     //         // defaultValue: () =>
+                //     //         //   isEnabledIm2420
+                //     //         //     ? getPlaceholder('title.main.fontSize', 'fontSize', themeStyleResolver, false)
+                //     //         //     : getPlaceholderFromTheme('title.main.fontSize', chartType),
+                //     //       },
+                //     //       fontColorItem: {
+                //     //         component: 'color-picker',
+                //     //         width: false,
+                //     //         ref: 'title.main.color',
+                //     //         // defaultValue: { color: getPlaceholderFromTheme('title.main.color', chartType) },
+                //     //       },
+                //     //     },
+                //     //   },
+                //     //   labelFontSize: {
+                //     //     component: 'slider',
+                //     //     type: 'number',
+                //     //     ref: 'font.size',
+                //     //     translation: 'properties.fontSize',
+                //     //     min: 0.2,
+                //     //     max: 1,
+                //     //     step: 0.01,
+                //     //     defaultValue: 0.5,
+                //     //   },
+                //     //   fontSizeAndColor: {
+                //     //     component: 'inline-wrapper',
+                //     //     type: 'items',
+                //     //     items: {
+                //     //       useFontColorExpression: {
+                //     //         ref: 'font.useColorExpression',
+                //     //         type: 'boolean',
+                //     //         translation: 'properties.fontColor',
+                //     //         component: 'dropdown',
+                //     //         width: 14,
+                //     //         options: colorOptions,
+                //     //       },
+                //     //       colorPicker: {
+                //     //         component: 'color-picker',
+                //     //         type: 'object',
+                //     //         ref: 'font.color',
+                //     //         translation: 'properties.color',
+                //     //         width: 12,
+                //     //         show: (data) => !propertyResolver.getValue(data, 'font.useColorExpression'),
+                //     //       },
+                //     //       colorExpression: {
+                //     //         component: 'input-field-expression',
+                //     //         type: 'string',
+                //     //         ref: 'font.colorExpression',
+                //     //         translation: 'Common.Expression',
+                //     //         show: (data) => propertyResolver.getValue(data, 'font.useColorExpression'),
+                //     //       },
+                //     //     },
+                //     //   },
+                //     // },
+                //     // },
+                //     // backgroundOptions: {
+                //     //   // Add Background option title here
+                //     //   component: 'panel-section',
+                //     //   translation: 'properties.color',
+                //     //   items: {
+                //     //     useColorExpression: {
+                //     //       ref: 'style.background.useColorExpression',
+                //     //       type: 'boolean',
+                //     //       component: 'dropdown',
+                //     //       options: colorOptions,
+                //     //     },
+                //     //     colorPicker: {
+                //     //       component: 'color-picker',
+                //     //       type: 'object',
+                //     //       ref: 'style.background.color',
+                //     //       translation: 'library.colors.colorUsed',
+                //     //       dualOutput: true,
+                //     //       show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                //     //     },
+                //     //     colorExpression: {
+                //     //       component: 'string',
+                //     //       type: 'string',
+                //     //       ref: 'style.background.colorExpression',
+                //     //       translation: 'Common.Expression',
+                //     //       expression: 'optional',
+                //     //       show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                //     //     },
+                //     //   },
+                //     // },
+                //     // backgroundImage: {
+                //     //   // component: 'items',
+                //     //   component: 'panel-section',
+                //     //   translation: 'properties.backgroundImage',
+                //     //   items: {
+                //     //     backgroundImageItems: {
+                //     //       key: 'general',
+                //     //       ref: 'components',
+                //     //       component: 'items',
+                //     //       items: {
+                //     //         backgroundItem: {
+                //     //           component: 'dropdown',
+                //     //           ref: 'bgImage.mode',
+                //     //           defaultValue: 'none',
+                //     //           options: [
+                //     //             {
+                //     //               value: 'none',
+                //     //               translation: 'Background.None',
+                //     //             },
+                //     //             {
+                //     //               value: 'media',
+                //     //               translation: 'MediaLibrary.Header',
+                //     //             },
+                //     //           ],
+                //     //           // change(data, handler, properties, args) {
+                //     //           //   const bgImageComp = args?.properties?.components?.find(
+                //     //           //     (comp) => comp.key === 'actionbutton'
+                //     //           //   )?.bgImage;
+                //     //           //   if (bgImageComp) {
+                //     //           //     bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
+                //     //           //   }
+                //     //           // },
+                //     //         },
+                //     //         // mediaLibraryItem: {
+                //     //         //   component: 'media-library-button',
+                //     //         //   ref: 'bgImage.mediaUrl',
+                //     //         //   translation: 'MediaLibrary.Header',
+                //     //         //   itemKey: 'actionbutton',
+                //     //         //   show(data, handler, args) {
+                //     //         //     if (data.bgImage?.mode === 'media') {
+                //     //         //       return true;
+                //     //         //     }
+                //     //         //     return false;
+                //     //         //   },
+                //     //         // },
+                //     //         // sizeItem: {
+                //     //         //   component: 'dropdown',
+                //     //         //   ref: 'bgImage.sizing',
+                //     //         //   defaultValue: 'originalSize',
+                //     //         //   change(data) {
+                //     //         //     if (data?.bgImage?.position) {
+                //     //         //       data.bgImage.position = 'center-center';
+                //     //         //     }
+                //     //         //   },
+                //     //         //   show(data, handler, args) {
+                //     //         //     const bgImageComp = args.properties.components.find(
+                //     //         //       (comp) => comp.key === 'actionbutton'
+                //     //         //     ).bgImage;
+                //     //         //     if (
+                //     //         //       data?.bgImage?.mode !== 'none' &&
+                //     //         //       bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl
+                //     //         //     ) {
+                //     //         //       return true;
+                //     //         //     }
+                //     //         //     return false;
+                //     //         //   },
+                //     //         //   options: [
+                //     //         //     {
+                //     //         //       value: 'originalSize',
+                //     //         //       translation: 'properties.backgroundImage.originalSize',
+                //     //         //     },
+                //     //         //     {
+                //     //         //       value: 'alwaysFit',
+                //     //         //       translation: 'properties.backgroundImage.sizeAlwaysFit',
+                //     //         //     },
+                //     //         //     {
+                //     //         //       value: 'fitWidth',
+                //     //         //       translation: 'properties.backgroundImage.sizeFitWidth',
+                //     //         //     },
+                //     //         //     {
+                //     //         //       value: 'fitHeight',
+                //     //         //       translation: 'properties.backgroundImage.sizeFitHeight',
+                //     //         //     },
+                //     //         //     {
+                //     //         //       value: 'stretchFit',
+                //     //         //       translation: 'properties.backgroundImage.sizeStretch',
+                //     //         //     },
+                //     //         //     {
+                //     //         //       value: 'alwaysFill',
+                //     //         //       translation: 'properties.backgroundImage.sizeAlwaysFill',
+                //     //         //     },
+                //     //         //   ],
+                //     //         // },
+                //     //         // positionGridItem: {
+                //     //         //   label: 'Position Grid',
+                //     //         //   component: 'position-grid',
+                //     //         //   ref: 'bgImage.position',
+                //     //         //   defaultValue: 'center-center',
+                //     //         //   show(data, handler, args) {
+                //     //         //     const bgImageComp = args.properties.components.find(
+                //     //         //       (comp) => comp.key === 'actionbutton'
+                //     //         //     ).bgImage;
+                //     //         //     if (
+                //     //         //       data?.bgImage?.mode !== 'none' &&
+                //     //         //       bgImageComp?.mediaUrl?.qStaticContentUrlDef?.qUrl &&
+                //     //         //       data?.bgImage?.sizing !== 'stretchFit'
+                //     //         //     ) {
+                //     //         //       return true;
+                //     //         //     }
+                //     //         //     return false;
+                //     //         //   },
+                //     //         // },
+                //     //       },
+                //     //     },
+                //     //   },
+                //     // },
+                //     // backgroundBorder: {
+                //     //   component: 'panel-section',
+                //     //   translation: 'properties.background.border',
+                //     //   items: {
+                //     //     backgroundBorderItem: {
+                //     //       component: 'items',
+                //     //       ref: 'components',
+                //     //       key: 'general',
+                //     //       items: {
+                //     //         useBorder: {
+                //     //           ref: 'border.useBorder',
+                //     //           type: 'boolean',
+                //     //           translation: 'properties.border.use',
+                //     //           component: 'switch',
+                //     //           options: toggleOptions,
+                //     //           defaultValue: false,
+                //     //         },
+                //     //         colorDropdown: {
+                //     //           type: 'string',
+                //     //           component: 'dropdown',
+                //     //           translation: 'properties.border.color',
+                //     //           ref: 'border.useColorExpression',
+                //     //           options: colorOptions,
+                //     //           show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
+                //     //         },
+                //     //         colorPicker: {
+                //     //           component: 'color-picker',
+                //     //           type: 'object',
+                //     //           ref: 'border.color',
+                //     //           translation: 'properties.color',
+                //     //           dualOutput: true,
+                //     //           show: (data) =>
+                //     //             propertyResolver.getValue(data, 'border.useBorder') &&
+                //     //             !propertyResolver.getValue(data, 'border.useColorExpression'),
+                //     //         },
+                //     //         colorExpression: {
+                //     //           component: 'input-field-expression',
+                //     //           ref: 'border.colorExpression',
+                //     //           translation: 'Common.Expression',
+                //     //           show: (data) =>
+                //     //             propertyResolver.getValue(data, 'border.useBorder') &&
+                //     //             propertyResolver.getValue(data, 'border.useColorExpression'),
+                //     //         },
+                //     //         borderWidth: {
+                //     //           component: 'slider',
+                //     //           show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
+                //     //           type: 'number',
+                //     //           ref: 'border.width',
+                //     //           translation: 'properties.border.width',
+                //     //           min: 0,
+                //     //           max: 0.5,
+                //     //           step: 0.005,
+                //     //         },
+                //     //         borderRadius: {
+                //     //           component: 'slider',
+                //     //           show: (data) => propertyResolver.getValue(data, 'border.useBorder'),
+                //     //           translation: 'properties.border.radius',
+                //     //           type: 'number',
+                //     //           ref: 'border.radius',
+                //     //           min: 0,
+                //     //           max: 1,
+                //     //           step: 0.01,
+                //     //         },
+                //     //       },
+                //     //     },
+                //     //   },
+                //     // },
+                //   },
+                // },
+              },
+              show: () => stylingPanelEnabled,
+            },
           },
         },
       },
