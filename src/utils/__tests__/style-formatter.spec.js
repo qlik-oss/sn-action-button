@@ -241,12 +241,11 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize and styling', () => {
-      theme.getStyle = jest.fn(() => 'myFont');
       styleFormatter.createLabelAndIcon({ theme, button, style });
       const text = button.children[0];
       expect(text.children[0].textContent).toEqual('Button');
       expect(text.style.whiteSpace).toEqual('nowrap');
-      expect(text.style.fontFamily).toEqual('myFont');
+      expect(text.style.fontFamily).toEqual('Source Sans Pro');
       expect(text.style.fontSize).toEqual('11.5px');
       expect(text.style.display).toEqual('flex');
       expect(text.style.alignItems).toEqual('center');

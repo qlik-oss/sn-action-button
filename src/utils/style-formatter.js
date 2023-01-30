@@ -50,13 +50,13 @@ export default {
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
+    const backgroundColor = getColor(background, primaryColor, theme);
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
-    const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
@@ -92,7 +92,8 @@ export default {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-    text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
+    text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily') || DEFAULTS.FONT_FAMILY;
+
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;

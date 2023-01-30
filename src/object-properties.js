@@ -63,6 +63,7 @@ const properties = {
   style: {
     label: DEFAULTS.LABEL,
     font: {
+      fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
       color: DEFAULTS.COLOR,
       colorExpression: '',
@@ -151,6 +152,7 @@ const properties = {
 
 /**
  * @typedef {object} Font
+ * @property {string=} [fontFamily='Source Sans Pro'] - Font Family of the label
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true

@@ -451,6 +451,12 @@
           "optional": true,
           "type": "#/definitions/ColorExpression"
         },
+        "fontFamily": {
+          "description": "Font family of the label",
+          "optional": true,
+          "defaultValue": "Source Sans Pro",
+          "type": "string"
+        },
         "size": {
           "description": "Relative[] size of label, must be greater than 0 and 1 fills the entire button",
           "optional": true,
