@@ -454,7 +454,7 @@ describe('ext', () => {
     it('should return current size', () => {
       data = JSON.parse(JSON.stringify(objectProperties));
       const result = background.items.backgroundImage.items.backgroundPosition.currentSize(data);
-      expect(result).toEqual('auto');
+      expect(result).toEqual('originalSize');
     });
   });
 });

@@ -65,7 +65,7 @@ const properties = {
     font: {
       fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
-      color: DEFAULTS.COLOR,
+      color: DEFAULTS.FONT_COLOR,
       colorExpression: '',
       size: DEFAULTS.FONT_SIZE,
       style: DEFAULTS.FONT_STYLE,
@@ -75,6 +75,7 @@ const properties = {
       useColorExpression: false,
       color: DEFAULTS.COLOR,
       colorExpression: '',
+      mode: DEFAULTS.BGIMAGE_MODE,
       useImage: false,
       url: {
         qStaticContentUrlDef: {
@@ -169,12 +170,13 @@ const properties = {
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
+ * @property {string=} [mode = 'none'] - Set to media library to show background image
  * @property {boolean=} [useImage=false] - Set to true to show background image
  * @property {object=} url - Contains the URL for the background image
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
  * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight')} [position='centerCenter'] - Image position
- * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
+ * @property {('originalSize'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='originalSize'] - Size of the image, relative to the button
  */
 
 /**

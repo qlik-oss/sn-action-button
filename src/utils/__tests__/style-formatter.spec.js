@@ -98,6 +98,26 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-color: myPrimaryColor')).toBe(true);
     });
 
+    it('should not return specified image url when the background mode is set on none', () => {
+      style.background.useImage = false;
+      style.background.mode = 'none';
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: auto auto')).toBe(false);
+      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(false);
+      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(false);
+    });
+
+    it('should return specified image url when the background mode is set on media', () => {
+      style.background.useImage = false;
+      style.background.mode = 'media';
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
+      expect(formattedStyle.includes('background-size: auto auto')).toBe(true);
+      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(true);
+      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
+    });
+
     it('should return specified image url and default image settings', () => {
       style.background.useImage = true;
       style.background.url.qStaticContentUrl = { qUrl: someUrl };
@@ -106,6 +126,17 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-size: auto auto')).toBe(true);
       expect(formattedStyle.includes('background-position: 50% 50%')).toBe(true);
       expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
+    });
+
+    it('should return no settings when background mode is set on media but the url is missing', () => {
+      style.background.useImage = false;
+      style.background.mode = 'media';
+      style.background.url.qStaticContentUrl = {};
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-image:')).toBe(false);
+      expect(formattedStyle.includes('background-size:')).toBe(false);
+      expect(formattedStyle.includes('background-position:')).toBe(false);
+      expect(formattedStyle.includes('background-repeat:')).toBe(false);
     });
 
     it('should return no settings when url is missing', () => {

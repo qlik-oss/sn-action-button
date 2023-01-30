@@ -6,6 +6,7 @@ import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
 import { colorOptions, toggleOptions } from './utils/style-utils';
 import getAutomationProps from './utils/automation-props';
+import styleDefaults from './style-defaults';
 
 let automationsList = null;
 
@@ -474,9 +475,10 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       translation: 'properties.backgroundImage.size',
                       type: 'string',
                       component: 'dropdown',
+                      defaultValue: styleDefaults.BACKGROUND_SIZE,
                       options: [
                         {
-                          value: 'auto',
+                          value: 'originalSize',
                           translation: 'properties.backgroundImage.originalSize',
                         },
                         {
@@ -526,6 +528,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             border: {
               type: 'items',
@@ -593,6 +596,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             icon: {
               type: 'items',

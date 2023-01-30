@@ -1,6 +1,6 @@
 import styleDefaults from './style-defaults';
 import propertyResolver from './utils/property-resolver';
-import { fontFamilyOptions, colorOptions } from './utils/style-utils';
+import { fontFamilyOptions, colorOptions, toggleOptions } from './utils/style-utils';
 
 export const getStyleEditorDefinition = () => ({
   items: {
@@ -27,6 +27,7 @@ export const getStyleEditorDefinition = () => ({
                   width: false,
                   ref: 'style.font.style',
                   defaultValue: ['bold'],
+                  matchValueFormat: true,
                 },
                 textAlign: {
                   component: 'text-align-buttons',
@@ -52,14 +53,17 @@ export const getStyleEditorDefinition = () => ({
                   type: 'boolean',
                   translation: 'properties.fontColor',
                   component: 'dropdown',
+                  defaultValue: false,
                   width: 14,
                   options: colorOptions,
                 },
                 colorPicker: {
-                  component: 'color-picker',
                   type: 'object',
+                  component: 'color-picker',
                   ref: 'style.font.color',
                   translation: 'properties.color',
+                  defaultValue: styleDefaults.FONT_COLOR,
+                  disabledNone: true,
                   width: 12,
                   show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
                 },
@@ -72,6 +76,197 @@ export const getStyleEditorDefinition = () => ({
                   show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
                 },
               },
+            },
+          },
+        },
+      },
+    },
+    backgroundOptions: {
+      component: 'panel-section',
+      translation: 'properties.background.options',
+      items: {
+        backgroundColor: {
+          type: 'items',
+          items: {
+            useColorExpression: {
+              type: 'boolean',
+              component: 'dropdown',
+              ref: 'style.background.useColorExpression',
+              translation: 'properties.color',
+              options: colorOptions,
+            },
+            colorExpression: {
+              type: 'string',
+              component: 'input-field-expression',
+              ref: 'style.background.colorExpression',
+              translation: 'Common.Expression',
+              expression: 'optional',
+              show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+            },
+            colorPicker: {
+              type: 'object',
+              component: 'color-picker',
+              ref: 'style.background.color',
+              translation: 'properties.color.used',
+              disableNone: false,
+              defaultValue: styleDefaults.COLOR,
+              dualOutput: true,
+              show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+            },
+          },
+        },
+        backgroundImage: {
+          items: {
+            backgroundImageMode: {
+              component: 'dropdown',
+              ref: 'style.background.mode',
+              translation: 'properties.backgroundImage',
+              defaultValue: styleDefaults.BGIMAGE_MODE,
+              options: [
+                {
+                  value: 'none',
+                  translation: 'Background.None',
+                },
+                {
+                  value: 'media',
+                  translation: 'MediaLibrary.Header',
+                },
+              ],
+              change(data) {
+                const bgImageComp = data.style.background;
+                bgImageComp
+                  ? (bgImageComp.url = { qStaticContentUrlDef: '' })
+                  : (data.style.background = { url: { qStaticContentUrlDef: '' } });
+              },
+            },
+            MediaLibrary: {
+              component: 'media-library-button',
+              ref: 'style.background.url',
+              translation: 'MediaLibrary.Header',
+              show: (data) => propertyResolver.getValue(data, 'style.background.mode') === 'media',
+            },
+            imageSize: {
+              component: 'dropdown',
+              ref: 'style.background.size',
+              defaultValue: styleDefaults.BACKGROUND_SIZE,
+              options: [
+                {
+                  value: 'originalSize',
+                  translation: 'properties.backgroundImage.originalSize',
+                },
+                {
+                  value: 'alwaysFit',
+                  translation: 'properties.backgroundImage.sizeAlwaysFit',
+                },
+                {
+                  value: 'fitWidth',
+                  translation: 'properties.backgroundImage.sizeFitWidth',
+                },
+                {
+                  value: 'fitHeight',
+                  translation: 'properties.backgroundImage.sizeFitHeight',
+                },
+                {
+                  value: 'stretchFit',
+                  translation: 'properties.backgroundImage.sizeStretch',
+                },
+                {
+                  value: 'alwaysFill',
+                  translation: 'properties.backgroundImage.sizeAlwaysFill',
+                },
+              ],
+              change: (data) => {
+                let currentPosition = propertyResolver.getValue(data, 'style.background.position');
+                if (currentPosition) currentPosition = styleDefaults.BGIMAGE_POSITION;
+              },
+              show: (data) => {
+                return (
+                  propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
+                  !!propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                );
+              },
+            },
+            position: {
+              component: 'position-grid',
+              ref: 'style.background.position',
+              translation: 'properties.backgroundImage.position',
+              defaultValue: styleDefaults.BGIMAGE_POSITION,
+              show: (data) => {
+                return (
+                  propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
+                  propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
+                  propertyResolver.getValue(data, 'style.background.size') !== 'stretchFit'
+                );
+              },
+              currentSizeRef: 'style.background.size',
+            },
+          },
+        },
+      },
+    },
+    backgroundBorder: {
+      component: 'panel-section',
+      translation: 'properties.border',
+      items: {
+        backgroundBorderItem: {
+          items: {
+            useBorder: {
+              type: 'boolean',
+              component: 'switch',
+              ref: 'style.border.useBorder',
+              translation: 'properties.border.use',
+              defaultValue: toggleOptions[1].value,
+              options: toggleOptions,
+            },
+            borderRadius: {
+              type: 'number',
+              component: 'slider',
+              ref: 'style.border.radius',
+              translation: 'properties.border.radius',
+              min: 0,
+              max: 1,
+              step: 0.01,
+              show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+            },
+            borderWidth: {
+              type: 'number',
+              component: 'slider',
+              ref: 'style.border.width',
+              translation: 'properties.border.width',
+              min: 0,
+              max: 0.5,
+              step: 0.005,
+              show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+            },
+            colorDropdown: {
+              type: 'string',
+              component: 'dropdown',
+              ref: 'style.border.useColorExpression',
+              translation: 'properties.border.color',
+              options: colorOptions,
+              show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
+            },
+            colorPicker: {
+              type: 'object',
+              component: 'color-picker',
+              ref: 'style.border.color',
+              translation: 'properties.color',
+              defaultValue: styleDefaults.COLOR,
+              disableNone: false,
+              dualOutput: true,
+              show: (data) =>
+                propertyResolver.getValue(data, 'style.border.useBorder') &&
+                !propertyResolver.getValue(data, 'style.border.useColorExpression'),
+            },
+            colorExpression: {
+              type: 'string',
+              component: 'input-field-expression',
+              ref: 'style.border.colorExpression',
+              translation: 'Common.Expression',
+              show: (data) =>
+                propertyResolver.getValue(data, 'style.border.useBorder') &&
+                propertyResolver.getValue(data, 'style.border.useColorExpression'),
+              expression: 'optional',
             },
           },
         },

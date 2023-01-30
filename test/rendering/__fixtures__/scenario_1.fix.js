@@ -52,7 +52,7 @@ export default () => ({
             },
             colorExpression: '',
             useImage: true,
-            size: 'auto',
+            size: 'originalSize',
             position: 'centerRight',
             url: {
               qStaticContentUrl: {
