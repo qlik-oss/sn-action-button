@@ -2,63 +2,28 @@ import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
-
-const backgroundSize = {
-  auto: 'auto auto',
-  alwaysFit: 'contain',
-  fitWidth: '100% auto',
-  fitHeight: 'auto 100%',
-  fill: '100% 100%',
-  alwaysFill: 'cover',
-};
-
-const backgroundPosition = {
-  topLeft: '0% 0%', // top left
-  centerLeft: '50% 0%', // center left
-  bottomLeft: '100% 0%', // bottom left
-  topCenter: '0% 50%', // top center
-  centerCenter: '50% 50%', // center center
-  bottomCenter: '100% 50%', // bottom center
-  topRight: '0% 100%', // top right
-  centerRight: '50% 100%', // center right
-  bottomRight: '100% 100%', // bottom right
-};
+import { backgroundSize, backgroundPosition } from './style-utils';
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
-
-const getColor = (
-  { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
-  defaultColor,
-  theme
-) => {
-  let resolvedColor;
-  if (useColorExpression) {
-    resolvedColor = colorUtils.resolveExpression(colorExpression);
-  } else if (typeof color === 'string') {
-    resolvedColor = color;
-  } else if (color) {
-    resolvedColor = theme.getColorPickerColor(color);
-  }
-  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
-};
 
 export default {
   getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     const { font = {}, background = {}, border = {} } = style;
-    const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
-    const backgroundColor = getColor(background, primaryColor, theme);
     // font
-    styles += formatProperty('color', getColor(font, '#ffffff', theme));
+    styles += formatProperty('color', colorUtils.getColor(font, DEFAULTS.FONT_COLOR.color, theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
+    const primaryColor = theme.getDataColorSpecials().primary;
+    const backgroundColor = colorUtils.getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
-    if (background.useImage && background.url.qStaticContentUrl) {
+    // backgroundImage
+    if ((background.useImage || background.mode === 'media') && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl = getImageUrl(bgUrl, app);
@@ -74,7 +39,7 @@ export default {
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
-      const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
+      const borderColor = colorUtils.getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
       const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
       styles += formatProperty(
