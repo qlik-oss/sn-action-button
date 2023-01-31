@@ -47,6 +47,28 @@ const backgroundPosition = {
   bottomRight: '100% 100%', // bottom right
 };
 
+const colorOptions = [
+  {
+    value: false,
+    translation: 'properties.colorMode.primary',
+  },
+  {
+    value: true,
+    translation: 'properties.colorMode.byExpression',
+  },
+];
+
+const toggleOptions = [
+  {
+    value: true,
+    translation: 'properties.on',
+  },
+  {
+    value: false,
+    translation: 'properties.off',
+  },
+];
+
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 const getFirstFont = (s) => s.split(',')[0];
@@ -57,9 +79,9 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
 
 const getFontStyle = (labelStyle, fontStyle) => {
   if (labelStyle) {
-    Object.keys(fontStyle).forEach(key => {
-      labelStyle.includes(key) ? fontStyle[key] = true : fontStyle[key] = false;
-     });
+    Object.keys(fontStyle).forEach((key) => {
+      labelStyle.includes(key) ? (fontStyle[key] = true) : (fontStyle[key] = false);
+    });
   }
   return fontStyle;
 };
@@ -81,6 +103,8 @@ const getColor = (
 };
 
 export default {
+  colorOptions,
+  toggleOptions,
   fontFamilyOptions,
   getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
