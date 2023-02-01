@@ -33,6 +33,11 @@ const properties = {
    */
   footnote: '',
   /**
+   * A responsive size of the button text
+   * @type {('responsive'|'fixed'|'relative')=}
+   */
+  layoutBehavior: 'relative',
+  /**
    * Controlling if the button should use an expression to determine if it is enabled or not
    *  @type {boolean}
    */
@@ -82,6 +87,16 @@ const properties = {
       },
       size: DEFAULTS.BACKGROUND_SIZE,
       position: DEFAULTS.BACKGROUND_POSITION,
+    },
+    bgImage: {
+      mode: DEFAULTS.BGIMAGE_MODE,
+      sizing: DEFAULTS.BGIMAGE_SIZE,
+      mediaUrl: {
+        qStaticContentUrlDef: {
+          qUrl: '',
+        },
+      },
+      position: DEFAULTS.BGIMAGE_POSITION,
     },
     border: {
       useColorExpression: false,

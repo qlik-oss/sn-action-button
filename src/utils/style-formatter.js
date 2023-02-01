@@ -86,6 +86,29 @@ const getFontStyle = (labelStyle, fontStyle) => {
   return fontStyle;
 };
 
+const getBackgroundUrl = (styles, bgImage, app) => {
+  if (bgImage.mode === 'media' && bgImage.mediaUrl.qStaticContentUrl) {
+    let bgUrl = bgImage.mediaUrl.qStaticContentUrl.qUrl;
+    if (bgUrl) {
+      bgUrl = urlUtils.getImageUrl(bgUrl, app);
+      styles += formatProperty('background-image', `url('${bgUrl}')`);
+      styles += formatProperty(
+        'background-size',
+        backgroundSize[
+          btnStyleComp?.bgImage?.sizing === 'originalSize'
+            ? 'auto'
+            : btnStyleComp?.bgImage?.sizing || DEFAULTS.BACKGROUND_POSITION
+        ]
+      );
+      styles += formatProperty(
+        'background-position',
+        btnStyleComp?.bgImage?.position ? btnStyleComp?.bgImage?.position?.replace('-', ' ') : 'center center'
+      );
+      return (styles += formatProperty('background-repeat', 'no-repeat'));
+    }
+  }
+};
+
 const getColor = (
   { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
   defaultColor,
@@ -109,7 +132,7 @@ export default {
   getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
-    const { font = {}, background = {}, border = {} } = style;
+    const { font = {}, background = {}, border = {}, bgImage = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
@@ -122,19 +145,20 @@ export default {
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
-    if (background.useImage && background.url.qStaticContentUrl) {
-      let bgUrl = background.url.qStaticContentUrl.qUrl;
-      if (bgUrl) {
-        bgUrl = urlUtils.getImageUrl(bgUrl, app);
-        styles += formatProperty('background-image', `url('${bgUrl}')`);
-        styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
-        styles += formatProperty(
-          'background-position',
-          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
-        );
-        styles += formatProperty('background-repeat', 'no-repeat');
-      }
-    }
+    bgImage && getBackgroundUrl(styles, bgImage, app);
+    // if (background.useImage && background.url.qStaticContentUrl) {
+    //   let bgUrl = background.url.qStaticContentUrl.qUrl;
+    //   if (bgUrl) {
+    //     bgUrl = urlUtils.getImageUrl(bgUrl, app);
+    //     styles += formatProperty('background-image', `url('${bgUrl}')`);
+    //     styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+    //     styles += formatProperty(
+    //       'background-position',
+    //       backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+    //     );
+    //     styles += formatProperty('background-repeat', 'no-repeat');
+    //   }
+    // }
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);

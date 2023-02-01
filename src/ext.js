@@ -25,6 +25,9 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
   const multiUserAutomation =
     shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
   const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON');
+  // const bkgOptionsEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_BTN_BG');
+  // const bkgOptionsEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_323_BACKGROUND_OPTIONS');
+  const bkgOptionsEnabled = true;
   return {
     definition: {
       type: 'items',
@@ -706,7 +709,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
               grouped: false,
               translation: 'properties.presentation',
               items: {
-                ButtonStyling: stylingPanelEnabled && styleEditor,
+                ButtonStyling: stylingPanelEnabled && styleEditor(bkgOptionsEnabled),
               },
               show: () => stylingPanelEnabled,
             },

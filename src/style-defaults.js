@@ -10,4 +10,7 @@ export default {
   BORDER_RADIUS: 0,
   BORDER_WIDTH: 0,
   ICON_POSITION: 'left',
+  BGIMAGE_SIZING: 'OriginalSize',
+  BGIMAGE_MODE: 'none',
+  BGIMAGE_POSITION: 'center-center',
 };
