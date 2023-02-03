@@ -4,26 +4,19 @@ import propertyResolver from './property-resolver';
 
 const styleEditorDefinition = (bkgOptionsEnabled) => {
   return {
-    key: 'button',
-    ref: 'components',
     component: 'styling-panel',
     translation: 'LayerStyleEditor.component.styling',
     chartTitle: 'Object.ActionButton',
     subtitle: 'LayerStyleEditor.component.styling',
     useGeneral: true,
-    // useBackground: bkgOptionsEnabled,
-    // useBackground: bkgOptionsEnabled,
-    // defaultValues: {},
+    useBackground: bkgOptionsEnabled,
     items: {
       labelSection: {
-        key: 'button',
         component: 'panel-section',
         translation: 'Common.Label',
         items: {
           labelItem: {
             items: {
-              key: 'button',
-              ref: 'components',
               fontFamily: {
                 component: 'dropdown',
                 ref: 'style.font.fontFamily',
@@ -41,7 +34,6 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
                     ref: 'style.font.labelStyle',
                     defaultValue: ['bold'],
                   },
-                  // Will be replaced by text align component
                   // textAlign: {
                   //   component: 'text-align-buttons',
                   //   ref: 'style.font.align',
@@ -84,8 +76,6 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
                 defaultValue: 0.5,
               },
               fontColor: {
-                // component: 'inline-wrapper',
-                // type: 'items',
                 items: {
                   useFontColorExpression: {
                     ref: 'style.font.useColorExpression',
@@ -122,7 +112,6 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
         translation: 'Background Color', // Fix it with the correct translation
         component: 'panel-section',
         items: {
-          // key: 'button',
           backgroundColor: {
             items: {
               useColorExpression: {
@@ -152,106 +141,105 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
           },
         },
       },
-      backgroundImage: {
-        component: 'panel-section',
-        translation: 'properties.backgroundImage',
-        items: {
-          backgroundImageItems: {
-            key: 'button',
-            component: 'items',
-            ref: 'components',
-            items: {
-              backgroundImageMode: {
-                component: 'dropdown',
-                ref: 'bgImage.mode',
-                defaultValue: 'none',
-                options: [
-                  {
-                    value: 'none',
-                    translation: 'Background.None',
-                  },
-                  {
-                    value: 'media',
-                    translation: 'MediaLibrary.Header',
-                  },
-                ],
-                change(data) {
-                  let bgImage = data.bgImage;
-                  if (!bgImage) {
-                    data.bgImage = { mediaUrl: {} };
-                    bgImage = data.bgImage;
-                  } else if (!bgImage.mediaUrl) {
-                    bgImage.mediaUrl = {};
-                  }
-                },
-              },
-              mediaUrl: {
-                itemKey: 'button',
-                component: 'media-library-button',
-                ref: 'bgImage.mediaUrl',
-                translation: 'MediaLibrary.Header',
-                show: (data) => data.bgImage?.mode === 'media',
-              },
-              imageSize: {
-                component: 'dropdown',
-                ref: 'bgImage.sizing',
-                defaultValue: 'originalSize',
-                change(data) {
-                  if (data?.bgImage?.position) {
-                    data.bgImage.position = 'center-center';
-                  }
-                },
-                options: [
-                  {
-                    value: 'originalSize',
-                    translation: 'properties.backgroundImage.originalSize',
-                  },
-                  {
-                    value: 'alwaysFit',
-                    translation: 'properties.backgroundImage.sizeAlwaysFit',
-                  },
-                  {
-                    value: 'fitWidth',
-                    translation: 'properties.backgroundImage.sizeFitWidth',
-                  },
-                  {
-                    value: 'fitHeight',
-                    translation: 'properties.backgroundImage.sizeFitHeight',
-                  },
-                  {
-                    value: 'stretchFit',
-                    translation: 'properties.backgroundImage.sizeStretch',
-                  },
-                  {
-                    value: 'alwaysFill',
-                    translation: 'properties.backgroundImage.sizeAlwaysFill',
-                  },
-                ],
-                show(data) {
-                  const imageMode = data.bgImage?.mode;
-                  return !!imageMode && imageMode !== 'none';
-                },
-              },
-              position: {
-                component: 'position-grid',
-                ref: 'bgImage.position',
-                translation: 'Common.Position',
-                show(data) {
-                  const imageMode = data.bgImage?.mode;
-                  const sizing = data.bgImage?.sizing;
-                  return !!imageMode && imageMode !== 'none' && sizing !== 'stretch';
-                },
-              },
-            },
-          },
-        },
-      },
+      // backgroundImage: {
+      //   component: 'panel-section',
+      //   translation: 'properties.backgroundImage',
+      //   items: {
+      //     backgroundImageItems: {
+      //       key: 'button',
+      //       component: 'items',
+      //       ref: 'components',
+      //       items: {
+      //         backgroundImageMode: {
+      //           component: 'dropdown',
+      //           ref: 'bgImage.mode',
+      //           defaultValue: 'none',
+      //           options: [
+      //             {
+      //               value: 'none',
+      //               translation: 'Background.None',
+      //             },
+      //             {
+      //               value: 'media',
+      //               translation: 'MediaLibrary.Header',
+      //             },
+      //           ],
+      //           change(data) {
+      //             let bgImage = data.bgImage;
+      //             if (!bgImage) {
+      //               data.bgImage = { mediaUrl: {} };
+      //               bgImage = data.bgImage;
+      //             } else if (!bgImage.mediaUrl) {
+      //               bgImage.mediaUrl = {};
+      //             }
+      //           },
+      //         },
+      //         mediaUrl: {
+      //           itemKey: 'button',
+      //           component: 'media-library-button',
+      //           ref: 'bgImage.mediaUrl',
+      //           translation: 'MediaLibrary.Header',
+      //           show: (data) => data.bgImage?.mode === 'media',
+      //         },
+      //         imageSize: {
+      //           component: 'dropdown',
+      //           ref: 'bgImage.sizing',
+      //           defaultValue: 'originalSize',
+      //           change(data) {
+      //             if (data?.bgImage?.position) {
+      //               data.bgImage.position = 'center-center';
+      //             }
+      //           },
+      //           options: [
+      //             {
+      //               value: 'originalSize',
+      //               translation: 'properties.backgroundImage.originalSize',
+      //             },
+      //             {
+      //               value: 'alwaysFit',
+      //               translation: 'properties.backgroundImage.sizeAlwaysFit',
+      //             },
+      //             {
+      //               value: 'fitWidth',
+      //               translation: 'properties.backgroundImage.sizeFitWidth',
+      //             },
+      //             {
+      //               value: 'fitHeight',
+      //               translation: 'properties.backgroundImage.sizeFitHeight',
+      //             },
+      //             {
+      //               value: 'stretchFit',
+      //               translation: 'properties.backgroundImage.sizeStretch',
+      //             },
+      //             {
+      //               value: 'alwaysFill',
+      //               translation: 'properties.backgroundImage.sizeAlwaysFill',
+      //             },
+      //           ],
+      //           show(data) {
+      //             const imageMode = data.bgImage?.mode;
+      //             return !!imageMode && imageMode !== 'none';
+      //           },
+      //         },
+      //         position: {
+      //           component: 'position-grid',
+      //           ref: 'bgImage.position',
+      //           translation: 'Common.Position',
+      //           show(data) {
+      //             const imageMode = data.bgImage?.mode;
+      //             const sizing = data.bgImage?.sizing;
+      //             return !!imageMode && imageMode !== 'none' && sizing !== 'stretch';
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
       backgroundBorder: {
         component: 'panel-section',
         translation: 'properties.border',
         items: {
           backgroundBorderItem: {
-            component: 'items',
             items: {
               useBorder: {
                 ref: 'style.border.useBorder',

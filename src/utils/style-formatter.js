@@ -129,7 +129,7 @@ export default {
   colorOptions,
   toggleOptions,
   fontFamilyOptions,
-  getStyles({ style = {}, disabled, theme, element, app }) {
+  getStyles({ style = {}, disabled, theme, element, app, layout }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     const { font = {}, background = {}, border = {}, bgImage = {} } = style;
@@ -180,7 +180,7 @@ export default {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'nowrap';
-    text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily');
+    text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily') || DEFAULTS.FONT_FAMILY;
 
     // label
     const textSpan = document.createElement('span');
