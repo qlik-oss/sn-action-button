@@ -77,11 +77,13 @@ const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
   label: getFirstFont(font),
 }));
 
-const getFontStyle = (labelStyle, fontStyle) => {
-  if (labelStyle) {
-    Object.keys(fontStyle).forEach((key) => {
-      labelStyle.includes(key) ? (fontStyle[key] = true) : (fontStyle[key] = false);
+const getFontStyle = (fontStyle) => {
+  const styleTemp = { bold: false, italic: false, underline: false };
+  if (Array.isArray(fontStyle)) {
+    fontStyle.forEach((key) => {
+      fontStyle.includes(key) ? (styleTemp[key] = true) : (styleTemp[key] = false);
     });
+    return styleTemp;
   }
   return fontStyle;
 };
@@ -129,7 +131,7 @@ export default {
   colorOptions,
   toggleOptions,
   fontFamilyOptions,
-  getStyles({ style = {}, disabled, theme, element, app, layout }) {
+  getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     const { font = {}, background = {}, border = {}, bgImage = {} } = style;
@@ -138,7 +140,8 @@ export default {
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
-    const fontStyle = getFontStyle(font.labelStyle, font.style);
+
+    const fontStyle = getFontStyle(font.style) || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
 
@@ -188,7 +191,7 @@ export default {
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
-    font.style && font.style.underline && (textSpan.style.textDecoration = 'underline');
+    getFontStyle(font.style).underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';

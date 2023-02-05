@@ -25,25 +25,28 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
               },
               fontWrapper: {
                 type: 'items',
-                grouped: true,
                 component: 'inline-wrapper',
                 items: {
                   fontStyle: {
                     component: 'font-style-buttons',
                     width: false,
-                    ref: 'style.font.labelStyle',
+                    ref: 'style.font.style',
                     defaultValue: ['bold'],
                   },
-                  // textAlign: {
-                  //   component: 'text-align-buttons',
-                  //   ref: 'style.font.align',
-                  // },
+                  textAlign: {
+                    component: 'text-align-buttons',
+                    ref: 'style.font.align',
+                    defaultValue: styleDefaults.TEXT_ALIGN,
+                  },
                 },
               },
               // layoutBehavior: {
               //   type: 'string',
               //   component: 'dropdown',
               //   ref: 'layoutBehavior',
+              //   sx: {
+              //     marginBottom: '5px',
+              //   },
               //   translation: 'properties.kpi.layoutBehavior',
               //   defaultValue: 'responsive',
               //   undefinedValue: 'responsive',

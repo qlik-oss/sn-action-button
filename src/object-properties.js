@@ -73,7 +73,6 @@ const properties = {
       size: DEFAULTS.FONT_SIZE,
       style: DEFAULTS.FONT_STYLE,
       align: DEFAULTS.TEXT_ALIGN,
-      // labelStyle: DEFAULTS.FONT_STYLE,
     },
     background: {
       useColorExpression: false,
