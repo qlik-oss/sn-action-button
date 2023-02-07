@@ -24,7 +24,6 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
                 defaultValue: styleDefaults.FONT_FAMILY,
               },
               fontWrapper: {
-                type: 'items',
                 component: 'inline-wrapper',
                 items: {
                   fontStyle: {
@@ -144,100 +143,93 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
           },
         },
       },
-      // backgroundImage: {
-      //   component: 'panel-section',
-      //   translation: 'properties.backgroundImage',
-      //   items: {
-      //     backgroundImageItems: {
-      //       key: 'button',
-      //       component: 'items',
-      //       ref: 'components',
-      //       items: {
-      //         backgroundImageMode: {
-      //           component: 'dropdown',
-      //           ref: 'bgImage.mode',
-      //           defaultValue: 'none',
-      //           options: [
-      //             {
-      //               value: 'none',
-      //               translation: 'Background.None',
-      //             },
-      //             {
-      //               value: 'media',
-      //               translation: 'MediaLibrary.Header',
-      //             },
-      //           ],
-      //           change(data) {
-      //             let bgImage = data.bgImage;
-      //             if (!bgImage) {
-      //               data.bgImage = { mediaUrl: {} };
-      //               bgImage = data.bgImage;
-      //             } else if (!bgImage.mediaUrl) {
-      //               bgImage.mediaUrl = {};
-      //             }
-      //           },
-      //         },
-      //         mediaUrl: {
-      //           itemKey: 'button',
-      //           component: 'media-library-button',
-      //           ref: 'bgImage.mediaUrl',
-      //           translation: 'MediaLibrary.Header',
-      //           show: (data) => data.bgImage?.mode === 'media',
-      //         },
-      //         imageSize: {
-      //           component: 'dropdown',
-      //           ref: 'bgImage.sizing',
-      //           defaultValue: 'originalSize',
-      //           change(data) {
-      //             if (data?.bgImage?.position) {
-      //               data.bgImage.position = 'center-center';
-      //             }
-      //           },
-      //           options: [
-      //             {
-      //               value: 'originalSize',
-      //               translation: 'properties.backgroundImage.originalSize',
-      //             },
-      //             {
-      //               value: 'alwaysFit',
-      //               translation: 'properties.backgroundImage.sizeAlwaysFit',
-      //             },
-      //             {
-      //               value: 'fitWidth',
-      //               translation: 'properties.backgroundImage.sizeFitWidth',
-      //             },
-      //             {
-      //               value: 'fitHeight',
-      //               translation: 'properties.backgroundImage.sizeFitHeight',
-      //             },
-      //             {
-      //               value: 'stretchFit',
-      //               translation: 'properties.backgroundImage.sizeStretch',
-      //             },
-      //             {
-      //               value: 'alwaysFill',
-      //               translation: 'properties.backgroundImage.sizeAlwaysFill',
-      //             },
-      //           ],
-      //           show(data) {
-      //             const imageMode = data.bgImage?.mode;
-      //             return !!imageMode && imageMode !== 'none';
-      //           },
-      //         },
-      //         position: {
-      //           component: 'position-grid',
-      //           ref: 'bgImage.position',
-      //           translation: 'Common.Position',
-      //           show(data) {
-      //             const imageMode = data.bgImage?.mode;
-      //             const sizing = data.bgImage?.sizing;
-      //             return !!imageMode && imageMode !== 'none' && sizing !== 'stretch';
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
+      backgroundImage: {
+        component: 'panel-section',
+        translation: 'properties.backgroundImage',
+        items: {
+          backgroundImageItems: {
+            items: {
+              backgroundImageMode: {
+                component: 'dropdown',
+                ref: 'style.background.bgImage.mode',
+                defaultValue: 'none',
+                options: [
+                  {
+                    value: 'none',
+                    translation: 'Background.None',
+                  },
+                  {
+                    value: 'media',
+                    translation: 'MediaLibrary.Header',
+                  },
+                ],
+                change(args) {
+                  const bgImageComp = args.background.bgImage;
+                  if (bgImageComp) {
+                    bgImageComp.mediaUrl = { qStaticContentUrlDef: '' };
+                  }
+                },
+              },
+              MediaLibrary: {
+                component: 'media-library-button',
+                ref: 'style.background.bgImage.mediaUrl',
+                translation: 'MediaLibrary.Header',
+                show: (data) => data.style.background.bgImage?.mode === 'media',
+              },
+              imageSize: {
+                component: 'dropdown',
+                ref: 'style.background.bgImage.sizing',
+                defaultValue: 'originalSize',
+                change(data) {
+                  if (data?.style.background.bgImage?.position) {
+                    data.style.background.bgImage.position = 'center-center';
+                  }
+                },
+                options: [
+                  {
+                    value: 'originalSize',
+                    translation: 'properties.backgroundImage.originalSize',
+                  },
+                  {
+                    value: 'alwaysFit',
+                    translation: 'properties.backgroundImage.sizeAlwaysFit',
+                  },
+                  {
+                    value: 'fitWidth',
+                    translation: 'properties.backgroundImage.sizeFitWidth',
+                  },
+                  {
+                    value: 'fitHeight',
+                    translation: 'properties.backgroundImage.sizeFitHeight',
+                  },
+                  {
+                    value: 'stretchFit',
+                    translation: 'properties.backgroundImage.sizeStretch',
+                  },
+                  {
+                    value: 'alwaysFill',
+                    translation: 'properties.backgroundImage.sizeAlwaysFill',
+                  },
+                ],
+                show(data) {
+                  const imageMode = data.style.background.bgImage?.mode;
+                  return !!imageMode && imageMode !== 'none';
+                },
+              },
+              position: {
+                component: 'position-grid',
+                ref: 'style.background.bgImage.position',
+                translation: 'Common.Position',
+                show(data) {
+                  const imageMode = data.style.background.bgImage?.mode;
+                  const sizing = data.style.background.bgImage?.sizing;
+                  return !!imageMode && imageMode !== 'none' && sizing !== 'stretch';
+                },
+              },
+            },
+          },
+        },
+      },
       backgroundBorder: {
         component: 'panel-section',
         translation: 'properties.border',

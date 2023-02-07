@@ -87,16 +87,6 @@ const properties = {
       size: DEFAULTS.BACKGROUND_SIZE,
       position: DEFAULTS.BACKGROUND_POSITION,
     },
-    bgImage: {
-      mode: DEFAULTS.BGIMAGE_MODE,
-      sizing: DEFAULTS.BGIMAGE_SIZE,
-      mediaUrl: {
-        qStaticContentUrlDef: {
-          qUrl: '',
-        },
-      },
-      position: DEFAULTS.BGIMAGE_POSITION,
-    },
     border: {
       useColorExpression: false,
       color: DEFAULTS.COLOR,

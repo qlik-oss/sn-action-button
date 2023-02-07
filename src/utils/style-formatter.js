@@ -88,9 +88,9 @@ const getFontStyle = (fontStyle) => {
   return fontStyle;
 };
 
-const getBackgroundUrl = (styles, bgImage, app) => {
-  if (bgImage.mode === 'media' && bgImage.mediaUrl.qStaticContentUrl) {
-    let bgUrl = bgImage.mediaUrl.qStaticContentUrl.qUrl;
+const getBackgroundUrl = (styles, background, app, layout) => {
+  if (background.bgImage.mode === 'media' && layout.background.bgImage.mediaUrl.qStaticContentUrlDef) {
+    let bgUrl = layout.background.bgImage.mediaUrl.qStaticContentUrlDef;
     if (bgUrl) {
       bgUrl = urlUtils.getImageUrl(bgUrl, app);
       styles += formatProperty('background-image', `url('${bgUrl}')`);
@@ -131,10 +131,10 @@ export default {
   colorOptions,
   toggleOptions,
   fontFamilyOptions,
-  getStyles({ style = {}, disabled, theme, element, app }) {
+  getStyles({ style = {}, disabled, theme, element, app, layout }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
-    const { font = {}, background = {}, border = {}, bgImage = {} } = style;
+    const { font = {}, background = {}, border = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
@@ -148,20 +148,24 @@ export default {
     // background
     const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
-    bgImage && getBackgroundUrl(styles, bgImage, app);
-    // if (background.useImage && background.url.qStaticContentUrl) {
-    //   let bgUrl = background.url.qStaticContentUrl.qUrl;
-    //   if (bgUrl) {
-    //     bgUrl = urlUtils.getImageUrl(bgUrl, app);
-    //     styles += formatProperty('background-image', `url('${bgUrl}')`);
-    //     styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
-    //     styles += formatProperty(
-    //       'background-position',
-    //       backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
-    //     );
-    //     styles += formatProperty('background-repeat', 'no-repeat');
-    //   }
-    // }
+    // getBackgroundUrl(styles, background, app, layout);
+    // bgImage && getBackgroundUrl(styles, bgImage, app);
+    if (
+      (background.useImage && background.url.qStaticContentUrl) ||
+      (background.bgImage.mode === 'media' && layout.background.bgImage.mediaUrl.qStaticContentUrl)
+    ) {
+      let bgUrl = background.url.qStaticContentUrl.qUrl || layout.background.bgImage.mediaUrl.qStaticContentUrl.qUrl;
+      if (bgUrl) {
+        bgUrl = urlUtils.getImageUrl(bgUrl, app);
+        styles += formatProperty('background-image', `url('${bgUrl}')`);
+        styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+        styles += formatProperty(
+          'background-position',
+          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+        );
+        styles += formatProperty('background-repeat', 'no-repeat');
+      }
+    }
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
