@@ -478,7 +478,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
-              // show: !stylingPanelEnabled,
+              show: !stylingPanelEnabled,
             },
             background: {
               grouped: true,
@@ -592,6 +592,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              // show: () => !stylingPanelEnabled,
             },
             border: {
               type: 'items',
@@ -659,6 +660,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: () => !stylingPanelEnabled,
             },
             icon: {
               type: 'items',
@@ -703,6 +705,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: () => !stylingPanelEnabled,
             },
             presentation: {
               type: 'items',

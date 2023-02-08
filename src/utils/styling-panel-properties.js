@@ -39,34 +39,34 @@ const styleEditorDefinition = (bkgOptionsEnabled) => {
                   },
                 },
               },
-              // layoutBehavior: {
-              //   type: 'string',
-              //   component: 'dropdown',
-              //   ref: 'layoutBehavior',
-              //   sx: {
-              //     marginBottom: '5px',
-              //   },
-              //   translation: 'properties.kpi.layoutBehavior',
-              //   defaultValue: 'responsive',
-              //   undefinedValue: 'responsive',
-              //   snapshot: {
-              //     tid: 'property-layoutBehavior',
-              //   },
-              //   options: [
-              //     {
-              //       value: 'responsive',
-              //       translation: 'properties.responsive',
-              //     },
-              //     {
-              //       value: 'relative',
-              //       translation: 'properties.fluid',
-              //     },
-              //     {
-              //       value: 'fixed',
-              //       translation: 'properties.fixed',
-              //     },
-              //   ],
-              // },
+              layoutBehavior: {
+                type: 'string',
+                component: 'dropdown',
+                ref: 'layoutBehavior',
+                sx: {
+                  marginBottom: '5px',
+                },
+                translation: 'properties.kpi.layoutBehavior',
+                defaultValue: 'responsive',
+                undefinedValue: 'responsive',
+                snapshot: {
+                  tid: 'property-layoutBehavior',
+                },
+                options: [
+                  {
+                    value: 'responsive',
+                    translation: 'properties.responsive',
+                  },
+                  {
+                    value: 'relative',
+                    translation: 'properties.fluid',
+                  },
+                  {
+                    value: 'fixed',
+                    translation: 'properties.fixed',
+                  },
+                ],
+              },
               fontSize: {
                 component: 'slider',
                 type: 'number',

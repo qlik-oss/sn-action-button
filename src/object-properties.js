@@ -59,6 +59,11 @@ const properties = {
   navigation: {
     action: 'none',
   },
+  layoutBehavior: 'relative',
+  /**
+   * @type {boolean}
+   */
+
   /**
    * All styling options
    * @type {Style}
