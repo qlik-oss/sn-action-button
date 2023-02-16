@@ -369,7 +369,6 @@ describe('actions', () => {
         headers,
         body: JSON.stringify({
           app: appId,
-          bookmark: '',
           sheet: sheetId,
           user: subject,
           space: spaceId,
@@ -413,7 +412,6 @@ describe('actions', () => {
         id: automationId,
         inputs: {
           app: app.id,
-          bookmark: '',
           sheet: sheetId,
           user: subject,
           space: spaceId,
