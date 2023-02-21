@@ -325,23 +325,28 @@ const actions = [
       }) =>
       async () => {
         if (multiUserAutomation && automationId.length ) {
-          let automationUrl
-          if (automationId !== undefined && automationId.length > 1) {
-            automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken)
+          try {
+            let automationUrl
+            if (automationId !== undefined && automationId.length > 1) {
+              automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken)
+            }
+            else {
+              return
+            }
+            let bookmark
+            if(automationPostData) {
+              bookmark = await getTemporaryBookmark(app)
+            }
+            const automationData = await getAutomationData(app, buttonId, automationId, bookmark)
+            const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData)
+            const response = await fetch(automationUrl, options);
+            if (automationShowNotification) {
+              const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
+              createSnackbar(msg, automationNotificationDuration, automationOpenLinkInNewTab);
+            }
           }
-          else {
-            return
-          }
-          let bookmark
-          if(automationPostData) {
-            bookmark = await getTemporaryBookmark(app)
-          }
-          const automationData = await getAutomationData(app, buttonId, automationId, bookmark)
-          const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData)
-          const response = await fetch(automationUrl, options);
-          const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
-          if (automationShowNotification) {
-            createSnackbar(msg, automationNotificationDuration, automationOpenLinkInNewTab);
+          catch {
+            // no-op
           }
         } else if (automation !== undefined) {
           oldAutomationRun(automation, automationPostData, app)

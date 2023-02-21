@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-self-import
+import * as helper from './automation-helper';
+
 export const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
   const data = await response.json();
@@ -29,47 +32,69 @@ export const getAutomation = async (automationId) => {
   return null;
 };
 
-const getAutomationRun = async (automationId, runId) =>
-  fetch(`../api/v1/automations/${automationId}/runs/${runId}`).then((res) => res.json());
-
-const checkMessage = (data, translator) => {
-  const defaultMessage = translator.get('Object.ActionButton.Automation.DefaultAutomationMsg') || 'Automation finished';
-  if (Array.isArray(data)) {
-    return { message: data.join(' ').length > 0 ? data.join(' ') : defaultMessage };
-  }
-  if (Object.keys(data).includes('message')) {
-    return data;
-  }
-  return { message: defaultMessage };
+export const getAutomationRun = async (automationId, runId) => {
+  const response = await fetch(`../api/v1/automations/${automationId}/runs/${runId}`);
+  return response.json();
 };
 
-const parseOutput = (data, translator) => {
+const getTranslation = (translator, key, defaultValue) => {
+  const translation = translator.get(key);
+  if (translation === key) {
+    return defaultValue;
+  }
+  return translation;
+};
+
+export const parseOutput = (data, translator) => {
+  const defaultMessage = {
+    message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished'),
+  };
   if (typeof data !== 'undefined') {
+    if (typeof data === 'object') {
+      if (Array.isArray(data)) {
+        return data?.length > 0 ? { message: data.join(' ') } : defaultMessage;
+      }
+      if (Object.keys(data).includes('message')) {
+        return data;
+      }
+      return defaultMessage;
+    }
     try {
       const message = JSON.parse(data);
-      return checkMessage(message, translator);
-    } catch {
-      if (typeof data === 'object') {
-        return checkMessage(data, translator);
+      if (Object.keys(message).includes('message')) {
+        return message;
       }
-      return { message: data };
+      return defaultMessage;
+    } catch {
+      if (data === '') {
+        return defaultMessage;
+      }
+      if (typeof data === 'string' || typeof data === 'number') {
+        return { message: data };
+      }
+      return defaultMessage;
     }
   }
-  return { message: translator.get('Object.ActionButton.Automation.DefaultAutomationMsg') || 'Automation finished' };
+  return defaultMessage;
 };
 
 // eslint-disable-next-line no-promise-executor-return
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
-// eslint-disable-next-line consistent-return
-const automationRunPolling = async (automationId, runId, translator, time = 0) => {
+// eslint-disable-next-line consistent-return, no-async-promise-executor
+export const automationRunPolling = async (automationId, runId, translator, time = 0) => {
   const runningStatuses = ['queued', 'running', 'not started', 'starting'];
-  const pollInterval = 2000;
-  const automationRun = await getAutomationRun(automationId, runId);
+  const pollInterval = 100;
+  const defaultMessage = getTranslation(
+    translator,
+    'Object.ActionButton.Automation.DefaultAutomationMsg',
+    'Automation finished'
+  );
+  const automationRun = await helper.getAutomationRun(automationId, runId);
   const { status } = automationRun;
   if (runningStatuses.includes(status)) {
     if (time > 10 * 60 * 1000) {
-      return { ok: false, message: translator.get('geo.findLocation.error.timeout') || 'Timeout' };
+      return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
     }
     setTimeout(automationRunPolling(automationId, runId, translator, time + pollInterval), pollInterval);
   } else {
@@ -81,7 +106,7 @@ const automationRunPolling = async (automationId, runId, translator, time = 0) =
           msg.ok = true;
         } else {
           msg = {
-            message: translator.get('Object.ActionButton.Automation.DefaultAutomationMsg') || 'Automation finished',
+            message: defaultMessage,
             ok: true,
           };
         }
@@ -93,7 +118,7 @@ const automationRunPolling = async (automationId, runId, translator, time = 0) =
           msg.ok = false;
         } else {
           msg = {
-            message: translator.get('Object.ActionButton.Automation.AutomationError') || 'Automation error',
+            message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
             ok: true,
           };
         }
@@ -105,7 +130,7 @@ const automationRunPolling = async (automationId, runId, translator, time = 0) =
           msg.ok = false;
         } else {
           msg = {
-            message: translator.get('Object.ActionButton.Automation.DefaultAutomationMsg') || 'Automation finished',
+            message: defaultMessage,
             ok: true,
           };
         }
@@ -117,7 +142,10 @@ const automationRunPolling = async (automationId, runId, translator, time = 0) =
           msg = parseOutput(automationRun.title, translator);
           msg.ok = false;
         } else {
-          msg = { message: translator.get('Object.ActionButton.Automation.UnkownError') || 'Unknown error', ok: true };
+          msg = {
+            message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
+            ok: true,
+          };
         }
         break;
       }
@@ -127,12 +155,13 @@ const automationRunPolling = async (automationId, runId, translator, time = 0) =
           msg.ok = true;
         } else {
           msg = {
-            message: translator.get('Object.ActionButton.Automation.DefaultAutomationMsg') || 'Automation finished',
+            message: defaultMessage,
             ok: true,
           };
         }
       }
     }
+    return msg;
   }
 };
 
@@ -154,22 +183,31 @@ export const getAutomationMsg = async (automationId, triggered, response, transl
       break;
     }
     case 400: {
-      message = { message: translator.get('Object.ActionButton.Automation.BadRequest') || 'Bad request', ok: false };
+      message = {
+        message: getTranslation(translator, 'Object.ActionButton.Automation.BadRequest', 'Bad request'),
+        ok: false,
+      };
       break;
     }
     case 401:
     case 403: {
       message = {
-        message:
-          translator.get('Object.ActionButton.Automation.NotAuthorized') ||
-          'You are not authorized to run this automation',
+        message: getTranslation(
+          translator,
+          'Object.ActionButton.Automation.NotAuthorized',
+          'You are not authorized to run this automation'
+        ),
         ok: false,
       };
       break;
     }
     case 404: {
       message = {
-        message: translator.get('Object.ActionButton.Automation.AutomationNotFound') || 'Automation not found',
+        message: getTranslation(
+          translator,
+          'Object.ActionButton.Automation.AutomationNotFound',
+          'Automation not found'
+        ),
         ok: false,
       };
       break;
@@ -177,13 +215,16 @@ export const getAutomationMsg = async (automationId, triggered, response, transl
     case 500:
     case 503: {
       message = {
-        message: translator.get('Object.ActionButton.Automation.AutomationError') || 'Automation error',
+        message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
         ok: false,
       };
       break;
     }
     default: {
-      message = { message: translator.get('Object.ActionButton.Automation.UnkownError') || 'Unknown error', ok: false };
+      message = {
+        message: getTranslation(translator, 'Object.ActionButton.Automation.UnkownError', 'Unknown error'),
+        ok: false,
+      };
     }
   }
   return message;
@@ -209,8 +250,8 @@ export const createSnackbar = async (message, duration, newTab) => {
   const randomId = (Math.random() + 1).toString(36).substring(7);
   const snackbarId = `sn-action-button-snackbar-${randomId}`;
   snackContainer.setAttribute('id', snackbarId);
-  const existingSnackbars = document.querySelectorAll('.sn-action-button-snackbar')
-  const bottom = 24 + ((existingSnackbars?.length || 0) * 5)
+  const existingSnackbars = document.querySelectorAll('.sn-action-button-snackbar');
+  const bottom = 24 + (existingSnackbars?.length || 0) * 5;
   const transitionMs = 400;
   const snackContainerStyles = {
     width: '400px',
@@ -227,7 +268,7 @@ export const createSnackbar = async (message, duration, newTab) => {
     opacity: 0,
     transition: `visibility 0ms, opacity ${transitionMs}ms linear`,
   };
-  applyStyles(snackContainer, snackContainerStyles)
+  applyStyles(snackContainer, snackContainerStyles);
   const snackbar = `
   <div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px"
