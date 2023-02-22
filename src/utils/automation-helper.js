@@ -1,5 +1,7 @@
-// eslint-disable-next-line import/no-self-import
-import * as helper from './automation-helper';
+import { inIframe } from './url-utils';
+import { getCurrentProtocol, removeProtocolHttp, encodeUrl } from './url-encoder';
+
+const TRANSITION_TIME = 400;
 
 export const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
@@ -78,9 +80,6 @@ export const parseOutput = (data, translator) => {
   return defaultMessage;
 };
 
-// eslint-disable-next-line no-promise-executor-return
-const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
-
 // eslint-disable-next-line consistent-return, no-async-promise-executor
 export const automationRunPolling = async (automationId, runId, translator, time = 0) => {
   const runningStatuses = ['queued', 'running', 'not started', 'starting'];
@@ -90,7 +89,7 @@ export const automationRunPolling = async (automationId, runId, translator, time
     'Object.ActionButton.Automation.DefaultAutomationMsg',
     'Automation finished'
   );
-  const automationRun = await helper.getAutomationRun(automationId, runId);
+  const automationRun = await getAutomationRun(automationId, runId);
   const { status } = automationRun;
   if (runningStatuses.includes(status)) {
     if (time > 10 * 60 * 1000) {
@@ -245,14 +244,27 @@ const removeSnackbar = (element) => {
   }, 1000);
 };
 
-export const createSnackbar = async (message, duration, newTab) => {
+const getTarget = (sameWindow) => {
+  if (sameWindow) {
+    return inIframe ? '_parent' : '_self';
+  }
+  return '_blank';
+};
+
+const getUrl = (url) => {
+  const protocol = getCurrentProtocol(url);
+  const urlRemovedProtocol = removeProtocolHttp(url);
+  return `${protocol}${encodeUrl(urlRemovedProtocol)}`;
+};
+
+export const createSnackbar = (msg, automationOpenLinkSameWindow) => {
+  const { message, url, urlText } = msg;
   const snackContainer = document.createElement('div');
   const randomId = (Math.random() + 1).toString(36).substring(7);
   const snackbarId = `sn-action-button-snackbar-${randomId}`;
   snackContainer.setAttribute('id', snackbarId);
   const existingSnackbars = document.querySelectorAll('.sn-action-button-snackbar');
   const bottom = 24 + (existingSnackbars?.length || 0) * 5;
-  const transitionMs = 400;
   const snackContainerStyles = {
     width: '400px',
     height: '35px',
@@ -266,11 +278,10 @@ export const createSnackbar = async (message, duration, newTab) => {
     'border-radius': '3px',
     'z-index': 1000,
     opacity: 0,
-    transition: `visibility 0ms, opacity ${transitionMs}ms linear`,
+    transition: `visibility 0ms, opacity ${TRANSITION_TIME}ms linear`,
   };
   applyStyles(snackContainer, snackContainerStyles);
-  const snackbar = `
-  <div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
+  const snackbar = `<div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px"
       fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
       <defs>
@@ -279,9 +290,13 @@ export const createSnackbar = async (message, duration, newTab) => {
       <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
     </svg>
     <span class="sn-action-button-snackbar-text"
-      style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-      Automation finished
-    </span>
+      style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
+    url
+      ? `<a href="${getUrl(url)}" style="margin-left: 6px;" target="${getTarget(automationOpenLinkSameWindow)}">${
+          urlText || 'Open'
+        }</a>`
+      : ''
+  }</span>
     <span style="cursor: pointer;">
       <svg class="sn-action-button-snackbar-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
         viewBox="0 0 16 16" fill="currentColor">
@@ -292,21 +307,11 @@ export const createSnackbar = async (message, duration, newTab) => {
     </span>
   </div>`;
   snackContainer.innerHTML = snackbar;
-  const msg = snackContainer.querySelector('.sn-action-button-snackbar-text');
-  msg.innerText = message.message;
-  if (message.url) {
-    const link = document.createElement('a');
-    const linkStyles = {
-      'margin-left': '6px',
-    };
-    applyStyles(link, linkStyles);
-    link.href = message.url;
-    if (newTab) {
-      link.target = '_blank';
-    }
-    link.innerText = message.urlText || 'Open';
-    msg.appendChild(link);
-  }
+  return snackContainer;
+};
+
+export const showSnackbar = async (message, duration, automationOpenLinkSameWindow) => {
+  const snackContainer = createSnackbar(message, automationOpenLinkSameWindow);
   const close = snackContainer.querySelector('.sn-action-button-snackbar-close');
   close.addEventListener('click', () => {
     removeSnackbar(snackContainer);
@@ -314,8 +319,9 @@ export const createSnackbar = async (message, duration, newTab) => {
   const body = document.querySelector('body');
   body.appendChild(snackContainer);
   applyStyles(snackContainer, { opacity: 1 });
-  await sleep(Math.max(duration * 1000 - transitionMs, 1));
-  removeSnackbar(snackContainer);
+  setTimeout(() => {
+    removeSnackbar(snackContainer);
+  }, Math.max(duration * 1000 - TRANSITION_TIME, 1));
 };
 
 // Automation run logic prior to IM_1855_AUTOMATIONS_MULTI_USER
