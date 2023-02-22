@@ -1,5 +1,5 @@
 import {
-  createSnackbar,
+  showSnackbar,
   getAutomationMsg,
   oldAutomationRun,
   getAutomationUrl,
@@ -319,37 +319,36 @@ const actions = [
         automationShowNotification,
         automationNotificationDuration,
         buttonId,
-        automationOpenLinkInNewTab,
+        automationOpenLinkSameWindow,
         multiUserAutomation,
-        translator
+        translator,
       }) =>
       async () => {
-        if (multiUserAutomation && automationId.length ) {
+        showSnackbar({ message: 'myText' }, 100);
+        if (multiUserAutomation && automationId.length) {
           try {
-            let automationUrl
+            let automationUrl;
             if (automationId !== undefined && automationId.length > 1) {
-              automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken)
+              automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
+            } else {
+              return;
             }
-            else {
-              return
+            let bookmark;
+            if (automationPostData) {
+              bookmark = await getTemporaryBookmark(app);
             }
-            let bookmark
-            if(automationPostData) {
-              bookmark = await getTemporaryBookmark(app)
-            }
-            const automationData = await getAutomationData(app, buttonId, automationId, bookmark)
-            const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData)
+            const automationData = await getAutomationData(app, buttonId, automationId, bookmark);
+            const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
             const response = await fetch(automationUrl, options);
             if (automationShowNotification) {
               const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
-              createSnackbar(msg, automationNotificationDuration, automationOpenLinkInNewTab);
+              showSnackbar(msg, automationNotificationDuration, automationOpenLinkSameWindow);
             }
-          }
-          catch {
+          } catch {
             // no-op
           }
         } else if (automation !== undefined) {
-          oldAutomationRun(automation, automationPostData, app)
+          oldAutomationRun(automation, automationPostData, app);
         }
       },
     requiredInput: ['automation'],
