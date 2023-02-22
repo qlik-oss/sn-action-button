@@ -246,7 +246,7 @@ const removeSnackbar = (element) => {
 
 const getTarget = (sameWindow) => {
   if (sameWindow) {
-    return inIframe ? '_parent' : '_self';
+    return inIframe() ? '_parent' : '_self';
   }
   return '_blank';
 };
