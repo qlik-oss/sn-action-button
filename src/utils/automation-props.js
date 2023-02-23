@@ -115,7 +115,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
   automationOpenLinkSameWindow: {
     ref: 'automationOpenLinkSameWindow',
     type: 'boolean',
-    translation: 'Object.ActionButton.Automation.OpenLinkInNewTab',
+    translation: 'Object.ActionButton.Automation.OpenLinkInSameWindow',
     component: 'switch',
     options: [
       {

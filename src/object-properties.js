@@ -124,7 +124,7 @@ const properties = {
  * @property {boolean=} [automationShowNotification=''] - Set to true when an automation should return a notification when finished running. Defaults to false
  * @property {string=} [automationNotificationDuration=''] - The amount of time in seconds that a notification should remain visible after running an automation
  * @property {string=} [automationNotificationDurationHelp=''] - Helper text when enabling notifications
- * @property {boolean=} [openInNewTab=''] - Set to true if you want links from notifications to be opened in a new tab
+ * @property {boolean=} [automationOpenLinkSameWindow=''] - Set to true if you want links from notifications to be opened in the same tab
  */
 
 /**
