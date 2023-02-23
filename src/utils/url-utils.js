@@ -22,7 +22,7 @@ function getSenseServerUrl(app) {
   return undefined;
 }
 
-const getImageUrl = (imgUrl, app) => {
+export const getImageUrl = (imgUrl, app) => {
   imgUrl.replace(/^\.\.\//i, '/');
   imgUrl = imgUrl.replace(/"/g, '\\"');
   imgUrl = imgUrl.replace(/'/g, "\\'");
@@ -32,7 +32,10 @@ const getImageUrl = (imgUrl, app) => {
   return imgUrl;
 };
 
-export default {
-  getImageUrl,
-  getSenseServerUrl,
+export const inIframe = () => {
+  try {
+    return window.self !== window.top;
+  } catch (error) {
+    return true;
+  }
 };

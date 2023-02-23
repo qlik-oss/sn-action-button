@@ -1,6 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
-import urlUtils from './url-utils';
+import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
 
 const backgroundSize = {
@@ -61,7 +61,7 @@ export default {
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
-        bgUrl = urlUtils.getImageUrl(bgUrl, app);
+        bgUrl = getImageUrl(bgUrl, app);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
         styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
         styles += formatProperty(

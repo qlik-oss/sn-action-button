@@ -1,13 +1,6 @@
-import Util from './util';
+import evaluateCondition from './util';
+import { inIframe } from './url-utils';
 import { getCurrentProtocol, removeProtocolHttp, urlHasEmailProtocol, encodeUrl } from './url-encoder';
-
-const inIframe = () => {
-  try {
-    return window.self !== window.top;
-  } catch (error) {
-    return true;
-  }
-};
 
 export const getOrderedSheets = async (app) => {
   const sheets = await app.getSheetList();
@@ -16,7 +9,7 @@ export const getOrderedSheets = async (app) => {
 
 export const getOrderedVisibleSheet = async (app) => {
   const sheets = await app.getSheetList();
-  const visibleSheets = sheets.filter((sheet) => Util.evaluateCondition(sheet.qData.showCondition));
+  const visibleSheets = sheets.filter((sheet) => evaluateCondition(sheet.qData.showCondition));
   return visibleSheets.sort((current, next) => current.qData.rank - next.qData.rank);
 };
 

@@ -165,7 +165,7 @@ describe('ext', () => {
       const automationId = 'automationId';
       const automationName = 'fakeAutomationName';
       global.fetch = jest.fn(() => Promise.resolve({ json: () => ({data: [{ id: automationId, name: automationName }]} ) }));
-      options = await actionItems.automationId.options();
+      options = await actionItems.automationProps.items.automationId.options();
       expect(global.fetch).toHaveBeenCalled;
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations?limit=100');
       expect(options).toHaveLength(1);
@@ -219,7 +219,7 @@ describe('ext', () => {
       expect(resultSoftLock).toBe(false);
       const resultValue = actionItems.value.show(actionObject);
       expect(resultValue).toBe(false);
-      const resultAutomation = actionItems.automationId.show(actionObject);
+      const resultAutomation = actionItems.automationProps.show(actionObject);
       expect(resultAutomation).toBe(false);
     });
 
@@ -253,13 +253,8 @@ describe('ext', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when automation needs to show', () => {
-      const result = actionItems.automationId.show({ actionType: 'executeAutomation' });
-      expect(result).toBe(true);
-    });
-
-    it('should return true when automationPostData needs to show', () => {
-      const result = actionItems.automationPostData.show({ actionType: 'executeAutomation' });
+    it('should return true when automation props needs to show', () => {
+      const result = actionItems.automationProps.show({ actionType: 'executeAutomation' });
       expect(result).toBe(true);
     });
 

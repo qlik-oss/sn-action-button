@@ -48,7 +48,7 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, multiUserAutomation });
+      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, multiUserAutomation, translator });
 
       useEffect(
         () => () => {
