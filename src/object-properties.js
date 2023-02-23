@@ -54,6 +54,8 @@ const properties = {
   navigation: {
     action: 'none',
   },
+  disableNavMenu: true,
+  showDetails: false,
   /**
    * All styling options
    * @type {Style}
