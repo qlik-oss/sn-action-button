@@ -1,4 +1,5 @@
-import { parseOutput, getAutomationUrl, getInputBlocks, getPostOptions, createSnackbar } from '../automation-helper';
+import { parseOutput, getAutomationUrl, getInputBlocks, getPostOptions, createSnackbar, automationRunPolling } from '../automation-helper';
+import * as helper from '../automation-helper';
 
 describe('automation helper', () => {
   const appId = 'fakeAppId';
@@ -10,6 +11,7 @@ describe('automation helper', () => {
   const tenantId = 'fakeTenantId';
   const automationId = 'fakeAutomationId';
   const automationExecutionToken = 'fakeExecutionToken';
+  const runId = 'fakeRunId';
   const automationData = {
     id: automationId,
     inputs: {
@@ -121,8 +123,16 @@ describe('automation helper', () => {
       const result = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
       expect(result).toEqual(postOptions);
     });
+    it('should return after status changed to finsihed', async () => {
+      const spy = jest.spyOn(helper, 'getAutomationRun')
+      spy
+      .mockReturnValueOnce({status: 'queued'})
+      .mockReturnValueOnce({status: 'finished', title: 'Automation done running!'})   
+      const result = await automationRunPolling(automationId, runId, translator);
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(result).toEqual({ok: true, message: 'Automation done running!'})
+    })
   });
-
   describe('createSnackbar', () => {
     it('should create snackbar without url', () => {
       const message = { message: 'text message' };

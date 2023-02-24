@@ -1,7 +1,11 @@
 import { inIframe } from './url-utils';
 import { getCurrentProtocol, removeProtocolHttp, encodeUrl } from './url-encoder';
+// eslint-disable-next-line import/no-self-import
+import * as helper from './automation-helper';
 
 const TRANSITION_TIME = 400;
+const POLL_INTERVAL = 2000;
+const MAX_POLL_TIME = 10 * 60 * 1000;
 
 export const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
@@ -81,90 +85,93 @@ export const parseOutput = (data, translator) => {
 };
 
 // eslint-disable-next-line consistent-return, no-async-promise-executor
-export const automationRunPolling = async (automationId, runId, translator, time = 0) => {
+export const automationRunPolling = async (automationId, runId, translator) => {
   const runningStatuses = ['queued', 'running', 'not started', 'starting'];
-  const pollInterval = 100;
   const defaultMessage = getTranslation(
     translator,
     'Object.ActionButton.Automation.DefaultAutomationMsg',
     'Automation finished'
   );
-  const automationRun = await getAutomationRun(automationId, runId);
-  const { status } = automationRun;
-  if (runningStatuses.includes(status)) {
-    if (time > 10 * 60 * 1000) {
-      return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
+  let status = 'queued';
+  let automationRun;
+  const endTime = Date.now() + MAX_POLL_TIME;
+  while (runningStatuses.includes(status)) {
+      if (Date.now() > endTime) {
+        return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
+      }
+      // eslint-disable-next-line no-await-in-loop
+      automationRun = await helper.getAutomationRun(automationId, runId);
+      status = automationRun.status;
+      // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+      await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
     }
-    setTimeout(automationRunPolling(automationId, runId, translator, time + pollInterval), pollInterval);
-  } else {
-    let msg;
-    switch (automationRun.status) {
-      case 'finished': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = true;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
-        break;
+  let msg;
+  switch (automationRun.status) {
+    case 'finished': {
+      if (automationRun.title?.length > 0) {
+        msg = parseOutput(automationRun.title, translator);
+        msg.ok = true;
+      } else {
+        msg = {
+          message: defaultMessage,
+          ok: true,
+        };
       }
-      case 'failed': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
-            ok: true,
-          };
-        }
-        break;
+      break;
+    }
+    case 'failed': {
+      if (automationRun.title?.length > 0) {
+        msg = parseOutput(automationRun.title, translator);
+        msg.ok = false;
+      } else {
+        msg = {
+          message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
+          ok: true,
+        };
       }
-      case 'finished with warnings': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
-        break;
+      break;
+    }
+    case 'finished with warnings': {
+      if (automationRun.title?.length > 0) {
+        msg = parseOutput(automationRun.title, translator);
+        msg.ok = false;
+      } else {
+        msg = {
+          message: defaultMessage,
+          ok: true,
+        };
       }
-      case 'must stop':
-      case 'stopped': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
-            ok: true,
-          };
-        }
-        break;
+      break;
+    }
+    case 'must stop':
+    case 'stopped': {
+      if (automationRun.title?.length > 0) {
+        msg = parseOutput(automationRun.title, translator);
+        msg.ok = false;
+      } else {
+        msg = {
+          message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
+          ok: true,
+        };
       }
-      default: {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = true;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
+      break;
+    }
+    default: {
+      if (automationRun.title?.length > 0) {
+        msg = parseOutput(automationRun.title, translator);
+        msg.ok = true;
+      } else {
+        msg = {
+          message: defaultMessage,
+          ok: true,
+        };
       }
     }
-    return msg;
   }
+  return msg;
 };
 
-export const getAutomationMsg = async (automationId, triggered, response, translator) => {
+export const pollAutomationAndGetMsg = async (automationId, triggered, response, translator) => {
   let message;
   switch (response.status) {
     case 200:
@@ -174,7 +181,7 @@ export const getAutomationMsg = async (automationId, triggered, response, transl
       const queued = status === 'queued';
       const runId = typeof id === 'undefined' ? guid : id;
       if (!triggered || queued) {
-        message = automationRunPolling(automationId, runId, translator);
+        message = await automationRunPolling(automationId, runId, translator);
       } else {
         message = parseOutput(data, translator);
         message.ok = true;

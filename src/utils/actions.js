@@ -1,6 +1,6 @@
 import {
   showSnackbar,
-  getAutomationMsg,
+  pollAutomationAndGetMsg,
   oldAutomationRun,
   getAutomationUrl,
   getTemporaryBookmark,
@@ -324,7 +324,6 @@ const actions = [
         translator,
       }) =>
       async () => {
-        showSnackbar({ message: 'myText' }, 100);
         if (multiUserAutomation && automationId.length) {
           try {
             let automationUrl;
@@ -340,8 +339,8 @@ const actions = [
             const automationData = await getAutomationData(app, buttonId, automationId, bookmark);
             const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
             const response = await fetch(automationUrl, options);
+            const msg = await pollAutomationAndGetMsg(automationId, automationTriggered, response, translator);
             if (automationShowNotification) {
-              const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
               showSnackbar(msg, automationNotificationDuration, automationOpenLinkSameWindow);
             }
           } catch {
