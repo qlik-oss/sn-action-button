@@ -6,8 +6,11 @@ describe('ext', () => {
     get: (someString) => someString,
   };
   let data;
-  const shouldHide = jest.fn();
-  shouldHide.isEnabled = jest.fn((feature) => feature === 'SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER' && true);
+  const shouldHide = {
+    isEnabled: jest.fn((feature) =>
+      ['SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER', 'IM_324_ACTION_BUTTON_SIZES'].includes(feature)
+    ),
+  };
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -133,10 +136,6 @@ describe('ext', () => {
         getStoryList: () => stories,
       },
     };
-
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
 
     it('Should return an array with a bookmark', async () => {
       options = await actionItems.bookmark.options(null, handler);
