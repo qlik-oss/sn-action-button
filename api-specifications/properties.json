@@ -381,12 +381,12 @@
         "size": {
           "description": "Size of the image, relative to the button",
           "optional": true,
-          "defaultValue": "'originalSize'",
+          "defaultValue": "'auto'",
           "kind": "union",
           "items": [
             {
               "kind": "literal",
-              "value": "'originalSize'"
+              "value": "'auto'"
             },
             {
               "kind": "literal",

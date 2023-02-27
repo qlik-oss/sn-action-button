@@ -118,17 +118,7 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
     });
 
-    it('should return specified image url and default image settings', () => {
-      style.background.useImage = true;
-      style.background.url.qStaticContentUrl = { qUrl: someUrl };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
-      expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
-      expect(formattedStyle.includes('background-size: auto auto')).toBe(true);
-      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(true);
-      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
-    });
-
-    it('should return no settings when background mode is set on media but the url is missing', () => {
+    it('should not show size/position when background mode is set on media but the url is not set', () => {
       style.background.useImage = false;
       style.background.mode = 'media';
       style.background.url.qStaticContentUrl = {};
@@ -137,6 +127,16 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-size:')).toBe(false);
       expect(formattedStyle.includes('background-position:')).toBe(false);
       expect(formattedStyle.includes('background-repeat:')).toBe(false);
+    });
+
+    it('should return specified image url and default image settings', () => {
+      style.background.useImage = true;
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
+      expect(formattedStyle.includes('background-size: auto auto')).toBe(true);
+      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(true);
+      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
     });
 
     it('should return no settings when url is missing', () => {
@@ -149,6 +149,39 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-repeat:')).toBe(false);
     });
 
+    it('should return specified image size when mode is set to media', () => {
+      expect(style.background.mode).toEqual('none');
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: 100% 100%')).toBe(false);
+      style.background = {
+        mode: 'media',
+        size: 'fill',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
+          },
+        },
+      };
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: 100% 100%')).toBe(true);
+    });
+
+    it('should return specified image position when mode is set to media', () => {
+      style.background = {
+        mode: 'media',
+        position: 'top-left',
+        size: 'fill',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
+          },
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      console.log(formattedStyle);
+      expect(formattedStyle.includes('background-position: top left')).toBe(true);
+    });
+
     it('should return specified image size', () => {
       style.background = {
         useImage: true,
@@ -159,7 +192,7 @@ describe('style-formatter', () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
       expect(formattedStyle.includes('background-size: 100% 100%')).toBe(true);
     });
 

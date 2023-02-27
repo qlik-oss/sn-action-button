@@ -151,7 +151,7 @@ export const getStyleEditorDefinition = () => ({
               defaultValue: styleDefaults.BACKGROUND_SIZE,
               options: [
                 {
-                  value: 'originalSize',
+                  value: 'auto',
                   translation: 'properties.backgroundImage.originalSize',
                 },
                 {
@@ -179,25 +179,19 @@ export const getStyleEditorDefinition = () => ({
                 let currentPosition = propertyResolver.getValue(data, 'style.background.position');
                 if (currentPosition) currentPosition = styleDefaults.BGIMAGE_POSITION;
               },
-              show: (data) => {
-                return (
-                  propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
-                  !!propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
-                );
-              },
+              show: (data) =>
+                propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
+                !!propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl'),
             },
             position: {
               component: 'position-grid',
               ref: 'style.background.position',
               translation: 'properties.backgroundImage.position',
               defaultValue: styleDefaults.BGIMAGE_POSITION,
-              show: (data) => {
-                return (
-                  propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
-                  propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
-                  propertyResolver.getValue(data, 'style.background.size') !== 'stretchFit'
-                );
-              },
+              show: (data) =>
+                propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
+                propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
+                propertyResolver.getValue(data, 'style.background.size') !== 'stretchFit',
               currentSizeRef: 'style.background.size',
             },
           },

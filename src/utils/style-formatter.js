@@ -2,7 +2,7 @@ import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
-import { getColor, backgroundSize, backgroundPosition } from './style-utils';
+import { backgroundSize, backgroundPosition } from './style-utils';
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
@@ -14,17 +14,16 @@ export default {
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
-    styles += formatProperty('color', getColor(font, DEFAULTS.FONT_COLOR.color, theme));
+    styles += formatProperty('color', colorUtils.getColor(font, DEFAULTS.FONT_COLOR.color, theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
     const primaryColor = theme.getDataColorSpecials().primary;
-    const backgroundColor = getColor(background, primaryColor, theme);
+    const backgroundColor = colorUtils.getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
     // backgroundImage
-    const {useImage} = background;
-    if ((useImage || background.mode === 'media') && background.url.qStaticContentUrl) {
+    if ((background.useImage || background.mode === 'media') && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl = getImageUrl(bgUrl, app);
@@ -32,9 +31,7 @@ export default {
         styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
         styles += formatProperty(
           'background-position',
-          backgroundPosition[
-            background.position || (useImage ? DEFAULTS.BACKGROUND_POSITION : DEFAULTS.BGIMAGE_POSITION)
-          ]
+          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
         );
         styles += formatProperty('background-repeat', 'no-repeat');
       }
@@ -42,7 +39,7 @@ export default {
     // border
     if (border.useBorder) {
       const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
-      const borderColor = getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
+      const borderColor = colorUtils.getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
       const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
       styles += formatProperty('border', `${borderSize}px solid ${borderColor}`);
       styles += formatProperty(

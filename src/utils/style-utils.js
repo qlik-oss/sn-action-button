@@ -1,6 +1,3 @@
-import DEFAULTS from '../style-defaults';
-import colorUtils from './color-utils';
-
 export const FONT_FAMILIES = [
   'American Typewriter, serif',
   'Andalé Mono, monospace',
@@ -25,7 +22,7 @@ export const FONT_FAMILIES = [
 ];
 
 export const backgroundSize = {
-  originalSize: 'auto auto',
+  auto: 'auto auto',
   alwaysFit: 'contain',
   fitWidth: '100% auto',
   fitHeight: 'auto 100%',
@@ -81,19 +78,3 @@ export const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
   value: font,
   label: getFirstFont(font),
 }));
-
-export const getColor = (
-  { useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR },
-  defaultColor,
-  theme
-) => {
-  let resolvedColor;
-  if (useColorExpression) {
-    resolvedColor = colorUtils.resolveExpression(colorExpression);
-  } else if (typeof color === 'string') {
-    resolvedColor = color;
-  } else if (color) {
-    resolvedColor = theme.getColorPickerColor(color);
-  }
-  return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
-};

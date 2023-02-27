@@ -478,7 +478,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       defaultValue: styleDefaults.BACKGROUND_SIZE,
                       options: [
                         {
-                          value: 'originalSize',
+                          value: 'auto',
                           translation: 'properties.backgroundImage.originalSize',
                         },
                         {
