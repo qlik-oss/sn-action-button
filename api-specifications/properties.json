@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.23.0",
+    "version": "1.28.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -223,13 +223,67 @@
           "type": "boolean"
         },
         "automation": {
-          "description": "ID of the automation. Required for type 'setVariable'",
+          "description": "Item ID of the automation (the id field returned from /api/v1/items?resourceType=automations)",
+          "optional": true,
+          "defaultValue": "''",
+          "type": "string"
+        },
+        "automationId": {
+          "description": "ID of the automation (the id field from /api/v1/automations OR the id field from /api/v1/automations)",
           "optional": true,
           "defaultValue": "''",
           "type": "string"
         },
         "automationPostData": {
           "description": "Set to true to include the current selections in the automation. Defaults to false",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "automationShowTriggered": {
+          "description": "Set to true when the selected automation is capable of have a triggered run mode",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "automationTriggered": {
+          "description": "Set to true when the automation should use the triggered run mode. Defaults to false",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "automationTriggeredText": {
+          "description": "Helper text when using the triggered run mode",
+          "optional": true,
+          "defaultValue": "''",
+          "type": "string"
+        },
+        "automationExecutionToken": {
+          "description": "Token used when using the triggered run mode",
+          "optional": true,
+          "defaultValue": "''",
+          "type": "string"
+        },
+        "automationShowNotification": {
+          "description": "Set to true when an automation should return a notification when finished running. Defaults to false",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "automationNotificationDuration": {
+          "description": "The amount of time in seconds that a notification should remain visible after running an automation",
+          "optional": true,
+          "defaultValue": "''",
+          "type": "string"
+        },
+        "automationNotificationDurationHelp": {
+          "description": "Helper text when enabling notifications",
+          "optional": true,
+          "defaultValue": "''",
+          "type": "string"
+        },
+        "automationOpenLinkSameWindow": {
+          "description": "Set to true if you want links from notifications to be opened in the same tab",
           "optional": true,
           "defaultValue": false,
           "type": "boolean"
@@ -435,6 +489,12 @@
     "Font": {
       "kind": "object",
       "entries": {
+        "fontFamily": {
+          "description": "Font Family of the label",
+          "optional": true,
+          "defaultValue": "'Source Sans Pro'",
+          "type": "string"
+        },
         "useColorExpression": {
           "description": "Set to true to use color expression",
           "optional": true,

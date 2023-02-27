@@ -35,6 +35,7 @@ describe('index', () => {
   };
 
   it('should render supernova', async () => {
+    const translator = { get: () => 'fakeTranslation' };
     const result = supernova({
       anything: {
         sense: {
@@ -43,7 +44,7 @@ describe('index', () => {
         },
       },
       sense: { navigation: 'nav' },
-      translator: { get: () => '' },
+      translator,
       flags: { isEnabled: () => true },
     });
     const c = create(result.component, {
@@ -62,6 +63,8 @@ describe('index', () => {
       constraints: 'constraints',
       theme: undefined,
       senseNavigation: 'nav',
+      multiUserAutomation: true,
+      translator,
     });
   });
 });

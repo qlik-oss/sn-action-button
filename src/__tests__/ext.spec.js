@@ -6,7 +6,8 @@ describe('ext', () => {
     get: (someString) => someString,
   };
   let data;
-  const shouldHide = { isEnabled: () => true };
+  const shouldHide = jest.fn();
+  shouldHide.isEnabled = jest.fn((feature) => feature === 'SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER' && true);
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -161,15 +162,17 @@ describe('ext', () => {
     });
 
     it('Should return an array with all automations', async () => {
-      const itemId = 'blendId';
-      const blendName = 'fakeBlendName';
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({ data: [{ id: itemId, name: blendName }] }) }));
-      options = await actionItems.automation.options();
+      const automationId = 'automationId';
+      const automationName = 'fakeAutomationName';
+      global.fetch = jest.fn(() =>
+        Promise.resolve({ json: () => ({ data: [{ id: automationId, name: automationName }] }) })
+      );
+      options = await actionItems.automationProps.items.automationId.options();
       expect(global.fetch).toHaveBeenCalled;
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/items?resourceType=automation&limit=100');
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations?limit=100');
       expect(options).toHaveLength(1);
-      expect(options[0].value).toEqual(itemId);
-      expect(options[0].label).toEqual(blendName);
+      expect(options[0].value).toEqual(automationId);
+      expect(options[0].label).toEqual(automationName);
     });
 
     it('Should return an array of odag app links', async () => {
@@ -218,7 +221,7 @@ describe('ext', () => {
       expect(resultSoftLock).toBe(false);
       const resultValue = actionItems.value.show(actionObject);
       expect(resultValue).toBe(false);
-      const resultAutomation = actionItems.automation.show(actionObject);
+      const resultAutomation = actionItems.automationProps.show(actionObject);
       expect(resultAutomation).toBe(false);
     });
 
@@ -252,13 +255,8 @@ describe('ext', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when automation needs to show', () => {
-      const result = actionItems.automation.show({ actionType: 'executeAutomation' });
-      expect(result).toBe(true);
-    });
-
-    it('should return true when automationPostData needs to show', () => {
-      const result = actionItems.automationPostData.show({ actionType: 'executeAutomation' });
+    it('should return true when automation props needs to show', () => {
+      const result = actionItems.automationProps.show({ actionType: 'executeAutomation' });
       expect(result).toBe(true);
     });
 

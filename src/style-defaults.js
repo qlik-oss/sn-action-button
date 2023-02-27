@@ -4,6 +4,7 @@ export default {
   FONT_SIZE_FIXED: 20,
   COLOR: { index: -1, color: null },
   FONT_STYLE: { bold: true, italic: false, underline: false },
+  FONT_FAMILY: 'Source Sans Pro',
   TEXT_ALIGN: 'center',
   BACKGROUND_SIZE: 'auto',
   BACKGROUND_POSITION: 'centerCenter',

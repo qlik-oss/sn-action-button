@@ -1,12 +1,6 @@
-import Util from './util';
-
-const inIframe = () => {
-  try {
-    return window.self !== window.top;
-  } catch (error) {
-    return true;
-  }
-};
+import evaluateCondition from './util';
+import { inIframe } from './url-utils';
+import { getCurrentProtocol, removeProtocolHttp, urlHasEmailProtocol, encodeUrl } from './url-encoder';
 
 export const getOrderedSheets = async (app) => {
   const sheets = await app.getSheetList();
@@ -15,7 +9,7 @@ export const getOrderedSheets = async (app) => {
 
 export const getOrderedVisibleSheet = async (app) => {
   const sheets = await app.getSheetList();
-  const visibleSheets = sheets.filter((sheet) => Util.evaluateCondition(sheet.qData.showCondition));
+  const visibleSheets = sheets.filter((sheet) => evaluateCondition(sheet.qData.showCondition));
   return visibleSheets.sort((current, next) => current.qData.rank - next.qData.rank);
 };
 
@@ -92,12 +86,21 @@ const navigationActions = [
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
         if (websiteUrl) {
-          const url = websiteUrl.match(/^(https?:\/\/|mailto:)/) ? websiteUrl : `http://${websiteUrl}`;
+          const protocol = getCurrentProtocol(websiteUrl);
+          const url = removeProtocolHttp(websiteUrl);
+          const isEmail = urlHasEmailProtocol(url);
           let target = '';
+          if (isEmail) {
+            window.open(url, target);
+          }
           if (sameWindow) {
             target = inIframe() ? '_parent' : '_self';
+            window.open(`${protocol}${url}`, target);
           }
-          window.open(url, target);
+          if (!isEmail && !sameWindow) {
+            const encoded = encodeUrl(url);
+            window.open(`${protocol}${encoded}`, target);
+          }
         }
       } catch (error) {
         // no-op

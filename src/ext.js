@@ -1,48 +1,30 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
+import { getStylingPanelDefinition } from './styling-panel-definition';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
+import { colorOptions, toggleOptions, fontSizeOptions } from './utils/style-utils';
+import getAutomationProps from './utils/automation-props';
 
-const colorOptions = [
-  {
-    value: false,
-    translation: 'properties.colorMode.primary',
-  },
-  {
-    value: true,
-    translation: 'properties.colorMode.byExpression',
-  },
-];
+let automationsList = null;
 
-const toggleOptions = [
-  {
-    value: true,
-    translation: 'properties.on',
-  },
-  {
-    value: false,
-    translation: 'properties.off',
-  },
-];
-
-const fontSizeOptions = [
-  {
-    value: 'responsive',
-    translation: 'properties.responsive',
-  },
-  {
-    value: 'relative',
-    translation: 'properties.fluid',
-  },
-  {
-    value: 'fixed',
-    translation: 'properties.fixed',
-  },
-];
-
+const getAutomations = async () => {
+  if (!automationsList) {
+    const automationsResponse = await fetch('../api/v1/automations?limit=100');
+    const automations = await automationsResponse.json();
+    automationsList = automations.data.map((a) => ({
+      value: a.id,
+      label: a.name,
+    }));
+  }
+  return automationsList;
+};
 export default function ext({ translator, shouldHide, senseNavigation }) {
   const { isEnabled } = shouldHide;
+  const multiUserAutomation = isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
+  const stylingPanelEnabled = isEnabled('SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON');
+  const bkgOptionsEnabled = isEnabled('SENSECLIENT_IM_1525_BTN_BG');
   return {
     definition: {
       type: 'items',
@@ -169,34 +151,11 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   defaultValue: false,
                   show: (data) => checkShowAction(data, 'partial'),
                 },
-                // adds automation to actions and adds a dropdown property panel
-                // item to select the automation for the button to trigger
-                automation: {
-                  type: 'string',
-                  component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Automation',
-                  ref: 'automation',
-                  dropdownOnly: true,
-                  options: async () => {
-                    const automations = await fetch('../api/v1/items?resourceType=automation&limit=100').then(
-                      (response) => response.json()
-                    );
-                    return automations.data.map((blend) => ({
-                      value: blend.id,
-                      label: blend.name,
-                    }));
-                  },
+                automationProps: {
+                  type: 'items',
+                  grouped: false,
+                  items: getAutomationProps(multiUserAutomation, getAutomations),
                   show: (data) => checkShowAction(data, 'automation'),
-                },
-                // Boolean property to instruct the automation action to create a
-                // bookmark and send it to the selected automation in the
-                // property panel.
-                automationPostData: {
-                  type: 'boolean',
-                  ref: 'automationPostData',
-                  translation: 'Object.ActionButton.Automation.SendSelections',
-                  show: (data) => checkShowAction(data, 'automation'),
-                  defaultValue: false,
                 },
               },
             },
@@ -474,6 +433,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             background: {
               grouped: true,
@@ -699,6 +659,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
+            presentation: stylingPanelEnabled ? getStylingPanelDefinition(bkgOptionsEnabled) : undefined,
           },
         },
       },

@@ -1,3 +1,13 @@
+import {
+  showSnackbar,
+  getAutomationMsg,
+  oldAutomationRun,
+  getAutomationUrl,
+  getTemporaryBookmark,
+  getAutomationData,
+  getPostOptions,
+} from './automation-helper';
+
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
   if (isDate) {
@@ -287,72 +297,58 @@ const actions = [
      *
      * ARGS
      * app - Reference to current app inherited from index.js
-     * automation - the item id of the automation to contact the items api
-     * automationPostData - boolean value. If true, creates a bookmark of the
-     * current selections and sends the resulting bookmark id as an input
-     * parameter to the selected automation.
+     * automation - the item id of the automation to contact the items api. Only needed if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is not enabled
+     * automationId - the automation id of the automation. Needed if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is enabled
+     * automationTriggered - If true, triggers the automation using the automations webhook URL, otherwise it will trigger the automation using the automations run API
+     * automationExecutionToken - token which is needed if triggering the automation using the automations webhook URL
+     * automationPostData - If true, creates a temporary bookmark and posts the resulting temporary bookmark id to the automation
+     * buttonId - the id of the button itself. Used to get the sheet id which the button is on to post the sheet id as an to the automation
+     * multiUserAutomation - Determines if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is enabled or not
      */
 
     translation: 'Object.ActionButton.ExecuteAutomation',
     value: 'executeAutomation',
     getActionCall:
-      ({ app, automation, automationPostData }) =>
+      ({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        automationShowNotification,
+        automationNotificationDuration,
+        buttonId,
+        automationOpenLinkSameWindow,
+        multiUserAutomation,
+        translator,
+      }) =>
       async () => {
-        if (automation !== undefined) {
+        showSnackbar({ message: 'myText' }, 100);
+        if (multiUserAutomation && automationId.length) {
           try {
-            automation = encodeURIComponent(automation);
-            const itemInfo = await fetch(`../api/v1/items/${automation}`).then((response) => response.json());
-            const autoInfo = await fetch(`../api/v1/automations/${itemInfo.resourceId}`).then((response) =>
-              response.json()
-            );
-            let executePath = `../api/v1/automations/${autoInfo.id}/actions/execute?X-Execution-Token=${autoInfo.executionToken}`;
-            if (automationPostData) {
-              const inputBlocks = await fetch(`../api/v1/automations/${itemInfo.resourceId}/blocks`)
-                .then((response) => response.json())
-                .then((blocks) => {
-                  let items = [];
-                  for (let i = 0; i < blocks.blocks.length; i++) {
-                    if (blocks.blocks[i].type === 'FormBlock') {
-                      items = blocks.blocks[i].form;
-                      break;
-                    }
-                  }
-                  return items;
-                });
-              if (inputBlocks.length > 0) {
-                const newDate = new Date();
-                const bmkProp = {
-                  qProp: {
-                    qInfo: {
-                      qId: `automation_${app.id}_${automation}_${newDate.getTime()}`,
-                      qType: 'bookmark',
-                    },
-                    qMetaDef: {
-                      title: `Generated automation bookmark on ${newDate.toISOString()}`,
-                      description:
-                        'Generated to provide target automation with bookmark to get current selection state',
-                      _createdBy: 'sn-action-button',
-                      _createdFor: 'automation',
-                      _createdOn: `${newDate.toISOString()}`,
-                      _id: `automation_${encodeURIComponent(app.id)}_${automation}_${newDate.getTime()}`,
-                    },
-                  },
-                };
-                const bmk = await app
-                  .createBookmark(bmkProp)
-                  .then((bookmark) => bookmark.getLayout())
-                  .then((layout) => layout.qInfo.qId);
-                await app.saveObjects();
-                executePath = `${executePath}&${inputBlocks[0].label.toLowerCase()}=${encodeURIComponent(
-                  app.id
-                )}&${inputBlocks[1].label.toLowerCase()}=${bmk}`;
-              }
+            let automationUrl;
+            if (automationId !== undefined && automationId.length > 1) {
+              automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
+            } else {
+              return;
             }
-            // execute the automation
-            await fetch(executePath).then((response) => response.json());
-          } catch (e) {
+            let bookmark;
+            if (automationPostData) {
+              bookmark = await getTemporaryBookmark(app);
+            }
+            const automationData = await getAutomationData(app, buttonId, automationId, bookmark);
+            const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
+            const response = await fetch(automationUrl, options);
+            if (automationShowNotification) {
+              const msg = await getAutomationMsg(automationId, automationTriggered, response, translator);
+              showSnackbar(msg, automationNotificationDuration, automationOpenLinkSameWindow);
+            }
+          } catch {
             // no-op
           }
+        } else if (automation !== undefined) {
+          oldAutomationRun(automation, automationPostData, app);
         }
       },
     requiredInput: ['automation'],

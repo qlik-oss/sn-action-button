@@ -1,4 +1,4 @@
-function evaluateCondition(condition) {
+export default function evaluateCondition(condition) {
   // case condition is commented
   if (condition && condition.length >= 2 && condition[0] === '/' && condition[1] === '/') {
     return true;
@@ -11,5 +11,3 @@ function evaluateCondition(condition) {
   }
   return condVal !== 0;
 }
-
-export default { evaluateCondition };

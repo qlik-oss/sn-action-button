@@ -3,29 +3,39 @@ import actions, { getValueList, checkShowAction, getActionsList } from '../actio
 describe('actions', () => {
   const qStateName = 'someState';
   let app;
+  let buttonId;
+  let multiUserAutomation;
   let createdBookmark;
+  let createdTemporaryBookmark;
   let fieldObject;
   let fieldInfoObject;
   let variableObject;
   let field;
   let bookmark;
   let variable;
-  let automation;
+  let automationId;
   let inputs = [];
   let automationPostData = false;
+  let automationTriggered = false;
   const value = 'someValue';
   const softLock = true;
   const resourceId = 'fakeResourceId';
   const id = 'fakeId';
-  const executionToken = 'fakeExecutionToken';
+  const sheetId = 'fakeSheetId';
+  const subject = 'fakeSubject';
+  const tenantId = 'fakeTenantId';
+  const spaceId = 'fakeSpaceId';
+  const csrfToken = 'fakeCsrfToken';
+  const automationExecutionToken = 'fakeExecutionToken';
   const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }, { label: 'blockLabel' }] }];
+  const translator = { get: () => '' };
 
   describe('all actions', () => {
     beforeEach(() => {
       field = 'someField';
       bookmark = 'someBookmark';
       variable = 'someVariable';
-      automation = 'someAutomation';
+      automationId = 'someAutomation';
       fieldObject = {
         clear: jest.fn(),
         clearAllButThis: jest.fn(),
@@ -49,13 +59,16 @@ describe('actions', () => {
         getLayout: jest.fn(() => Promise.resolve({ qInfo: { qId: 'bmId' } })),
       };
       app = {
+        id: 'fakeAppId',
         applyBookmark: jest.fn(),
         clearAll: jest.fn(),
         createBookmark: jest.fn(() => Promise.resolve(createdBookmark)),
+        createTemporaryBookmark: jest.fn(() => Promise.resolve(createdTemporaryBookmark)),
         back: jest.fn(),
         forward: jest.fn(),
         getField: jest.fn(() => Promise.resolve(fieldObject)),
         getFieldDescription: jest.fn(() => Promise.resolve(fieldInfoObject)),
+        getObject: jest.fn(() => Promise.resolve({ getParent: jest.fn(() => Promise.resolve({ id: sheetId })) })),
         getVariableByName: jest.fn(() => Promise.resolve(variableObject)),
         lockAll: jest.fn(),
         unlockAll: jest.fn(),
@@ -66,7 +79,20 @@ describe('actions', () => {
         saveObjects: jest.fn(),
       };
       global.fetch = jest.fn(() =>
-        Promise.resolve({ json: () => ({ resourceId, id, executionToken, inputs, blocks }) })
+        Promise.resolve({
+          json: () => ({
+            resourceId,
+            id,
+            automationExecutionToken,
+            inputs,
+            blocks,
+            subject,
+            tenantId,
+            headers: { get: () => csrfToken },
+            attributes: { spaceId },
+          }),
+          headers: { get: () => csrfToken },
+        })
       );
     });
 
@@ -306,34 +332,150 @@ describe('actions', () => {
       expect(app.doSave).toNotHaveBeenCalled;
     });
 
-    it('should call executeAutomation', async () => {
+    it('should call executeAutomation when automationTriggered is true', async () => {
       inputs = [];
+      const appId = 'fakeAppId';
+      let automation;
       automationPostData = false;
+      automationTriggered = true;
+      buttonId = 'fakeButtonId';
+      multiUserAutomation = true;
+      const time = new Date(2022, 10, 1);
+      jest.useFakeTimers('modern');
+      jest.setSystemTime(time);
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).toHaveBeenCalledThrice;
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        buttonId,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${appId}`);
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/csrf-token');
+      const headers = {
+        'Content-Type': 'application/json',
+        'qlik-csrf-token': csrfToken,
+        'X-Execution-Token': automationExecutionToken,
+      };
+      const postOptions = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          app: appId,
+          sheet: sheetId,
+          user: subject,
+          space: spaceId,
+          tenant: tenantId,
+          time,
+        }),
+      };
       expect(global.fetch).toHaveBeenCalledWith(
-        `../api/v1/automations/${id}/actions/execute?X-Execution-Token=${executionToken}`
+        `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`,
+        postOptions
       );
+      jest.useRealTimers();
+    });
+
+    it('should call automation run when automationTriggered is false', async () => {
+      inputs = [];
+      let automation;
+      automationPostData = false;
+      automationTriggered = false;
+      buttonId = 'fakeButtonId';
+      const time = new Date(2022, 10, 1);
+      jest.useFakeTimers('modern');
+      jest.setSystemTime(time);
+      const actionObject = actions.find((action) => action.value === 'executeAutomation');
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        buttonId,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${app.id}`);
+      expect(global.fetch).toHaveBeenCalledWith('../api/v1/csrf-token');
+      const automationData = {
+        id: automationId,
+        inputs: {
+          app: app.id,
+          sheet: sheetId,
+          user: subject,
+          space: spaceId,
+          tenant: tenantId,
+          time,
+        },
+        context: 'qsbutton',
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+        'qlik-csrf-token': csrfToken,
+      };
+      const postOptions = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(automationData),
+      };
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${automationId}/runs`, postOptions);
+      jest.useRealTimers();
     });
 
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      automation = undefined;
-      await actionObject.getActionCall({ app, automation, automationPostData })();
+      automationId = '';
+      await actionObject.getActionCall({ app, automationId, automationPostData, multiUserAutomation, translator })();
       expect(global.fetch).toNotHaveBeenCalled;
     });
 
-    it('should call executeAutomation with creation of bookmark and save app', async () => {
+    it('should call executeAutomation with creation of temp bookmark', async () => {
       inputs = [];
       automationPostData = true;
+      let automation;
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      await actionObject.getActionCall({ app, automation, automationPostData })();
-      expect(global.fetch).toHaveBeenCalledTimes(4);
-      expect(app.createBookmark).toHaveBeenCalled;
-      expect(app.saveObjects).toHaveBeenCalled;
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        buttonId,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(app.createTemporaryBookmark).toHaveBeenCalled;
+    });
+
+    it('should call executeAutomation WITHOUT creation of temp bookmark', async () => {
+      inputs = [];
+      automationPostData = false;
+      let automation;
+      const actionObject = actions.find((action) => action.value === 'executeAutomation');
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        buttonId,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(app.createTemporaryBookmark).toNotHaveBeenCalled;
     });
 
     it('should call refreshDynamicViews', async () => {

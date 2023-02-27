@@ -1,6 +1,6 @@
 import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
-import urlUtils from './url-utils';
+import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
 
 const backgroundSize = {
@@ -43,25 +43,25 @@ const getColor = (
 };
 
 export default {
-  getStyles({ style = {}, disabled, theme, element }) {
+  getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
     const { font = {}, background = {}, border = {} } = style;
     const primaryColor = theme.getDataColorSpecials().primary;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
+    const backgroundColor = getColor(background, primaryColor, theme);
     // font
     styles += formatProperty('color', getColor(font, '#ffffff', theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
     // background
-    const backgroundColor = getColor(background, primaryColor, theme);
     styles += formatProperty('background-color', backgroundColor);
     if (background.useImage && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
-        bgUrl = urlUtils.getImageUrl(bgUrl);
+        bgUrl = getImageUrl(bgUrl, app);
         styles += formatProperty('background-image', `url('${bgUrl}')`);
         styles += formatProperty('background-size', backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
         styles += formatProperty(
@@ -92,7 +92,7 @@ export default {
     // text element wrapping label and icon
     const text = document.createElement('text');
     text.style.whiteSpace = 'pre';
-    text.style.fontFamily = theme.getStyle('', '', 'fontFamily');
+    text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily') || DEFAULTS.FONT_FAMILY;
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;
