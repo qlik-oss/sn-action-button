@@ -7,7 +7,7 @@ describe('ext', () => {
   };
   let data;
   const shouldHide = jest.fn();
-  shouldHide.isEnabled = jest.fn(feature => feature === 'SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER' && true)
+  shouldHide.isEnabled = jest.fn((feature) => feature === 'SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER' && true);
   const senseNavigation = {
     getOdagLinks: () =>
       Promise.resolve([{ properties: { data: { id: 'TestOdagLink', name: 'TestOdagLink' }, type: 'odaglink' } }]),
@@ -164,7 +164,9 @@ describe('ext', () => {
     it('Should return an array with all automations', async () => {
       const automationId = 'automationId';
       const automationName = 'fakeAutomationName';
-      global.fetch = jest.fn(() => Promise.resolve({ json: () => ({data: [{ id: automationId, name: automationName }]} ) }));
+      global.fetch = jest.fn(() =>
+        Promise.resolve({ json: () => ({ data: [{ id: automationId, name: automationName }] }) })
+      );
       options = await actionItems.automationProps.items.automationId.options();
       expect(global.fetch).toHaveBeenCalled;
       expect(global.fetch).toHaveBeenCalledWith('../api/v1/automations?limit=100');

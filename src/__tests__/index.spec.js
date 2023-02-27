@@ -35,7 +35,7 @@ describe('index', () => {
   };
 
   it('should render supernova', async () => {
-    const translator = { get: () => 'fakeTranslation' }
+    const translator = { get: () => 'fakeTranslation' };
     const result = supernova({
       anything: {
         sense: {
