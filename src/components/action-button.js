@@ -9,7 +9,16 @@ export const runActions = async (actionList) => {
   }
 };
 
-export const renderButton = ({ layout, theme, app, constraints, senseNavigation, element, multiUserAutomation, translator }) => {
+export const renderButton = ({
+  layout,
+  theme,
+  app,
+  constraints,
+  senseNavigation,
+  element,
+  multiUserAutomation,
+  translator,
+}) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
@@ -27,7 +36,18 @@ export const renderButton = ({ layout, theme, app, constraints, senseNavigation,
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation, buttonId, multiUserAutomation, translator }));
+        actionObj &&
+          actionCallList.push(
+            actionObj.getActionCall({
+              app,
+              qStateName,
+              ...action,
+              senseNavigation,
+              buttonId,
+              multiUserAutomation,
+              translator,
+            })
+          );
       });
       button.setAttribute('disabled', true);
       await runActions(actionCallList);

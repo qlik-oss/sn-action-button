@@ -155,7 +155,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'items',
                   grouped: false,
                   items: getAutomationProps(multiUserAutomation, getAutomations),
-                  show: (data) => checkShowAction(data, 'automation')
+                  show: (data) => checkShowAction(data, 'automation'),
                 },
               },
             },

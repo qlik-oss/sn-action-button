@@ -28,7 +28,7 @@ describe('actions', () => {
   const csrfToken = 'fakeCsrfToken';
   const automationExecutionToken = 'fakeExecutionToken';
   const blocks = [{ displayName: 'Inputs', form: [{ label: 'blockLabel' }, { label: 'blockLabel' }] }];
-  const translator = { get: () => '' }
+  const translator = { get: () => '' };
 
   describe('all actions', () => {
     beforeEach(() => {
@@ -353,7 +353,7 @@ describe('actions', () => {
         automationPostData,
         buttonId,
         multiUserAutomation,
-        translator
+        translator,
       })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
@@ -402,7 +402,7 @@ describe('actions', () => {
         automationPostData,
         buttonId,
         multiUserAutomation,
-        translator
+        translator,
       })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
@@ -435,7 +435,7 @@ describe('actions', () => {
 
     it('should NOT call executeAutomation when no automation', async () => {
       const actionObject = actions.find((action) => action.value === 'executeAutomation');
-      automationId = "";
+      automationId = '';
       await actionObject.getActionCall({ app, automationId, automationPostData, multiUserAutomation, translator })();
       expect(global.fetch).toNotHaveBeenCalled;
     });
@@ -454,7 +454,7 @@ describe('actions', () => {
         automationPostData,
         buttonId,
         multiUserAutomation,
-        translator
+        translator,
       })();
       expect(app.createTemporaryBookmark).toHaveBeenCalled;
     });
@@ -473,7 +473,7 @@ describe('actions', () => {
         automationPostData,
         buttonId,
         multiUserAutomation,
-        translator
+        translator,
       })();
       expect(app.createTemporaryBookmark).toNotHaveBeenCalled;
     });
