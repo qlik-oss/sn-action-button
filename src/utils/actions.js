@@ -324,7 +324,6 @@ const actions = [
         translator,
       }) =>
       async () => {
-        showSnackbar({ message: 'myText' }, 100);
         if (multiUserAutomation && automationId.length) {
           try {
             let automationUrl;
