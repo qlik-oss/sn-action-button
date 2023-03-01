@@ -152,48 +152,11 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   defaultValue: false,
                   show: (data) => checkShowAction(data, 'partial'),
                 },
-                // adds automation to actions and adds a dropdown property panel
-                // item to select the automation for the button to trigger
-
-                // Boolean property to instruct the automation action to create a
-                // bookmark and send it to the selected automation in the
-                // property panel.
-                automation: {
-                  type: 'string',
-                  component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Automation',
-                  ref: 'automation',
-                  dropdownOnly: true,
-                  options: async () => {
-                    const automationsResponse = await fetch('../api/v1/items?resourceType=automation&limit=100');
-                    const automations = await automationsResponse.json();
-                    return automations.data.map((a) => ({
-                      value: a.id,
-                      label: a.name,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, 'automation') && !multiUserAutomation,
-                },
-                automationId: {
-                  type: 'string',
-                  component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Automation',
-                  ref: 'automationId',
-                  dropdownOnly: false,
-                  options: async () => getAutomations(),
-                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation,
-                  change: async (data) => {
-                    const a = await getAutomation(data.automationId)
-                      data.automationExecutionToken = a.executionToken
-                    else {
-                      data.automationExecutionToken = ''
+                automationProps: {
+                  type: 'items',
+                  grouped: false,
+                  items: getAutomationProps(multiUserAutomation, getAutomations),
                   show: (data) => checkShowAction(data, 'automation'),
-                  show: (data) =>
-                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
-                    const a = await getAutomation(data.automationId)
-                    else {
-                  show: (data) =>
-                  show: (data) => checkShowAction(data, 'automation') && multiUserAutomation && data.automationShowTriggered,
                 },
               },
             },

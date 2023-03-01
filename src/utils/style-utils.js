@@ -1,5 +1,3 @@
-import urlUtils from './url-utils';
-
 const FONT_FAMILIES = [
   'American Typewriter, serif',
   'Andalé Mono, monospace',
@@ -23,6 +21,7 @@ const FONT_FAMILIES = [
   'Verdana, sans-serif',
 ];
 
+export const backgroundSize = {
   auto: 'auto auto',
   alwaysFit: 'contain',
   fitWidth: '100% auto',
@@ -73,7 +72,6 @@ export const toggleOptions = [
     translation: 'properties.off',
   },
 ];
-
 
 const getFirstFont = (s) => s.split(',')[0];
 export const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
@@ -131,18 +129,18 @@ export function getBoundingBox(self, $element) {
   };
 }
 
-const layoutBehavior = data.layoutBehavior || 'responsive';
-const scopeLabelComponent = self.props.baseLayoutInfo.components[0];
-const scopeValueComponent = self.props.baseLayoutInfo.components[1];
-if (layoutBehavior === 'fixed') {
-  // In fixed font size behavior, the label needs to take fontSize (S, M, L) into account
-  scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize] * fixedLabelScale;
-  scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
-} else if (layoutBehavior === 'relative') {
-  scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
-  scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
-} else {
-  scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
-  // To fix QLIK-89656: set maxNrChars to 0 so the font size of the main measure value is based on the formatted value
-  scopeValueComponent.components[0].fontSizes.maxNrChars = 0;
-}
+// const layoutBehavior = data.layoutBehavior || 'responsive';
+// const scopeLabelComponent = self.props.baseLayoutInfo.components[0];
+// const scopeValueComponent = self.props.baseLayoutInfo.components[1];
+// if (layoutBehavior === 'fixed') {
+//   // In fixed font size behavior, the label needs to take fontSize (S, M, L) into account
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize] * fixedLabelScale;
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
+// } else if (layoutBehavior === 'relative') {
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
+// } else {
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
+//   // To fix QLIK-89656: set maxNrChars to 0 so the font size of the main measure value is based on the formatted value
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = 0;
+// }

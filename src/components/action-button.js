@@ -38,8 +38,6 @@ export const renderButton = ({
         const actionObj = allActions.find((act) => act.value === action.actionType);
         actionObj &&
           actionCallList.push(
-        actionObj && actionCallList.push(actionObj.getActionCall({ app, qStateName, ...action, senseNavigation, buttonId, multiUserAutomation }));
-          actionCallList.push(
             actionObj.getActionCall({
               app,
               qStateName,

@@ -2,13 +2,14 @@ import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
-import { getFontStyle } from './style-utils';
+
+export const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 export default {
-  getStyles({ style = {}, disabled, theme, element, app, layout }) {
+  getStyles({ style = {}, disabled, theme, element, app }) {
     let styles =
       'width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;';
-    const { font = {}, background = {}, border = {}, bgImage = {} } = style;
+    const { font = {}, background = {}, border = {} } = style;
     // enable
     styles += disabled ? formatProperty('opacity', 0.4) : formatProperty('cursor', 'pointer');
     // font
@@ -16,12 +17,8 @@ export default {
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty('font-weight', 'bold'));
     fontStyle.italic && (styles += formatProperty('font-style', 'italic'));
-    // background
-    const primaryColor = theme.getDataColorSpecials().primary;
-    const backgroundColor = colorUtils.getColor(background, primaryColor, theme);
-    styles += formatProperty('background-color', backgroundColor);
-    if (
-      (background.useImage && background.url.qStaticContentUrl) ||
+    // backgroundImage
+    if ((background.useImage || background.mode === 'media') && background.url.qStaticContentUrl) {
       let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl = getImageUrl(bgUrl, app);
@@ -63,7 +60,6 @@ export default {
     textSpan.style.whiteSpace = 'nowrap';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
-    getFontStyle(font).underline && (textSpan.style.textDecoration = 'underline');
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== '';
