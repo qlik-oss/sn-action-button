@@ -57,6 +57,10 @@ const properties = {
   disableNavMenu: true,
   showDetails: false,
   /**
+   * @type {('responsive'|'fixed'|'relative')=}
+   */
+  layoutBehavior: DEFAULTS.LAYOUT_BEHAVIOR,
+  /**
    * All styling options
    * @type {Style}
    */
@@ -70,6 +74,7 @@ const properties = {
       size: DEFAULTS.FONT_SIZE,
       style: DEFAULTS.FONT_STYLE,
       align: DEFAULTS.TEXT_ALIGN,
+      layoutBehavior: DEFAULTS.LAYOUT_BEHAVIOR,
     },
     background: {
       useColorExpression: false,

@@ -36,6 +36,31 @@ export const getStyleEditorDefinition = () => ({
                 },
               },
             },
+            layoutBehavior: {
+              type: 'string',
+              component: 'dropdown',
+              ref: 'layoutBehavior',
+              translation: 'properties.kpi.layoutBehavior',
+              defaultValue: 'responsive',
+              undefinedValue: 'responsive',
+              snapshot: {
+                tid: 'property-layoutBehavior',
+              },
+              options: [
+                {
+                  value: 'responsive',
+                  translation: 'properties.responsive',
+                },
+                {
+                  value: 'relative',
+                  translation: 'properties.fluid',
+                },
+                {
+                  value: 'fixed',
+                  translation: 'properties.fixed',
+                },
+              ],
+            },
             fontSize: {
               component: 'slider',
               type: 'number',

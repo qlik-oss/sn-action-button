@@ -78,3 +78,68 @@ export const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
   value: font,
   label: getFirstFont(font),
 }));
+
+export function getBaseFonts() {
+  const baseFontSizeSmall = 7;
+  const baseFontSizeMedium = 4;
+  const baseFontSizeLarge = 3;
+  const fixedFontGap = 1.5; // To reach the desired outcome, the difference between the L fonts with the rest was bigger than the difference between M and S
+  return {
+    font: {
+      baseFontSizeSmall,
+      baseFontSizeMedium,
+      baseFontSizeLarge,
+    },
+    layout: {
+      responsive: {
+        S: baseFontSizeSmall,
+        M: baseFontSizeMedium,
+        L: baseFontSizeLarge,
+      },
+      relative: {
+        S: baseFontSizeSmall * fixedFontGap,
+        M: baseFontSizeMedium * fixedFontGap,
+        L: baseFontSizeLarge,
+      },
+      fixed: {
+        S: baseFontSizeSmall * fixedFontGap,
+        M: baseFontSizeMedium * fixedFontGap,
+        L: baseFontSizeLarge,
+      },
+    },
+  };
+}
+
+export function getBoundingBox(self, $element) {
+  const isSnapshotLockedMode = self.layout && self.layout.snapshotData && !self.options.freeResize;
+
+  if (isSnapshotLockedMode && self.layout.snapshotData.elementRatio) {
+    return {
+      // This "forces" away the responsive behavior
+      width: self.layout.snapshotData.object.size.w,
+      height: self.layout.snapshotData.object.size.w * self.layout.snapshotData.elementRatio,
+    };
+  }
+
+  const size = $element.getBoundingClientRect();
+  return {
+    width: size.width,
+    height: size.height,
+  };
+}
+
+// const layoutBehavior = data.layoutBehavior || 'responsive';
+// const scopeLabelComponent = self.props.baseLayoutInfo.components[0];
+// const scopeValueComponent = self.props.baseLayoutInfo.components[1];
+// if (layoutBehavior === 'fixed') {
+//   // In fixed font size behavior, the label needs to take fontSize (S, M, L) into account
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize] * fixedLabelScale;
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
+// } else if (layoutBehavior === 'relative') {
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = baseFontSizes.layout[layoutBehavior][data.fontSize];
+// } else {
+//   scopeLabelComponent.fontSizes.maxNrChars = baseFontSizes.font.baseFontSizeMedium * fixedLabelScale; // Label is not affected by fontSize
+//   // To fix QLIK-89656: set maxNrChars to 0 so the font size of the main measure value is based on the formatted value
+//   scopeValueComponent.components[0].fontSizes.maxNrChars = 0;
+// }

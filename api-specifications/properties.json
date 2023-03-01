@@ -562,6 +562,26 @@
               "type": "boolean"
             }
           }
+        },
+        "layoutBehavior": {
+          "optional": true,
+          "defaultValue": "responsive",
+          "kind": "union",
+          "items": [
+            {
+              "kind": "literal",
+              "value": "'responsive'"
+            },
+            {
+              "kind": "literal",
+              "value": "'fixed'"
+            },
+            {
+              "kind": "literal",
+              "value": "'relative'"
+            }
+          ],
+          "type": "string"
         }
       }
     },
