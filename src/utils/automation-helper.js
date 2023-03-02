@@ -1,7 +1,5 @@
 import { inIframe } from './url-utils';
 import { getCurrentProtocol, removeProtocolHttp, encodeUrl } from './url-encoder';
-// eslint-disable-next-line import/no-self-import
-import * as helper from './automation-helper';
 
 const TRANSITION_TIME = 400;
 const POLL_INTERVAL = 2000;
@@ -100,7 +98,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
       }
       // eslint-disable-next-line no-await-in-loop
-      automationRun = await helper.getAutomationRun(automationId, runId);
+      automationRun = await getAutomationRun(automationId, runId);
       status = automationRun.status;
       // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
       await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
@@ -289,38 +287,32 @@ export const createSnackbar = (msg, automationOpenLinkSameWindow, error) => {
   };
   applyStyles(snackContainer, snackContainerStyles);
   const snackbar = `<div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
-  <button tabindex="-1" style="background:transparent;border:none;">  
   ${error ? 
       `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img">
         <path d="M6.919.439A1.5 1.5 0 0 1 8.925.336l.114.103 6.48 6.48a1.5 1.5 0 0 1 .102 2.006l-.102.114-6.48 6.48a1.5 1.5 0 0 1-2.006.102l-.114-.102-6.48-6.48a1.5 1.5 0 0 1-.103-2.006l.103-.114 6.48-6.48Zm1.56 10.54h-1c-.267 0-.455.158-.493.404l-.007.096v1c0 .266.158.454.404.492l.096.008h1c.266 0 .454-.158.492-.404l.008-.096v-1c0-.267-.158-.455-.404-.493l-.096-.007Zm0-8h-1c-.3 0-.5.2-.5.5v5c0 .3.2.5.5.5h1c.3 0 .5-.2.5-.5v-5c0-.3-.2-.5-.5-.5Z"></path>
       </svg>`
-          :
-      `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px"
-          fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
-          <defs>
-            <path id="tick_svg__tick-a" d="m6 10 7-7 2 2-7 7-2 2-5-5 2-2 3 3Z"></path>
-          </defs>
-          <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
-       </svg>`    
+        :
+      `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
+        <defs>
+          <path id="tick_svg__tick-a" d="m6 10 7-7 2 2-7 7-2 2-5-5 2-2 3 3Z"></path>
+        </defs>
+        <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
+      </svg>` 
     }  
-    </button>
-    <span class="sn-action-button-snackbar-text"
-      style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
+    <span class="sn-action-button-snackbar-text" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
     url
-      ? `<a href="${getUrl(url)}" style="margin-left: 6px;" tabindex="0" target="${getTarget(automationOpenLinkSameWindow)}">${
+      ? `<a href="${getUrl(url)}" style="margin-left: 6px;" target="${getTarget(automationOpenLinkSameWindow)}">${
           urlText || 'Open'
         }</a>`
       : ''
-  }</span>
-    <button tabindex="0" class="sn-action-button-snackbar-close" style="background:transparent;border:none;cursor:pointer;">
-      <svg  xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-        viewBox="0 0 16 16" fill="currentColor">
-        <path
-          d="M9.34535242,8 L13.3273238,11.9819714 C13.6988326,12.3534802 13.6988326,12.955815 13.3273238,13.3273238 C12.955815,13.6988326 12.3534802,13.6988326 11.9819714,13.3273238 L8,9.34535242 L4.01802863,13.3273238 C3.64651982,13.6988326 3.04418502,13.6988326 2.67267621,13.3273238 C2.3011674,12.955815 2.3011674,12.3534802 2.67267621,11.9819714 L6.65464758,8 L2.67267621,4.01802863 C2.3011674,3.64651982 2.3011674,3.04418502 2.67267621,2.67267621 C3.04418502,2.3011674 3.64651982,2.3011674 4.01802863,2.67267621 L8,6.65464758 L11.9819714,2.67267621 C12.3534802,2.3011674 12.955815,2.3011674 13.3273238,2.67267621 C13.6988326,3.04418502 13.6988326,3.64651982 13.3273238,4.01802863 L9.34535242,8 Z">
+    }</span>
+    <span style="cursor: pointer;">
+      <svg class="sn-action-button-snackbar-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M9.34535242,8 L13.3273238,11.9819714 C13.6988326,12.3534802 13.6988326,12.955815 13.3273238,13.3273238 C12.955815,13.6988326 12.3534802,13.6988326 11.9819714,13.3273238 L8,9.34535242 L4.01802863,13.3273238 C3.64651982,13.6988326 3.04418502,13.6988326 2.67267621,13.3273238 C2.3011674,12.955815 2.3011674,12.3534802 2.67267621,11.9819714 L6.65464758,8 L2.67267621,4.01802863 C2.3011674,3.64651982 2.3011674,3.04418502 2.67267621,2.67267621 C3.04418502,2.3011674 3.64651982,2.3011674 4.01802863,2.67267621 L8,6.65464758 L11.9819714,2.67267621 C12.3534802,2.3011674 12.955815,2.3011674 13.3273238,2.67267621 C13.6988326,3.04418502 13.6988326,3.64651982 13.3273238,4.01802863 L9.34535242,8 Z">
         </path>
       </svg>
-    </button>
-  </div>`;
+      </span>
+    </div>`;
   snackContainer.innerHTML = snackbar;
   return snackContainer;
 };

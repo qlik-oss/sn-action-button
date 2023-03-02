@@ -1,5 +1,13 @@
-import { parseOutput, getAutomationUrl, getInputBlocks, getPostOptions, createSnackbar, automationRunPolling } from '../automation-helper';
-import * as helper from '../automation-helper';
+import prettier from 'prettier';
+import {
+  parseOutput,
+  getAutomationUrl,
+  getInputBlocks,
+  getPostOptions,
+  createSnackbar,
+  automationRunPolling,
+} from '../automation-helper';
+
 
 describe('automation helper', () => {
   const appId = 'fakeAppId';
@@ -124,19 +132,21 @@ describe('automation helper', () => {
       expect(result).toEqual(postOptions);
     });
     it('should return after status changed to finsihed', async () => {
-      const spy = jest.spyOn(helper, 'getAutomationRun')
-      spy
-      .mockReturnValueOnce({status: 'queued'})
-      .mockReturnValueOnce({status: 'finished', title: 'Automation done running!'})   
+      const queued = { status: 'queued' };
+      const finished = { status: 'finished', title: 'Automation done running!' };
+      global.fetch = jest
+        .fn()
+        .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
+        .mockResolvedValueOnce({ json: () => Promise.resolve(finished) });
       const result = await automationRunPolling(automationId, runId, translator);
-      expect(spy).toHaveBeenCalledTimes(2);
-      expect(result).toEqual({ok: true, message: 'Automation done running!'})
-    })
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(result).toEqual({ ok: true, message: 'Automation done running!' });
+    });
   });
   describe('createSnackbar', () => {
     it('should create snackbar without url', () => {
       const message = { message: 'text message' };
-      const result = createSnackbar(message, false).innerHTML;
+      const result = createSnackbar(message, false, false).innerHTML;
       const expected = `<div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
       <defs>
@@ -152,12 +162,12 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-      expect(result).toEqual(expected);
+      expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
     });
 
     it('should create snackbar with url', () => {
       const message = { message: 'text message', url: 'www.qlik.com' };
-      const result = createSnackbar(message, false).innerHTML;
+      const result = createSnackbar(message, false, false).innerHTML;
       const expected = `<div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
       <defs>
@@ -173,7 +183,7 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-      expect(result).toEqual(expected);
+  expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
     });
 
     it('should create snackbar with url in using same window', () => {
@@ -194,7 +204,7 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-      expect(result).toEqual(expected);
+  expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
     });
   });
 });
