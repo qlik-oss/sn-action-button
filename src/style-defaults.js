@@ -13,5 +13,5 @@ export default {
   BACKGROUND_POSITION: 'centerCenter',
   BORDER_RADIUS: 0,
   BORDER_WIDTH: 0,
-  LAYOUT_BEHAVIOR: 'relative',
+  LAYOUT_BEHAVIOR: 'responsive',
 };

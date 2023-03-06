@@ -27,7 +27,6 @@ export const getStyleEditorDefinition = () => ({
                   width: false,
                   ref: 'style.font.style',
                   defaultValue: ['bold'],
-                  matchValueFormat: true,
                 },
                 textAlign: {
                   component: 'text-align-buttons',
@@ -39,7 +38,7 @@ export const getStyleEditorDefinition = () => ({
             layoutBehavior: {
               type: 'string',
               component: 'dropdown',
-              ref: 'layoutBehavior',
+              ref: 'style.font.layoutBehavior',
               translation: 'properties.kpi.layoutBehavior',
               defaultValue: 'responsive',
               undefinedValue: 'responsive',
