@@ -2072,10 +2072,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nebula.js/cli-build@3.1.3", "@nebula.js/cli-build@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-3.1.3.tgz#6d911aa3e03165fdf115c43a6c08cd5bb3076cd4"
-  integrity sha512-77ByvTjWcET90AWpJzjlNnyGxHLJj8SYeOzA/IB02l8cgxZicGXpgc1CEy4TX7HpfSo2PZKQy9rnz6HO2A8MCQ==
+"@nebula.js/cli-build@3.2.2", "@nebula.js/cli-build@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-3.2.2.tgz#750cf1b2d0af5f42bf881704ca334b6ff1d7253f"
+  integrity sha512-XFKefRgR2LxYEzkkQdkj4RE9NtXhwfxr7vUCAaTPDw1wWCeW1vcLWgfTNR6UGKWBtAUsmbkQCGOJtD0W33SOvA==
   dependencies:
     "@babel/cli" "7.20.7"
     "@babel/core" "7.20.12"
@@ -2095,25 +2095,25 @@
     rollup-plugin-sourcemaps "0.6.3"
     yargs "17.6.2"
 
-"@nebula.js/cli-create@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-3.1.3.tgz#dca0e1324a2c03af4b03e1367aab977392a70abc"
-  integrity sha512-UyfdJfNIkMckk6eKxhZy6vMS0tztT0raIgN0XOJNDcnn4hS8Do8vrn4OJsmsxb1SsHyOpmtWwVa0Sm8lk6vO7g==
+"@nebula.js/cli-create@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-3.2.2.tgz#d3f2bc529645b0e83cdbd46962852a5b4ad058bc"
+  integrity sha512-4RoI+yG42w4qDIvskWoS5OTmjsR21LAmwvKRrnHrjH3aQarS53OKtwUodugjySve0YDtXVSt3dmOlDuEt7VU/A==
   dependencies:
     chalk "4.1.2"
     ejs "3.1.8"
     fs-extra "11.1.0"
     inquirer "8.2.5"
 
-"@nebula.js/cli-sense@3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-3.1.3.tgz#e2214fed121687fd75bacdcce086de25b111ba45"
-  integrity sha512-0dYhE2yinTuTH34uSeahhK18WxfpeEFB/MZdu4yPJbvjHwSvY9dzDJOyf3YbUCFqM7l5Q/qQCW0/jIjAQvAS7g==
+"@nebula.js/cli-sense@3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-3.2.2.tgz#67ae40728c070b44261c930568212d501bef8c3c"
+  integrity sha512-PHh3Werg5LO2kc1By54KbOdwc0Fcw4iA35GThKy2uE4P/2WS1RJ1/NfjSVABxRD99fhv+HbsTAFb4u2OooKHpg==
   dependencies:
     "@babel/cli" "7.20.7"
     "@babel/core" "7.20.12"
     "@babel/preset-env" "7.20.2"
-    "@nebula.js/stardust" "^3.1.3"
+    "@nebula.js/stardust" "^3.2.2"
     "@rollup/plugin-babel" "6.0.3"
     "@rollup/plugin-commonjs" "24.0.1"
     "@rollup/plugin-node-resolve" "15.0.1"
@@ -2125,12 +2125,12 @@
     rollup "3.12.1"
     yargs "17.6.2"
 
-"@nebula.js/cli-serve@3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-3.1.3.tgz#4b86d849a1656c57a0b26b4a37a322418d66f2d1"
-  integrity sha512-2dsbKn/PykEYXLCPh/Fm/R4633y7mAr5XwJmpgtVtCxQS0NVBeicw0rhIiS6qRI3WrW7NmrxmQERDpIQXIkQzg==
+"@nebula.js/cli-serve@3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-3.2.2.tgz#7cd1cf183c7303aabd8181fa8e0db30f8089e15f"
+  integrity sha512-xI3d5qTDNLJcMYiVJyoUVAjwlYqOJ1XS79Xy5gwCcznM03t3ABEH9Ui6AYcQ+0XAIaqmP5sOZ8EFAxaq86pu3w==
   dependencies:
-    "@nebula.js/cli-build" "^3.1.3"
+    "@nebula.js/cli-build" "^3.2.2"
     "@qlik/sdk" "^0.18.0"
     body-parser "1.20.1"
     chalk "4.1.2"
@@ -2149,19 +2149,19 @@
     ws "8.12.0"
     yargs "17.6.2"
 
-"@nebula.js/cli@3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-3.1.3.tgz#ea1efbc9fee665d7fc938a59d58e003830f3c2a8"
-  integrity sha512-vJdGdNrydLF58gASafkmH9dnfaAZzY7dDSqrMk82DgXlCdvou28k9X0eaQgBN1VgEkA0+bLYcrddlSaFNeiFVw==
+"@nebula.js/cli@3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-3.2.2.tgz#0637a63cfd8f2dfb1d6a9f9fad3df4eb64fa1702"
+  integrity sha512-OxlB+9oiX3RCevnjySUi8NS4kRU84v+q0JvScXMrmeWPNmtXrz+w7ibHyXs/uXWnF5tNirWPwhKAoQEjgZAqfw==
   dependencies:
-    "@nebula.js/cli-create" "^3.1.3"
+    "@nebula.js/cli-create" "^3.2.2"
     import-cwd "3.0.0"
     yargs "17.6.2"
 
-"@nebula.js/stardust@3.1.3", "@nebula.js/stardust@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-3.1.3.tgz#10dc06941a8ad68d9d596ac5a075ceb7a689d25b"
-  integrity sha512-L3/u9CuIgtgEyF4VpIAl4Hzg1dxHGO/us0LQSdK31s4/r4bX6fo1jUtgI8VUZ/cw81moRchM6NE46TKxbr8yYg==
+"@nebula.js/stardust@3.2.2", "@nebula.js/stardust@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-3.2.2.tgz#625f82da2801924b055b4521fd1bdaef426943ef"
+  integrity sha512-wUrrIeJqyWpfXJV/Vw35c0hEhoE6lCHF10oQ7JenZLanQJMQ9eopwEkJL89ixj44/wOsq5ElixWjKN8L76TP+g==
   dependencies:
     "@types/qlik-engineapi" "12.67.12"
 
@@ -2201,13 +2201,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@playwright/test@1.31.1":
-  version "1.31.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.31.1.tgz#39d6873dc46af135f12451d79707db7d1357455d"
-  integrity sha512-IsytVZ+0QLDh1Hj83XatGp/GsI1CDJWbyDaBGbainsh0p2zC7F4toUocqowmjS6sQff2NGT3D9WbDj/3K2CJiA==
+"@playwright/test@1.31.2":
+  version "1.31.2"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.31.2.tgz#426d8545143a97a6fed250a2a27aa1c8e5e2548e"
+  integrity sha512-BYVutxDI4JeZKV1+ups6dt5WiqKhjBtIYowyZIJ3kBDmJgsuPKsqqKNIMFbUePLSCmp2cZu+BDL427RcNKTRYw==
   dependencies:
     "@types/node" "*"
-    playwright-core "1.31.1"
+    playwright-core "1.31.2"
   optionalDependencies:
     fsevents "2.3.2"
 
@@ -4603,10 +4603,10 @@ eslint-config-airbnb-base@15.0.0:
     object.entries "^1.1.5"
     semver "^6.3.0"
 
-eslint-config-prettier@8.6.0:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.6.0.tgz#dec1d29ab728f4fa63061774e1672ac4e363d207"
-  integrity sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==
+eslint-config-prettier@8.7.0:
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.7.0.tgz#f1cc58a8afebc50980bd53475451df146c13182d"
+  integrity sha512-HHVXLSlVUhMSmyW4ZzEuvjpwqamgmlfkutD53cYXLikh4pt/modINRcCIApJ84czDxM4GZInwUrromsDdTImTA==
 
 eslint-import-resolver-node@^0.3.7:
   version "0.3.7"
@@ -8044,10 +8044,10 @@ pkg-dir@4.2.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.31.1:
-  version "1.31.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.31.1.tgz#4deeebbb8fb73b512593fe24bea206d8fd85ff7f"
-  integrity sha512-JTyX4kV3/LXsvpHkLzL2I36aCdml4zeE35x+G5aPc4bkLsiRiQshU5lWeVpHFAuC8xAcbI6FDcw/8z3q2xtJSQ==
+playwright-core@1.31.2:
+  version "1.31.2"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.31.2.tgz#debf4b215d14cb619adb7e511c164d068075b2ed"
+  integrity sha512-a1dFgCNQw4vCsG7bnojZjDnPewZcw7tZUNFN0ZkcLYKj+mPmXvg4MpaaKZ5SgqPsOmqIf2YsVRkgqiRDxD+fDQ==
 
 portfinder@1.0.32:
   version "1.0.32"
