@@ -1,5 +1,6 @@
 /* eslint-disable no-cond-assign */
 import CSSColors from './css-colors';
+import DEFAULTS from '../style-defaults';
 
 const colorUtils = {
   resolveExpression: (input) => {
@@ -56,6 +57,17 @@ const colorUtils = {
     )
       .toString(16)
       .slice(1)}`;
+  },
+  getColor({ useColorExpression = false, colorExpression = '', color = DEFAULTS.COLOR }, defaultColor, theme) {
+    let resolvedColor;
+    if (useColorExpression) {
+      resolvedColor = colorUtils.resolveExpression(colorExpression);
+    } else if (typeof color === 'string') {
+      resolvedColor = color;
+    } else if (color) {
+      resolvedColor = theme.getColorPickerColor(color);
+    }
+    return !resolvedColor || resolvedColor === 'none' ? defaultColor : resolvedColor;
   },
 };
 
