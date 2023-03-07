@@ -3,7 +3,7 @@ import { getCurrentProtocol, removeProtocolHttp, encodeUrl } from './url-encoder
 
 const TRANSITION_TIME = 400;
 const POLL_INTERVAL = 2000;
-const MAX_POLL_TIME = 10 * 60 * 1000;
+const MAX_POLLS = 300;
 
 const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
@@ -77,85 +77,67 @@ export const parseOutput = (data, translator) => {
   return defaultMessage;
 };
 
-export const automationRunPolling = async (automationId, runId, translator) => {
-  const runningStatuses = ['queued', 'running', 'not started', 'starting'];
-  let status = 'queued';
-  let automationRun;
-  const endTime = Date.now() + MAX_POLL_TIME;
-  while (runningStatuses.includes(status)) {
-    if (Date.now() > endTime) {
-      return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
-    }
-    // eslint-disable-next-line no-await-in-loop
-    automationRun = await getAutomationRun(automationId, runId);
-    status = automationRun.status;
-    // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
+export const automationRunPolling = async (automationId, runId, translator, polTimes, resolve) => {
+  if (polTimes > MAX_POLLS) {
+    return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
   }
-  let msg;
+  const automationRun = await getAutomationRun(automationId, runId);
   switch (automationRun.status) {
+    case 'queued':
+    case 'running':
+    case 'not started':
+    case 'starting':
+      return setTimeout(
+        () => automationRunPolling(automationId, runId, translator, polTimes + 1, resolve),
+        POLL_INTERVAL
+      );
     case 'finished': {
       if (automationRun.title?.length > 0) {
-        msg = parseOutput(automationRun.title, translator);
-        msg.ok = true;
-      } else {
-        msg = {
-          message: getDefaultMessage(translator),
-          ok: true,
-        };
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: true });
       }
-      break;
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
     }
     case 'failed': {
       if (automationRun.title?.length > 0) {
-        msg = parseOutput(automationRun.title, translator);
-        msg.ok = false;
-      } else {
-        msg = {
-          message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
-          ok: false,
-        };
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
       }
-      break;
+      return resolve({
+        message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
+        ok: false,
+      });
     }
     case 'finished with warnings': {
       if (automationRun.title?.length > 0) {
-        msg = parseOutput(automationRun.title, translator);
-        msg.ok = false;
-      } else {
-        msg = {
-          message: getDefaultMessage(translator),
-          ok: true,
-        };
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
       }
-      break;
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
     }
     case 'must stop':
     case 'stopped': {
       if (automationRun.title?.length > 0) {
-        msg = parseOutput(automationRun.title, translator);
-        msg.ok = false;
-      } else {
-        msg = {
-          message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
-          ok: false,
-        };
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
       }
-      break;
+      return resolve({
+        message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
+        ok: false,
+      });
     }
     default: {
       if (automationRun.title?.length > 0) {
-        msg = parseOutput(automationRun.title, translator);
-        msg.ok = true;
-      } else {
-        msg = {
-          message: getDefaultMessage(translator),
-          ok: true,
-        };
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: true });
       }
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
     }
   }
-  return msg;
 };
 
 export const pollAutomationAndGetMsg = async (automationId, triggered, response, translator) => {
@@ -168,7 +150,10 @@ export const pollAutomationAndGetMsg = async (automationId, triggered, response,
       const queued = status === 'queued';
       const runId = typeof id === 'undefined' ? guid : id;
       if (!triggered || queued) {
-        message = await automationRunPolling(automationId, runId, translator);
+        const prom = new Promise((resolve) => {
+          automationRunPolling(automationId, runId, translator, 0, resolve);
+        });
+        message = await prom;
       } else {
         message = parseOutput(data, translator);
         message.ok = true;
