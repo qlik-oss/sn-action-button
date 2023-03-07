@@ -16,7 +16,7 @@ describe('action button', () => {
         appendChild: () => {},
       };
       defaults.element.firstElementChild = button;
-      defaults.layout.qInfo = { qId: 'buttonId' }
+      defaults.layout.qInfo = { qId: 'buttonId' };
       defaults.layout.actions = [{ actionType: 'applyBookmark' }, { actionType: 'clearAll' }];
       defaults.layout.navigation = { action: 'firstSheet', sheet: 'mySheet' };
       defaults.app.clearAll = jest.fn();

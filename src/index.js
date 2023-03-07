@@ -25,7 +25,7 @@ export default function supernova(env) {
   const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
   const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
-  const multiUserAutomation = isEnabled?.('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER')
+  const multiUserAutomation = isEnabled?.('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
   const senseNavigation = sense?.navigation;
   properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
 
@@ -48,7 +48,16 @@ export default function supernova(env) {
       const app = useApp();
       const constraints = useConstraints();
 
-      const cleanup = renderButton({ element, layout, constraints, theme, app, senseNavigation, multiUserAutomation, translator });
+      const cleanup = renderButton({
+        element,
+        layout,
+        constraints,
+        theme,
+        app,
+        senseNavigation,
+        multiUserAutomation,
+        translator,
+      });
 
       useEffect(
         () => () => {

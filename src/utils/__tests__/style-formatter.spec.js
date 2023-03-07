@@ -98,6 +98,37 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-color: myPrimaryColor')).toBe(true);
     });
 
+    it('should not return specified image url when the background mode is set on none', () => {
+      style.background.useImage = false;
+      style.background.mode = 'none';
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: auto auto')).toBe(false);
+      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(false);
+      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(false);
+    });
+
+    it('should return specified image url when the background mode is set on media', () => {
+      style.background.useImage = false;
+      style.background.mode = 'media';
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
+      expect(formattedStyle.includes('background-size: auto auto')).toBe(true);
+      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(true);
+      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(true);
+    });
+
+    it('should not show size/position when background mode is set on media but the url is not set', () => {
+      style.background.useImage = false;
+      style.background.mode = 'media';
+      style.background.url.qStaticContentUrl = {};
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-image:')).toBe(false);
+      expect(formattedStyle.includes('background-size:')).toBe(false);
+      expect(formattedStyle.includes('background-position:')).toBe(false);
+      expect(formattedStyle.includes('background-repeat:')).toBe(false);
+    });
+
     it('should return specified image url and default image settings', () => {
       style.background.useImage = true;
       style.background.url.qStaticContentUrl = { qUrl: someUrl };
@@ -116,6 +147,38 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-size:')).toBe(false);
       expect(formattedStyle.includes('background-position:')).toBe(false);
       expect(formattedStyle.includes('background-repeat:')).toBe(false);
+    });
+
+    it('should return specified image size when mode is set to media', () => {
+      expect(style.background.mode).toEqual('none');
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: 100% 100%')).toBe(false);
+      style.background = {
+        mode: 'media',
+        size: 'fill',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
+          },
+        },
+      };
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-size: 100% 100%')).toBe(true);
+    });
+
+    it('should return specified image position when mode is set to media', () => {
+      style.background = {
+        mode: 'media',
+        position: 'top-left',
+        size: 'fill',
+        url: {
+          qStaticContentUrl: {
+            qUrl: someUrl,
+          },
+        },
+      };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-position: top left')).toBe(true);
     });
 
     it('should return specified image size', () => {
@@ -241,12 +304,11 @@ describe('style-formatter', () => {
     });
 
     it('should set fontSize and styling', () => {
-      theme.getStyle = jest.fn(() => 'myFont');
       styleFormatter.createLabelAndIcon({ theme, button, style });
       const text = button.children[0];
       expect(text.children[0].textContent).toEqual('Button');
       expect(text.style.whiteSpace).toEqual('nowrap');
-      expect(text.style.fontFamily).toEqual('myFont');
+      expect(text.style.fontFamily).toEqual('Source Sans Pro');
       expect(text.style.fontSize).toEqual('11.5px');
       expect(text.style.display).toEqual('flex');
       expect(text.style.alignItems).toEqual('center');

@@ -1,10 +1,12 @@
 import actions, { checkShowAction, getActionsList } from './utils/actions';
 import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
+import { getStylingPanelDefinition } from './styling-panel-definition';
 import propertyResolver from './utils/property-resolver';
 import importProperties from './utils/conversion';
 import luiIcons from './utils/lui-icons';
-import getStylingPanelDefinition from './styling-panel-definition';
+import { colorOptions, toggleOptions } from './utils/style-utils';
 import getAutomationProps from './utils/automation-props';
+import styleDefaults from './style-defaults';
 
 let automationsList = null;
 
@@ -19,29 +21,6 @@ const getAutomations = async () => {
   }
   return automationsList;
 };
-
-const colorOptions = [
-  {
-    value: false,
-    translation: 'properties.colorMode.primary',
-  },
-  {
-    value: true,
-    translation: 'properties.colorMode.byExpression',
-  },
-];
-
-const toggleOptions = [
-  {
-    value: true,
-    translation: 'properties.on',
-  },
-  {
-    value: false,
-    translation: 'properties.off',
-  },
-];
-
 export default function ext({ translator, shouldHide, senseNavigation }) {
   const multiUserAutomation =
     shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
@@ -177,7 +156,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   type: 'items',
                   grouped: false,
                   items: getAutomationProps(multiUserAutomation, getAutomations),
-                  show: (data) => checkShowAction(data, 'automation')
+                  show: (data) => checkShowAction(data, 'automation'),
                 },
               },
             },
@@ -434,6 +413,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             background: {
               grouped: true,
@@ -495,6 +475,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       translation: 'properties.backgroundImage.size',
                       type: 'string',
                       component: 'dropdown',
+                      defaultValue: styleDefaults.BACKGROUND_SIZE,
                       options: [
                         {
                           value: 'auto',
@@ -547,6 +528,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             border: {
               type: 'items',
@@ -614,6 +596,7 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
               },
+              show: !stylingPanelEnabled,
             },
             icon: {
               type: 'items',

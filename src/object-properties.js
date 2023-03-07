@@ -63,8 +63,9 @@ const properties = {
   style: {
     label: DEFAULTS.LABEL,
     font: {
+      fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
-      color: DEFAULTS.COLOR,
+      color: DEFAULTS.FONT_COLOR,
       colorExpression: '',
       size: DEFAULTS.FONT_SIZE,
       style: DEFAULTS.FONT_STYLE,
@@ -74,6 +75,7 @@ const properties = {
       useColorExpression: false,
       color: DEFAULTS.COLOR,
       colorExpression: '',
+      mode: DEFAULTS.BGIMAGE_MODE,
       useImage: false,
       url: {
         qStaticContentUrlDef: {
@@ -151,6 +153,7 @@ const properties = {
 
 /**
  * @typedef {object} Font
+ * @property {string=} [fontFamily='Source Sans Pro'] - Font Family of the label
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
@@ -167,11 +170,12 @@ const properties = {
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {ColorExpression=} colorExpression - Color defined by expression, needed if useColorExpression is true
+ * @property {('none'|'media')=} [mode = 'none'] - Toggles the background image, set to media to show the image
  * @property {boolean=} [useImage=false] - Set to true to show background image
  * @property {object=} url - Contains the URL for the background image
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
- * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight')} [position='centerCenter'] - Image position
+ * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight'|'top-left'|'center-left'|'bottom-left'|'top-center'|'center-center'|'top-right'|'center-right'|'bottom-right')} [position='center-center'] - Image position
  * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
  */
 
