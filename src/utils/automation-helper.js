@@ -43,37 +43,38 @@ const getTranslation = (translator, key, defaultValue) => {
   return translation;
 };
 
-const defaultMessage = (translator) =>
+const getDefaultMessage = (translator) =>
   getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished');
 
 export const parseOutput = (data, translator) => {
+  const defaultMessage = { message: getDefaultMessage(translator) };
   if (typeof data !== 'undefined') {
     if (typeof data === 'object') {
       if (Array.isArray(data)) {
-        return data?.length > 0 ? { message: data.join(' ') } : defaultMessage(translator);
+        return data?.length > 0 ? { message: data.join(' ') } : defaultMessage;
       }
       if (Object.keys(data).includes('message')) {
         return data;
       }
-      return defaultMessage(translator);
+      return defaultMessage;
     }
     try {
       const message = JSON.parse(data);
       if (Object.keys(message).includes('message')) {
         return message;
       }
-      return defaultMessage(translator);
+      return defaultMessage;
     } catch {
       if (data === '') {
-        return defaultMessage(translator);
+        return defaultMessage;
       }
       if (typeof data === 'string' || typeof data === 'number') {
         return { message: data };
       }
-      return defaultMessage(translator);
+      return defaultMessage;
     }
   }
-  return defaultMessage(translator);
+  return defaultMessage;
 };
 
 export const automationRunPolling = async (automationId, runId, translator) => {
@@ -99,7 +100,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = true;
       } else {
         msg = {
-          message: defaultMessage(translator),
+          message: getDefaultMessage(translator),
           ok: true,
         };
       }
@@ -123,7 +124,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = false;
       } else {
         msg = {
-          message: defaultMessage(translator),
+          message: getDefaultMessage(translator),
           ok: true,
         };
       }
@@ -148,7 +149,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = true;
       } else {
         msg = {
-          message: defaultMessage(translator),
+          message: getDefaultMessage(translator),
           ok: true,
         };
       }
