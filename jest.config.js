@@ -6,6 +6,11 @@ module.exports = {
       lines: 78,
     },
   },
-  coveragePathIgnorePatterns: ['src/__tests__/default-button-props.js'],
+  coveragePathIgnorePatterns: [
+    'src/__tests__/default-button-props.js',
+    'src/data.js',
+    'src/utils/lui-icons',
+    'src/style-defaults',
+  ],
   collectCoverageFrom: ['src/**'],
 };
