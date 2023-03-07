@@ -43,47 +43,41 @@ const getTranslation = (translator, key, defaultValue) => {
   return translation;
 };
 
+const defaultMessage = (translator) =>
+  getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished');
+
 export const parseOutput = (data, translator) => {
-  const defaultMessage = {
-    message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished'),
-  };
   if (typeof data !== 'undefined') {
     if (typeof data === 'object') {
       if (Array.isArray(data)) {
-        return data?.length > 0 ? { message: data.join(' ') } : defaultMessage;
+        return data?.length > 0 ? { message: data.join(' ') } : defaultMessage(translator);
       }
       if (Object.keys(data).includes('message')) {
         return data;
       }
-      return defaultMessage;
+      return defaultMessage(translator);
     }
     try {
       const message = JSON.parse(data);
       if (Object.keys(message).includes('message')) {
         return message;
       }
-      return defaultMessage;
+      return defaultMessage(translator);
     } catch {
       if (data === '') {
-        return defaultMessage;
+        return defaultMessage(translator);
       }
       if (typeof data === 'string' || typeof data === 'number') {
         return { message: data };
       }
-      return defaultMessage;
+      return defaultMessage(translator);
     }
   }
-  return defaultMessage;
+  return defaultMessage(translator);
 };
 
-// eslint-disable-next-line consistent-return, no-async-promise-executor
 export const automationRunPolling = async (automationId, runId, translator) => {
   const runningStatuses = ['queued', 'running', 'not started', 'starting'];
-  const defaultMessage = getTranslation(
-    translator,
-    'Object.ActionButton.Automation.DefaultAutomationMsg',
-    'Automation finished'
-  );
   let status = 'queued';
   let automationRun;
   const endTime = Date.now() + MAX_POLL_TIME;
@@ -105,7 +99,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = true;
       } else {
         msg = {
-          message: defaultMessage,
+          message: defaultMessage(translator),
           ok: true,
         };
       }
@@ -129,7 +123,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = false;
       } else {
         msg = {
-          message: defaultMessage,
+          message: defaultMessage(translator),
           ok: true,
         };
       }
@@ -154,7 +148,7 @@ export const automationRunPolling = async (automationId, runId, translator) => {
         msg.ok = true;
       } else {
         msg = {
-          message: defaultMessage,
+          message: defaultMessage(translator),
           ok: true,
         };
       }
