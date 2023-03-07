@@ -5,18 +5,18 @@ const TRANSITION_TIME = 400;
 const POLL_INTERVAL = 2000;
 const MAX_POLL_TIME = 10 * 60 * 1000;
 
-export const getUser = async () => {
+const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
   const data = await response.json();
   return data;
 };
 
-export const getCsrfToken = async () => {
+const getCsrfToken = async () => {
   const response = await fetch('../api/v1/csrf-token');
   return response.headers.get('qlik-csrf-token');
 };
 
-export const getSpaceId = async (appId) => {
+const getSpaceId = async (appId) => {
   const response = await fetch(`../api/v1/apps/${appId}`);
   const data = await response.json();
   return data?.attributes?.spaceId || 'personal';
