@@ -7,4 +7,5 @@ module.exports = {
     },
   },
   coveragePathIgnorePatterns: ['src/__tests__/default-button-props.js'],
+  collectCoverageFrom: ['src/**'],
 };
