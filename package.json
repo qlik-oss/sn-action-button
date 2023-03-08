@@ -36,7 +36,6 @@
     "build:watch": "node ./tools/build.js --ext --mode development -w",
     "lint": "eslint src",
     "format": "prettier --write 'src/**'",
-    "format:check": "prettier --check src/**",
     "start": "nebula serve",
     "sense": "nebula sense",
     "copy:ext": "node ./tools/copy-ext.js",
@@ -53,7 +52,8 @@
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "eslint --cache --fix"
+      "eslint --cache --fix",
+      "prettier --check src/**'"
     ],
     "*.{json,css,md}": [
       "yarn format"
