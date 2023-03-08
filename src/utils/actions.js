@@ -302,8 +302,8 @@ const actions = [
      * automationTriggered - If true, triggers the automation using the automations webhook URL, otherwise it will trigger the automation using the automations run API
      * automationExecutionToken - token which is needed if triggering the automation using the automations webhook URL
      * automationPostData - If true, creates a temporary bookmark and posts the resulting temporary bookmark id to the automation
-     * buttonId - the id of the button itself. Used to get the sheet id which the button is on to post the sheet id as an to the automation
      * multiUserAutomation - Determines if SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER is enabled or not
+     * senseNavigation - Navigation API provided when in sense client
      */
 
     translation: 'Object.ActionButton.ExecuteAutomation',
@@ -318,10 +318,10 @@ const actions = [
         automationPostData,
         automationShowNotification,
         automationNotificationDuration,
-        buttonId,
         automationOpenLinkSameWindow,
         multiUserAutomation,
         translator,
+        senseNavigation,
       }) =>
       async () => {
         if (multiUserAutomation && automationId.length) {
@@ -336,7 +336,7 @@ const actions = [
             if (automationPostData) {
               bookmark = await getTemporaryBookmark(app);
             }
-            const automationData = await getAutomationData(app, buttonId, automationId, bookmark);
+            const automationData = await getAutomationData({ app, automationId, bookmark, senseNavigation });
             const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
             const response = await fetch(automationUrl, options);
             const msg = await pollAutomationAndGetMsg(automationId, automationTriggered, response, translator);

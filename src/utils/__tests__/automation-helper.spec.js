@@ -8,7 +8,6 @@ import {
   automationRunPolling,
 } from '../automation-helper';
 
-
 describe('automation helper', () => {
   const appId = 'fakeAppId';
   const app = { id: appId };
@@ -132,13 +131,19 @@ describe('automation helper', () => {
       expect(result).toEqual(postOptions);
     });
     it('should return after status changed to finsihed', async () => {
+      jest.useFakeTimers({ advanceTimers: true });
       const queued = { status: 'queued' };
       const finished = { status: 'finished', title: 'Automation done running!' };
       global.fetch = jest
         .fn()
         .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
         .mockResolvedValueOnce({ json: () => Promise.resolve(finished) });
-      const result = await automationRunPolling(automationId, runId, translator);
+      const prom = new Promise((resolve) => {
+        automationRunPolling(automationId, runId, translator, 0, resolve);
+      });
+      jest.runAllTicks();
+      jest.runAllTimers();
+      const result = await prom;
       expect(global.fetch).toHaveBeenCalledTimes(2);
       expect(result).toEqual({ ok: true, message: 'Automation done running!' });
     });
@@ -162,7 +167,9 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-      expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
+      expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(
+        prettier.format(expected.trim(), { parser: 'html' })
+      );
     });
 
     it('should create snackbar with url', () => {
@@ -183,7 +190,9 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-  expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
+      expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(
+        prettier.format(expected.trim(), { parser: 'html' })
+      );
     });
 
     it('should create snackbar with url in using same window', () => {
@@ -204,7 +213,9 @@ describe('automation helper', () => {
       </svg>
     </span>
   </div>`;
-  expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(prettier.format(expected.trim(), { parser: 'html' }));
+      expect(prettier.format(result.trim(), { parser: 'html' })).toEqual(
+        prettier.format(expected.trim(), { parser: 'html' })
+      );
     });
   });
 });
