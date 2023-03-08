@@ -78,15 +78,15 @@ export const parseOutput = (data, translator) => {
 };
 
 export const automationRunPolling = async (automationId, runId, translator, polTimes, resolve) => {
-  if (polTimes > MAX_POLLS) {
-    return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
-  }
   const automationRun = await getAutomationRun(automationId, runId);
   switch (automationRun.status) {
     case 'queued':
     case 'running':
     case 'not started':
     case 'starting':
+      if (polTimes > MAX_POLLS) {
+        return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
+      }
       return setTimeout(
         () => automationRunPolling(automationId, runId, translator, polTimes + 1, resolve),
         POLL_INTERVAL
