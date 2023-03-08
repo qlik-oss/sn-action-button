@@ -52,7 +52,8 @@
   },
   "lint-staged": {
     "*.{js, jsx}": [
-      "eslint --cache --fix"
+      "eslint --cache --fix",
+      "prettier --check src/**'"
     ],
     "*.{json,css,md}": [
       "yarn format"
