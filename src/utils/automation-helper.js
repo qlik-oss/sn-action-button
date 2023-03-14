@@ -2,25 +2,21 @@ import { inIframe } from './url-utils';
 import { getCurrentProtocol, removeProtocolHttp, encodeUrl } from './url-encoder';
 
 const TRANSITION_TIME = 400;
+const POLL_INTERVAL = 2000;
+const MAX_POLLS = 300;
 
-export const getUser = async () => {
+const getUser = async () => {
   const response = await fetch(`../api/v1/users/me`);
   const data = await response.json();
   return data;
 };
 
-export const getCsrfToken = async () => {
+const getCsrfToken = async () => {
   const response = await fetch('../api/v1/csrf-token');
   return response.headers.get('qlik-csrf-token');
 };
 
-export const getSheetId = async (app, buttonId) => {
-  const button = await app.getObject(buttonId);
-  const parent = await button.getParent();
-  return parent.id;
-};
-
-export const getSpaceId = async (appId) => {
+const getSpaceId = async (appId) => {
   const response = await fetch(`../api/v1/apps/${appId}`);
   const data = await response.json();
   return data?.attributes?.spaceId || 'personal';
@@ -47,10 +43,11 @@ const getTranslation = (translator, key, defaultValue) => {
   return translation;
 };
 
+const getDefaultMessage = (translator) =>
+  getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished');
+
 export const parseOutput = (data, translator) => {
-  const defaultMessage = {
-    message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Automation finished'),
-  };
+  const defaultMessage = { message: getDefaultMessage(translator) };
   if (typeof data !== 'undefined') {
     if (typeof data === 'object') {
       if (Array.isArray(data)) {
@@ -80,91 +77,70 @@ export const parseOutput = (data, translator) => {
   return defaultMessage;
 };
 
-// eslint-disable-next-line consistent-return, no-async-promise-executor
-export const automationRunPolling = async (automationId, runId, translator, time = 0) => {
-  const runningStatuses = ['queued', 'running', 'not started', 'starting'];
-  const pollInterval = 100;
-  const defaultMessage = getTranslation(
-    translator,
-    'Object.ActionButton.Automation.DefaultAutomationMsg',
-    'Automation finished'
-  );
+export const automationRunPolling = async (automationId, runId, translator, polTimes, resolve) => {
   const automationRun = await getAutomationRun(automationId, runId);
-  const { status } = automationRun;
-  if (runningStatuses.includes(status)) {
-    if (time > 10 * 60 * 1000) {
-      return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
+  switch (automationRun.status) {
+    case 'queued':
+    case 'running':
+    case 'not started':
+    case 'starting':
+      if (polTimes > MAX_POLLS) {
+        return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
+      }
+      return setTimeout(
+        () => automationRunPolling(automationId, runId, translator, polTimes + 1, resolve),
+        POLL_INTERVAL
+      );
+    case 'finished': {
+      if (automationRun.title?.length > 0) {
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: true });
+      }
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
     }
-    setTimeout(automationRunPolling(automationId, runId, translator, time + pollInterval), pollInterval);
-  } else {
-    let msg;
-    switch (automationRun.status) {
-      case 'finished': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = true;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
-        break;
+    case 'failed': {
+      if (automationRun.title?.length > 0) {
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
       }
-      case 'failed': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
-            ok: true,
-          };
-        }
-        break;
-      }
-      case 'finished with warnings': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
-        break;
-      }
-      case 'must stop':
-      case 'stopped': {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = false;
-        } else {
-          msg = {
-            message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
-            ok: true,
-          };
-        }
-        break;
-      }
-      default: {
-        if (automationRun.title?.length > 0) {
-          msg = parseOutput(automationRun.title, translator);
-          msg.ok = true;
-        } else {
-          msg = {
-            message: defaultMessage,
-            ok: true,
-          };
-        }
-      }
+      return resolve({
+        message: getTranslation(translator, 'Object.ActionButton.Automation.AutomationError', 'Automation error'),
+        ok: false,
+      });
     }
-    return msg;
+    case 'finished with warnings': {
+      if (automationRun.title?.length > 0) {
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
+      }
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
+    }
+    case 'must stop':
+    case 'stopped': {
+      if (automationRun.title?.length > 0) {
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: false });
+      }
+      return resolve({
+        message: getTranslation(translator, 'Object.ActionButton.Automation.DefaultAutomationMsg', 'Unknown error'),
+        ok: false,
+      });
+    }
+    default: {
+      if (automationRun.title?.length > 0) {
+        return resolve({ ...parseOutput(automationRun.title, translator), ok: true });
+      }
+      return resolve({
+        message: getDefaultMessage(translator),
+        ok: true,
+      });
+    }
   }
 };
 
-export const getAutomationMsg = async (automationId, triggered, response, translator) => {
+export const pollAutomationAndGetMsg = async (automationId, triggered, response, translator) => {
   let message;
   switch (response.status) {
     case 200:
@@ -174,7 +150,10 @@ export const getAutomationMsg = async (automationId, triggered, response, transl
       const queued = status === 'queued';
       const runId = typeof id === 'undefined' ? guid : id;
       if (!triggered || queued) {
-        message = automationRunPolling(automationId, runId, translator);
+        const prom = new Promise((resolve) => {
+          automationRunPolling(automationId, runId, translator, 0, resolve);
+        });
+        message = await prom;
       } else {
         message = parseOutput(data, translator);
         message.ok = true;
@@ -257,7 +236,7 @@ const getUrl = (url) => {
   return `${protocol}${encodeUrl(urlRemovedProtocol)}`;
 };
 
-export const createSnackbar = (msg, automationOpenLinkSameWindow) => {
+export const createSnackbar = (msg, automationOpenLinkSameWindow, error) => {
   const { message, url, urlText } = msg;
   const snackContainer = document.createElement('div');
   const randomId = (Math.random() + 1).toString(36).substring(7);
@@ -282,15 +261,19 @@ export const createSnackbar = (msg, automationOpenLinkSameWindow) => {
   };
   applyStyles(snackContainer, snackContainerStyles);
   const snackbar = `<div class="sn-action-button-snackbar" style="display: flex; justify-content: space-between; height: 100%; align-items: center;">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px"
-      fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
-      <defs>
-        <path id="tick_svg__tick-a" d="m6 10 7-7 2 2-7 7-2 2-5-5 2-2 3 3Z"></path>
-      </defs>
-      <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
-    </svg>
-    <span class="sn-action-button-snackbar-text"
-      style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
+  ${
+    error
+      ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img">
+        <path d="M6.919.439A1.5 1.5 0 0 1 8.925.336l.114.103 6.48 6.48a1.5 1.5 0 0 1 .102 2.006l-.102.114-6.48 6.48a1.5 1.5 0 0 1-2.006.102l-.114-.102-6.48-6.48a1.5 1.5 0 0 1-.103-2.006l.103-.114 6.48-6.48Zm1.56 10.54h-1c-.267 0-.455.158-.493.404l-.007.096v1c0 .266.158.454.404.492l.096.008h1c.266 0 .454-.158.492-.404l.008-.096v-1c0-.267-.158-.455-.404-.493l-.096-.007Zm0-8h-1c-.3 0-.5.2-.5.5v5c0 .3.2.5.5.5h1c.3 0 .5-.2.5-.5v-5c0-.3-.2-.5-.5-.5Z"></path>
+      </svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" height="16px" fill="currentColor" aria-hidden="true" role="img" data-testid="status-indicator__valid">
+        <defs>
+          <path id="tick_svg__tick-a" d="m6 10 7-7 2 2-7 7-2 2-5-5 2-2 3 3Z"></path>
+        </defs>
+        <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
+      </svg>`
+  }  
+    <span class="sn-action-button-snackbar-text" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
     url
       ? `<a href="${getUrl(url)}" style="margin-left: 6px;" target="${getTarget(automationOpenLinkSameWindow)}">${
           urlText || 'Open'
@@ -298,20 +281,19 @@ export const createSnackbar = (msg, automationOpenLinkSameWindow) => {
       : ''
   }</span>
     <span style="cursor: pointer;">
-      <svg class="sn-action-button-snackbar-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-        viewBox="0 0 16 16" fill="currentColor">
-        <path
-          d="M9.34535242,8 L13.3273238,11.9819714 C13.6988326,12.3534802 13.6988326,12.955815 13.3273238,13.3273238 C12.955815,13.6988326 12.3534802,13.6988326 11.9819714,13.3273238 L8,9.34535242 L4.01802863,13.3273238 C3.64651982,13.6988326 3.04418502,13.6988326 2.67267621,13.3273238 C2.3011674,12.955815 2.3011674,12.3534802 2.67267621,11.9819714 L6.65464758,8 L2.67267621,4.01802863 C2.3011674,3.64651982 2.3011674,3.04418502 2.67267621,2.67267621 C3.04418502,2.3011674 3.64651982,2.3011674 4.01802863,2.67267621 L8,6.65464758 L11.9819714,2.67267621 C12.3534802,2.3011674 12.955815,2.3011674 13.3273238,2.67267621 C13.6988326,3.04418502 13.6988326,3.64651982 13.3273238,4.01802863 L9.34535242,8 Z">
+      <svg class="sn-action-button-snackbar-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M9.34535242,8 L13.3273238,11.9819714 C13.6988326,12.3534802 13.6988326,12.955815 13.3273238,13.3273238 C12.955815,13.6988326 12.3534802,13.6988326 11.9819714,13.3273238 L8,9.34535242 L4.01802863,13.3273238 C3.64651982,13.6988326 3.04418502,13.6988326 2.67267621,13.3273238 C2.3011674,12.955815 2.3011674,12.3534802 2.67267621,11.9819714 L6.65464758,8 L2.67267621,4.01802863 C2.3011674,3.64651982 2.3011674,3.04418502 2.67267621,2.67267621 C3.04418502,2.3011674 3.64651982,2.3011674 4.01802863,2.67267621 L8,6.65464758 L11.9819714,2.67267621 C12.3534802,2.3011674 12.955815,2.3011674 13.3273238,2.67267621 C13.6988326,3.04418502 13.6988326,3.64651982 13.3273238,4.01802863 L9.34535242,8 Z">
         </path>
       </svg>
-    </span>
-  </div>`;
+      </span>
+    </div>`;
   snackContainer.innerHTML = snackbar;
   return snackContainer;
 };
 
 export const showSnackbar = async (message, duration, automationOpenLinkSameWindow) => {
-  const snackContainer = createSnackbar(message, automationOpenLinkSameWindow);
+  const snackContainer = createSnackbar(message, automationOpenLinkSameWindow, !message.ok);
+  snackContainer.focus();
   const close = snackContainer.querySelector('.sn-action-button-snackbar-close');
   close.addEventListener('click', () => {
     removeSnackbar(snackContainer);
@@ -396,12 +378,12 @@ export const getTemporaryBookmark = async (app) => {
   return app.createTemporaryBookmark(bookmarkProps);
 };
 
-export const getAutomationData = async (app, buttonId, automationId, bookmark) => {
+export const getAutomationData = async ({ app, automationId, bookmark, senseNavigation }) => {
   const user = await getUser();
   const inputs = {
     app: app.id,
     bookmark,
-    sheet: await getSheetId(app, buttonId),
+    sheet: senseNavigation?.getCurrentSheetId(),
     user: user.subject,
     space: await getSpaceId(app.id),
     tenant: user.tenantId,

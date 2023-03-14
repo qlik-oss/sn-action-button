@@ -22,7 +22,6 @@ export const renderButton = ({
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
   const { style, qStateName, navigation } = layout;
-  const buttonId = layout.qInfo.qId;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
   const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
@@ -43,7 +42,6 @@ export const renderButton = ({
               qStateName,
               ...action,
               senseNavigation,
-              buttonId,
               multiUserAutomation,
               translator,
             })

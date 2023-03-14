@@ -77,7 +77,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
     },
   },
   automationTriggeredText: {
-    label: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
+    translation: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
     component: 'text',
     show: (data) => multiUserAutomation && data.automationShowTriggered && data.automationTriggered,
   },

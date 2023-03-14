@@ -3,7 +3,6 @@ import actions, { getValueList, checkShowAction, getActionsList } from '../actio
 describe('actions', () => {
   const qStateName = 'someState';
   let app;
-  let buttonId;
   let multiUserAutomation;
   let createdBookmark;
   let createdTemporaryBookmark;
@@ -22,6 +21,7 @@ describe('actions', () => {
   const resourceId = 'fakeResourceId';
   const id = 'fakeId';
   const sheetId = 'fakeSheetId';
+  const senseNavigation = { getCurrentSheetId: () => sheetId };
   const subject = 'fakeSubject';
   const tenantId = 'fakeTenantId';
   const spaceId = 'fakeSpaceId';
@@ -68,7 +68,6 @@ describe('actions', () => {
         forward: jest.fn(),
         getField: jest.fn(() => Promise.resolve(fieldObject)),
         getFieldDescription: jest.fn(() => Promise.resolve(fieldInfoObject)),
-        getObject: jest.fn(() => Promise.resolve({ getParent: jest.fn(() => Promise.resolve({ id: sheetId })) })),
         getVariableByName: jest.fn(() => Promise.resolve(variableObject)),
         lockAll: jest.fn(),
         unlockAll: jest.fn(),
@@ -338,7 +337,6 @@ describe('actions', () => {
       let automation;
       automationPostData = false;
       automationTriggered = true;
-      buttonId = 'fakeButtonId';
       multiUserAutomation = true;
       const time = new Date(2022, 10, 1);
       jest.useFakeTimers('modern');
@@ -351,7 +349,7 @@ describe('actions', () => {
         automationTriggered,
         automationExecutionToken,
         automationPostData,
-        buttonId,
+        senseNavigation,
         multiUserAutomation,
         translator,
       })();
@@ -388,7 +386,6 @@ describe('actions', () => {
       let automation;
       automationPostData = false;
       automationTriggered = false;
-      buttonId = 'fakeButtonId';
       const time = new Date(2022, 10, 1);
       jest.useFakeTimers('modern');
       jest.setSystemTime(time);
@@ -400,9 +397,9 @@ describe('actions', () => {
         automationTriggered,
         automationExecutionToken,
         automationPostData,
-        buttonId,
         multiUserAutomation,
         translator,
+        senseNavigation,
       })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
       expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
@@ -452,9 +449,9 @@ describe('actions', () => {
         automationTriggered,
         automationExecutionToken,
         automationPostData,
-        buttonId,
         multiUserAutomation,
         translator,
+        senseNavigation,
       })();
       expect(app.createTemporaryBookmark).toHaveBeenCalled;
     });
@@ -471,24 +468,22 @@ describe('actions', () => {
         automationTriggered,
         automationExecutionToken,
         automationPostData,
-        buttonId,
         multiUserAutomation,
         translator,
+        senseNavigation,
       })();
       expect(app.createTemporaryBookmark).toNotHaveBeenCalled;
     });
 
     it('should call refreshDynamicViews', async () => {
-      const senseNavigation = {
-        refreshDynamicViews: jest.fn(),
-      };
+      senseNavigation.refreshDynamicViews = jest.fn();
       const actionObject = actions.find((action) => action.value === 'refreshDynamicViews');
       await actionObject.getActionCall({ senseNavigation })();
       expect(senseNavigation.refreshDynamicViews).toHaveBeenCalled;
     });
 
     it('should not call refreshDynamicViews if not implemented in sense-client', async () => {
-      const senseNavigation = {};
+      senseNavigation.refreshDynamicViews = null;
       const actionObject = actions.find((action) => action.value === 'refreshDynamicViews');
       await actionObject.getActionCall({ senseNavigation })();
       expect(senseNavigation.refreshDynamicViews).toNotHaveBeenCalled;
