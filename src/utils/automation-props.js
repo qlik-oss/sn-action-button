@@ -33,7 +33,6 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
     show: () => multiUserAutomation,
     change: async (data) => {
       const a = await getAutomation(data.automationId);
-      data.automationShowTriggered = a.runMode === 'triggered';
       if (data.automationTriggered) {
         data.automationExecutionToken = a.executionToken;
       } else {
@@ -65,7 +64,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
     type: 'boolean',
     ref: 'automationTriggered',
     translation: 'Object.ActionButton.Automation.RunModeTriggered',
-    show: (data) => multiUserAutomation && data.automationShowTriggered,
+    show: () => multiUserAutomation,
     defaultValue: false,
     change: async (data) => {
       const a = await getAutomation(data.automationId);
@@ -79,7 +78,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
   automationTriggeredText: {
     translation: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
     component: 'text',
-    show: (data) => multiUserAutomation && data.automationShowTriggered && data.automationTriggered,
+    show: (data) => multiUserAutomation && data.automationTriggered,
   },
   automationShowNotification: {
     ref: 'automationShowNotification',
