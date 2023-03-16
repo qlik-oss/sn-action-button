@@ -7,6 +7,7 @@ import {
   getAutomationData,
   getPostOptions,
 } from './automation-helper';
+import { getSenseServerUrl } from './url-utils';
 
 export const getValueList = async (app, values, isDate) => {
   let valuesArray = values.split(';');
@@ -326,9 +327,15 @@ const actions = [
       async () => {
         if (multiUserAutomation && automationId.length) {
           try {
+            const baseUrl = getSenseServerUrl(app);
             let automationUrl;
             if (automationId !== undefined && automationId.length > 1) {
-              automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
+              automationUrl = getAutomationUrl({
+                automationId,
+                automationTriggered,
+                automationExecutionToken,
+                baseUrl,
+              });
             } else {
               return;
             }
@@ -336,10 +343,21 @@ const actions = [
             if (automationPostData) {
               bookmark = await getTemporaryBookmark(app);
             }
-            const automationData = await getAutomationData({ app, automationId, bookmark, senseNavigation });
-            const options = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
+            const automationData = await getAutomationData({ app, automationId, bookmark, senseNavigation, baseUrl });
+            const options = await getPostOptions({
+              automationTriggered,
+              automationExecutionToken,
+              automationData,
+              baseUrl,
+            });
             const response = await fetch(automationUrl, options);
-            const msg = await pollAutomationAndGetMsg(automationId, automationTriggered, response, translator);
+            const msg = await pollAutomationAndGetMsg({
+              automationId,
+              automationTriggered,
+              response,
+              translator,
+              baseUrl,
+            });
             if (automationShowNotification) {
               showSnackbar(msg, automationNotificationDuration, automationOpenLinkSameWindow);
             }

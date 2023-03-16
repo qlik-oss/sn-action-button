@@ -76,6 +76,7 @@ describe('actions', () => {
         doReload: jest.fn(() => true),
         doSave: jest.fn(),
         saveObjects: jest.fn(),
+        session: { config: { url: 'wss://myBaseUrl.com' } },
       };
       global.fetch = jest.fn(() =>
         Promise.resolve({
@@ -354,9 +355,9 @@ describe('actions', () => {
         translator,
       })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${appId}`);
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/csrf-token');
+      expect(global.fetch).toHaveBeenCalledWith(`https://mybaseurl.com/api/v1/users/me`);
+      expect(global.fetch).toHaveBeenCalledWith(`https://mybaseurl.com/api/v1/apps/${appId}`);
+      expect(global.fetch).toHaveBeenCalledWith('https://mybaseurl.com/api/v1/csrf-token');
       const headers = {
         'Content-Type': 'application/json',
         'qlik-csrf-token': csrfToken,
@@ -374,8 +375,9 @@ describe('actions', () => {
           time,
         }),
       };
-      expect(global.fetch).toHaveBeenCalledWith(
-        `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`,
+      expect(global.fetch).toHaveBeenNthCalledWith(
+        4,
+        `https://mybaseurl.com/api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`,
         postOptions
       );
       jest.useRealTimers();
@@ -402,9 +404,9 @@ describe('actions', () => {
         senseNavigation,
       })();
       expect(global.fetch).toHaveBeenCalledTimes(4);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/users/me`);
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/apps/${app.id}`);
-      expect(global.fetch).toHaveBeenCalledWith('../api/v1/csrf-token');
+      expect(global.fetch).toHaveBeenCalledWith(`https://mybaseurl.com/api/v1/users/me`);
+      expect(global.fetch).toHaveBeenCalledWith(`https://mybaseurl.com/api/v1/apps/${app.id}`);
+      expect(global.fetch).toHaveBeenCalledWith('https://mybaseurl.com/api/v1/csrf-token');
       const automationData = {
         id: automationId,
         inputs: {
@@ -426,7 +428,10 @@ describe('actions', () => {
         headers,
         body: JSON.stringify(automationData),
       };
-      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${automationId}/runs`, postOptions);
+      expect(global.fetch).toHaveBeenCalledWith(
+        `https://mybaseurl.com/api/v1/automations/${automationId}/runs`,
+        postOptions
+      );
       jest.useRealTimers();
     });
 

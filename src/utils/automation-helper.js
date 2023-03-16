@@ -5,19 +5,19 @@ const TRANSITION_TIME = 400;
 const POLL_INTERVAL = 2000;
 const MAX_POLLS = 300;
 
-const getUser = async () => {
-  const response = await fetch(`../api/v1/users/me`);
+const getUser = async (baseUrl) => {
+  const response = await fetch(`${baseUrl}api/v1/users/me`);
   const data = await response.json();
   return data;
 };
 
-const getCsrfToken = async () => {
-  const response = await fetch('../api/v1/csrf-token');
+const getCsrfToken = async (baseUrl) => {
+  const response = await fetch(`${baseUrl}api/v1/csrf-token`);
   return response.headers.get('qlik-csrf-token');
 };
 
-const getSpaceId = async (appId) => {
-  const response = await fetch(`../api/v1/apps/${appId}`);
+const getSpaceId = async (appId, baseUrl) => {
+  const response = await fetch(`${baseUrl}api/v1/apps/${appId}`);
   const data = await response.json();
   return data?.attributes?.spaceId || 'personal';
 };
@@ -30,8 +30,8 @@ export const getAutomation = async (automationId) => {
   return null;
 };
 
-export const getAutomationRun = async (automationId, runId) => {
-  const response = await fetch(`../api/v1/automations/${automationId}/runs/${runId}`);
+export const getAutomationRun = async (automationId, runId, baseUrl) => {
+  const response = await fetch(`${baseUrl}api/v1/automations/${automationId}/runs/${runId}`);
   return response.json();
 };
 
@@ -77,8 +77,8 @@ export const parseOutput = (data, translator) => {
   return defaultMessage;
 };
 
-export const automationRunPolling = async (automationId, runId, translator, polTimes, resolve) => {
-  const automationRun = await getAutomationRun(automationId, runId);
+export const automationRunPolling = async ({ automationId, runId, translator, polTimes, resolve, baseUrl }) => {
+  const automationRun = await getAutomationRun(automationId, runId, baseUrl);
   switch (automationRun.status) {
     case 'queued':
     case 'running':
@@ -88,7 +88,7 @@ export const automationRunPolling = async (automationId, runId, translator, polT
         return { ok: false, message: getTranslation(translator, 'geo.findLocation.error.timeout', 'Timeout') };
       }
       return setTimeout(
-        () => automationRunPolling(automationId, runId, translator, polTimes + 1, resolve),
+        () => automationRunPolling({ automationId, runId, translator, polTimes: polTimes + 1, resolve, baseUrl }),
         POLL_INTERVAL
       );
     case 'finished': {
@@ -140,7 +140,7 @@ export const automationRunPolling = async (automationId, runId, translator, polT
   }
 };
 
-export const pollAutomationAndGetMsg = async (automationId, triggered, response, translator) => {
+export const pollAutomationAndGetMsg = async ({ automationId, triggered, response, translator, baseUrl }) => {
   let message;
   switch (response.status) {
     case 200:
@@ -151,7 +151,7 @@ export const pollAutomationAndGetMsg = async (automationId, triggered, response,
       const runId = typeof id === 'undefined' ? guid : id;
       if (!triggered || queued) {
         const prom = new Promise((resolve) => {
-          automationRunPolling(automationId, runId, translator, 0, resolve);
+          automationRunPolling({ automationId, runId, translator, polTimes: 0, resolve, baseUrl });
         });
         message = await prom;
       } else {
@@ -361,11 +361,11 @@ export const oldAutomationRun = async (automation, automationPostData, app) => {
   }
 };
 
-export const getAutomationUrl = (automationId, automationTriggered, automationExecutionToken) => {
+export const getAutomationUrl = ({ automationId, automationTriggered, automationExecutionToken, baseUrl }) => {
   if (automationTriggered) {
-    return `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
+    return `${baseUrl}api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
   }
-  return `../api/v1/automations/${automationId}/runs`;
+  return `${baseUrl}api/v1/automations/${automationId}/runs`;
 };
 
 export const getTemporaryBookmark = async (app) => {
@@ -378,14 +378,14 @@ export const getTemporaryBookmark = async (app) => {
   return app.createTemporaryBookmark(bookmarkProps);
 };
 
-export const getAutomationData = async ({ app, automationId, bookmark, senseNavigation }) => {
-  const user = await getUser();
+export const getAutomationData = async ({ app, automationId, bookmark, senseNavigation, baseUrl }) => {
+  const user = await getUser(baseUrl);
   const inputs = {
     app: app.id,
     bookmark,
     sheet: senseNavigation?.getCurrentSheetId(),
     user: user.subject,
-    space: await getSpaceId(app.id),
+    space: await getSpaceId(app.id, baseUrl),
     tenant: user.tenantId,
     time: new Date(),
   };
@@ -396,10 +396,10 @@ export const getAutomationData = async ({ app, automationId, bookmark, senseNavi
   };
 };
 
-export const getPostOptions = async (automationTriggered, automationExecutionToken, automationData) => {
+export const getPostOptions = async ({ automationTriggered, automationExecutionToken, automationData, baseUrl }) => {
   const headers = {
     'Content-Type': 'application/json',
-    'qlik-csrf-token': await getCsrfToken(),
+    'qlik-csrf-token': await getCsrfToken(baseUrl),
   };
   if (automationTriggered) {
     headers['X-Execution-Token'] = automationExecutionToken;

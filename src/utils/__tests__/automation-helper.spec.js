@@ -19,6 +19,7 @@ describe('automation helper', () => {
   const automationId = 'fakeAutomationId';
   const automationExecutionToken = 'fakeExecutionToken';
   const runId = 'fakeRunId';
+  const baseUrl = 'https://www.myBaseUrl.com/';
   const automationData = {
     id: automationId,
     inputs: {
@@ -82,15 +83,15 @@ describe('automation helper', () => {
     });
     it('triggered automation should return triggered url', () => {
       automationTriggered = true;
-      const result = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
+      const result = getAutomationUrl({ automationId, automationTriggered, automationExecutionToken, baseUrl });
       expect(result).toEqual(
-        `../api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`
+        `${baseUrl}api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`
       );
     });
     it('not triggered automation should return run url', () => {
       automationTriggered = false;
-      const result = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
-      expect(result).toEqual(`../api/v1/automations/${automationId}/runs`);
+      const result = getAutomationUrl({ automationId, automationTriggered, automationExecutionToken, baseUrl });
+      expect(result).toEqual(`${baseUrl}api/v1/automations/${automationId}/runs`);
     });
     it('without bookmark should only return one block', () => {
       const result = getInputBlocks(bookmark);
@@ -113,7 +114,7 @@ describe('automation helper', () => {
         headers,
         body: JSON.stringify(automationData.inputs),
       };
-      const result = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
+      const result = await getPostOptions({ automationTriggered, automationExecutionToken, automationData, baseUrl });
       expect(result).toEqual(postOptions);
     });
     it('non triggered automation should return header without execution be equal to automation data', async () => {
@@ -127,7 +128,7 @@ describe('automation helper', () => {
         headers,
         body: JSON.stringify(automationData),
       };
-      const result = await getPostOptions(automationTriggered, automationExecutionToken, automationData);
+      const result = await getPostOptions({ automationTriggered, automationExecutionToken, automationData, baseUrl });
       expect(result).toEqual(postOptions);
     });
     it('should return after status changed to finsihed', async () => {
@@ -139,7 +140,7 @@ describe('automation helper', () => {
         .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
         .mockResolvedValueOnce({ json: () => Promise.resolve(finished) });
       const prom = new Promise((resolve) => {
-        automationRunPolling(automationId, runId, translator, 0, resolve);
+        automationRunPolling({ automationId, runId, translator, pollingTimes: 0, resolve, baseUrl });
       });
       jest.runAllTicks();
       jest.runAllTimers();
@@ -156,7 +157,7 @@ describe('automation helper', () => {
         .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
         .mockResolvedValueOnce({ json: () => Promise.resolve(failed) });
       const prom = new Promise((resolve) => {
-        automationRunPolling(automationId, runId, translator, 0, resolve);
+        automationRunPolling({ automationId, runId, translator, polTimes: 0, resolve, baseUrl });
       });
       jest.runAllTicks();
       jest.runAllTimers();

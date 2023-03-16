@@ -5,7 +5,7 @@ function checkForPrefix(url) {
   return urlArray[1] === 'app' ? '' : `/${urlArray[1]}`;
 }
 
-function getSenseServerUrl(app) {
+export function getSenseServerUrl(app) {
   let config;
   let wsUrl;
   let protocol;
