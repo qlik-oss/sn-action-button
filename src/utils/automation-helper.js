@@ -140,7 +140,7 @@ export const automationRunPolling = async ({ automationId, runId, translator, po
   }
 };
 
-export const pollAutomationAndGetMsg = async ({ automationId, triggered, response, translator, baseUrl }) => {
+export const pollAutomationAndGetMsg = async ({ automationId, automationTriggered, response, translator, baseUrl }) => {
   let message;
   switch (response.status) {
     case 200:
@@ -149,7 +149,7 @@ export const pollAutomationAndGetMsg = async ({ automationId, triggered, respons
       const { status, guid, id } = data;
       const queued = status === 'queued';
       const runId = typeof id === 'undefined' ? guid : id;
-      if (!triggered || queued) {
+      if (!automationTriggered || queued) {
         const prom = new Promise((resolve) => {
           automationRunPolling({ automationId, runId, translator, polTimes: 0, resolve, baseUrl });
         });
