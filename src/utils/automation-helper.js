@@ -6,18 +6,18 @@ const POLL_INTERVAL = 2000;
 const MAX_POLLS = 300;
 
 const getUser = async (baseUrl) => {
-  const response = await fetch(`${baseUrl}api/v1/users/me`);
+  const response = await fetch(`${baseUrl}/api/v1/users/me`);
   const data = await response.json();
   return data;
 };
 
 const getCsrfToken = async (baseUrl) => {
-  const response = await fetch(`${baseUrl}api/v1/csrf-token`);
+  const response = await fetch(`${baseUrl}/api/v1/csrf-token`);
   return response.headers.get('qlik-csrf-token');
 };
 
 const getSpaceId = async (appId, baseUrl) => {
-  const response = await fetch(`${baseUrl}api/v1/apps/${appId}`);
+  const response = await fetch(`${baseUrl}/api/v1/apps/${appId}`);
   const data = await response.json();
   return data?.attributes?.spaceId || 'personal';
 };
@@ -31,7 +31,7 @@ export const getAutomation = async (automationId) => {
 };
 
 export const getAutomationRun = async (automationId, runId, baseUrl) => {
-  const response = await fetch(`${baseUrl}api/v1/automations/${automationId}/runs/${runId}`);
+  const response = await fetch(`${baseUrl}/api/v1/automations/${automationId}/runs/${runId}`);
   return response.json();
 };
 
@@ -363,9 +363,9 @@ export const oldAutomationRun = async (automation, automationPostData, app) => {
 
 export const getAutomationUrl = ({ automationId, automationTriggered, automationExecutionToken, baseUrl }) => {
   if (automationTriggered) {
-    return `${baseUrl}api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
+    return `${baseUrl}/api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`;
   }
-  return `${baseUrl}api/v1/automations/${automationId}/runs`;
+  return `${baseUrl}/api/v1/automations/${automationId}/runs`;
 };
 
 export const getTemporaryBookmark = async (app) => {

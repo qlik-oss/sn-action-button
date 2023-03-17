@@ -19,7 +19,7 @@ describe('automation helper', () => {
   const automationId = 'fakeAutomationId';
   const automationExecutionToken = 'fakeExecutionToken';
   const runId = 'fakeRunId';
-  const baseUrl = 'https://www.myBaseUrl.com/';
+  const baseUrl = 'https://www.myBaseUrl.com';
   const automationData = {
     id: automationId,
     inputs: {
@@ -85,13 +85,13 @@ describe('automation helper', () => {
       automationTriggered = true;
       const result = getAutomationUrl({ automationId, automationTriggered, automationExecutionToken, baseUrl });
       expect(result).toEqual(
-        `${baseUrl}api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`
+        `${baseUrl}/api/v1/automations/${automationId}/actions/execute?X-Execution-Token=${automationExecutionToken}`
       );
     });
     it('not triggered automation should return run url', () => {
       automationTriggered = false;
       const result = getAutomationUrl({ automationId, automationTriggered, automationExecutionToken, baseUrl });
-      expect(result).toEqual(`${baseUrl}api/v1/automations/${automationId}/runs`);
+      expect(result).toEqual(`${baseUrl}/api/v1/automations/${automationId}/runs`);
     });
     it('without bookmark should only return one block', () => {
       const result = getInputBlocks(bookmark);

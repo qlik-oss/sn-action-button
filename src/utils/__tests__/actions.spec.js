@@ -76,7 +76,7 @@ describe('actions', () => {
         doReload: jest.fn(() => true),
         doSave: jest.fn(),
         saveObjects: jest.fn(),
-        session: { config: { url: 'wss://myBaseUrl.com' } },
+        session: { config: { url: 'wss://myBaseUrl.com/app' } },
       };
       global.fetch = jest.fn(() =>
         Promise.resolve({
