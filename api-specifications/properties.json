@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.29.0",
+    "version": "1.28.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -240,6 +240,12 @@
           "defaultValue": false,
           "type": "boolean"
         },
+        "automationShowTriggered": {
+          "description": "Set to true when the selected automation is capable of have a triggered run mode",
+          "optional": true,
+          "defaultValue": false,
+          "type": "boolean"
+        },
         "automationTriggered": {
           "description": "Set to true when the automation should use the triggered run mode. Defaults to false",
           "optional": true,
@@ -247,7 +253,7 @@
           "type": "boolean"
         },
         "automationTriggeredText": {
-          "description": "Helper text when using the triggered run mode. Defaults to false",
+          "description": "Helper text when using the triggered run mode",
           "optional": true,
           "defaultValue": "''",
           "type": "string"
@@ -303,23 +309,6 @@
           "optional": true,
           "type": "#/definitions/ColorExpression"
         },
-        "mode": {
-          "description": "Toggles the background image, set to media to show the image",
-          "optional": true,
-          "defaultValue": "'none'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'none'"
-            },
-            {
-              "kind": "literal",
-              "value": "'media'"
-            }
-          ],
-          "type": "string"
-        },
         "useImage": {
           "description": "Set to true to show background image",
           "optional": true,
@@ -347,7 +336,7 @@
         "position": {
           "description": "Image position",
           "optional": true,
-          "defaultValue": "'center-center'",
+          "defaultValue": "'centerCenter'",
           "kind": "union",
           "items": [
             {
@@ -385,38 +374,6 @@
             {
               "kind": "literal",
               "value": "'bottomRight'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottom-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-right'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-right'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottom-right'"
             }
           ],
           "type": "string"
