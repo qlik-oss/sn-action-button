@@ -132,9 +132,8 @@ export const getStyleEditorDefinition = () => ({
               ],
               change(data) {
                 const bgImageComp = data.style.background;
-                bgImageComp
-                  ? (bgImageComp.url = { qStaticContentUrlDef: '' })
-                  : (data.style.background = { url: { qStaticContentUrlDef: '' } });
+                if (!bgImageComp) data.style.background = { qStaticContentUrlDef: {} };
+                if (!bgImageComp.url) data.style.background.url = {};
               },
             },
             MediaLibrary: {
@@ -174,8 +173,8 @@ export const getStyleEditorDefinition = () => ({
                 },
               ],
               change: (data) => {
-                let currentPosition = propertyResolver.getValue(data, 'style.background.position');
-                if (currentPosition) currentPosition = styleDefaults.BGIMAGE_POSITION;
+                if (propertyResolver.getValue(data, 'style.background.position'))
+                  data.style.background.position = styleDefaults.BGIMAGE_POSITION;
               },
               show: (data) =>
                 propertyResolver.getValue(data, 'style.background.mode') === 'media' &&
