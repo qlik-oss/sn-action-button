@@ -1,5 +1,6 @@
 import styleFormatter from '../style-formatter';
 import defaultValues from '../../__tests__/default-button-props';
+import { getStyleEditorDefinition } from '../../styling-panel-definition';
 
 describe('style-formatter', () => {
   describe('getStyles', () => {
@@ -24,7 +25,7 @@ describe('style-formatter', () => {
       const d = defaultValues();
       theme = d.theme;
       layout = d.layout;
-      style = JSON.parse(JSON.stringify(layout.style));
+      style = layout.style;
       element = {
         offsetHeight: 200,
         offsetWidth: 100,
@@ -98,15 +99,6 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-color: myPrimaryColor')).toBe(true);
     });
 
-    it('should not return specified image url when the background mode is set on none', () => {
-      style.background.useImage = false;
-      style.background.mode = 'none';
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
-      expect(formattedStyle.includes('background-size: auto auto')).toBe(false);
-      expect(formattedStyle.includes('background-position: 50% 50%')).toBe(false);
-      expect(formattedStyle.includes('background-repeat: no-repeat')).toBe(false);
-    });
-
     it('should return specified image url when the background mode is set on media', () => {
       style.background.useImage = false;
       style.background.mode = 'media';
@@ -127,6 +119,27 @@ describe('style-formatter', () => {
       expect(formattedStyle.includes('background-size:')).toBe(false);
       expect(formattedStyle.includes('background-position:')).toBe(false);
       expect(formattedStyle.includes('background-repeat:')).toBe(false);
+    });
+
+    it('should keep the image url but not show it when the mode changes from media to none', () => {
+      const { backgroundImageMode } = getStyleEditorDefinition().items.backgroundOptions.items.backgroundImage.items;
+
+      style.background.useImage = false;
+      style.background.mode = 'media';
+      style.background.url.qStaticContentUrl = { qUrl: someUrl };
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-image:')).toBe(true);
+
+      style.background.mode = 'none';
+      backgroundImageMode.change(layout);
+      expect(style.background.url.qStaticContentUrl.qUrl).toEqual('/media/Logo/qlik.png');
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-image:')).toBe(false);
+
+      style.background.mode = 'media';
+      backgroundImageMode.change(layout);
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(formattedStyle.includes('background-image:')).toBe(true);
     });
 
     it('should return specified image url and default image settings', () => {
