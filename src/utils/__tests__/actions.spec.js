@@ -22,7 +22,6 @@ describe('actions', () => {
   const id = 'fakeId';
   const sheetId = 'fakeSheetId';
   const senseNavigation = { getCurrentSheetId: () => sheetId };
-  const subject = 'fakeSubject';
   const tenantId = 'fakeTenantId';
   const spaceId = 'fakeSpaceId';
   const csrfToken = 'fakeCsrfToken';
@@ -85,7 +84,6 @@ describe('actions', () => {
             automationExecutionToken,
             inputs,
             blocks,
-            subject,
             tenantId,
             headers: { get: () => csrfToken },
             attributes: { spaceId },
@@ -368,7 +366,7 @@ describe('actions', () => {
         body: JSON.stringify({
           app: appId,
           sheet: sheetId,
-          user: subject,
+          user: id,
           space: spaceId,
           tenant: tenantId,
           time,
@@ -410,7 +408,7 @@ describe('actions', () => {
         inputs: {
           app: app.id,
           sheet: sheetId,
-          user: subject,
+          user: id,
           space: spaceId,
           tenant: tenantId,
           time,

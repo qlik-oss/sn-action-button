@@ -14,7 +14,7 @@ describe('automation helper', () => {
   const csrfToken = 'fakeCsrfToken';
   const spaceId = 'fakeSpaceId';
   const sheetId = 'fakeSheetId';
-  const subject = 'fakeSubject';
+  const userId = 'fakeUserId';
   const tenantId = 'fakeTenantId';
   const automationId = 'fakeAutomationId';
   const automationExecutionToken = 'fakeExecutionToken';
@@ -24,7 +24,7 @@ describe('automation helper', () => {
     inputs: {
       app: app.id,
       sheet: sheetId,
-      user: subject,
+      user: userId,
       space: spaceId,
       tenant: tenantId,
       time: new Date(),
@@ -46,7 +46,7 @@ describe('automation helper', () => {
         Promise.resolve({
           json: () => ({
             attributes: { spaceId },
-            subject,
+            id: userId,
             tenantId,
             guid: automationId,
             status,
