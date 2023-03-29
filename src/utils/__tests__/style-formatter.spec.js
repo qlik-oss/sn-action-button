@@ -316,66 +316,140 @@ describe('style-formatter', () => {
       jest.resetAllMocks();
     });
 
-    it('should set fontSize and styling', () => {
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      const text = button.children[0];
-      expect(text.children[0].textContent).toEqual('Button');
-      expect(text.style.whiteSpace).toEqual('nowrap');
-      expect(text.style.fontFamily).toEqual('Source Sans Pro');
-      expect(text.style.fontSize).toEqual('11.5px');
-      expect(text.style.display).toEqual('flex');
-      expect(text.style.alignItems).toEqual('center');
-      expect(text.style.justifyContent).toEqual('center');
-    });
+    describe('font size behavior: ', () => {
+      describe('responsive', () => {
+        it('should set fontSize and styling', () => {
+          expect(style.font.sizeBehavior).toBe('responsive');
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.children[0].textContent).toEqual('Button');
+          expect(text.style.whiteSpace).toEqual('pre');
+          expect(text.style.fontFamily).toEqual('Source Sans Pro');
+          expect(text.style.fontSize).toEqual('11.50px');
+          expect(text.style.display).toEqual('flex');
+          expect(text.style.alignItems).toEqual('center');
+          expect(text.style.justifyContent).toEqual('center');
+        });
 
-    it('should set fontSize to 8px for small font sizes', () => {
-      button.appendChild = (child) => {
-        child.setAttribute = jest.fn();
-        child.offsetHeight = 400;
-        child.offsetWidth = 400;
-        button.children.push(child);
-      };
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      expect(button.children[0].style.fontSize).toEqual('8px');
-    });
+        it('should set fontSize to 8px for small font sizes', () => {
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 400;
+            child.offsetWidth = 400;
+            button.children.push(child);
+          };
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toEqual('8px');
+        });
 
-    it('should set fontSize when text offsetWidth is bigger than button', () => {
-      button.appendChild = (child) => {
-        child.setAttribute = jest.fn();
-        child.offsetHeight = 400;
-        child.offsetWidth = 125;
-        button.children.push(child);
-      };
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      expect(button.children[0].style.fontSize).toEqual('9.200000000000001px');
-    });
+        it('should set fontSize when text offsetWidth is bigger than button', () => {
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 400;
+            child.offsetWidth = 125;
+            button.children.push(child);
+          };
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toEqual('9.20px');
+        });
 
-    it('should set fontSize when italic is selected', () => {
-      style.font.style = {
-        italic: true,
-      };
-      button.appendChild = (child) => {
-        child.setAttribute = jest.fn();
-        child.offsetHeight = 400;
-        child.offsetWidth = 125;
-        button.children.push(child);
-      };
-      styleFormatter.createLabelAndIcon({ theme, button, style });
-      expect(button.children[0].style.fontSize).toEqual('9px');
-    });
+        it('should set fontSize when italic is selected', () => {
+          style.font.style = {
+            italic: true,
+          };
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 400;
+            child.offsetWidth = 125;
+            button.children.push(child);
+          };
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toEqual('9px');
+        });
 
-    it('should place icon first then label inside text element with italics', () => {
-      style.font.style = {
-        italic: true,
-      };
-      const isSense = true;
-      style.icon.useIcon = true;
-      style.icon.iconType = 'back';
-      styleFormatter.createLabelAndIcon({ theme, button, style, isSense });
-      const text = button.children[0];
-      expect(text.children[0].style.textDecoration).toEqual('none');
-      expect(text.children[1].textContent).toEqual('Button');
-      expect(button.children[0].style.fontSize).toEqual('10.5px');
+        it('should place icon first then label inside text element with italics', () => {
+          style.font.style = {
+            italic: true,
+          };
+          const isSense = true;
+          style.icon.useIcon = true;
+          style.icon.iconType = 'back';
+          styleFormatter.createLabelAndIcon({ theme, button, style, isSense });
+          const text = button.children[0];
+          expect(text.children[0].style.textDecoration).toEqual('none');
+          expect(text.children[1].textContent).toEqual('Button');
+          expect(button.children[0].style.fontSize).toEqual('10.50px');
+        });
+      });
+
+      describe('fluid', () => {
+        it('adjusts font size to the size of the button', () => {
+          expect(style.font.size).toBe(0.5);
+          style.font.sizeBehavior = 'fluid';
+          button.clientWidth = 100;
+          button.clientHeight = 50;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toBe('12.5px');
+          // change the button size
+          button.clientWidth = 200;
+          button.clientHeight = 200;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[1].style.fontSize).toBe('25px');
+        });
+
+        it('adjusts font size to the size of the button and text length is not considered', () => {
+          expect(style.font.size).toBe(0.5);
+          style.font.sizeBehavior = 'fluid';
+          button.clientWidth = 100;
+          button.clientHeight = 50;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toBe('12.5px');
+          // change the text offset sizes
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 20;
+            child.offsetWidth = 400;
+            button.children.push(child);
+          };
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[1].style.fontSize).toBe('12.5px');
+        });
+      });
+
+      describe('fixed', () => {
+        it('adjusts font size to the layout font size', () => {
+          expect(style.font.size).toBe(0.5);
+          style.font.sizeBehavior = 'fixed';
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toBe('46px');
+          style.font.size = 0.6;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[1].style.fontSize).toBe('55.20px');
+        });
+
+        it('adjusts font size to the layout font size, none of the button or text length is considered', () => {
+          expect(style.font.size).toBe(0.5);
+          style.font.sizeBehavior = 'fixed';
+          button.clientWidth = 100;
+          button.clientHeight = 50;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toBe('46px');
+          // change the button client sizes
+          button.clientWidth = 50;
+          button.clientHeight = 100;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[1].style.fontSize).toBe('46px');
+          // change the text offset sizes
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 20;
+            child.offsetWidth = 400;
+            button.children.push(child);
+          };
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[2].style.fontSize).toBe('46px');
+        });
+      });
     });
 
     it('should place label first then icon inside text element', () => {

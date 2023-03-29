@@ -73,8 +73,43 @@ export const toggleOptions = [
   },
 ];
 
+export const fontSizeOptions = [
+  {
+    value: 'responsive',
+    translation: 'properties.responsive',
+  },
+  {
+    value: 'fixed',
+    translation: 'properties.fixed',
+  },
+  {
+    value: 'fluid',
+    translation: 'properties.fluid',
+  },
+];
+
 const getFirstFont = (s) => s.split(',')[0];
 export const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
   value: font,
   label: getFirstFont(font),
 }));
+
+const trimDecimal = (num) => (num % 1 !== 0 ? num.toFixed(2) : num);
+
+export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
+  if (font.style && font.style.italic) {
+    if (hasIcon) {
+      text.style.fontSize = `${trimDecimal(Math.max(textFontSize * 0.84, 8))}px`;
+      text.children[0].style.marginRight = `${trimDecimal(text.offsetWidth * 0.04)}px`;
+      text.children[1].style.marginRight = `${trimDecimal(text.offsetWidth * 0.04)}px`;
+    } else {
+      text.style.fontSize = `${trimDecimal(Math.max(textFontSize * 0.9, 8))}px`;
+      text.children[0].style.marginRight = `${trimDecimal(text.offsetWidth * 0.02)}px`;
+    }
+  } else if (hasIcon) {
+    text.style.fontSize = `${trimDecimal(Math.max(textFontSize * 0.88, 8))}px`;
+    text.children[0].style.marginRight = `${trimDecimal(text.offsetWidth * 0.04)}px`;
+  } else {
+    text.style.fontSize = `${trimDecimal(Math.max(textFontSize * 0.92, 8))}px`;
+  }
+};

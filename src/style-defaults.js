@@ -4,6 +4,7 @@ export default {
   FONT_COLOR: { index: -1, color: '#ffffff' },
   FONT_STYLE: { bold: true, italic: false, underline: false },
   FONT_FAMILY: 'Source Sans Pro',
+  SIZE_BEHAVIOR: 'responsive',
   TEXT_ALIGN: 'center',
   COLOR: { index: -1, color: 'none' },
   ICON_POSITION: 'left',
