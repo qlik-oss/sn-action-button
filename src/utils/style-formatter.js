@@ -2,7 +2,7 @@ import colorUtils from './color-utils';
 import luiIcons from './lui-icons';
 import { getImageUrl } from './url-utils';
 import DEFAULTS from '../style-defaults';
-import { backgroundSize, backgroundPosition } from './style-utils';
+import { backgroundSize, backgroundPosition, setTextFontSize } from './style-utils';
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
@@ -56,13 +56,13 @@ export default {
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement('text');
-    text.style.whiteSpace = 'nowrap';
+    text.style.whiteSpace = 'pre';
     text.style.fontFamily = style.font.fontFamily || theme.getStyle('', '', 'fontFamily') || DEFAULTS.FONT_FAMILY;
 
     // label
     const textSpan = document.createElement('span');
     textSpan.textContent = label;
-    textSpan.style.whiteSpace = 'nowrap';
+    textSpan.style.whiteSpace = 'pre';
     textSpan.style.textOverflow = 'ellipsis';
     textSpan.style.overflow = 'visible';
     font.style && font.style.underline && (textSpan.style.textDecoration = 'underline');
@@ -80,33 +80,38 @@ export default {
     button.innerHTML = '';
     button.appendChild(text);
 
-    // Calculations on font size.
-    // 1. Setting font size to height of button container
-    text.style.fontSize = `${button.clientHeight}px`;
-    // 2. Adjust the font size to the height ratio between button container and text box
-    let newFontsize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
-    text.style.fontSize = `${newFontsize}px`;
-    // 3. Adjust the font size to the width ratio between button container and text box
-    if (text.offsetWidth > button.clientWidth) {
-      newFontsize *= button.clientWidth / text.offsetWidth;
-    }
-    // 4. Setting final font size by scaling with the font size from the layout + other font styling
-    const fontScale = font.size || DEFAULTS.FONT_SIZE;
-    if (font.style && font.style.italic) {
-      if (hasIcon) {
-        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.84, 8)}px`;
-        text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
-        text.children[1].style.marginRight = `${text.offsetWidth * 0.04}px`;
-      } else {
-        text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.9, 8)}px`;
-        text.children[0].style.marginRight = `${text.offsetWidth * 0.02}px`;
+    // font size adapts to the size of the box and the length of text
+    if (Object.keys(font).length === 0 || font.sizeBehavior === 'responsive') {
+      // 1. Setting font size to height of button container
+      text.style.fontSize = `${button.clientHeight}px`;
+      // 2. Adjust the font size to the height ratio between button container and text box
+      let adjustedFontSize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+      text.style.fontSize = `${adjustedFontSize}px`;
+      // 3. Adjust the font size to the width ratio between button container and text box
+      if (text.offsetWidth > button.clientWidth) {
+        adjustedFontSize *= button.clientWidth / text.offsetWidth;
       }
-    } else if (hasIcon) {
-      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.88, 8)}px`;
-      text.children[0].style.marginRight = `${text.offsetWidth * 0.04}px`;
+      // 4. Setting final font size by scaling with the font size from the layout + other font styling
+      const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
+      setTextFontSize(text, font, textFontSize, hasIcon);
+    } // Adjust the font size to the size of the box
+    else if (font.sizeBehavior === 'fluid') {
+      const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
+      // 40 here is just a hard coded value which seems to work quite well.
+      const calculatedWidth = 40 / layoutFontSize;
+      const fontSize = Math.min(
+        (button.clientWidth / calculatedWidth) * 10,
+        button.clientHeight * layoutFontSize * 0.8
+      );
+      text.style.fontSize = `${fontSize}px`;
+      textSpan.style.overflow = 'hidden';
     } else {
-      text.style.fontSize = `${Math.max(newFontsize * fontScale * 0.92, 8)}px`;
+      // The font size is independent of the box size and the length of the text
+      const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
+      setTextFontSize(text, font, textFontSize, hasIcon);
+      textSpan.style.overflow = 'hidden';
     }
+
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
       text.children.forEach((child) => {

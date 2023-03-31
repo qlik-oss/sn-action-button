@@ -1,6 +1,6 @@
 import styleDefaults from './style-defaults';
 import propertyResolver from './utils/property-resolver';
-import { fontFamilyOptions, colorOptions, toggleOptions } from './utils/style-utils';
+import { fontFamilyOptions, colorOptions, toggleOptions, fontSizeOptions } from './utils/style-utils';
 
 export const getStyleEditorDefinition = () => ({
   items: {
@@ -34,6 +34,13 @@ export const getStyleEditorDefinition = () => ({
                   defaultValue: styleDefaults.TEXT_ALIGN,
                 },
               },
+            },
+            fontSizeBehavior: {
+              component: 'dropdown',
+              ref: 'style.font.sizeBehavior',
+              translation: 'properties.kpi.layoutBehavior',
+              defaultValue: 'responsive',
+              options: fontSizeOptions,
             },
             fontSize: {
               component: 'slider',

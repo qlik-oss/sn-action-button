@@ -68,6 +68,7 @@ const properties = {
       color: DEFAULTS.FONT_COLOR,
       colorExpression: '',
       size: DEFAULTS.FONT_SIZE,
+      sizeBehavior: DEFAULTS.SIZE_BEHAVIOR,
       style: DEFAULTS.FONT_STYLE,
       align: DEFAULTS.TEXT_ALIGN,
     },
@@ -158,6 +159,7 @@ const properties = {
  * @property {boolean=} [style.bold = true] - Bold text
  * @property {boolean=} [style.italic = false] - Italic text
  * @property {boolean=} [style.underline = false] - Underlined text
+ * @property {('responsive'|'fluid'|'fixed')} [sizeBehavior='responsive'] - Setting to determine how the fontsize of the label is calculated.
  */
 
 /**
