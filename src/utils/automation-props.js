@@ -58,7 +58,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
   includeSelectionsText: {
     translation: `Object.ActionButton.Automation.SendSelectionsHelp`,
     component: 'text',
-    show: (data) => data.automationPostData && multiUserAutomation,
+    show: () => multiUserAutomation,
   },
   automationTriggered: {
     type: 'boolean',
@@ -78,7 +78,7 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
   automationTriggeredText: {
     translation: `Object.ActionButton.Automation.RunModeTriggeredHelp`,
     component: 'text',
-    show: (data) => multiUserAutomation && data.automationTriggered,
+    show: () => multiUserAutomation,
   },
   automationShowNotification: {
     ref: 'automationShowNotification',

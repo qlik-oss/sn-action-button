@@ -384,7 +384,7 @@ export const getAutomationData = async ({ app, automationId, bookmark, senseNavi
     app: app.id,
     bookmark,
     sheet: senseNavigation?.getCurrentSheetId(),
-    user: user.subject,
+    user: user.id,
     space: await getSpaceId(app.id),
     tenant: user.tenantId,
     time: new Date(),
@@ -516,7 +516,7 @@ export const getInputBlocks = (bookmark) => {
       childId: null,
       inputs: [
         { id: 'd41ae430-073a-11ec-bdef-bb104839c843', value: '{$.inputs.app}', type: 'string', structure: [] },
-        { id: 'fab02320-9270-11ed-a391-739edffdb33c', value: '{$.inputs.bookmark}', type: 'string', structure: [] },
+        { id: 'd41b7e40-073a-11ec-ac1b-59270c518ae7', value: '{$.inputs.bookmark}', type: 'string', structure: [] },
         {
           id: 'f478e320-9270-11ed-b551-d73ebe8e14ad',
           value: 'Yes',
