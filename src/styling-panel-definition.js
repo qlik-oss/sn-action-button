@@ -273,7 +273,7 @@ export const getStyleEditorDefinition = () => ({
   },
 });
 
-export const getStylingPanelDefinition = (bkgOptionsEnabled) => ({
+export const getStylingPanelDefinition = () => ({
   type: 'items',
   grouped: false,
   translation: 'properties.presentation',
@@ -285,7 +285,7 @@ export const getStylingPanelDefinition = (bkgOptionsEnabled) => ({
       subtitle: 'LayerStyleEditor.component.styling',
       ref: 'components',
       useGeneral: true,
-      useBackground: bkgOptionsEnabled,
+      useBackground: true,
       ...getStyleEditorDefinition(),
     },
   },
