@@ -1,3 +1,5 @@
+import DEFAULTS from '../style-defaults';
+
 export const FONT_FAMILIES = [
   'American Typewriter, serif',
   'Andalé Mono, monospace',
@@ -111,5 +113,34 @@ export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
     text.children[0].style.marginRight = `${trimDecimal(text.offsetWidth * 0.04)}px`;
   } else {
     text.style.fontSize = `${trimDecimal(Math.max(textFontSize * 0.92, 8))}px`;
+  }
+};
+
+export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) => {
+  if (font.sizeBehavior === 'fixed') {
+    // The font size is independent of the box size and the length of the text
+    const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
+    setTextFontSize(text, font, textFontSize, hasIcon);
+    textSpan.style.overflow = 'hidden';
+  } else if (font.sizeBehavior === 'relative') {
+    const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
+    // 40 here is just a hard coded value which seems to work quite well.
+    const calculatedWidth = 40 / layoutFontSize;
+    const fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * layoutFontSize * 0.8);
+    text.style.fontSize = `${fontSize}px`;
+    textSpan.style.overflow = 'hidden';
+  } else {
+    // 1. Setting font size to height of button container
+    text.style.fontSize = `${button.clientHeight}px`;
+    // 2. Adjust the font size to the height ratio between button container and text box
+    let adjustedFontSize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+    text.style.fontSize = `${adjustedFontSize}px`;
+    // 3. Adjust the font size to the width ratio between button container and text box
+    if (text.offsetWidth > button.clientWidth) {
+      adjustedFontSize *= button.clientWidth / text.offsetWidth;
+    }
+    // 4. Setting final font size by scaling with the font size from the layout + other font styling
+    const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
+    setTextFontSize(text, font, textFontSize, hasIcon);
   }
 };
