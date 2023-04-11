@@ -31,7 +31,6 @@ export default () => ({
           label: 'Button',
           font: {
             size: 0.46,
-            sizeBehavior: 'responsive',
             useColorExpression: false,
             color: {
               index: 8,

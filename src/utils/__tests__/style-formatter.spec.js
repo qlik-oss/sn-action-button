@@ -382,10 +382,10 @@ describe('style-formatter', () => {
         });
       });
 
-      describe('fluid', () => {
+      describe('relative', () => {
         it('adjusts font size to the size of the button', () => {
           expect(style.font.size).toBe(0.5);
-          style.font.sizeBehavior = 'fluid';
+          style.font.sizeBehavior = 'relative';
           button.clientWidth = 100;
           button.clientHeight = 50;
           styleFormatter.createLabelAndIcon({ theme, button, style });
@@ -399,7 +399,7 @@ describe('style-formatter', () => {
 
         it('adjusts font size to the size of the button and text length is not considered', () => {
           expect(style.font.size).toBe(0.5);
-          style.font.sizeBehavior = 'fluid';
+          style.font.sizeBehavior = 'relative';
           button.clientWidth = 100;
           button.clientHeight = 50;
           styleFormatter.createLabelAndIcon({ theme, button, style });

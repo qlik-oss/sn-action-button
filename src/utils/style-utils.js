@@ -79,12 +79,12 @@ export const fontSizeOptions = [
     translation: 'properties.responsive',
   },
   {
-    value: 'fixed',
-    translation: 'properties.fixed',
+    value: 'relative',
+    translation: 'properties.fluid',
   },
   {
-    value: 'fluid',
-    translation: 'properties.fluid',
+    value: 'fixed',
+    translation: 'properties.fixed',
   },
 ];
 

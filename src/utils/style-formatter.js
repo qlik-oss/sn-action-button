@@ -80,8 +80,22 @@ export default {
     button.innerHTML = '';
     button.appendChild(text);
 
-    // font size adapts to the size of the box and the length of text
-    if (Object.keys(font).length === 0 || font.sizeBehavior === 'responsive') {
+    if (font.sizeBehavior === 'relative') {
+      const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
+      // 40 here is just a hard coded value which seems to work quite well.
+      const calculatedWidth = 40 / layoutFontSize;
+      const fontSize = Math.min(
+        (button.clientWidth / calculatedWidth) * 10,
+        button.clientHeight * layoutFontSize * 0.8
+      );
+      text.style.fontSize = `${fontSize}px`;
+      textSpan.style.overflow = 'hidden';
+    } else if (font.sizeBehavior === 'fixed') {
+      // The font size is independent of the box size and the length of the text
+      const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
+      setTextFontSize(text, font, textFontSize, hasIcon);
+      textSpan.style.overflow = 'hidden';
+    } else {
       // 1. Setting font size to height of button container
       text.style.fontSize = `${button.clientHeight}px`;
       // 2. Adjust the font size to the height ratio between button container and text box
@@ -94,23 +108,39 @@ export default {
       // 4. Setting final font size by scaling with the font size from the layout + other font styling
       const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
       setTextFontSize(text, font, textFontSize, hasIcon);
-    } // Adjust the font size to the size of the box
-    else if (font.sizeBehavior === 'fluid') {
-      const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
-      // 40 here is just a hard coded value which seems to work quite well.
-      const calculatedWidth = 40 / layoutFontSize;
-      const fontSize = Math.min(
-        (button.clientWidth / calculatedWidth) * 10,
-        button.clientHeight * layoutFontSize * 0.8
-      );
-      text.style.fontSize = `${fontSize}px`;
-      textSpan.style.overflow = 'hidden';
-    } else {
-      // The font size is independent of the box size and the length of the text
-      const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
-      setTextFontSize(text, font, textFontSize, hasIcon);
-      textSpan.style.overflow = 'hidden';
     }
+
+    // // font size adapts to the size of the box and the length of text
+    // if (Object.keys(font).length === 0 || font.sizeBehavior === 'responsive') {
+    //   // 1. Setting font size to height of button container
+    //   text.style.fontSize = `${button.clientHeight}px`;
+    //   // 2. Adjust the font size to the height ratio between button container and text box
+    //   let adjustedFontSize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+    //   text.style.fontSize = `${adjustedFontSize}px`;
+    //   // 3. Adjust the font size to the width ratio between button container and text box
+    //   if (text.offsetWidth > button.clientWidth) {
+    //     adjustedFontSize *= button.clientWidth / text.offsetWidth;
+    //   }
+    //   // 4. Setting final font size by scaling with the font size from the layout + other font styling
+    //   const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
+    //   setTextFontSize(text, font, textFontSize, hasIcon);
+    // } // Adjust the font size to the size of the box
+    // else if (font.sizeBehavior === 'relative') {
+    //   const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
+    //   // 40 here is just a hard coded value which seems to work quite well.
+    //   const calculatedWidth = 40 / layoutFontSize;
+    //   const fontSize = Math.min(
+    //     (button.clientWidth / calculatedWidth) * 10,
+    //     button.clientHeight * layoutFontSize * 0.8
+    //   );
+    //   text.style.fontSize = `${fontSize}px`;
+    //   textSpan.style.overflow = 'hidden';
+    // } else {
+    //   // The font size is independent of the box size and the length of the text
+    //   const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
+    //   setTextFontSize(text, font, textFontSize, hasIcon);
+    //   textSpan.style.overflow = 'hidden';
+    // }
 
     // hide overflow when there can be overflow
     if (text.style.fontSize === '8px') {
