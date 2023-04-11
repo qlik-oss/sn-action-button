@@ -318,6 +318,19 @@ describe('style-formatter', () => {
 
     describe('font size behavior: ', () => {
       describe('responsive', () => {
+        it('should set fontSize and styling when there is no sizeBehavior property', () => {
+          style.font = {};
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.children[0].textContent).toEqual('Button');
+          expect(text.style.whiteSpace).toEqual('pre');
+          expect(text.style.fontFamily).toEqual('Source Sans Pro');
+          expect(text.style.fontSize).toEqual('11.50px');
+          expect(text.style.display).toEqual('flex');
+          expect(text.style.alignItems).toEqual('center');
+          expect(text.style.justifyContent).toEqual('center');
+        });
+
         it('should set fontSize and styling', () => {
           expect(style.font.sizeBehavior).toBe('responsive');
           styleFormatter.createLabelAndIcon({ theme, button, style });
