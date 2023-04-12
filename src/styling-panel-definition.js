@@ -1,6 +1,6 @@
 import styleDefaults from './style-defaults';
 import propertyResolver from './utils/property-resolver';
-import { fontFamilyOptions, colorOptions, toggleOptions, fontSizeOptions } from './utils/style-utils';
+import { fontFamilyOptions, colorOptions, toggleOptions, sizeBehaviorOptions } from './utils/style-utils';
 
 export const getStyleEditorDefinition = () => ({
   items: {
@@ -40,7 +40,7 @@ export const getStyleEditorDefinition = () => ({
               ref: 'style.font.sizeBehavior',
               translation: 'properties.kpi.layoutBehavior',
               defaultValue: 'responsive',
-              options: fontSizeOptions,
+              options: sizeBehaviorOptions,
             },
             fontSize: {
               component: 'slider',
@@ -51,6 +51,17 @@ export const getStyleEditorDefinition = () => ({
               max: 1,
               step: 0.01,
               defaultValue: 0.5,
+              show: (data) => !(propertyResolver.getValue(data, 'style.font.sizeBehavior') === 'fixed'),
+            },
+            fontSizeFixed: {
+              type: 'number',
+              ref: 'style.font.sizeFixed',
+              component: 'integer',
+              translation: 'properties.fontSize',
+              min: 5,
+              defaultValue: 20,
+              option: 'optional',
+              show: (data) => propertyResolver.getValue(data, 'style.font.sizeBehavior') === 'fixed',
             },
             fontColor: {
               items: {
