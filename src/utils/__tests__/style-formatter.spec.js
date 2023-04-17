@@ -430,28 +430,23 @@ describe('style-formatter', () => {
       });
 
       describe('fixed', () => {
-        it('adjusts font size to the layout font size', () => {
-          expect(style.font.size).toBe(0.5);
+        it('adjusts font size to the layout default font size', () => {
           style.font.sizeBehavior = 'fixed';
           styleFormatter.createLabelAndIcon({ theme, button, style });
-          expect(button.children[0].style.fontSize).toBe('46px');
+          expect(button.children[0].style.fontSize).toBe('20px');
           style.font.size = 0.6;
           styleFormatter.createLabelAndIcon({ theme, button, style });
-          expect(button.children[1].style.fontSize).toBe('55.20px');
+          expect(button.children[1].style.fontSize).toBe('20px');
         });
 
         it('adjusts font size to the layout font size, none of the button or text length is considered', () => {
-          expect(style.font.size).toBe(0.5);
           style.font.sizeBehavior = 'fixed';
-          button.clientWidth = 100;
-          button.clientHeight = 50;
-          styleFormatter.createLabelAndIcon({ theme, button, style });
-          expect(button.children[0].style.fontSize).toBe('46px');
+          style.font.sizeFixed = 16;
           // change the button client sizes
           button.clientWidth = 50;
           button.clientHeight = 100;
           styleFormatter.createLabelAndIcon({ theme, button, style });
-          expect(button.children[1].style.fontSize).toBe('46px');
+          expect(button.children[0].style.fontSize).toBe('16px');
           // change the text offset sizes
           button.appendChild = (child) => {
             child.setAttribute = jest.fn();
@@ -460,7 +455,7 @@ describe('style-formatter', () => {
             button.children.push(child);
           };
           styleFormatter.createLabelAndIcon({ theme, button, style });
-          expect(button.children[2].style.fontSize).toBe('46px');
+          expect(button.children[1].style.fontSize).toBe('16px');
         });
       });
     });

@@ -75,7 +75,7 @@ export const toggleOptions = [
   },
 ];
 
-export const fontSizeOptions = [
+export const sizeBehaviorOptions = [
   {
     value: 'responsive',
     translation: 'properties.responsive',
@@ -119,8 +119,7 @@ export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
 export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) => {
   if (font.sizeBehavior === 'fixed') {
     // The font size is independent of the box size and the length of the text
-    const textFontSize = (font.size || DEFAULTS.FONT_SIZE) * 100;
-    setTextFontSize(text, font, textFontSize, hasIcon);
+    text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
     textSpan.style.overflow = 'hidden';
   } else if (font.sizeBehavior === 'relative') {
     const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
