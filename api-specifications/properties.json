@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.30.0",
+    "version": "1.31.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -560,6 +560,12 @@
           "defaultValue": 0.5,
           "type": "number"
         },
+        "sizeFixed": {
+          "description": "Fixed size of the label in pixels. Must be bigger than 5. Only active when sizeBehavior is fixed.",
+          "optional": true,
+          "defaultValue": 20,
+          "type": "number"
+        },
         "align": {
           "description": "Horizontal alignment",
           "optional": true,
@@ -618,7 +624,7 @@
             },
             {
               "kind": "literal",
-              "value": "'fluid'"
+              "value": "'relative'"
             },
             {
               "kind": "literal",
