@@ -1,4 +1,5 @@
-const serve = require('@nebula.js/cli-serve'); // eslint-disable-line
+/* eslint-disable no-undef */
+const serve = require("@nebula.js/cli-serve"); // eslint-disable-line
 
 let s;
 
@@ -7,14 +8,14 @@ before(async function run() {
   s = await serve({
     build: false,
     open: false,
-    type: 'action-button'
+    type: "action-button",
   });
 
   process.env.BASE_URL = s.url;
 
-  page.on('pageerror', e => {
+  page.on("pageerror", (e) => {
     // eslint-disable-next-line no-console
-    console.log('Error:', e.message, e.stack);
+    console.log("Error:", e.message, e.stack);
   });
 });
 

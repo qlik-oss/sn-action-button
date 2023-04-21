@@ -1,6 +1,6 @@
-import allActions from '../utils/actions';
-import navigationActions from '../utils/navigation-actions';
-import styleFormatter from '../utils/style-formatter';
+import allActions from "../utils/actions";
+import navigationActions from "../utils/navigation-actions";
+import styleFormatter from "../utils/style-formatter";
 
 export const runActions = async (actionList) => {
   for (let i = 0; i < actionList.length; i++) {
@@ -24,9 +24,15 @@ export const renderButton = ({
   const { style, qStateName, navigation } = layout;
   const disabled = layout.useEnabledCondition && layout.enabledCondition === 0;
   const isClickable = !disabled && !constraints.active;
-  const formattedStyles = styleFormatter.getStyles({ style, disabled, theme, element, app });
-  button.setAttribute('style', formattedStyles);
-  button.setAttribute('tabindex', '-1');
+  const formattedStyles = styleFormatter.getStyles({
+    style,
+    disabled,
+    theme,
+    element,
+    app,
+  });
+  button.setAttribute("style", formattedStyles);
+  button.setAttribute("tabindex", "-1");
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });
 
   button.onclick = async () => {
@@ -47,15 +53,20 @@ export const renderButton = ({
             })
           );
       });
-      button.setAttribute('disabled', true);
+      button.setAttribute("disabled", true);
       await runActions(actionCallList);
       if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
         const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
-        if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === 'function') {
-          await navigationObject.navigationCall({ app, senseNavigation, ...navigation, element });
+        if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === "function") {
+          await navigationObject.navigationCall({
+            app,
+            senseNavigation,
+            ...navigation,
+            element,
+          });
         }
       }
-      button.removeAttribute('disabled');
+      button.removeAttribute("disabled");
     }
   };
 
@@ -71,8 +82,8 @@ export const renderButton = ({
 
   const resetScale = () => {
     const { transform } = button.style;
-    if (isClickable && transform !== '' && transform !== 'scale(1)') {
-      button.style.transform = 'scale(1)';
+    if (isClickable && transform !== "" && transform !== "scale(1)") {
+      button.style.transform = "scale(1)";
     }
   };
 

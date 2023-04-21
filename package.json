@@ -2,16 +2,11 @@
   "name": "@nebula.js/sn-action-button",
   "version": "1.31.0",
   "description": "Action button supernova",
-  "license": "MIT",
-  "author": "QlikTech International AB",
   "keywords": [
     "qlik",
     "nebula",
     "supernova"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "bugs": {
     "url": "https://github.com/qlik-oss/sn-action-button/issues"
   },
@@ -19,34 +14,33 @@
     "type": "git",
     "url": "https://github.com/qlik-oss/sn-action-button.git"
   },
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "main": "dist/sn-action-button.js",
   "files": [
     "dist",
     "api-specifications",
     "core",
     "sn-action-button-ext"
   ],
-  "engines": {
-    "node": ">=16"
-  },
-  "main": "dist/sn-action-button.js",
-  "systemjs": "dist/sn-action-button.systemjs.js",
   "scripts": {
     "build": "node ./tools/build.js --core --ext",
     "build:dev": "node ./tools/build.js --core --ext --mode development",
     "build:watch": "node ./tools/build.js --ext --mode development -w",
-    "lint": "eslint src",
-    "format": "prettier --write 'src/**'",
-    "start": "nebula serve",
-    "sense": "nebula sense",
     "copy:ext": "node ./tools/copy-ext.js",
-    "test:unit": "jest",
-    "test:rendering": "playwright test",
-    "test:local:rendering": "./test/rendering/scripts/run-rendering-test.sh",
-    "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "format": "prettier --write '**'",
+    "format:check": "prettier --check '**'",
+    "lint": "eslint .",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install",
+    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "start": "nebula serve",
+    "test:local:rendering": "./test/rendering/scripts/run-rendering-test.sh",
+    "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh",
+    "test:rendering": "playwright test",
+    "test:unit": "jest",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
   },
@@ -59,8 +53,35 @@
       "yarn format"
     ]
   },
-  "peerDependencies": {
-    "@nebula.js/stardust": ">=2.13.0"
+  "prettier": "@qlik/prettier-config",
+  "eslintConfig": {
+    "env": {
+      "browser": true
+    },
+    "extends": [
+      "@qlik/eslint-config",
+      "@qlik/eslint-config/jest"
+    ],
+    "rules": {
+      "arrow-parens": 0,
+      "comma-dangle": 0,
+      "implicit-arrow-linebreak": 0,
+      "max-len": 0,
+      "no-bitwise": 0,
+      "no-nested-ternary": 0,
+      "no-param-reassign": 0,
+      "no-plusplus": 0,
+      "no-restricted-globals": 0,
+      "no-unused-expressions": 0,
+      "object-curly-newline": 0,
+      "operator-linebreak": 0,
+      "import/no-extraneous-dependencies": [
+        2,
+        {
+          "devDependencies": true
+        }
+      ]
+    }
   },
   "devDependencies": {
     "@babel/cli": "7.21.0",
@@ -76,13 +97,10 @@
     "@nebula.js/stardust": "3.3.0",
     "@nebula.js/test-utils": "0.6.0",
     "@playwright/test": "1.32.3",
+    "@qlik/eslint-config": "^0.0.9",
+    "@qlik/prettier-config": "^0.1.1",
     "babel-plugin-istanbul": "6.1.1",
     "eslint": "8.38.0",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-prettier": "8.8.0",
-    "eslint-plugin-import": "2.27.5",
-    "eslint-plugin-mocha": "10.1.0",
-    "eslint-plugin-prettier": "4.2.1",
     "fs-extra": "11.1.1",
     "husky": "8.0.3",
     "jest": "29.5.0",
@@ -94,5 +112,15 @@
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
     "yargs": "17.7.1"
-  }
+  },
+  "peerDependencies": {
+    "@nebula.js/stardust": ">=2.13.0"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "systemjs": "dist/sn-action-button.systemjs.js"
 }

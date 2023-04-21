@@ -1,9 +1,9 @@
-import { create } from '@nebula.js/test-utils';
-import supernova from '../index';
-import * as renderButton from '../components/action-button';
+import { create } from "@nebula.js/test-utils";
+import * as renderButton from "../components/action-button";
+import supernova from "../index";
 
-describe('index', () => {
-  const renderSpy = jest.spyOn(renderButton, 'renderButton').mockResolvedValue();
+describe("index", () => {
+  const renderSpy = jest.spyOn(renderButton, "renderButton").mockResolvedValue();
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -34,8 +34,8 @@ describe('index', () => {
     },
   };
 
-  it('should render supernova', async () => {
-    const translator = { get: () => 'fakeTranslation' };
+  it("should render supernova", async () => {
+    const translator = { get: () => "fakeTranslation" };
     const result = supernova({
       anything: {
         sense: {
@@ -43,26 +43,26 @@ describe('index', () => {
           isFeatureBlacklisted: () => false,
         },
       },
-      sense: { navigation: 'nav' },
+      sense: { navigation: "nav" },
       translator,
       flags: { isEnabled: () => true },
     });
     const c = create(result.component, {
       element: thisElement,
-      layout: 'layout',
-      constraints: 'constraints',
+      layout: "layout",
+      constraints: "constraints",
     });
 
     await c.update();
 
-    expect(thisElement.appendChild).toHaveBeenCalled;
+    expect(thisElement.appendChild).toHaveBeenCalled();
     expect(renderSpy).toHaveBeenCalledWith({
       element: thisElement,
-      layout: 'layout',
+      layout: "layout",
       app: undefined,
-      constraints: 'constraints',
+      constraints: "constraints",
       theme: undefined,
-      senseNavigation: 'nav',
+      senseNavigation: "nav",
       multiUserAutomation: true,
       translator,
     });

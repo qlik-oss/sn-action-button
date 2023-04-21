@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 const artifacts = {
-  artifactsPath: 'test/integration/__artifacts__',
+  artifactsPath: "test/integration/__artifacts__",
 };
 
-describe('should render an', () => {
-  const content = '.njs-viz';
+describe("should render an", () => {
+  const content = ".njs-viz";
   // const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
   before(async () => {
@@ -11,9 +12,10 @@ describe('should render an', () => {
     await page.waitForSelector(content, { visible: true });
   });
 
-  it('Action button', async () => {
+  it("Action button", async () => {
     const elem = await page.$(content);
     const img = await elem.screenshot();
-    return expect(img).to.matchImageOf('action-button', artifacts);
+    // eslint-disable-next-line jest/valid-expect
+    return expect(img).to.matchImageOf("action-button", artifacts);
   });
 });

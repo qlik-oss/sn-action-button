@@ -11,19 +11,19 @@ export function convertAction(action, newProperties) {
     cId: action.cId,
   };
   switch (action.actionType) {
-    case 'clearOther':
-      newAction.actionType = 'clearAllButThis';
+    case "clearOther":
+      newAction.actionType = "clearAllButThis";
       break;
-    case 'unlockAllAndClearAll':
-      newAction.actionType = 'clearAll';
+    case "unlockAllAndClearAll":
+      newAction.actionType = "clearAll";
       newAction.softLock = true;
       break;
-    case 'selectField':
-      newAction.actionType = 'selectMatchingValues';
+    case "selectField":
+      newAction.actionType = "selectMatchingValues";
       break;
-    case 'selectAndLockField':
-      newProperties.actions.push({ ...newAction, cId: null, actionType: 'selectMatchingValues' });
-      newAction.actionType = 'lockField';
+    case "selectAndLockField":
+      newProperties.actions.push({ ...newAction, cId: null, actionType: "selectMatchingValues" });
+      newAction.actionType = "lockField";
       break;
     default:
       break;
@@ -33,14 +33,14 @@ export function convertAction(action, newProperties) {
 
 export function convertNavigation(oldType) {
   switch (oldType) {
-    case 'gotoSheet':
-      return 'goToSheet';
-    case 'gotoSheetById':
-      return 'goToSheetById';
-    case 'gotoStory':
-      return 'goToStory';
-    case 'switchToEdit':
-      return 'none';
+    case "gotoSheet":
+      return "goToSheet";
+    case "gotoSheetById":
+      return "goToSheetById";
+    case "gotoStory":
+      return "goToStory";
+    case "switchToEdit":
+      return "none";
     default:
       return oldType;
   }
@@ -51,16 +51,16 @@ const importProperties = (exportedFmt, initialProperties) => {
   const newProperties = {
     actions: [],
     // Adding props to avoid errors from old navigation button. Converting to any other chart will still give these errors
-    props: { useEnabledCondition: null, fullWidth: 'auto' },
+    props: { useEnabledCondition: null, fullWidth: "auto" },
     qLayoutExclude: { disabled: {} },
     ...initialProperties,
   };
 
-  if (exportedFmt && exportedFmt.properties.visualization === 'qlik-button-for-navigation') {
+  if (exportedFmt && exportedFmt.properties.visualization === "qlik-button-for-navigation") {
     Object.keys(exportedFmt.properties).forEach((key) => {
       let props;
       switch (key) {
-        case 'props':
+        case "props":
           props = exportedFmt.properties[key];
           newProperties.style.label = props.buttonLabel;
           newProperties.style.icon.useIcon = props.buttonShowIcon;
@@ -75,17 +75,17 @@ const importProperties = (exportedFmt, initialProperties) => {
           newProperties.navigation = {
             action: convertNavigation(props.navigationAction),
             // Need to convert sheet from expression
-            sheet: props.navigationAction === 'gotoSheetById' ? props.sheetId : props.selectedSheet,
+            sheet: props.navigationAction === "gotoSheetById" ? props.sheetId : props.selectedSheet,
             story: props.selectedStory,
             websiteUrl: props.websiteUrl,
             sameWindow: props.sameWindow,
           };
           break;
-        case 'qStateName':
-        case 'showTitles':
-        case 'title':
-        case 'subtitle':
-        case 'footnote':
+        case "qStateName":
+        case "showTitles":
+        case "title":
+        case "subtitle":
+        case "footnote":
           newProperties[key] = exportedFmt.properties[key];
           break;
         default:
