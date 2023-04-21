@@ -2,6 +2,7 @@
 .DS_Store
 .editorconfig
 .eslintignore
+.eslintcache
 .github/CODEOWNERS
 .gitignore
 .husky/
