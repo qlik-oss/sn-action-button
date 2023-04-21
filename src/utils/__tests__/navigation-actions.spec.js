@@ -52,7 +52,7 @@ describe("navigation actions", () => {
     it("should NOT call goToSheet when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToSheet).not.toHaveBeenCalled();
+      expect(senseNavigation.goToSheet).toHaveBeenCalledTimes(0);
     });
     it("should call goToSheetById", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheetById");
@@ -62,7 +62,7 @@ describe("navigation actions", () => {
     it("should NOT call goToSheetById when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheetById");
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToSheet).not.toHaveBeenCalled();
+      expect(senseNavigation.goToSheet).toHaveBeenCalledTimes(0);
     });
     it("should call goToStory", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToStory");
@@ -72,12 +72,12 @@ describe("navigation actions", () => {
     it("should NOT call goToStory when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToStory");
       await navigationObject.navigationCall({ senseNavigation });
-      expect(senseNavigation.goToStory).not.toHaveBeenCalled();
+      expect(senseNavigation.goToStory).toHaveBeenCalledTimes(0);
     });
     it("should NOT call openWebsite", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({});
-      expect(global.open).not.toHaveBeenCalled();
+      expect(global.open).toHaveBeenCalledTimes(0);
     });
     it("should call openWebsite with defaults", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");

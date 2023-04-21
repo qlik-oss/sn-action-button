@@ -58,7 +58,7 @@ describe("action button", () => {
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.removeAttribute).toHaveBeenCalledWith("disabled");
-      expect(defaults.senseNavigation.goToSheet).not.toHaveBeenCalled();
+      expect(defaults.senseNavigation.goToSheet).toHaveBeenCalledTimes(0);
     });
 
     it("should not run navigation when in story mode", async () => {
@@ -66,7 +66,7 @@ describe("action button", () => {
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.removeAttribute).toHaveBeenCalledWith("disabled");
-      expect(defaults.senseNavigation.goToSheet).not.toHaveBeenCalled();
+      expect(defaults.senseNavigation.goToSheet).toHaveBeenCalledTimes(0);
     });
 
     it("should call scale and resetScale on mousedown/up", async () => {
