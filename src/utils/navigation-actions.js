@@ -1,6 +1,6 @@
-import evaluateCondition from './util';
-import { inIframe } from './url-utils';
-import { getCurrentProtocol, removeProtocolHttp, urlHasEmailProtocol, encodeUrl } from './url-encoder';
+import { encodeUrl, getCurrentProtocol, removeProtocolHttp, urlHasEmailProtocol } from "./url-encoder";
+import { inIframe } from "./url-utils";
+import evaluateCondition from "./util";
 
 export const getOrderedSheets = async (app) => {
   const sheets = await app.getSheetList();
@@ -15,28 +15,28 @@ export const getOrderedVisibleSheet = async (app) => {
 
 const navigationActions = [
   {
-    translation: 'Object.ActionButton.NoNavigation',
-    value: 'none',
+    translation: "Object.ActionButton.NoNavigation",
+    value: "none",
   },
   {
-    translation: 'Object.ActionButton.GoToNextSheet',
-    value: 'nextSheet',
+    translation: "Object.ActionButton.GoToNextSheet",
+    value: "nextSheet",
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.nextSheet();
     },
     requiredInput: [],
   },
   {
-    translation: 'Object.ActionButton.GoToPreviousSheet',
-    value: 'prevSheet',
+    translation: "Object.ActionButton.GoToPreviousSheet",
+    value: "prevSheet",
     navigationCall: async ({ senseNavigation }) => {
       await senseNavigation.prevSheet();
     },
     requiredInput: [],
   },
   {
-    translation: 'Object.ActionButton.GoToLastSheet',
-    value: 'lastSheet',
+    translation: "Object.ActionButton.GoToLastSheet",
+    value: "lastSheet",
     navigationCall: async ({ app, senseNavigation }) => {
       const sheets = await getOrderedVisibleSheet(app);
       await senseNavigation.goToSheet(sheets[sheets.length - 1].qInfo.qId);
@@ -44,8 +44,8 @@ const navigationActions = [
     requiredInput: [],
   },
   {
-    translation: 'Object.ActionButton.GoToFirstSheet',
-    value: 'firstSheet',
+    translation: "Object.ActionButton.GoToFirstSheet",
+    value: "firstSheet",
     navigationCall: async ({ app, senseNavigation }) => {
       const sheets = await getOrderedVisibleSheet(app);
       await senseNavigation.goToSheet(sheets[0].qInfo.qId);
@@ -54,47 +54,47 @@ const navigationActions = [
   },
 
   {
-    translation: 'Object.ActionButton.GoToASheet',
-    value: 'goToSheet',
+    translation: "Object.ActionButton.GoToASheet",
+    value: "goToSheet",
     navigationCall: async ({ senseNavigation, sheet }) => {
       sheet && (await senseNavigation.goToSheet(sheet));
     },
     // TODO replace by searchable dropdown
-    requiredInput: ['sheet'],
+    requiredInput: ["sheet"],
   },
   {
-    translation: 'Object.ActionButton.GoToSheetById',
-    value: 'goToSheetById',
+    translation: "Object.ActionButton.GoToSheetById",
+    value: "goToSheetById",
     navigationCall: async ({ senseNavigation, sheet }) => {
       sheet && (await senseNavigation.goToSheet(sheet));
     },
     // TODO replace by searchable dropdown
-    requiredInput: ['sheetId'],
+    requiredInput: ["sheetId"],
   },
   {
-    translation: 'Object.ActionButton.GoToStory',
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('storytelling'),
-    value: 'goToStory',
+    translation: "Object.ActionButton.GoToStory",
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("storytelling"),
+    value: "goToStory",
     navigationCall: async ({ senseNavigation, story }) => {
       story && (await senseNavigation.goToStory(story));
     },
-    requiredInput: ['story'],
+    requiredInput: ["story"],
   },
   {
-    translation: 'Object.ActionButton.OpenWebsiteEmail',
-    value: 'openWebsite',
+    translation: "Object.ActionButton.OpenWebsiteEmail",
+    value: "openWebsite",
     navigationCall: async ({ websiteUrl, sameWindow }) => {
       try {
         if (websiteUrl) {
           const protocol = getCurrentProtocol(websiteUrl);
           const url = removeProtocolHttp(websiteUrl);
           const isEmail = urlHasEmailProtocol(url);
-          let target = '';
+          let target = "";
           if (isEmail) {
             window.open(url, target);
           }
           if (sameWindow) {
-            target = inIframe() ? '_parent' : '_self';
+            target = inIframe() ? "_parent" : "_self";
             window.open(`${protocol}${url}`, target);
           }
           if (!isEmail && !sameWindow) {
@@ -106,35 +106,35 @@ const navigationActions = [
         // no-op
       }
     },
-    requiredInput: ['websiteUrl', 'sameWindow'],
+    requiredInput: ["websiteUrl", "sameWindow"],
   },
   {
-    translation: 'Object.ActionButton.DocumentChain',
-    value: 'openChainedApp',
+    translation: "Object.ActionButton.DocumentChain",
+    value: "openChainedApp",
     hide: ({ isEnabled, isUnsupportedFeature }) =>
-      !isEnabled?.('ACTION_BUTTON_DOCUMENT_CHAINING') || isUnsupportedFeature?.('bookmarks'),
+      !isEnabled?.("ACTION_BUTTON_DOCUMENT_CHAINING") || isUnsupportedFeature?.("bookmarks"),
     navigationCall: async ({ app, sameWindow, appId, sheet }) => {
       const tempBookmark = app.storeTempSelectionState && (await app.storeTempSelectionState());
-      let target = '';
+      let target = "";
       if (sameWindow) {
-        target = inIframe() ? '_parent' : '_self';
+        target = inIframe() ? "_parent" : "_self";
       }
       const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
         sheet
       )}/tempselectionstate/${encodeURIComponent(tempBookmark)}`;
       window.open(url, target);
     },
-    requiredInput: ['sameWindow', 'appId', 'sheetId'],
+    requiredInput: ["sameWindow", "appId", "sheetId"],
   },
   {
-    translation: 'Object.ActionButton.SelectOdagApp',
-    value: 'odagLink',
+    translation: "Object.ActionButton.SelectOdagApp",
+    value: "odagLink",
     navigationCall: async ({ app, senseNavigation, odagLink, element }) => {
-      if (typeof senseNavigation.openOdagPopup === 'function' && odagLink && odagLink.length > 0) {
+      if (typeof senseNavigation.openOdagPopup === "function" && odagLink && odagLink.length > 0) {
         await senseNavigation.openOdagPopup(app, odagLink, element);
       }
     },
-    requiredInput: ['odagLink'],
+    requiredInput: ["odagLink"],
   },
 ];
 

@@ -1,18 +1,18 @@
-import actions, { checkShowAction, getActionsList } from './utils/actions';
-import { checkShowNavigation, getNavigationsList } from './utils/navigation-actions';
-import { getStylingPanelDefinition } from './styling-panel-definition';
-import propertyResolver from './utils/property-resolver';
-import importProperties from './utils/conversion';
-import luiIcons from './utils/lui-icons';
-import { colorOptions, toggleOptions } from './utils/style-utils';
-import getAutomationProps from './utils/automation-props';
-import styleDefaults from './style-defaults';
+import styleDefaults from "./style-defaults";
+import { getStylingPanelDefinition } from "./styling-panel-definition";
+import actions, { checkShowAction, getActionsList } from "./utils/actions";
+import getAutomationProps from "./utils/automation-props";
+import importProperties from "./utils/conversion";
+import luiIcons from "./utils/lui-icons";
+import { checkShowNavigation, getNavigationsList } from "./utils/navigation-actions";
+import propertyResolver from "./utils/property-resolver";
+import { colorOptions, toggleOptions } from "./utils/style-utils";
 
 let automationsList = null;
 
 const getAutomations = async () => {
   if (!automationsList) {
-    const automationsResponse = await fetch('../api/v1/automations?limit=100');
+    const automationsResponse = await fetch("../api/v1/automations?limit=100");
     const automations = await automationsResponse.json();
     automationsList = automations.data.map((a) => ({
       value: a.id,
@@ -23,22 +23,22 @@ const getAutomations = async () => {
 };
 export default function ext({ translator, shouldHide, senseNavigation }) {
   const multiUserAutomation =
-    shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
-  const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled('SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON');
+    shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
+  const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON");
   return {
     definition: {
-      type: 'items',
-      component: 'accordion',
+      type: "items",
+      component: "accordion",
       items: {
         actions: {
-          type: 'items',
-          translation: 'Object.ActionButton.ActionsAndNavigation',
+          type: "items",
+          translation: "Object.ActionButton.ActionsAndNavigation",
           grouped: true,
           items: {
             actions: {
-              type: 'array',
-              translation: 'Object.ActionButton.Actions',
-              ref: 'actions',
+              type: "array",
+              translation: "Object.ActionButton.Actions",
+              ref: "actions",
               itemTitleRef: (data) => {
                 if (data.actionLabel) {
                   return data.actionLabel;
@@ -46,38 +46,38 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 // If actionType exists but it's not found in the actions list,
                 // the action is invalid for the current version of the button
                 const fallbackTitle = data.actionType
-                  ? 'Object.ActionButton.InvalidAction'
-                  : 'Object.ActionButton.NewAction';
+                  ? "Object.ActionButton.InvalidAction"
+                  : "Object.ActionButton.NewAction";
                 const action = actions.find((act) => data.actionType === act.value);
                 return translator.get((action && action.translation) || fallbackTitle);
               },
               allowAdd: true,
               allowRemove: true,
               allowMove: true,
-              addTranslation: 'Object.ActionButton.AddAction',
+              addTranslation: "Object.ActionButton.AddAction",
               items: {
                 label: {
-                  component: 'string',
-                  ref: 'actionLabel',
-                  translation: 'Common.Label',
-                  expression: 'optional',
-                  defaultValue: '',
+                  component: "string",
+                  ref: "actionLabel",
+                  translation: "Common.Label",
+                  expression: "optional",
+                  defaultValue: "",
                 },
                 actionType: {
-                  type: 'string',
-                  ref: 'actionType',
-                  component: 'expression-with-dropdown',
-                  translation: 'Object.ActionButton.Action',
-                  defaultValue: '',
+                  type: "string",
+                  ref: "actionType",
+                  component: "expression-with-dropdown",
+                  translation: "Object.ActionButton.Action",
+                  defaultValue: "",
                   options: getActionsList(shouldHide),
                   dropdownOnly: true,
                 },
                 bookmark: {
-                  type: 'string',
-                  ref: 'bookmark',
-                  component: 'expression-with-dropdown',
-                  translation: 'ExpressionEditor.SetExpresions.Bookmark',
-                  defaultValue: '',
+                  type: "string",
+                  ref: "bookmark",
+                  component: "expression-with-dropdown",
+                  translation: "ExpressionEditor.SetExpresions.Bookmark",
+                  defaultValue: "",
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const bms = await hyperCubeHandler.app.getBookmarkList();
@@ -86,14 +86,14 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       value: bookmark.qInfo.qId,
                     }));
                   },
-                  show: (data) => checkShowAction(data, 'bookmark'),
+                  show: (data) => checkShowAction(data, "bookmark"),
                 },
                 field: {
-                  type: 'string',
-                  ref: 'field',
-                  component: 'expression-with-dropdown',
-                  translation: 'Common.Field',
-                  defaultValue: '',
+                  type: "string",
+                  ref: "field",
+                  component: "expression-with-dropdown",
+                  translation: "Common.Field",
+                  defaultValue: "",
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
                     const fields = await hyperCubeHandler.app.getFieldList();
@@ -102,15 +102,15 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                       value: field.qName,
                     }));
                   },
-                  show: (data) => checkShowAction(data, 'field'),
+                  show: (data) => checkShowAction(data, "field"),
                 },
                 variable: {
-                  type: 'string',
-                  ref: 'variable',
-                  component: 'expression-with-dropdown',
-                  translation: 'Common.Variable',
-                  defaultValue: '',
-                  expressionType: 'StringExpression',
+                  type: "string",
+                  ref: "variable",
+                  component: "expression-with-dropdown",
+                  translation: "Common.Variable",
+                  defaultValue: "",
+                  expressionType: "StringExpression",
                   options: async (action, hyperCubeHandler) => {
                     const variables = await hyperCubeHandler.app.getVariableList();
                     return variables
@@ -120,78 +120,78 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                         value: v.qName,
                       }));
                   },
-                  show: (data) => checkShowAction(data, 'variable'),
+                  show: (data) => checkShowAction(data, "variable"),
                 },
                 showSystemVariables: {
-                  type: 'boolean',
-                  ref: 'showSystemVariables',
-                  translation: 'ExpressionEditor.SystemVariables',
+                  type: "boolean",
+                  ref: "showSystemVariables",
+                  translation: "ExpressionEditor.SystemVariables",
                   defaultValue: false,
-                  show: (data) => checkShowAction(data, 'variable'),
+                  show: (data) => checkShowAction(data, "variable"),
                 },
                 softLock: {
-                  type: 'boolean',
-                  ref: 'softLock',
-                  translation: 'Object.ActionButton.Softlock',
+                  type: "boolean",
+                  ref: "softLock",
+                  translation: "Object.ActionButton.Softlock",
                   defaultValue: false,
-                  show: (data) => checkShowAction(data, 'softLock'),
+                  show: (data) => checkShowAction(data, "softLock"),
                 },
                 value: {
-                  type: 'string',
-                  ref: 'value',
-                  component: 'string',
-                  translation: 'properties.value',
-                  expression: 'optional',
-                  show: (data) => checkShowAction(data, 'value'),
+                  type: "string",
+                  ref: "value",
+                  component: "string",
+                  translation: "properties.value",
+                  expression: "optional",
+                  show: (data) => checkShowAction(data, "value"),
                 },
                 partial: {
-                  type: 'boolean',
-                  ref: 'partial',
-                  translation: 'Object.ActionButton.Partial',
+                  type: "boolean",
+                  ref: "partial",
+                  translation: "Object.ActionButton.Partial",
                   defaultValue: false,
-                  show: (data) => checkShowAction(data, 'partial'),
+                  show: (data) => checkShowAction(data, "partial"),
                 },
                 automationProps: {
-                  type: 'items',
+                  type: "items",
                   grouped: false,
                   items: getAutomationProps(multiUserAutomation, getAutomations),
-                  show: (data) => checkShowAction(data, 'automation'),
+                  show: (data) => checkShowAction(data, "automation"),
                 },
               },
             },
             navigation: {
-              translation: 'Object.ActionButton.Navigation',
-              type: 'items',
+              translation: "Object.ActionButton.Navigation",
+              type: "items",
               items: {
                 action: {
-                  ref: 'navigation.action',
-                  translation: 'Object.ActionButton.Navigation',
-                  component: 'expression-with-dropdown',
+                  ref: "navigation.action",
+                  translation: "Object.ActionButton.Navigation",
+                  component: "expression-with-dropdown",
                   defaultValue: null,
                   options: getNavigationsList(shouldHide),
                   dropdownOnly: true,
                 },
                 appId: {
-                  type: 'string',
-                  expression: 'optional',
-                  ref: 'navigation.appId',
-                  translation: 'properties.appId',
-                  show: (data) => checkShowNavigation(data, 'appId'),
+                  type: "string",
+                  expression: "optional",
+                  ref: "navigation.appId",
+                  translation: "properties.appId",
+                  show: (data) => checkShowNavigation(data, "appId"),
                 },
                 sheetId: {
-                  type: 'string',
-                  ref: 'navigation.sheet',
-                  translation: 'properties.sheet',
-                  expression: 'optional',
-                  show: (data) => checkShowNavigation(data, 'sheetId'),
+                  type: "string",
+                  ref: "navigation.sheet",
+                  translation: "properties.sheet",
+                  expression: "optional",
+                  show: (data) => checkShowNavigation(data, "sheetId"),
                 },
                 sheet: {
-                  type: 'string',
-                  ref: 'navigation.sheet',
-                  translation: 'properties.sheet',
-                  component: 'expression-with-dropdown',
-                  expressionType: 'StringExpression',
-                  show: (data) => checkShowNavigation(data, 'sheet'),
+                  type: "string",
+                  ref: "navigation.sheet",
+                  translation: "properties.sheet",
+                  component: "expression-with-dropdown",
+                  expressionType: "StringExpression",
+                  show: (data) => checkShowNavigation(data, "sheet"),
                   options: async (action, hyperCubeHandler) => {
                     const sheets = await hyperCubeHandler.app.getSheetList();
                     return sheets.map((sheet) => ({
@@ -202,12 +202,12 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
                 story: {
-                  type: 'string',
-                  ref: 'navigation.story',
-                  translation: 'properties.story',
-                  component: 'expression-with-dropdown',
-                  expressionType: 'StringExpression',
-                  show: (data) => checkShowNavigation(data, 'story'),
+                  type: "string",
+                  ref: "navigation.story",
+                  translation: "properties.story",
+                  component: "expression-with-dropdown",
+                  expressionType: "StringExpression",
+                  show: (data) => checkShowNavigation(data, "story"),
                   options: async (action, hyperCubeHandler) => {
                     const stories = await hyperCubeHandler.app.getStoryList();
                     return stories.map((story) => ({
@@ -217,76 +217,76 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   },
                 },
                 websiteUrl: {
-                  type: 'string',
-                  expression: 'optional',
-                  ref: 'navigation.websiteUrl',
-                  translation: 'properties.website',
-                  show: (data) => checkShowNavigation(data, 'websiteUrl'),
+                  type: "string",
+                  expression: "optional",
+                  ref: "navigation.websiteUrl",
+                  translation: "properties.website",
+                  show: (data) => checkShowNavigation(data, "websiteUrl"),
                 },
                 sameWindow: {
-                  type: 'boolean',
-                  ref: 'navigation.sameWindow',
-                  translation: 'properties.sameWindow',
-                  show: (data) => checkShowNavigation(data, 'sameWindow'),
+                  type: "boolean",
+                  ref: "navigation.sameWindow",
+                  translation: "properties.sameWindow",
+                  show: (data) => checkShowNavigation(data, "sameWindow"),
                   defaultValue: false,
                 },
                 odagLink: {
-                  type: 'string',
-                  ref: 'navigation.odagLink',
-                  component: 'dropdown',
-                  translation: 'ExpressionEditor.SetExpresions.OdagAppLinks',
+                  type: "string",
+                  ref: "navigation.odagLink",
+                  component: "dropdown",
+                  translation: "ExpressionEditor.SetExpresions.OdagAppLinks",
                   options: async (action, hyperCubeHandler) => {
                     const odagLinks = await senseNavigation.getOdagLinks(hyperCubeHandler.app);
                     return odagLinks
-                      .filter((link) => link.properties.type === 'odaglink')
+                      .filter((link) => link.properties.type === "odaglink")
                       .map((odagLink) => ({
                         label: odagLink.properties.data.name,
                         value: odagLink.properties.data.id,
                       }));
                   },
-                  show: (data) => checkShowNavigation(data, 'odagLink'),
+                  show: (data) => checkShowNavigation(data, "odagLink"),
                 },
               },
             },
           },
         },
         enableCondition: {
-          type: 'items',
-          translation: 'properties.enableConditionSection',
+          type: "items",
+          translation: "properties.enableConditionSection",
           items: {
             useCondition: {
-              type: 'boolean',
-              component: 'switch',
-              translation: 'properties.enableToggle',
-              ref: 'useEnabledCondition',
+              type: "boolean",
+              component: "switch",
+              translation: "properties.enableToggle",
+              ref: "useEnabledCondition",
               options: [
                 {
                   value: true,
-                  translation: 'properties.on',
+                  translation: "properties.on",
                 },
                 {
                   value: false,
-                  translation: 'properties.off',
+                  translation: "properties.off",
                 },
               ],
             },
             condition: {
-              ref: 'enabledCondition',
-              translation: 'properties.enableCondition',
-              type: 'integer',
-              expression: 'optional',
+              ref: "enabledCondition",
+              translation: "properties.enableCondition",
+              type: "integer",
+              expression: "optional",
               show: (data) => data.useEnabledCondition,
             },
           },
         },
         settings: {
-          component: 'expandable-items',
-          translation: 'Common.Appearance',
-          uses: 'settings',
+          component: "expandable-items",
+          translation: "Common.Appearance",
+          uses: "settings",
           items: {
             general: {
-              type: 'items',
-              translation: 'properties.general',
+              type: "items",
+              translation: "properties.general",
               items: {
                 showTitles: {},
                 details: {
@@ -296,116 +296,116 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                   show: false,
                 },
                 label: {
-                  component: 'string',
-                  ref: 'style.label',
-                  translation: 'Common.Label',
-                  expression: 'optional',
+                  component: "string",
+                  ref: "style.label",
+                  translation: "Common.Label",
+                  expression: "optional",
                 },
               },
             },
             font: {
               grouped: true,
-              type: 'items',
-              translation: 'properties.font',
+              type: "items",
+              translation: "properties.font",
               items: {
                 sizeAndColor: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     fontSize: {
-                      component: 'slider',
-                      type: 'number',
-                      ref: 'style.font.size',
-                      translation: 'properties.fontSize',
+                      component: "slider",
+                      type: "number",
+                      ref: "style.font.size",
+                      translation: "properties.fontSize",
                       min: 0.2,
                       max: 1,
                       step: 0.01,
                     },
                     useFontColorExpression: {
-                      ref: 'style.font.useColorExpression',
-                      type: 'boolean',
-                      translation: 'properties.fontColor',
-                      component: 'dropdown',
+                      ref: "style.font.useColorExpression",
+                      type: "boolean",
+                      translation: "properties.fontColor",
+                      component: "dropdown",
                       options: colorOptions,
                     },
                     colorPicker: {
-                      component: 'color-picker',
-                      type: 'object',
-                      ref: 'style.font.color',
-                      translation: 'properties.color',
+                      component: "color-picker",
+                      type: "object",
+                      ref: "style.font.color",
+                      translation: "properties.color",
                       dualOutput: true,
-                      show: (data) => !propertyResolver.getValue(data, 'style.font.useColorExpression'),
+                      show: (data) => !propertyResolver.getValue(data, "style.font.useColorExpression"),
                     },
                     colorExpression: {
-                      component: 'string',
-                      type: 'string',
-                      ref: 'style.font.colorExpression',
-                      translation: 'Common.Expression',
-                      expression: 'optional',
-                      show: (data) => propertyResolver.getValue(data, 'style.font.useColorExpression'),
+                      component: "string",
+                      type: "string",
+                      ref: "style.font.colorExpression",
+                      translation: "Common.Expression",
+                      expression: "optional",
+                      show: (data) => propertyResolver.getValue(data, "style.font.useColorExpression"),
                     },
                   },
                 },
                 stylingAndAlign: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     fontStyling: {
-                      component: 'item-selection-list',
-                      type: 'string',
-                      ref: 'style.font.style',
-                      translation: 'properties.textStyle',
+                      component: "item-selection-list",
+                      type: "string",
+                      ref: "style.font.style",
+                      translation: "properties.textStyle",
                       horizontal: true,
                       multipleSelect: true,
                       items: [
                         {
-                          component: 'icon-item',
-                          icon: 'bold',
-                          value: 'bold',
-                          translation: 'Common.bold',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "bold",
+                          value: "bold",
+                          translation: "Common.bold",
+                          labelPlacement: "bottom",
                         },
                         {
-                          component: 'icon-item',
-                          icon: 'italic',
-                          value: 'italic',
-                          translation: 'Common.italic',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "italic",
+                          value: "italic",
+                          translation: "Common.italic",
+                          labelPlacement: "bottom",
                         },
                         {
-                          component: 'icon-item',
-                          icon: 'underline',
-                          value: 'underline',
-                          translation: 'Common.underline',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "underline",
+                          value: "underline",
+                          translation: "Common.underline",
+                          labelPlacement: "bottom",
                         },
                       ],
                     },
                     textAlign: {
-                      component: 'item-selection-list',
-                      type: 'string',
-                      ref: 'style.font.align',
-                      translation: 'properties.Alignment',
+                      component: "item-selection-list",
+                      type: "string",
+                      ref: "style.font.align",
+                      translation: "properties.Alignment",
                       horizontal: true,
                       items: [
                         {
-                          component: 'icon-item',
-                          icon: 'align_left',
-                          value: 'left',
-                          translation: 'properties.dock.left',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "align_left",
+                          value: "left",
+                          translation: "properties.dock.left",
+                          labelPlacement: "bottom",
                         },
                         {
-                          component: 'icon-item',
-                          icon: 'align_center',
-                          value: 'center',
-                          translation: 'Common.Center',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "align_center",
+                          value: "center",
+                          translation: "Common.Center",
+                          labelPlacement: "bottom",
                         },
                         {
-                          component: 'icon-item',
-                          icon: 'align_right',
-                          value: 'right',
-                          translation: 'properties.dock.right',
-                          labelPlacement: 'bottom',
+                          component: "icon-item",
+                          icon: "align_right",
+                          value: "right",
+                          translation: "properties.dock.right",
+                          labelPlacement: "bottom",
                         },
                       ],
                     },
@@ -416,112 +416,112 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
             },
             background: {
               grouped: true,
-              type: 'items',
-              translation: 'properties.background',
+              type: "items",
+              translation: "properties.background",
               items: {
                 backgroundColor: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     useColorExpression: {
-                      ref: 'style.background.useColorExpression',
-                      type: 'boolean',
-                      translation: 'AppDetails.SheetBackgroundColor',
-                      component: 'dropdown',
+                      ref: "style.background.useColorExpression",
+                      type: "boolean",
+                      translation: "AppDetails.SheetBackgroundColor",
+                      component: "dropdown",
                       options: colorOptions,
                     },
                     colorPicker: {
-                      component: 'color-picker',
-                      type: 'object',
-                      ref: 'style.background.color',
-                      translation: 'properties.color',
+                      component: "color-picker",
+                      type: "object",
+                      ref: "style.background.color",
+                      translation: "properties.color",
                       dualOutput: true,
-                      show: (data) => !propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                      show: (data) => !propertyResolver.getValue(data, "style.background.useColorExpression"),
                     },
                     colorExpression: {
-                      component: 'string',
-                      type: 'string',
-                      ref: 'style.background.colorExpression',
-                      translation: 'Common.Expression',
-                      expression: 'optional',
-                      show: (data) => propertyResolver.getValue(data, 'style.background.useColorExpression'),
+                      component: "string",
+                      type: "string",
+                      ref: "style.background.colorExpression",
+                      translation: "Common.Expression",
+                      expression: "optional",
+                      show: (data) => propertyResolver.getValue(data, "style.background.useColorExpression"),
                     },
                   },
                 },
                 backgroundImage: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     useBackgroundImage: {
-                      ref: 'style.background.useImage',
-                      type: 'boolean',
-                      translation: 'properties.backgroundImage.use',
-                      component: 'switch',
+                      ref: "style.background.useImage",
+                      type: "boolean",
+                      translation: "properties.backgroundImage.use",
+                      component: "switch",
                       options: toggleOptions,
                     },
                     backgroundUrl: {
-                      ref: 'style.background.url.qStaticContentUrlDef.qUrl',
-                      layoutRef: 'style.background.url.qStaticContentUrl.qUrl',
+                      ref: "style.background.url.qStaticContentUrlDef.qUrl",
+                      layoutRef: "style.background.url.qStaticContentUrl.qUrl",
                       schemaIgnore: true,
-                      translation: 'Common.Image',
-                      tooltip: { select: 'properties.media.select', remove: 'properties.media.removeBackground' },
-                      type: 'string',
-                      component: 'media',
+                      translation: "Common.Image",
+                      tooltip: { select: "properties.media.select", remove: "properties.media.removeBackground" },
+                      type: "string",
+                      component: "media",
                       show(data) {
-                        return propertyResolver.getValue(data, 'style.background.useImage');
+                        return propertyResolver.getValue(data, "style.background.useImage");
                       },
                     },
                     backgroundSize: {
-                      ref: 'style.background.size',
-                      translation: 'properties.backgroundImage.size',
-                      type: 'string',
-                      component: 'dropdown',
+                      ref: "style.background.size",
+                      translation: "properties.backgroundImage.size",
+                      type: "string",
+                      component: "dropdown",
                       defaultValue: styleDefaults.BACKGROUND_SIZE,
                       options: [
                         {
-                          value: 'auto',
-                          translation: 'properties.backgroundImage.originalSize',
+                          value: "auto",
+                          translation: "properties.backgroundImage.originalSize",
                         },
                         {
-                          value: 'alwaysFit',
-                          translation: 'properties.backgroundImage.sizeAlwaysFit',
+                          value: "alwaysFit",
+                          translation: "properties.backgroundImage.sizeAlwaysFit",
                         },
                         {
-                          value: 'fitWidth',
-                          translation: 'properties.backgroundImage.sizeFitWidth',
+                          value: "fitWidth",
+                          translation: "properties.backgroundImage.sizeFitWidth",
                         },
                         {
-                          value: 'fitHeight',
-                          translation: 'properties.backgroundImage.sizeFitHeight',
+                          value: "fitHeight",
+                          translation: "properties.backgroundImage.sizeFitHeight",
                         },
                         {
-                          value: 'fill',
-                          translation: 'properties.backgroundImage.sizeStretch',
+                          value: "fill",
+                          translation: "properties.backgroundImage.sizeStretch",
                         },
                         {
-                          value: 'alwaysFill',
-                          translation: 'properties.backgroundImage.sizeAlwaysFill',
+                          value: "alwaysFill",
+                          translation: "properties.backgroundImage.sizeAlwaysFill",
                         },
                       ],
                       show(data) {
                         return (
-                          propertyResolver.getValue(data, 'style.background.useImage') &&
-                          !!propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl')
+                          propertyResolver.getValue(data, "style.background.useImage") &&
+                          !!propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl")
                         );
                       },
                     },
                     backgroundPosition: {
-                      ref: 'style.background.position',
-                      translation: 'Common.Position',
-                      type: 'string',
-                      component: 'align-matrix',
+                      ref: "style.background.position",
+                      translation: "Common.Position",
+                      type: "string",
+                      component: "align-matrix",
                       show(data) {
                         return (
-                          propertyResolver.getValue(data, 'style.background.useImage') &&
-                          propertyResolver.getValue(data, 'style.background.url.qStaticContentUrlDef.qUrl') &&
-                          propertyResolver.getValue(data, 'style.background.size') !== 'fill'
+                          propertyResolver.getValue(data, "style.background.useImage") &&
+                          propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl") &&
+                          propertyResolver.getValue(data, "style.background.size") !== "fill"
                         );
                       },
                       currentSize(data) {
-                        return propertyResolver.getValue(data, 'style.background.size');
+                        return propertyResolver.getValue(data, "style.background.size");
                       },
                     },
                   },
@@ -530,67 +530,67 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
               show: !stylingPanelEnabled,
             },
             border: {
-              type: 'items',
+              type: "items",
               grouped: true,
-              translation: 'properties.border',
+              translation: "properties.border",
               items: {
                 borderSettings: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     useBorder: {
-                      ref: 'style.border.useBorder',
-                      type: 'boolean',
-                      translation: 'properties.border.use',
-                      component: 'switch',
+                      ref: "style.border.useBorder",
+                      type: "boolean",
+                      translation: "properties.border.use",
+                      component: "switch",
                       options: toggleOptions,
                     },
                     borderRadius: {
-                      component: 'slider',
-                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
-                      translation: 'properties.border.radius',
-                      type: 'number',
-                      ref: 'style.border.radius',
+                      component: "slider",
+                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                      translation: "properties.border.radius",
+                      type: "number",
+                      ref: "style.border.radius",
                       min: 0,
                       max: 1,
                       step: 0.01,
                     },
                     borderWidth: {
-                      component: 'slider',
-                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
-                      type: 'number',
-                      ref: 'style.border.width',
-                      translation: 'properties.border.width',
+                      component: "slider",
+                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                      type: "number",
+                      ref: "style.border.width",
+                      translation: "properties.border.width",
                       min: 0,
                       max: 0.5,
                       step: 0.005,
                     },
                     colorDropdown: {
-                      type: 'string',
-                      show: (data) => propertyResolver.getValue(data, 'style.border.useBorder'),
-                      component: 'dropdown',
-                      translation: 'properties.border.color',
-                      ref: 'style.border.useColorExpression',
+                      type: "string",
+                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                      component: "dropdown",
+                      translation: "properties.border.color",
+                      ref: "style.border.useColorExpression",
                       options: colorOptions,
                     },
                     colorPicker: {
-                      component: 'color-picker',
-                      type: 'object',
-                      ref: 'style.border.color',
-                      translation: 'properties.color',
+                      component: "color-picker",
+                      type: "object",
+                      ref: "style.border.color",
+                      translation: "properties.color",
                       dualOutput: true,
                       show: (data) =>
-                        propertyResolver.getValue(data, 'style.border.useBorder') &&
-                        !propertyResolver.getValue(data, 'style.border.useColorExpression'),
+                        propertyResolver.getValue(data, "style.border.useBorder") &&
+                        !propertyResolver.getValue(data, "style.border.useColorExpression"),
                     },
                     colorExpression: {
-                      component: 'string',
-                      type: 'string',
-                      ref: 'style.border.colorExpression',
-                      translation: 'Common.Expression',
+                      component: "string",
+                      type: "string",
+                      ref: "style.border.colorExpression",
+                      translation: "Common.Expression",
                       show: (data) =>
-                        propertyResolver.getValue(data, 'style.border.useBorder') &&
-                        propertyResolver.getValue(data, 'style.border.useColorExpression'),
-                      expression: 'optional',
+                        propertyResolver.getValue(data, "style.border.useBorder") &&
+                        propertyResolver.getValue(data, "style.border.useColorExpression"),
+                      expression: "optional",
                     },
                   },
                 },
@@ -598,44 +598,44 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
               show: !stylingPanelEnabled,
             },
             icon: {
-              type: 'items',
+              type: "items",
               grouped: true,
-              translation: 'properties.icon',
+              translation: "properties.icon",
               items: {
                 iconSettings: {
-                  type: 'items',
+                  type: "items",
                   items: {
                     useIcon: {
-                      ref: 'style.icon.useIcon',
-                      type: 'boolean',
-                      translation: 'properties.icon.use',
-                      component: 'switch',
+                      ref: "style.icon.useIcon",
+                      type: "boolean",
+                      translation: "properties.icon.use",
+                      component: "switch",
                       options: toggleOptions,
                     },
                     iconType: {
-                      ref: 'style.icon.iconType',
-                      component: 'expression-with-dropdown',
-                      translation: 'properties.icon',
-                      defaultValue: '',
+                      ref: "style.icon.iconType",
+                      component: "expression-with-dropdown",
+                      translation: "properties.icon",
+                      defaultValue: "",
                       options: luiIcons,
-                      expressionType: 'StringExpression',
-                      show: (data) => propertyResolver.getValue(data, 'style.icon.useIcon'),
+                      expressionType: "StringExpression",
+                      show: (data) => propertyResolver.getValue(data, "style.icon.useIcon"),
                     },
                     iconPosition: {
-                      ref: 'style.icon.position',
-                      component: 'dropdown',
-                      translation: 'Common.Position',
+                      ref: "style.icon.position",
+                      component: "dropdown",
+                      translation: "Common.Position",
                       options: [
                         {
-                          translation: 'properties.dock.left',
-                          value: 'left',
+                          translation: "properties.dock.left",
+                          value: "left",
                         },
                         {
-                          translation: 'properties.dock.right',
-                          value: 'right',
+                          translation: "properties.dock.right",
+                          value: "right",
                         },
                       ],
-                      show: (data) => propertyResolver.getValue(data, 'style.icon.useIcon'),
+                      show: (data) => propertyResolver.getValue(data, "style.icon.useIcon"),
                     },
                   },
                 },

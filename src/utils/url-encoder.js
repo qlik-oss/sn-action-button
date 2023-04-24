@@ -1,6 +1,6 @@
-const HTTP_PROTOCOL = 'http://';
-const HTTPS_PROTOCOL = 'https://';
-const EMAIL_PROTOCOL = 'mailto:';
+const HTTP_PROTOCOL = "http://";
+const HTTPS_PROTOCOL = "https://";
+const EMAIL_PROTOCOL = "mailto:";
 
 export const getCurrentProtocol = (s) => {
   if (s.startsWith(HTTP_PROTOCOL)) {
@@ -54,7 +54,7 @@ const UNMATCHED_SURROGATE_PAIR_REGEXP = /(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]|[\u
  * String to replace unmatched surrogate pair with.
  */
 
-const UNMATCHED_SURROGATE_PAIR_REPLACE = '$1\uFFFD$2';
+const UNMATCHED_SURROGATE_PAIR_REPLACE = "$1\uFFFD$2";
 
 /**
  * https://www.npmjs.com/package/encodeurl

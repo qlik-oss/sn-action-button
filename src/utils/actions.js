@@ -1,22 +1,22 @@
 import {
-  showSnackbar,
-  pollAutomationAndGetMsg,
-  oldAutomationRun,
-  getAutomationUrl,
-  getTemporaryBookmark,
   getAutomationData,
+  getAutomationUrl,
   getPostOptions,
-} from './automation-helper';
+  getTemporaryBookmark,
+  oldAutomationRun,
+  pollAutomationAndGetMsg,
+  showSnackbar,
+} from "./automation-helper";
 
 export const getValueList = async (app, values, isDate) => {
-  let valuesArray = values.split(';');
+  let valuesArray = values.split(";");
   if (isDate) {
-    let dateExpression = '';
+    let dateExpression = "";
     valuesArray.forEach((date) => {
       dateExpression += `Num('${date}')&';'&`;
     });
     const convertedDates = await app.evaluate(dateExpression.slice(0, -5));
-    valuesArray = convertedDates.split(';');
+    valuesArray = convertedDates.split(";");
   }
   return valuesArray.map((value) =>
     Number.isNaN(+value) ? { qText: value } : { qIsNumeric: true, qNumber: Number(value) }
@@ -25,10 +25,10 @@ export const getValueList = async (app, values, isDate) => {
 
 const actions = [
   {
-    value: 'applyBookmark',
-    translation: 'Object.ActionButton.ApplyBookmark',
-    group: 'bookmark',
-    hide: ({ isUnsupportedFeature }) => isUnsupportedFeature?.('bookmarks'),
+    value: "applyBookmark",
+    translation: "Object.ActionButton.ApplyBookmark",
+    group: "bookmark",
+    hide: ({ isUnsupportedFeature }) => isUnsupportedFeature?.("bookmarks"),
     getActionCall:
       ({ app, bookmark }) =>
       async () => {
@@ -36,12 +36,12 @@ const actions = [
         const findBm = bookMarks.find((bm) => bm.qData.title === bookmark);
         bookmark && (await app.applyBookmark((findBm && findBm.qInfo && findBm.qInfo.qId) || bookmark));
       },
-    requiredInput: ['bookmark'],
+    requiredInput: ["bookmark"],
   },
   {
-    value: 'back',
-    translation: 'Object.ActionButton.MoveBackward',
-    group: 'selection',
+    value: "back",
+    translation: "Object.ActionButton.MoveBackward",
+    group: "selection",
     getActionCall:
       ({ app }) =>
       async () => {
@@ -50,9 +50,9 @@ const actions = [
     requiredInput: [],
   },
   {
-    value: 'forward',
-    translation: 'Object.ActionButton.MoveForward',
-    group: 'selection',
+    value: "forward",
+    translation: "Object.ActionButton.MoveForward",
+    group: "selection",
     getActionCall:
       ({ app }) =>
       async () => {
@@ -61,20 +61,20 @@ const actions = [
     requiredInput: [],
   },
   {
-    value: 'clearAll',
-    translation: 'Object.ActionButton.ClearAll',
-    group: 'selection',
+    value: "clearAll",
+    translation: "Object.ActionButton.ClearAll",
+    group: "selection",
     getActionCall:
       ({ app, softLock }) =>
       async () => {
         await app.clearAll(softLock);
       },
-    requiredInput: ['softLock'],
+    requiredInput: ["softLock"],
   },
   {
-    value: 'clearAllButThis',
-    translation: 'Object.ActionButton.ClearAllButThis',
-    group: 'selection',
+    value: "clearAllButThis",
+    translation: "Object.ActionButton.ClearAllButThis",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, softLock }) =>
       async () => {
@@ -83,12 +83,12 @@ const actions = [
           await fieldObj.clearAllButThis(softLock);
         }
       },
-    requiredInput: ['field', 'softLock'],
+    requiredInput: ["field", "softLock"],
   },
   {
-    value: 'clearField',
-    translation: 'Object.ActionButton.ClearSelectionInField',
-    group: 'selection',
+    value: "clearField",
+    translation: "Object.ActionButton.ClearSelectionInField",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field }) =>
       async () => {
@@ -97,12 +97,12 @@ const actions = [
           await fieldObj.clear();
         }
       },
-    requiredInput: ['field'],
+    requiredInput: ["field"],
   },
   {
-    value: 'selectAll',
-    translation: 'Object.ActionButton.SelectAllInField',
-    group: 'selection',
+    value: "selectAll",
+    translation: "Object.ActionButton.SelectAllInField",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, softLock }) =>
       async () => {
@@ -111,28 +111,28 @@ const actions = [
           await fieldObj.selectAll(softLock);
         }
       },
-    requiredInput: ['field', 'softLock'],
+    requiredInput: ["field", "softLock"],
   },
   {
-    value: 'selectValues',
-    translation: 'Object.ActionButton.SelectValuesInField',
-    group: 'selection',
+    value: "selectValues",
+    translation: "Object.ActionButton.SelectValuesInField",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, value, softLock }) =>
       async () => {
         if (field && value) {
           const fieldObj = await app.getField(field, qStateName);
           const fieldInfo = await app.getFieldDescription(field);
-          const valueList = await getValueList(app, value, fieldInfo.qTags.includes('$date'));
+          const valueList = await getValueList(app, value, fieldInfo.qTags.includes("$date"));
           await fieldObj.selectValues(valueList, false, softLock);
         }
       },
-    requiredInput: ['field', 'value', 'softLock'],
+    requiredInput: ["field", "value", "softLock"],
   },
   {
-    value: 'selectMatchingValues',
-    translation: 'Object.ActionButton.SelectMatchingValues',
-    group: 'selection',
+    value: "selectMatchingValues",
+    translation: "Object.ActionButton.SelectMatchingValues",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, value, softLock }) =>
       async () => {
@@ -141,12 +141,12 @@ const actions = [
           await fieldObj.select(value, false, softLock);
         }
       },
-    requiredInput: ['field', 'value', 'softLock'],
+    requiredInput: ["field", "value", "softLock"],
   },
   {
-    value: 'selectAlternative',
-    translation: 'Object.ActionButton.SelectAlternatives',
-    group: 'selection',
+    value: "selectAlternative",
+    translation: "Object.ActionButton.SelectAlternatives",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, softLock }) =>
       async () => {
@@ -155,13 +155,13 @@ const actions = [
           await fieldObj.selectAlternative(softLock);
         }
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
-    requiredInput: ['field', 'softLock'],
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["field", "softLock"],
   },
   {
-    value: 'selectExcluded',
-    translation: 'Object.ActionButton.SelectExcluded',
-    group: 'selection',
+    value: "selectExcluded",
+    translation: "Object.ActionButton.SelectExcluded",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, softLock }) =>
       async () => {
@@ -170,13 +170,13 @@ const actions = [
           await fieldObj.selectExcluded(softLock);
         }
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
-    requiredInput: ['field', 'softLock'],
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["field", "softLock"],
   },
   {
-    value: 'selectPossible',
-    translation: 'Object.ActionButton.SelectPossibleValues',
-    group: 'selection',
+    value: "selectPossible",
+    translation: "Object.ActionButton.SelectPossibleValues",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, softLock }) =>
       async () => {
@@ -185,13 +185,13 @@ const actions = [
           await fieldObj.selectPossible(softLock);
         }
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
-    requiredInput: ['field', 'softLock'],
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["field", "softLock"],
   },
   {
-    value: 'toggleSelect',
-    translation: 'Object.ActionButton.ToggleFieldSelection',
-    group: 'selection',
+    value: "toggleSelect",
+    translation: "Object.ActionButton.ToggleFieldSelection",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field, value, softLock }) =>
       async () => {
@@ -200,24 +200,24 @@ const actions = [
           await fieldObj.toggleSelect(value, softLock);
         }
       },
-    requiredInput: ['field', 'value', 'softLock'],
+    requiredInput: ["field", "value", "softLock"],
   },
   {
-    value: 'lockAll',
-    translation: 'Object.ActionButton.LockAllSelections',
-    group: 'selection',
+    value: "lockAll",
+    translation: "Object.ActionButton.LockAllSelections",
+    group: "selection",
     getActionCall:
       ({ app }) =>
       async () => {
         await app.lockAll();
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
     requiredInput: [],
   },
   {
-    value: 'lockField',
-    translation: 'Object.ActionButton.LockField',
-    group: 'selection',
+    value: "lockField",
+    translation: "Object.ActionButton.LockField",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field }) =>
       async () => {
@@ -226,25 +226,25 @@ const actions = [
           await fieldObj.lock();
         }
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
-    requiredInput: ['field'],
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["field"],
   },
   {
-    value: 'unlockAll',
-    translation: 'Object.ActionButton.UnlockAllSelections',
-    group: 'selection',
+    value: "unlockAll",
+    translation: "Object.ActionButton.UnlockAllSelections",
+    group: "selection",
     getActionCall:
       ({ app }) =>
       async () => {
         await app.unlockAll();
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
     requiredInput: [],
   },
   {
-    value: 'unlockField',
-    translation: 'Object.ActionButton.UnlockAField',
-    group: 'selection',
+    value: "unlockField",
+    translation: "Object.ActionButton.UnlockAField",
+    group: "selection",
     getActionCall:
       ({ app, qStateName, field }) =>
       async () => {
@@ -253,13 +253,13 @@ const actions = [
           await fieldObj.unlock();
         }
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('advancedSelectionOptions'),
-    requiredInput: ['field'],
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["field"],
   },
   {
-    value: 'setVariable',
-    translation: 'Object.ActionButton.SetVariable',
-    group: 'variables',
+    value: "setVariable",
+    translation: "Object.ActionButton.SetVariable",
+    group: "variables",
     getActionCall:
       ({ app, variable, value }) =>
       async () => {
@@ -272,13 +272,13 @@ const actions = [
           }
         }
       },
-    requiredInput: ['variable', 'value'],
+    requiredInput: ["variable", "value"],
   },
   {
-    value: 'doReload',
-    translation: 'Object.ActionButton.DoReload',
-    group: 'reload',
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.('reloadData'),
+    value: "doReload",
+    translation: "Object.ActionButton.DoReload",
+    group: "reload",
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("reloadData"),
     getActionCall:
       ({ app, partial }) =>
       async () => {
@@ -287,7 +287,7 @@ const actions = [
           await app.doSave();
         }
       },
-    requiredInput: ['partial'],
+    requiredInput: ["partial"],
   },
   {
     /** *************************************
@@ -306,8 +306,8 @@ const actions = [
      * senseNavigation - Navigation API provided when in sense client
      */
 
-    translation: 'Object.ActionButton.ExecuteAutomation',
-    value: 'executeAutomation',
+    translation: "Object.ActionButton.ExecuteAutomation",
+    value: "executeAutomation",
     getActionCall:
       ({
         app,
@@ -350,17 +350,17 @@ const actions = [
           oldAutomationRun(automation, automationPostData, app);
         }
       },
-    requiredInput: ['automation'],
-    hide: ({ isEnabled }) => !isEnabled?.('ACTION_BUTTON_AUTOMATIONS'),
+    requiredInput: ["automation"],
+    hide: ({ isEnabled }) => !isEnabled?.("ACTION_BUTTON_AUTOMATIONS"),
   },
   {
-    value: 'refreshDynamicViews',
-    translation: 'Object.ActionButton.RefreshDynamicViews',
-    group: 'dynamicViews',
+    value: "refreshDynamicViews",
+    translation: "Object.ActionButton.RefreshDynamicViews",
+    group: "dynamicViews",
     getActionCall:
       ({ senseNavigation }) =>
       async () => {
-        if (typeof senseNavigation.refreshDynamicViews === 'function') {
+        if (typeof senseNavigation.refreshDynamicViews === "function") {
           await senseNavigation.refreshDynamicViews();
         }
       },

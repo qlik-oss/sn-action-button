@@ -1,4 +1,4 @@
-import DEFAULTS from './style-defaults';
+import DEFAULTS from "./style-defaults";
 
 /**
  * @extends {qae.GenericObjectProperties}
@@ -21,17 +21,17 @@ const properties = {
    * Visualization title
    * @type {string=}
    */
-  title: '',
+  title: "",
   /**
    * Visualization subtitle
    * @type {string=}
    */
-  subtitle: '',
+  subtitle: "",
   /**
    * Visualization footnote
    * @type {string=}
    */
-  footnote: '',
+  footnote: "",
   /**
    * Controlling if the button should use an expression to determine if it is enabled or not
    *  @type {boolean}
@@ -52,7 +52,7 @@ const properties = {
    * @type {NavigationAction}
    */
   navigation: {
-    action: 'none',
+    action: "none",
   },
   disableNavMenu: true,
   showDetails: false,
@@ -66,7 +66,7 @@ const properties = {
       fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
       color: DEFAULTS.FONT_COLOR,
-      colorExpression: '',
+      colorExpression: "",
       size: DEFAULTS.FONT_SIZE,
       sizeFixed: DEFAULTS.FONT_SIZE_FIXED,
       sizeBehavior: DEFAULTS.SIZE_BEHAVIOR,
@@ -76,12 +76,12 @@ const properties = {
     background: {
       useColorExpression: false,
       color: DEFAULTS.COLOR,
-      colorExpression: '',
+      colorExpression: "",
       mode: DEFAULTS.BGIMAGE_MODE,
       useImage: false,
       url: {
         qStaticContentUrlDef: {
-          qUrl: '',
+          qUrl: "",
         },
       },
       size: DEFAULTS.BACKGROUND_SIZE,
@@ -90,14 +90,14 @@ const properties = {
     border: {
       useColorExpression: false,
       color: DEFAULTS.COLOR,
-      colorExpression: '',
+      colorExpression: "",
       useBorder: false,
       radius: DEFAULTS.BORDER_RADIUS,
       width: DEFAULTS.BORDER_WIDTH,
     },
     icon: {
       useIcon: false,
-      iconType: '',
+      iconType: "",
       position: DEFAULTS.ICON_POSITION,
     },
   },

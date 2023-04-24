@@ -1,47 +1,47 @@
-const path = require('path');
+const path = require("path");
 
-const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
+const { version } = require(path.resolve(__dirname, "./package.json")); // eslint-disable-line
 
 module.exports = {
   serve: {
     snapshots: [
       {
-        key: 'btn',
+        key: "btn",
         meta: {
-          language: 'sv-SE',
-          theme: 'light',
+          language: "sv-SE",
+          theme: "light",
           appLayout: {},
           size: { width: 800, height: 600 },
         },
         layout: {
-          qInfo: { qId: 'CNaxMh', qType: 'sn-action-button' },
+          qInfo: { qId: "CNaxMh", qType: "sn-action-button" },
           qSelectionInfo: {},
           actions: [],
-          navigation: { action: 'none', sheet: '', story: '', websiteUrl: '', sameWindow: false },
+          navigation: { action: "none", sheet: "", story: "", websiteUrl: "", sameWindow: false },
           useEnabledCondition: false,
           enabledCondition: 1,
           showTitles: true,
-          title: '',
-          subtitle: '',
-          footnote: '',
+          title: "",
+          subtitle: "",
+          footnote: "",
           showDetails: false,
           style: {
-            label: 'My Button!',
+            label: "My Button!",
             font: {
               size: 0.66,
               useColorExpression: false,
-              color: { index: 13, color: '#65d3da' },
-              colorExpression: '',
+              color: { index: 13, color: "#65d3da" },
+              colorExpression: "",
               style: { bold: true, italic: true, underline: true },
-              align: 'left',
+              align: "left",
             },
             background: {
               useColorExpression: true,
               color: { index: -1, color: null },
-              colorExpression: 'pink',
+              colorExpression: "pink",
               useImage: false,
-              size: 'auto',
-              position: 'centerCenter',
+              size: "auto",
+              position: "centerCenter",
               url: { qStaticContentUrl: {} },
             },
             border: {
@@ -50,18 +50,18 @@ module.exports = {
               width: 0.245,
               useColorExpression: false,
               color: { index: -1, color: null },
-              colorExpression: '',
+              colorExpression: "",
             },
-            icon: { useIcon: true, iconType: 'image', position: 'left' },
+            icon: { useIcon: true, iconType: "image", position: "left" },
           },
-          visualization: 'action-button',
+          visualization: "action-button",
         },
       },
     ],
   },
   build: {
     replacementStrings: {
-      'process.env.PACKAGE_VERSION': JSON.stringify(version),
+      "process.env.PACKAGE_VERSION": JSON.stringify(version),
     },
   },
 };

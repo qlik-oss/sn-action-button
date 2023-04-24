@@ -1,19 +1,19 @@
 import {
-  useElement,
-  useStaleLayout,
-  useEffect,
-  useMemo,
   useApp,
   useConstraints,
-  useTheme,
+  useEffect,
+  useElement,
   useImperativeHandle,
-} from '@nebula.js/stardust';
+  useMemo,
+  useStaleLayout,
+  useTheme,
+} from "@nebula.js/stardust";
 
-import properties from './object-properties';
-import data from './data';
-import ext from './ext';
+import data from "./data";
+import ext from "./ext";
+import properties from "./object-properties";
 
-import { renderButton } from './components/action-button';
+import { renderButton } from "./components/action-button";
 
 export default function supernova(env) {
   const {
@@ -25,9 +25,9 @@ export default function supernova(env) {
   const isFeatureBlacklisted = anything.sense?.isFeatureBlacklisted;
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
   const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
-  const multiUserAutomation = isEnabled?.('SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER');
+  const multiUserAutomation = isEnabled?.("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
   const senseNavigation = sense?.navigation;
-  properties.style.label = sense ? translator.get('Object.ActionButton') : 'Button';
+  properties.style.label = sense ? translator.get("Object.ActionButton") : "Button";
 
   return {
     qae: {
@@ -39,8 +39,8 @@ export default function supernova(env) {
       const theme = useTheme();
 
       useMemo(() => {
-        const button = document.createElement('button');
-        button.appendChild(document.createElement('text'));
+        const button = document.createElement("button");
+        button.appendChild(document.createElement("text"));
         element.appendChild(button);
       }, []);
 
