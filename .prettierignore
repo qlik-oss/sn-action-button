@@ -13,6 +13,7 @@ coverage
 node_modules
 properties.json
 LICENSE
+sn-action-button-ext/
 *.lock
 *.html
 *.snap
