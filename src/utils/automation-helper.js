@@ -32,6 +32,9 @@ export const getAutomation = async (automationId) => {
 
 export const getAutomationRun = async (automationId, runId) => {
   const response = await fetch(`../api/v1/automations/${automationId}/runs/${runId}`);
+  if (response.status !== 200) {
+    throw Error;
+  }
   return response.json();
 };
 
@@ -78,7 +81,15 @@ export const parseOutput = (data, translator) => {
 };
 
 export const automationRunPolling = async (automationId, runId, translator, polTimes, resolve) => {
-  const automationRun = await getAutomationRun(automationId, runId);
+  let automationRun;
+  try {
+    automationRun = await getAutomationRun(automationId, runId);
+  } catch {
+    return resolve({
+      ok: true,
+      message: getTranslation(translator, "Object.ActionButton.Automation.AutomationTriggered", "Automation triggered"),
+    });
+  }
   switch (automationRun.status) {
     case "queued":
     case "running":
