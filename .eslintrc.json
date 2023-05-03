@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true,
+    "es5": true
+  },
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.{js,jsx}", "jest.setup.js"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      },
+      "plugins": ["jest", "react", "@typescript-eslint"],
+      "rules": {}
+    }
+  ]
+}

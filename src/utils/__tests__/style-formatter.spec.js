@@ -284,9 +284,9 @@ describe("style-formatter", () => {
 
       global.document.createElement = jest.fn(() => {
         const newElement = {
-          setAttribute: () => {},
-          removeAttribute: () => {},
-          firstElementChild: { setAttribute: () => {} },
+          setAttribute: () => undefined,
+          removeAttribute: () => undefined,
+          firstElementChild: { setAttribute: () => undefined },
           style: {},
           children: [],
         };
