@@ -114,5 +114,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "systemjs": "dist/sn-action-button.systemjs.js"
+  "systemjs": "dist/sn-action-button.systemjs.js",
+  "dependencies": {
+    "@types/node": "^18.16.3",
+    "@types/react": "^18.2.2",
+    "@types/react-dom": "^18.2.3",
+    "@types/styled-components": "^5.1.26",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4"
+  }
 }
