@@ -33,7 +33,7 @@ export const getAutomation = async (automationId) => {
 export const getAutomationRun = async (automationId, runId) => {
   const response = await fetch(`../api/v1/automations/${automationId}/runs/${runId}`);
   if (response.status !== 200) {
-    throw Error;
+    throw new Error();
   }
   return response.json();
 };
