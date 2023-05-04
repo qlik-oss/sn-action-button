@@ -1,16 +1,17 @@
 import DEFAULTS from "../style-defaults";
+import { GetStyle, HandleSetStyle } from "../types";
 import colorUtils from "./color-utils";
 import luiIcons from "./lui-icons";
 import { adjustFontSizeBehavior, backgroundPosition, backgroundSize } from "./style-utils";
 import { getImageUrl } from "./url-utils";
 
-const formatProperty = (path, setting) => `${path}: ${setting};`;
+const formatProperty = (path: string, setting: string | number) => `${path}: ${setting};`;
 
 export default {
-  getStyles({ style = {}, disabled, theme, element, app }) {
+  getStyles({ style, disabled, theme, element, app }: GetStyle) {
     let styles =
       "width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;";
-    const { font = {}, background = {}, border = {} } = style;
+    const { font, background, border } = style;
     // enable
     styles += disabled ? formatProperty("opacity", 0.4) : formatProperty("cursor", "pointer");
     // font
@@ -23,8 +24,8 @@ export default {
     const backgroundColor = colorUtils.getColor(background, primaryColor, theme);
     styles += formatProperty("background-color", backgroundColor);
     // backgroundImage
-    if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
-      let bgUrl = background.url.qStaticContentUrl.qUrl;
+    if ((background.useImage || background.mode === "media") && background.layoutUrl.qStaticContentUrl) {
+      let bgUrl = background.layoutUrl.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl = getImageUrl(bgUrl, app);
         styles += formatProperty("background-image", `url('${bgUrl}')`);
@@ -52,8 +53,8 @@ export default {
 
     return styles;
   },
-  createLabelAndIcon({ button, theme, style = {}, isSense }) {
-    const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
+  createLabelAndIcon({ button, theme, style, isSense }: HandleSetStyle) {
+    const { icon, font, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement("text");
     text.style.whiteSpace = "pre";
@@ -84,7 +85,7 @@ export default {
 
     // hide overflow when there can be overflow
     if (text.style.fontSize === "8px") {
-      text.children.forEach((child) => {
+      Array.from(text.children as HTMLCollectionOf<HTMLElement>).forEach((child) => {
         child.style.overflow = "hidden";
       });
     }

@@ -1,11 +1,13 @@
 /* eslint-disable prefer-destructuring */
+import { stardust } from "@nebula.js/stardust";
 import defaultValues from "../../__tests__/default-button-props";
 import { getStyleEditorDefinition } from "../../styling-panel-definition";
+import { Style } from "../../types";
 import styleFormatter from "../style-formatter";
 
 describe("style-formatter", () => {
   describe("getStyles", () => {
-    let style;
+    let style: Style;
     const defaultStyle =
       "width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;cursor: pointer;color: #ffffff;font-weight: bold;background-color: myPrimaryColor;border: none;";
     const someColor = "#ffff00";
@@ -16,21 +18,21 @@ describe("style-formatter", () => {
           url: "wss://localhost/app/12345-5678",
         },
       },
-    };
+    } as unknown as EngineAPI.IApp;
     const someUrl = "/media/Logo/qlik.png";
-    let theme;
-    let layout;
+    let theme: stardust.Theme;
+    let layout: any;
     const disabled = false;
-    let element;
+    let element: HTMLElement;
     beforeEach(() => {
       const d = defaultValues();
-      theme = d.theme;
+      theme = d.theme as unknown as stardust.Theme;
       layout = d.layout;
       style = layout.style;
       element = {
         offsetHeight: 200,
         offsetWidth: 100,
-      };
+      } as unknown as HTMLElement;
     });
 
     afterEach(() => {
@@ -38,73 +40,69 @@ describe("style-formatter", () => {
     });
 
     it("should return default styling", () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle).toEqual(defaultStyle);
     });
     // enable
     it("should have set opacity and cursor for disabled button", () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled: true, theme, element, app });
       expect(formattedStyle.includes("opacity: 0.4")).toBe(true);
       expect(formattedStyle.includes("cursor: pointer")).toBe(false);
     });
 
     it("should not have set opacity for enabled button", () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("opacity: 0.4")).toBe(false);
     });
     // font
     it("should return specified font color", () => {
-      style.font.color = someColor;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.font.color.color = someColor;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`color: ${someColor}`)).toBe(true);
     });
 
     it("should return specified font color from expression", () => {
       style.font.colorExpression = someColorExpression;
       style.font.useColorExpression = true;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`color: ${someColorExpression}`)).toBe(true);
     });
 
     it("should return font-weight: bold when bold is selected", () => {
-      style.font.style = {
-        bold: true,
-      };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.font.style.bold = true;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("font-weight: bold")).toBe(true);
     });
 
     it("should return font-style: italic when italic is selected", () => {
-      style.font.style = {
-        italic: true,
-      };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.font.style.italic = true;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("font-style: italic")).toBe(true);
     });
     // background
     it("should return specified background color", () => {
-      style.background.color = someColor;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.color.color = someColor;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`background-color: ${someColor}`)).toBe(true);
     });
 
     it("should return specified background color from expression", () => {
       style.background.colorExpression = someColorExpression;
       style.background.useColorExpression = true;
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`background-color: ${someColorExpression}`)).toBe(true);
     });
 
     it("should return default background color when color is none", () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-color: myPrimaryColor")).toBe(true);
     });
 
     it("should return specified image url when the background mode is set on media", () => {
       style.background.useImage = false;
       style.background.mode = "media";
-      style.background.url.qStaticContentUrl = { qUrl: someUrl };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.layoutUrl.qStaticContentUrl = { qUrl: someUrl };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
       expect(formattedStyle.includes("background-size: auto auto")).toBe(true);
       expect(formattedStyle.includes("background-position: 50% 50%")).toBe(true);
@@ -114,8 +112,8 @@ describe("style-formatter", () => {
     it("should not show size/position when background mode is set on media but the url is not set", () => {
       style.background.useImage = false;
       style.background.mode = "media";
-      style.background.url.qStaticContentUrl = {};
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.layoutUrl.qStaticContentUrl = undefined;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-image:")).toBe(false);
       expect(formattedStyle.includes("background-size:")).toBe(false);
       expect(formattedStyle.includes("background-position:")).toBe(false);
@@ -127,26 +125,26 @@ describe("style-formatter", () => {
 
       style.background.useImage = false;
       style.background.mode = "media";
-      style.background.url.qStaticContentUrl = { qUrl: someUrl };
-      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.layoutUrl.qStaticContentUrl = { qUrl: someUrl };
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-image:")).toBe(true);
 
       style.background.mode = "none";
       backgroundImageMode.change(layout);
-      expect(style.background.url.qStaticContentUrl.qUrl).toEqual("/media/Logo/qlik.png");
-      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      expect(style.background.layoutUrl.qStaticContentUrl.qUrl).toEqual("/media/Logo/qlik.png");
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-image:")).toBe(false);
 
       style.background.mode = "media";
       backgroundImageMode.change(layout);
-      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-image:")).toBe(true);
     });
 
     it("should return specified image url and default image settings", () => {
       style.background.useImage = true;
-      style.background.url.qStaticContentUrl = { qUrl: someUrl };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.layoutUrl.qStaticContentUrl = { qUrl: someUrl };
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes(`background-image: url('https://localhost${someUrl}')`)).toBe(true);
       expect(formattedStyle.includes("background-size: auto auto")).toBe(true);
       expect(formattedStyle.includes("background-position: 50% 50%")).toBe(true);
@@ -155,8 +153,8 @@ describe("style-formatter", () => {
 
     it("should return no settings when url is missing", () => {
       style.background.useImage = true;
-      style.background.url.qStaticContentUrl = {};
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      style.background.layoutUrl.qStaticContentUrl = undefined;
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-image:")).toBe(false);
       expect(formattedStyle.includes("background-size:")).toBe(false);
       expect(formattedStyle.includes("background-position:")).toBe(false);
@@ -165,18 +163,20 @@ describe("style-formatter", () => {
 
     it("should return specified image size when mode is set to media", () => {
       expect(style.background.mode).toEqual("none");
-      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      let formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-size: 100% 100%")).toBe(false);
-      style.background = {
-        mode: "media",
-        size: "fill",
-        url: {
-          qStaticContentUrl: {
-            qUrl: someUrl,
+      style = {
+        background: {
+          mode: "media",
+          size: "fill",
+          url: {
+            qStaticContentUrl: {
+              qUrl: someUrl,
+            },
           },
         },
       };
-      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-size: 100% 100%")).toBe(true);
     });
 
@@ -191,7 +191,7 @@ describe("style-formatter", () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-position: top left")).toBe(true);
     });
 
@@ -205,7 +205,7 @@ describe("style-formatter", () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-size: 100% 100%")).toBe(true);
     });
 
@@ -219,7 +219,7 @@ describe("style-formatter", () => {
           },
         },
       };
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("background-position: 0% 0%")).toBe(true);
     });
     // border
@@ -267,7 +267,7 @@ describe("style-formatter", () => {
     });
 
     it("should not set a border", () => {
-      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app });
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle.includes("border: none")).toBe(true);
     });
   });
