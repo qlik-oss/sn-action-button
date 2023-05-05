@@ -1,0 +1,140 @@
+import DEFAULTS from "../style-defaults";
+export var FONT_FAMILIES = [
+    "American Typewriter, serif",
+    "Andalé Mono, monospace",
+    "Arial Black, sans-serif",
+    "Arial, sans-serif",
+    "Bradley Hand, cursive",
+    "Brush Script MT, cursive",
+    "Comic Sans MS, cursive",
+    "Courier, monospace",
+    "Didot, serif",
+    "Georgia, serif",
+    "Impact, sans-serif",
+    "Lucida Console, monospace",
+    "Luminari, fantasy",
+    "Monaco, monospace",
+    "QlikView Sans, sans-serif",
+    "Source Sans Pro, sans-serif",
+    "Tahoma, sans-serif",
+    "Times New Roman, serif",
+    "Trebuchet MS, sans-serif",
+    "Verdana, sans-serif",
+];
+export var backgroundSize = {
+    auto: "auto auto",
+    alwaysFit: "contain",
+    fitWidth: "100% auto",
+    fitHeight: "auto 100%",
+    fill: "100% 100%",
+    alwaysFill: "cover",
+};
+export var backgroundPosition = {
+    "top-left": "top left",
+    "center-left": "center left",
+    "bottom-left": "bottom left",
+    "top-center": "top center",
+    "center-center": "center center",
+    "bottom-center": "bottom center",
+    "top-right": "top right",
+    "center-right": "center right",
+    "bottom-right": "bottom right",
+    topLeft: "0% 0%",
+    centerLeft: "50% 0%",
+    bottomLeft: "100% 0%",
+    topCenter: "0% 50%",
+    centerCenter: "50% 50%",
+    bottomCenter: "100% 50%",
+    topRight: "0% 100%",
+    centerRight: "50% 100%",
+    bottomRight: "100% 100%", // bottom right
+};
+export var colorOptions = [
+    {
+        value: false,
+        translation: "properties.colorMode.primary",
+    },
+    {
+        value: true,
+        translation: "properties.colorMode.byExpression",
+    },
+];
+export var toggleOptions = [
+    {
+        value: true,
+        translation: "properties.on",
+    },
+    {
+        value: false,
+        translation: "properties.off",
+    },
+];
+export var sizeBehaviorOptions = [
+    {
+        value: "responsive",
+        translation: "properties.responsive",
+    },
+    {
+        value: "relative",
+        translation: "properties.fluid",
+    },
+    {
+        value: "fixed",
+        translation: "properties.fixed",
+    },
+];
+var getFirstFont = function (s) { return s.split(",")[0]; };
+export var fontFamilyOptions = FONT_FAMILIES.map(function (font) { return ({
+    value: font,
+    label: getFirstFont(font),
+}); });
+var trimDecimal = function (num) { return (num % 1 !== 0 ? num.toFixed(2) : num); };
+export var setTextFontSize = function (text, font, textFontSize, hasIcon) {
+    if (font.style && font.style.italic) {
+        if (hasIcon) {
+            text.style.fontSize = "".concat(trimDecimal(Math.max(textFontSize * 0.84, 8)), "px");
+            text.children[0].style.marginRight = "".concat(trimDecimal(text.offsetWidth * 0.04), "px");
+            text.children[1].style.marginRight = "".concat(trimDecimal(text.offsetWidth * 0.04), "px");
+        }
+        else {
+            text.style.fontSize = "".concat(trimDecimal(Math.max(textFontSize * 0.9, 8)), "px");
+            text.children[0].style.marginRight = "".concat(trimDecimal(text.offsetWidth * 0.02), "px");
+        }
+    }
+    else if (hasIcon) {
+        text.style.fontSize = "".concat(trimDecimal(Math.max(textFontSize * 0.88, 8)), "px");
+        text.children[0].style.marginRight = "".concat(trimDecimal(text.offsetWidth * 0.04), "px");
+    }
+    else {
+        text.style.fontSize = "".concat(trimDecimal(Math.max(textFontSize * 0.92, 8)), "px");
+    }
+};
+export var adjustFontSizeBehavior = function (button, font, text, textSpan, hasIcon) {
+    if (font.sizeBehavior === "fixed") {
+        // The font size is independent of the box size and the length of the text
+        text.style.fontSize = "".concat(font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED, "px");
+        textSpan.style.overflow = "hidden";
+    }
+    else if (font.sizeBehavior === "relative") {
+        var layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
+        // 40 here is just a hard coded value which seems to work quite well.
+        var calculatedWidth = 40 / layoutFontSize;
+        var fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * layoutFontSize * 0.8);
+        text.style.fontSize = "".concat(fontSize, "px");
+        textSpan.style.overflow = "hidden";
+    }
+    else {
+        // 1. Setting font size to height of button container
+        text.style.fontSize = "".concat(button.clientHeight, "px");
+        // 2. Adjust the font size to the height ratio between button container and text box
+        var adjustedFontSize = (button.clientHeight / text.offsetHeight) * button.clientHeight;
+        text.style.fontSize = "".concat(adjustedFontSize, "px");
+        // 3. Adjust the font size to the width ratio between button container and text box
+        if (text.offsetWidth > button.clientWidth) {
+            adjustedFontSize *= button.clientWidth / text.offsetWidth;
+        }
+        // 4. Setting final font size by scaling with the font size from the layout + other font styling
+        var textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
+        setTextFontSize(text, font, textFontSize, hasIcon);
+    }
+};

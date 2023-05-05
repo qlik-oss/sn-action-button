@@ -64,10 +64,10 @@ const colorUtils = {
       resolvedColor = colorUtils.resolveExpression(colorExpression);
     } else if (typeof color === "string") {
       resolvedColor = color;
-    } else if (color) {
-      resolvedColor = theme.getColorPickerColor(color);
+    } else {
+      theme.resolvedColor = theme.getColorPickerColor(color);
     }
-    return !resolvedColor || resolvedColor === "none" ? defaultColor : resolvedColor;
+    return !resolvedColor || resolvedColor.color === "none" ? defaultColor : resolvedColor;
   },
 };
 

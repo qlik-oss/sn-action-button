@@ -33,9 +33,6 @@ export interface Url {
   qStaticContentUrlDef: {
     qUrl: string;
   };
-}
-
-export interface LayoutUrl {
   qStaticContentUrl:
     | {
         qUrl: string;

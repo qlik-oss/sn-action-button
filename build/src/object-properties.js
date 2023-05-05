@@ -1,111 +1,108 @@
 import DEFAULTS from "./style-defaults";
-
 /**
  * @extends {qae.GenericObjectProperties}
  * @entry
  */
-
-const properties = {
-  /**
-   * Current version of this generic object definition.
-   * @type {string}
-   * @default
-   */
-  version: process.env.PACKAGE_VERSION,
-  /**
-   * Show title for the visualization
-   * @type {boolean=}
-   */
-  showTitles: true,
-  /**
-   * Visualization title
-   * @type {string=}
-   */
-  title: "",
-  /**
-   * Visualization subtitle
-   * @type {string=}
-   */
-  subtitle: "",
-  /**
-   * Visualization footnote
-   * @type {string=}
-   */
-  footnote: "",
-  /**
-   * Controlling if the button should use an expression to determine if it is enabled or not
-   *  @type {boolean}
-   */
-  useEnabledCondition: false,
-  /**
-   * Number or expression evaluating to number, 0 means disabling the button
-   * @type {number | EnabledExpression}
-   */
-  enabledCondition: 1,
-  /**
-   * List of actions, performed in this order
-   * @type {Action[]}
-   */
-  actions: [],
-  /**
-   * Navigation action to move to new sheet/URL, performed after all other actions
-   * @type {NavigationAction}
-   */
-  navigation: {
-    action: "none",
-  },
-  disableNavMenu: true,
-  showDetails: false,
-  /**
-   * All styling options
-   * @type {Style}
-   */
-  style: {
-    label: DEFAULTS.LABEL,
-    font: {
-      fontFamily: DEFAULTS.FONT_FAMILY,
-      useColorExpression: false,
-      color: DEFAULTS.FONT_COLOR,
-      colorExpression: "",
-      size: DEFAULTS.FONT_SIZE,
-      sizeFixed: DEFAULTS.FONT_SIZE_FIXED,
-      sizeBehavior: DEFAULTS.SIZE_BEHAVIOR,
-      style: DEFAULTS.FONT_STYLE,
-      align: DEFAULTS.TEXT_ALIGN,
+var properties = {
+    /**
+     * Current version of this generic object definition.
+     * @type {string}
+     * @default
+     */
+    version: process.env.PACKAGE_VERSION,
+    /**
+     * Show title for the visualization
+     * @type {boolean=}
+     */
+    showTitles: true,
+    /**
+     * Visualization title
+     * @type {string=}
+     */
+    title: "",
+    /**
+     * Visualization subtitle
+     * @type {string=}
+     */
+    subtitle: "",
+    /**
+     * Visualization footnote
+     * @type {string=}
+     */
+    footnote: "",
+    /**
+     * Controlling if the button should use an expression to determine if it is enabled or not
+     *  @type {boolean}
+     */
+    useEnabledCondition: false,
+    /**
+     * Number or expression evaluating to number, 0 means disabling the button
+     * @type {number | EnabledExpression}
+     */
+    enabledCondition: 1,
+    /**
+     * List of actions, performed in this order
+     * @type {Action[]}
+     */
+    actions: [],
+    /**
+     * Navigation action to move to new sheet/URL, performed after all other actions
+     * @type {NavigationAction}
+     */
+    navigation: {
+        action: "none",
     },
-    background: {
-      useColorExpression: false,
-      color: DEFAULTS.COLOR,
-      colorExpression: "",
-      mode: DEFAULTS.BGIMAGE_MODE,
-      useImage: false,
-      url: {
-        qStaticContentUrlDef: {
-          qUrl: "",
+    disableNavMenu: true,
+    showDetails: false,
+    /**
+     * All styling options
+     * @type {Style}
+     */
+    style: {
+        label: DEFAULTS.LABEL,
+        font: {
+            fontFamily: DEFAULTS.FONT_FAMILY,
+            useColorExpression: false,
+            color: DEFAULTS.FONT_COLOR,
+            colorExpression: "",
+            size: DEFAULTS.FONT_SIZE,
+            sizeFixed: DEFAULTS.FONT_SIZE_FIXED,
+            sizeBehavior: DEFAULTS.SIZE_BEHAVIOR,
+            style: DEFAULTS.FONT_STYLE,
+            align: DEFAULTS.TEXT_ALIGN,
         },
-        qStaticContentUrl: {
-          qUrl: "",
+        background: {
+            useColorExpression: false,
+            color: DEFAULTS.COLOR,
+            colorExpression: "",
+            mode: DEFAULTS.BGIMAGE_MODE,
+            useImage: false,
+            url: {
+                qStaticContentUrlDef: {
+                    qUrl: "",
+                },
+                qStaticContentUrl: {
+                    qUrl: "",
+                },
+            },
+            size: DEFAULTS.BACKGROUND_SIZE,
+            position: DEFAULTS.BACKGROUND_POSITION,
         },
-      },
-      size: DEFAULTS.BACKGROUND_SIZE,
-      position: DEFAULTS.BACKGROUND_POSITION,
+        border: {
+            useColorExpression: false,
+            color: DEFAULTS.COLOR,
+            colorExpression: "",
+            useBorder: false,
+            radius: DEFAULTS.BORDER_RADIUS,
+            width: DEFAULTS.BORDER_WIDTH,
+        },
+        icon: {
+            useIcon: false,
+            iconType: "",
+            position: DEFAULTS.ICON_POSITION,
+        },
     },
-    border: {
-      useColorExpression: false,
-      color: DEFAULTS.COLOR,
-      colorExpression: "",
-      useBorder: false,
-      radius: DEFAULTS.BORDER_RADIUS,
-      width: DEFAULTS.BORDER_WIDTH,
-    },
-    icon: {
-      useIcon: false,
-      iconType: "",
-      position: DEFAULTS.ICON_POSITION,
-    },
-  },
 };
-
 /**
  * Defines what action to perform and options for that action type.
  * @typedef {object} Action
@@ -128,7 +125,6 @@ const properties = {
  * @property {string=} [automationNotificationDurationHelp=''] - Helper text when enabling notifications
  * @property {boolean=} [automationOpenLinkSameWindow=''] - Set to true if you want links from notifications to be opened in the same tab
  */
-
 /**
  * Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.
  * @typedef {object} NavigationAction
@@ -140,7 +136,6 @@ const properties = {
  * @property {boolean=} sameWindow - Set to true to open in same window/tab. Required for 'openWebsite'
  * @property {string=} odagLink - ODAG link name. Required for 'odagLink'
  */
-
 /**
  * Holds styling options
  * @typedef {object} Style
@@ -150,7 +145,6 @@ const properties = {
  * @property {Border=} border - Styling for border
  * @property {Icon=} icon - Styling for icon
  */
-
 /**
  * @typedef {object} Font
  * @property {string=} [fontFamily='Source Sans Pro'] - Font Family of the label
@@ -166,7 +160,6 @@ const properties = {
  * @property {boolean=} [style.underline = false] - Underlined text
  * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='responsive'] - Setting to determine how the fontsize of the label is calculated.
  */
-
 /**
  * @typedef {object} Background
  * @property {boolean=} [useColorExpression=false] - Set to true to use color expression
@@ -180,7 +173,6 @@ const properties = {
  * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight'|'top-left'|'center-left'|'bottom-left'|'top-center'|'center-center'|'top-right'|'center-right'|'bottom-right')} [position='center-center'] - Image position
  * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
  */
-
 /**
  * @typedef {object} Border
  * @property {boolean=} [useBorder=false] - Set to true to use border expression
@@ -190,7 +182,6 @@ const properties = {
  * @property {PaletteColor=} color - Color defined by index or hex code, needed if useColorExpression is false
  * @property {string=} colorExpression - Color defined by expression, needed if useColorExpression is true
  */
-
 /**
  * Icons are only available inside Qlik Sense
  * @typedef {object} Icon
@@ -199,26 +190,22 @@ const properties = {
  * @property {string=} [iconType.value=''] - name of icon
  * @property {('left'|'right')=} [position='left'] - Defines which side of the label the icon will be
  */
-
 /**
  * Color information structure. Holds the actual color and index in palette.
  * @typedef {object} PaletteColor
  * @property {string=} color - Color as hex string (only used if index: -1)
  * @property {number=} index - Index in palette
  */
-
 /**
  * Format for using color expressions
  * @typedef {object} ColorExpression
  * @property {object} qStringExpression
  * @property {string} qStringExpression.qExpr - expression that resolves to a supported color format
  */
-
 /**
  * Format for setting if the button is enabled/disabled with an expression
  * @typedef {object} EnabledExpression
  * @property {object} qStringExpression
  * @property {string} qStringExpression.qExpr - expression that resolves to a number
  */
-
 export default properties;

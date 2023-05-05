@@ -15,7 +15,7 @@ export default {
     // enable
     styles += disabled ? formatProperty("opacity", 0.4) : formatProperty("cursor", "pointer");
     // font
-    styles += formatProperty("color", colorUtils.getColor(font, DEFAULTS.FONT_COLOR.color, theme));
+    styles += formatProperty("color", colorUtils.getColor(font, DEFAULTS.FONT_COLOR, theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty("font-weight", "bold"));
     fontStyle.italic && (styles += formatProperty("font-style", "italic"));
@@ -24,8 +24,8 @@ export default {
     const backgroundColor = colorUtils.getColor(background, primaryColor, theme);
     styles += formatProperty("background-color", backgroundColor);
     // backgroundImage
-    if ((background.useImage || background.mode === "media") && background.layoutUrl.qStaticContentUrl) {
-      let bgUrl = background.layoutUrl.qStaticContentUrl.qUrl;
+    if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
+      let bgUrl = background.url.qStaticContentUrl.qUrl;
       if (bgUrl) {
         bgUrl = getImageUrl(bgUrl, app);
         styles += formatProperty("background-image", `url('${bgUrl}')`);
