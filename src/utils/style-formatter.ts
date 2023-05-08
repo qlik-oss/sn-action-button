@@ -15,7 +15,7 @@ export default {
     // enable
     styles += disabled ? formatProperty("opacity", 0.4) : formatProperty("cursor", "pointer");
     // font
-    styles += formatProperty("color", colorUtils.getColor(font, DEFAULTS.FONT_COLOR.color, theme));
+    styles += formatProperty("color", colorUtils.getColor(font, DEFAULTS.FONT_COLOR, theme));
     const fontStyle = font.style || DEFAULTS.FONT_STYLE;
     fontStyle.bold && (styles += formatProperty("font-weight", "bold"));
     fontStyle.italic && (styles += formatProperty("font-style", "italic"));

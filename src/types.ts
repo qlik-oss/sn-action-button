@@ -24,6 +24,16 @@ export type Position =
   | "center-right"
   | "bottom-right";
 
+// export type ColorSingle = string;
+// export type ColorObj = {
+//   color: string;
+//   index: number;
+// };
+
+// export interface Color {
+//   color: ColorSingle | ColorObj;
+// }
+
 export interface Color {
   color: string;
   index: number;
@@ -31,20 +41,17 @@ export interface Color {
 
 export interface Url {
   qStaticContentUrlDef: {
-    qUrl: string;
+    qUrl?: string;
   };
   qStaticContentUrl: {
-    qUrl: string;
+    qUrl?: string;
   };
 }
 
 export interface Font {
   fontFamily: string;
   useColorExpression: boolean;
-  color: {
-    color: string;
-    index: number;
-  };
+  color: Color;
   colorExpression: string;
   size: number;
   sizeFixed: number;

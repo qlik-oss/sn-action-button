@@ -97,6 +97,8 @@
     "@qlik/eslint-config": "^0.0.11",
     "@qlik/prettier-config": "^0.1.1",
     "@rollup/plugin-typescript": "^11.1.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@types/jest": "^29.5.1",
     "@types/node": "^18.16.3",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.3",
