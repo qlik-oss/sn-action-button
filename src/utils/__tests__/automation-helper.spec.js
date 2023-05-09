@@ -136,8 +136,8 @@ describe("automation helper", () => {
       const finished = { status: "finished", title: "Automation done running!" };
       global.fetch = jest
         .fn()
-        .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
-        .mockResolvedValueOnce({ json: () => Promise.resolve(finished) });
+        .mockResolvedValueOnce({ status: 200, json: () => Promise.resolve(queued) })
+        .mockResolvedValueOnce({ status: 200, json: () => Promise.resolve(finished) });
       const prom = new Promise((resolve) => {
         automationRunPolling(automationId, runId, translator, 0, resolve);
       });
@@ -153,8 +153,8 @@ describe("automation helper", () => {
       const failed = { status: "failed", title: null };
       global.fetch = jest
         .fn()
-        .mockResolvedValueOnce({ json: () => Promise.resolve(queued) })
-        .mockResolvedValueOnce({ json: () => Promise.resolve(failed) });
+        .mockResolvedValueOnce({ status: 200, json: () => Promise.resolve(queued) })
+        .mockResolvedValueOnce({ status: 200, json: () => Promise.resolve(failed) });
       const prom = new Promise((resolve) => {
         automationRunPolling(automationId, runId, translator, 0, resolve);
       });
@@ -164,7 +164,21 @@ describe("automation helper", () => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
       expect(result).toEqual({ ok: false, message: "Automation error" });
     });
+    it("should return an automation triggered when status changed to queued but 403 response", async () => {
+      jest.useFakeTimers({ advanceTimers: true });
+      const queued = { status: "queued" };
+      global.fetch = jest.fn().mockResolvedValueOnce({ status: 403, json: () => Promise.resolve(queued) });
+      const prom = new Promise((resolve) => {
+        automationRunPolling(automationId, runId, translator, 0, resolve);
+      });
+      jest.runAllTicks();
+      jest.runAllTimers();
+      const result = await prom;
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(result).toEqual({ ok: true, message: "Automation triggered" });
+    });
   });
+
   describe("createSnackbar", () => {
     it("should create snackbar without url", () => {
       const message = { message: "text message" };
