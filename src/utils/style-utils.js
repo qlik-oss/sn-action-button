@@ -116,18 +116,27 @@ export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
   }
 };
 
+const setFontSizeBehaviorStyle = (button, font, text, textSpan) => {
+  if (font.sizeBehavior === "fixed" || font.sizeBehavior === "relative") {
+    textSpan.style.whiteSpace = "pre";
+    textSpan.style.textOverflow = "ellipsis";
+    text.style.whiteSpace = "pre";
+    text.offsetWidth <= button.clientWidth
+      ? (textSpan.style.overflow = "visible")
+      : (textSpan.style.overflow = "hidden");
+  }
+};
+
 export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) => {
   if (font.sizeBehavior === "fixed") {
     // The font size is independent of the box size and the length of the text
     text.style.fontSize = `${font.sizeFixed || DEFAULTS.FONT_SIZE_FIXED}px`;
-    textSpan.style.overflow = "hidden";
   } else if (font.sizeBehavior === "relative") {
     const layoutFontSize = font.size || DEFAULTS.FONT_SIZE;
     // 40 here is just a hard coded value which seems to work quite well.
     const calculatedWidth = 40 / layoutFontSize;
     const fontSize = Math.min((button.clientWidth / calculatedWidth) * 10, button.clientHeight * layoutFontSize * 0.8);
     text.style.fontSize = `${fontSize}px`;
-    textSpan.style.overflow = "hidden";
   } else {
     // 1. Setting font size to height of button container
     text.style.fontSize = `${button.clientHeight}px`;
@@ -142,4 +151,5 @@ export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) =>
     const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
     setTextFontSize(text, font, textFontSize, hasIcon);
   }
+  setFontSizeBehaviorStyle(button, font, text, textSpan);
 };
