@@ -30,6 +30,7 @@ export const backgroundSize = {
   fitHeight: "auto 100%",
   fill: "100% 100%",
   alwaysFill: "cover",
+  stretchFit: "100% 100%",
 };
 
 export const backgroundPosition = {
@@ -117,14 +118,10 @@ export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
 };
 
 const setFontSizeBehaviorStyle = (button, font, text, textSpan) => {
-  if (font.sizeBehavior === "fixed" || font.sizeBehavior === "relative") {
-    textSpan.style.whiteSpace = "pre";
-    textSpan.style.textOverflow = "ellipsis";
-    text.style.whiteSpace = "pre";
-    text.offsetWidth <= button.clientWidth
-      ? (textSpan.style.overflow = "visible")
-      : (textSpan.style.overflow = "hidden");
-  }
+  text.style.whiteSpace = "nowrap";
+  textSpan.style.whiteSpace = "nowrap";
+  textSpan.style.textOverflow = "ellipsis";
+  text.offsetWidth <= button.clientWidth ? (textSpan.style.overflow = "visible") : (textSpan.style.overflow = "hidden");
 };
 
 export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) => {
