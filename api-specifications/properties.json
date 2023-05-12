@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.31.0",
+    "version": "1.32.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -441,10 +441,6 @@
             },
             {
               "kind": "literal",
-              "value": "'fitWidth'"
-            },
-            {
-              "kind": "literal",
               "value": "'fitHeight'"
             },
             {
@@ -454,6 +450,10 @@
             {
               "kind": "literal",
               "value": "'alwaysFill'"
+            },
+            {
+              "kind": "literal",
+              "value": "'stretchFit'"
             }
           ],
           "type": "string"
