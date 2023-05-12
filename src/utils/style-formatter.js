@@ -56,15 +56,10 @@ export default {
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement("text");
-    text.style.whiteSpace = "pre";
     text.style.fontFamily = style.font.fontFamily || theme.getStyle("", "", "fontFamily") || DEFAULTS.FONT_FAMILY;
-
     // label
     const textSpan = document.createElement("span");
     textSpan.textContent = label;
-    textSpan.style.whiteSpace = "pre";
-    textSpan.style.textOverflow = "ellipsis";
-    textSpan.style.overflow = "visible";
     font.style && font.style.underline && (textSpan.style.textDecoration = "underline");
     text.appendChild(textSpan);
     // icon
@@ -82,7 +77,6 @@ export default {
 
     adjustFontSizeBehavior(button, font, text, textSpan, hasIcon);
 
-    // hide overflow when there can be overflow
     if (text.style.fontSize === "8px") {
       text.children.forEach((child) => {
         child.style.overflow = "hidden";

@@ -161,7 +161,7 @@ const properties = {
  * @property {boolean=} [style.bold = true] - Bold text
  * @property {boolean=} [style.italic = false] - Italic text
  * @property {boolean=} [style.underline = false] - Underlined text
- * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='responsive'] - Setting to determine how the fontsize of the label is calculated.
+ * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='fixed'] - Setting to determine how the fontsize of the label is calculated.
  */
 
 /**
@@ -175,7 +175,7 @@ const properties = {
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
  * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight'|'top-left'|'center-left'|'bottom-left'|'top-center'|'center-center'|'top-right'|'center-right'|'bottom-right')} [position='center-center'] - Image position
- * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
+ * @property {('auto'|'alwaysFit'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill'|'stretchFit')=} [size='auto'] - Size of the image, relative to the button
  */
 
 /**

@@ -324,7 +324,7 @@ describe("style-formatter", () => {
           styleFormatter.createLabelAndIcon({ theme, button, style });
           const text = button.children[0];
           expect(text.children[0].textContent).toEqual("Button");
-          expect(text.style.whiteSpace).toEqual("pre");
+          expect(text.style.whiteSpace).toEqual("nowrap");
           expect(text.style.fontFamily).toEqual("Source Sans Pro");
           expect(text.style.fontSize).toEqual("11.50px");
           expect(text.style.display).toEqual("flex");
@@ -333,19 +333,20 @@ describe("style-formatter", () => {
         });
 
         it("should set fontSize and styling", () => {
-          expect(style.font.sizeBehavior).toBe("responsive");
+          expect(style.font.sizeBehavior).toBe("fixed");
           styleFormatter.createLabelAndIcon({ theme, button, style });
           const text = button.children[0];
           expect(text.children[0].textContent).toEqual("Button");
-          expect(text.style.whiteSpace).toEqual("pre");
+          expect(text.style.whiteSpace).toEqual("nowrap");
           expect(text.style.fontFamily).toEqual("Source Sans Pro");
-          expect(text.style.fontSize).toEqual("11.50px");
+          expect(text.style.fontSize).toEqual("20px");
           expect(text.style.display).toEqual("flex");
           expect(text.style.alignItems).toEqual("center");
           expect(text.style.justifyContent).toEqual("center");
         });
 
         it("should set fontSize to 8px for small font sizes", () => {
+          style.font.sizeBehavior = "responsive";
           button.appendChild = (child) => {
             child.setAttribute = jest.fn();
             child.offsetHeight = 400;
@@ -357,6 +358,7 @@ describe("style-formatter", () => {
         });
 
         it("should set fontSize when text offsetWidth is bigger than button", () => {
+          style.font.sizeBehavior = "responsive";
           button.appendChild = (child) => {
             child.setAttribute = jest.fn();
             child.offsetHeight = 400;
@@ -368,6 +370,7 @@ describe("style-formatter", () => {
         });
 
         it("should set fontSize when italic is selected", () => {
+          style.font.sizeBehavior = "responsive";
           style.font.style = {
             italic: true,
           };
@@ -382,6 +385,7 @@ describe("style-formatter", () => {
         });
 
         it("should place icon first then label inside text element with italics", () => {
+          style.font.sizeBehavior = "responsive";
           style.font.style = {
             italic: true,
           };
@@ -409,11 +413,12 @@ describe("style-formatter", () => {
           button.clientHeight = 200;
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[1].style.fontSize).toBe("25px");
+          expect(button.children[0].children[0].style.overflow).toEqual("visible");
         });
 
         it("adjusts font size to the size of the button and text length is not considered", () => {
-          expect(style.font.size).toBe(0.5);
           style.font.sizeBehavior = "relative";
+          expect(style.font.size).toBe(0.5);
           button.clientWidth = 100;
           button.clientHeight = 50;
           styleFormatter.createLabelAndIcon({ theme, button, style });
@@ -428,11 +433,26 @@ describe("style-formatter", () => {
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[1].style.fontSize).toBe("12.5px");
         });
+
+        it("should calculate correct font size when behavior is relative", () => {
+          style.font.sizeBehavior = "relative";
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 400;
+            child.offsetWidth = 400;
+            button.children.push(child);
+          };
+          style.label =
+            "a very very very very very very very very very very very very very very very very very very very very long title";
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toEqual("12.5px");
+          expect(button.children[0].children[0].style.textOverflow).toEqual("ellipsis");
+          expect(button.children[0].children[0].style.overflow).toEqual("hidden");
+        });
       });
 
       describe("fixed", () => {
         it("adjusts font size to the layout default font size", () => {
-          style.font.sizeBehavior = "fixed";
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[0].style.fontSize).toBe("20px");
           style.font.size = 0.6;
@@ -441,7 +461,6 @@ describe("style-formatter", () => {
         });
 
         it("adjusts font size to the layout font size, none of the button or text length is considered", () => {
-          style.font.sizeBehavior = "fixed";
           style.font.sizeFixed = 16;
           // change the button client sizes
           button.clientWidth = 50;
@@ -462,6 +481,7 @@ describe("style-formatter", () => {
     });
 
     it("should place label first then icon inside text element", () => {
+      style.font.sizeBehavior = "responsive";
       const isSense = true;
       style.icon.useIcon = true;
       style.icon.iconType = "Back";
