@@ -1,3 +1,4 @@
+import { encodeForHTML } from "./html-encoder";
 import { encodeUrl, getCurrentProtocol, removeProtocolHttp } from "./url-encoder";
 import { inIframe } from "./url-utils";
 
@@ -238,6 +239,7 @@ const getUrl = (url) => {
 
 export const createSnackbar = (msg, automationOpenLinkSameWindow, error) => {
   const { message, url, urlText } = msg;
+  const encodedMessage = encodeForHTML(message);
   const snackContainer = document.createElement("div");
   const randomId = (Math.random() + 1).toString(36).substring(7);
   const snackbarId = `sn-action-button-snackbar-${randomId}`;
@@ -273,7 +275,7 @@ export const createSnackbar = (msg, automationOpenLinkSameWindow, error) => {
         <use xlink:href="#tick_svg__tick-a" fill-rule="evenodd"></use>
       </svg>`
   }  
-    <span class="sn-action-button-snackbar-text" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${message}${
+    <span class="sn-action-button-snackbar-text" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${encodedMessage}${
     url
       ? `<a href="${getUrl(url)}" style="margin-left: 6px;" target="${getTarget(automationOpenLinkSameWindow)}">${
           urlText || "Open"

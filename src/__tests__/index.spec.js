@@ -7,22 +7,23 @@ describe("index", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
-
-  global.document = {
-    createElement: () => {
-      const newElement = {
-        setAttribute: () => {},
-        removeAttribute: () => {},
-        firstElementChild: { setAttribute: () => {} },
-        style: {},
-        children: [],
-      };
-      newElement.appendChild = (newChild) => {
-        newElement.children.push(newChild);
-      };
-      return newElement;
-    },
-  };
+  if (!global.document) {
+    global.document = {
+      createElement: () => {
+        const newElement = {
+          setAttribute: () => {},
+          removeAttribute: () => {},
+          firstElementChild: { setAttribute: () => {} },
+          style: {},
+          children: [],
+        };
+        newElement.appendChild = (newChild) => {
+          newElement.children.push(newChild);
+        };
+        return newElement;
+      },
+    };
+  }
   const thisElement = {
     appendChild: jest.fn(),
     firstElementChild: {
