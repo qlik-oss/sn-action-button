@@ -615,7 +615,7 @@
         "sizeBehavior": {
           "description": "Setting to determine how the fontsize of the label is calculated.",
           "optional": true,
-          "defaultValue": "'fixed'",
+          "defaultValue": "'responsive'",
           "kind": "union",
           "items": [
             {

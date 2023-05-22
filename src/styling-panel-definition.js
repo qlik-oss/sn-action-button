@@ -39,7 +39,7 @@ export const getStyleEditorDefinition = () => ({
               component: "dropdown",
               ref: "style.font.sizeBehavior",
               translation: "properties.kpi.layoutBehavior",
-              defaultValue: "fixed",
+              defaultValue: "responsive",
               options: sizeBehaviorOptions,
             },
             fontSize: {
