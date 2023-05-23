@@ -324,10 +324,10 @@ const actions = [
         senseNavigation,
       }) =>
       async () => {
-        if (multiUserAutomation && automationId.length) {
+        if (multiUserAutomation && automationId !== undefined) {
           try {
             let automationUrl;
-            if (automationId !== undefined && automationId.length > 1) {
+            if (automationId.length > 1) {
               automationUrl = getAutomationUrl(automationId, automationTriggered, automationExecutionToken);
             } else {
               return;
@@ -347,7 +347,7 @@ const actions = [
             // no-op
           }
         } else if (automation !== undefined) {
-          oldAutomationRun(automation, automationPostData, app);
+          await oldAutomationRun(automation, automationPostData, app);
         }
       },
     requiredInput: ["automation"],

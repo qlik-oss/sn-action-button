@@ -26,7 +26,9 @@ describe("actions", () => {
   const spaceId = "fakeSpaceId";
   const csrfToken = "fakeCsrfToken";
   const automationExecutionToken = "fakeExecutionToken";
-  const blocks = [{ displayName: "Inputs", form: [{ label: "blockLabel" }, { label: "blockLabel" }] }];
+  const blocks = [
+    { displayName: "Inputs", type: "FormBlock", form: [{ label: "blockLabel1" }, { label: "blockLabel2" }] },
+  ];
   const translator = { get: () => "" };
 
   describe("all actions", () => {
@@ -82,6 +84,7 @@ describe("actions", () => {
             resourceId,
             id,
             automationExecutionToken,
+            executionToken: automationExecutionToken,
             inputs,
             blocks,
             tenantId,
@@ -328,7 +331,57 @@ describe("actions", () => {
       await actionObject.getActionCall({ app, partial: true })();
       expect(app.doSave).toHaveBeenCalledTimes(0);
     });
-
+    it("should call executeAutomation with old logic with bookmark", async () => {
+      const automation = "fakeAutomationId";
+      multiUserAutomation = false;
+      automationId = undefined;
+      automationPostData = true;
+      const actionObject = actions.find((action) => action.value === "executeAutomation");
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        senseNavigation,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}/blocks`);
+      expect(global.fetch).toHaveBeenCalledWith(
+        `../api/v1/automations/${id}/actions/execute?X-Execution-Token=${automationExecutionToken}&blocklabel1=${app.id}&blocklabel2=bmId`
+      );
+      expect(app.createBookmark).toHaveBeenCalledTimes(1);
+      expect(app.saveObjects).toHaveBeenCalledTimes(1);
+    });
+    it("should call executeAutomation with old logic without bookmark", async () => {
+      const automation = "fakeAutomationId";
+      multiUserAutomation = false;
+      automationId = undefined;
+      automationPostData = false;
+      const actionObject = actions.find((action) => action.value === "executeAutomation");
+      await actionObject.getActionCall({
+        app,
+        automation,
+        automationId,
+        automationTriggered,
+        automationExecutionToken,
+        automationPostData,
+        senseNavigation,
+        multiUserAutomation,
+        translator,
+      })();
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/items/${automation}`);
+      expect(global.fetch).toHaveBeenCalledWith(`../api/v1/automations/${resourceId}`);
+      expect(global.fetch).toHaveBeenCalledWith(
+        `../api/v1/automations/${id}/actions/execute?X-Execution-Token=${automationExecutionToken}`
+      );
+    });
     it("should call executeAutomation when automationTriggered is true", async () => {
       inputs = [];
       const appId = "fakeAppId";

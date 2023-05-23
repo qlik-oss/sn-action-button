@@ -3,6 +3,8 @@ import { encodeUrl, getCurrentProtocol, removeProtocolHttp } from "./url-encoder
 import { inIframe } from "./url-utils";
 
 const TRANSITION_TIME = 400;
+const DEFAULT_NOTIFICATION_DURATION = 4000;
+const MIN_NOTIFICATION_DURATION = 2000;
 const POLL_INTERVAL = 2000;
 const MAX_POLLS = 300;
 
@@ -24,7 +26,7 @@ const getSpaceId = async (appId) => {
 };
 
 export const getAutomation = async (automationId) => {
-  if (automationId.length > 2) {
+  if (automationId.length > 1) {
     const response = await fetch(`../api/v1/automations/${automationId}`);
     return response.json();
   }
@@ -305,7 +307,7 @@ export const showSnackbar = async (message, duration, automationOpenLinkSameWind
   applyStyles(snackContainer, { opacity: 1 });
   setTimeout(() => {
     removeSnackbar(snackContainer);
-  }, Math.max(duration * 1000 - TRANSITION_TIME, 1));
+  }, Math.max(duration === undefined ? DEFAULT_NOTIFICATION_DURATION - TRANSITION_TIME : duration * 1000 - TRANSITION_TIME, MIN_NOTIFICATION_DURATION));
 };
 
 // Automation run logic prior to IM_1855_AUTOMATIONS_MULTI_USER

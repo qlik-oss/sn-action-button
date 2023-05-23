@@ -44,7 +44,8 @@ const getAutomationProps = (multiUserAutomation, getAutomations) => ({
     translation: "Object.ActionButton.Automation.Link",
     component: "link",
     url: (data) => `/automations/editor/${data.automationId}`,
-    show: (data) => data.automationId.length > 1 && multiUserAutomation,
+    show: (data) =>
+      Object.prototype.hasOwnProperty.call(data, "automationId") && data.automationId.length > 1 && multiUserAutomation,
   },
   // Boolean property to instruct the automation action to create a
   // bookmark and send it to the selected automation in the
