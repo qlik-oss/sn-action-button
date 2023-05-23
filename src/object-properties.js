@@ -161,7 +161,7 @@ const properties = {
  * @property {boolean=} [style.bold = true] - Bold text
  * @property {boolean=} [style.italic = false] - Italic text
  * @property {boolean=} [style.underline = false] - Underlined text
- * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='fixed'] - Setting to determine how the fontsize of the label is calculated.
+ * @property {('responsive'|'relative'|'fixed')} [sizeBehavior='responsive'] - Setting to determine how the fontsize of the label is calculated.
  */
 
 /**
