@@ -33,6 +33,10 @@ const actions = [
       ({ app, bookmark }) =>
       async () => {
         const bookMarks = await app.getBookmarkList();
+        const findBmWithID = bookMarks.find((bm) => bm.qInfo.qId === bookmark);
+        if (findBmWithID.qData.qBookmark.qPatches.length > 0 || findBmWithID.qMeta.isExtended) {
+          app.clearAllSoftPatches();
+        }
         const findBm = bookMarks.find((bm) => bm.qData.title === bookmark);
         bookmark && (await app.applyBookmark((findBm && findBm.qInfo && findBm.qInfo.qId) || bookmark));
       },
