@@ -62,6 +62,7 @@ const properties = {
    */
   style: {
     label: DEFAULTS.LABEL,
+    showLabel: true,
     font: {
       fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
@@ -142,6 +143,7 @@ const properties = {
  * Holds styling options
  * @typedef {object} Style
  * @property {string=} [label='Button'] - The text displayed on the button
+ * @property {boolean=} [showLabel=true] - If the label should be shown or hidden
  * @property {Font=} font - Styling for the label
  * @property {Background=} background - Styling for background, including image
  * @property {Border=} border - Styling for border
