@@ -295,11 +295,24 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 cellNavMenu: {
                   show: false,
                 },
-                label: {
-                  component: "string",
-                  ref: "style.label",
-                  translation: "Common.Label",
-                  expression: "optional",
+                labelGroup: {
+                  type: "items",
+                  items: {
+                    label: {
+                      component: "string",
+                      ref: "style.label",
+                      translation: "Common.Label",
+                      expression: "optional",
+                    },
+                    showLabelToggle: {
+                      component: "switch",
+                      type: "boolean",
+                      ref: "style.showLabel",
+                      translation: "properties.referenceLines.showLabel",
+                      defaultValue: true,
+                      options: toggleOptions,
+                    },
+                  },
                 },
               },
             },

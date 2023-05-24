@@ -53,7 +53,7 @@ export default {
     return styles;
   },
   createLabelAndIcon({ button, theme, style = {}, isSense }) {
-    const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
+    const { icon = {}, font = {}, label = DEFAULTS.LABEL, showLabel = true } = style;
     // text element wrapping label and icon
     const text = document.createElement("text");
     text.style.fontFamily = style.font.fontFamily || theme.getStyle("", "", "fontFamily") || DEFAULTS.FONT_FAMILY;
@@ -61,6 +61,7 @@ export default {
     const textSpan = document.createElement("span");
     textSpan.textContent = label;
     font.style && font.style.underline && (textSpan.style.textDecoration = "underline");
+
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== "";
@@ -86,5 +87,10 @@ export default {
     text.style.display = "flex";
     text.style.alignItems = "center";
     text.style.justifyContent = font.align === "left" ? "flex-start" : font.align === "right" ? "flex-end" : "center";
+    if (!showLabel) {
+      text.style.height = "1px";
+      text.style.width = "1px";
+      text.style.overflow = "hidden";
+    }
   },
 };
