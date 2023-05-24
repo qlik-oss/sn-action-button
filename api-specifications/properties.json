@@ -790,6 +790,12 @@
           "defaultValue": "'Button'",
           "type": "string"
         },
+        "showLabel": {
+          "description": "If the label should be shown or hidden",
+          "optional": true,
+          "defaultValue": true,
+          "type": "boolean"
+        },
         "font": {
           "description": "Styling for the label",
           "optional": true,
