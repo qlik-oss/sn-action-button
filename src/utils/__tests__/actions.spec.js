@@ -70,7 +70,19 @@ describe("actions", () => {
         getVariableByName: jest.fn(() => Promise.resolve(variableObject)),
         lockAll: jest.fn(),
         unlockAll: jest.fn(),
-        getBookmarkList: () => [{ qData: { title: "findMyBookmark" }, qInfo: { qId: "myBookmarkId" } }],
+        clearAllSoftPatches: jest.fn(),
+        getBookmarkList: () => [
+          {
+            qData: { title: "findMyBookmark" },
+            qInfo: { qId: "myBookmarkId" },
+            qMeta: { isExtended: false },
+          },
+          {
+            qData: { title: "findMyBookmarkExtended" },
+            qInfo: { qId: "myBookmarkExtendedId" },
+            qMeta: { isExtended: true },
+          },
+        ],
         evaluate: () => "43850;43881",
         doReload: jest.fn(() => true),
         doSave: jest.fn(),
@@ -116,6 +128,18 @@ describe("actions", () => {
       const actionObj = actions.find((action) => action.value === "applyBookmark");
       await actionObj.getActionCall({ app, bookmark: "findMyBookmark" })();
       expect(app.applyBookmark).toHaveBeenCalledWith("myBookmarkId");
+    });
+
+    it("should call clearallsoftpatches if bookmark is extended", async () => {
+      const actionObj = actions.find((action) => action.value === "applyBookmark");
+      await actionObj.getActionCall({ app, bookmark: "myBookmarkExtendedId" })();
+      expect(app.clearAllSoftPatches).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call clearallsoftpatches if bookmark is not extended", async () => {
+      const actionObj = actions.find((action) => action.value === "applyBookmark");
+      await actionObj.getActionCall({ app, bookmark: "myBookmarkId" })();
+      expect(app.clearAllSoftPatches).toHaveBeenCalledTimes(0);
     });
 
     it("should call back", async () => {
