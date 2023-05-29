@@ -56,12 +56,12 @@ export default {
     const { icon = {}, font = {}, label = DEFAULTS.LABEL } = style;
     // text element wrapping label and icon
     const text = document.createElement("text");
-    text.style.whiteSpace = "pre";
+    text.style.whiteSpace = "nowrap";
     text.style.fontFamily = style.font.fontFamily || theme.getStyle("", "", "fontFamily") || DEFAULTS.FONT_FAMILY;
     // label
     const textSpan = document.createElement("span");
     textSpan.textContent = label;
-    textSpan.style.whiteSpace = "pre";
+    textSpan.style.whiteSpace = "nowrap";
     textSpan.style.textOverflow = "ellipsis";
     font.style && font.style.underline && (textSpan.style.textDecoration = "underline");
     text.appendChild(textSpan);
