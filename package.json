@@ -28,7 +28,7 @@
     "build:dev": "node ./tools/build.js --core --ext --mode development",
     "build:watch": "node ./tools/build.js --ext --mode development -w",
     "copy:ext": "node ./tools/copy-ext.js",
-    "format": "prettier --write '**'",
+    "format": "prettier --write **",
     "format:check": "prettier --check '**'",
     "lint": "eslint .",
     "prepack": "./tools/prepare-sn-pack.js",
