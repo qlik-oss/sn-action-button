@@ -85,7 +85,7 @@
     "@nebula.js/cli": "4.2.0",
     "@nebula.js/cli-build": "3.3.0",
     "@nebula.js/cli-sense": "3.3.0",
-    "@nebula.js/cli-serve": "3.3.0",
+    "@nebula.js/cli-serve": "4.2.0",
     "@nebula.js/stardust": "3.3.0",
     "@nebula.js/test-utils": "0.6.0",
     "@playwright/test": "1.33.0",
