@@ -2507,14 +2507,14 @@
     rollup-plugin-sourcemaps "0.6.3"
     yargs "17.7.1"
 
-"@nebula.js/cli-create@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-3.3.0.tgz#9b448909b31b07f7c86114fee3f956397ed0910b"
-  integrity sha512-Xe13CNcJ1/0pwU3A601itNe6LnPK9zO1ZDcARkbxU9Pjxbq2D6a2c63IBX8OYlDNBo5VyiGAhmCwnSvmdPNvtA==
+"@nebula.js/cli-create@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-4.2.0.tgz#36fdfd557c2e82bdf27b713c8f877a6c251ba9b7"
+  integrity sha512-SsAf5KRRgcodRoN+BXIW8TbGwKmbsrxAZV2KuCIpv1STPVd27fIiPBzNWIjUQBtH3Fnu0omcGiDIQ56g9byw+g==
   dependencies:
     chalk "4.1.2"
-    ejs "3.1.8"
-    fs-extra "11.1.0"
+    ejs "3.1.9"
+    fs-extra "11.1.1"
     inquirer "8.2.5"
 
 "@nebula.js/cli-sense@3.3.0":
@@ -2561,14 +2561,14 @@
     ws "8.12.1"
     yargs "17.7.1"
 
-"@nebula.js/cli@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-3.3.0.tgz#87182d471cf16c4e8b9c1b4e9578abffc7c07de9"
-  integrity sha512-ZBnzRUrh9E4EXv6EJw0e1lwTP9mS9mL7tYRGH+dktUm3woz3/SNapvdIq4whcdpHayTpWwrl81iRUh3zoj7FMg==
+"@nebula.js/cli@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-4.2.0.tgz#cdc891fa93c4bcbc8ac6ce8800ba0bbe3f2ffa2c"
+  integrity sha512-yHhrE2ydT3xpuiCkbOmTz0TA6BgSAkzsneYJySe7HnVdthLlRRBEuLrT+V9DyZ87Tg0jcXBj4y2jpf5aaTYJlA==
   dependencies:
-    "@nebula.js/cli-create" "^3.3.0"
+    "@nebula.js/cli-create" "^4.2.0"
     import-cwd "3.0.0"
-    yargs "17.7.1"
+    yargs "17.7.2"
 
 "@nebula.js/stardust@3.3.0", "@nebula.js/stardust@^3.3.0":
   version "3.3.0"
@@ -5074,10 +5074,10 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-ejs@3.1.8:
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.8.tgz#758d32910c78047585c7ef1f92f9ee041c1c190b"
-  integrity sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==
+ejs@3.1.9:
+  version "3.1.9"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.9.tgz#03c9e8777fe12686a9effcef22303ca3d8eeb361"
+  integrity sha512-rC+QVNMJWv+MtPgkt0y+0rVEIdbtxVADApW9JXrUVlzHetgcyczP/E7DJmWJ4fJCZF2cPcBk0laWO9ZHMG3DmQ==
   dependencies:
     jake "^10.8.5"
 
