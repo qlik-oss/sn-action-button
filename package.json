@@ -86,7 +86,7 @@
     "@nebula.js/cli-build": "3.3.0",
     "@nebula.js/cli-sense": "4.2.0",
     "@nebula.js/cli-serve": "4.2.0",
-    "@nebula.js/stardust": "3.3.0",
+    "@nebula.js/stardust": "4.2.0",
     "@nebula.js/test-utils": "0.6.0",
     "@playwright/test": "1.33.0",
     "@qlik/eslint-config": "^0.0.16",
@@ -106,7 +106,7 @@
     "yargs": "17.7.2"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=2.13.0"
+    "@nebula.js/stardust": ">=4.2.0"
   },
   "engines": {
     "node": ">=16"
