@@ -26,7 +26,7 @@
   "scripts": {
     "build": "node ./tools/build.js --core --ext",
     "build:dev": "node ./tools/build.js --core --ext --mode development",
-    "build:watch": "node ./tools/build.js --ext --mode development -w",
+    "build:watch": "node ./tools/build.js --mode development -w",
     "copy:ext": "node ./tools/copy-ext.js",
     "format": "prettier --write '**'",
     "format:check": "prettier --check '**'",
@@ -101,6 +101,7 @@
     "lint-staged": "13.2.2",
     "mocha-junit-reporter": "2.2.0",
     "prettier": "2.8.8",
+    "qlik-chart-modules": "0.55.0",
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
     "yargs": "17.7.2"
