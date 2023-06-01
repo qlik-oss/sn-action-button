@@ -44,7 +44,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.10.0-browsers
+      - image: cimg/node:18.16.0-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -61,7 +61,7 @@ jobs:
       - run:
           name: Run unit tests and upload to coveralls
           command: |
-            yarn jest --coverage --reporters=default --reporters=jest-junit
+            yarn test:unit --runInBand --coverage --reporters=default --reporters=jest-junit
             if [ ! -z "$COVERALLS_REPO_TOKEN" ]; then
               echo "Uploading coverage results to coveralls.io..."
               cat ./coverage/lcov.info | npx coveralls
@@ -101,7 +101,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.10.0
+      - image: cimg/node:18.15.0
     steps:
       - attach_workspace:
           at: ~/action-button
