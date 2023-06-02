@@ -1,28 +1,5 @@
 import DEFAULTS from "../style-defaults";
 
-export const FONT_FAMILIES = [
-  "American Typewriter, serif",
-  "Andalé Mono, monospace",
-  "Arial Black, sans-serif",
-  "Arial, sans-serif",
-  "Bradley Hand, cursive",
-  "Brush Script MT, cursive",
-  "Comic Sans MS, cursive",
-  "Courier, monospace",
-  "Didot, serif",
-  "Georgia, serif",
-  "Impact, sans-serif",
-  "Lucida Console, monospace",
-  "Luminari, fantasy",
-  "Monaco, monospace",
-  "QlikView Sans, sans-serif",
-  "Source Sans Pro, sans-serif",
-  "Tahoma, sans-serif",
-  "Times New Roman, serif",
-  "Trebuchet MS, sans-serif",
-  "Verdana, sans-serif",
-];
-
 export const backgroundSize = {
   auto: "auto auto",
   alwaysFit: "contain",
@@ -90,12 +67,6 @@ export const sizeBehaviorOptions = [
     translation: "properties.fixed",
   },
 ];
-
-const getFirstFont = (s) => s.split(",")[0];
-export const fontFamilyOptions = FONT_FAMILIES.map((font) => ({
-  value: font,
-  label: getFirstFont(font),
-}));
 
 const trimDecimal = (num) => (num % 1 !== 0 ? num.toFixed(2) : num);
 

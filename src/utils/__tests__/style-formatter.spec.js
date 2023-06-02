@@ -123,7 +123,8 @@ describe("style-formatter", () => {
     });
 
     it("should keep the image url but not show it when the mode changes from media to none", () => {
-      const { backgroundImageMode } = getStyleEditorDefinition().items.backgroundOptions.items.backgroundImage.items;
+      const { backgroundImageMode } = getStyleEditorDefinition({ flags: {}, theme: {}, translator: {} }).items
+        .backgroundOptions.items.backgroundImage.items;
 
       style.background.useImage = false;
       style.background.mode = "media";

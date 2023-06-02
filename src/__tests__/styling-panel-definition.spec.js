@@ -3,7 +3,7 @@ import { getStylingPanelDefinition } from "../styling-panel-definition";
 
 describe("getStylingPanelDefinition", () => {
   let data;
-  const props = getStylingPanelDefinition();
+  const props = getStylingPanelDefinition({ flags: {}, theme: {}, translator: {} });
   const { labelItem } = props.items.styleEditor.items.labelSection.items;
 
   describe("show functions", () => {

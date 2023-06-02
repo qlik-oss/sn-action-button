@@ -21,7 +21,7 @@ const getAutomations = async () => {
   }
   return automationsList;
 };
-export default function ext({ translator, shouldHide, senseNavigation }) {
+export default function ext({ translator, shouldHide, senseNavigation, theme }) {
   const multiUserAutomation =
     shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
   const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON");
@@ -641,7 +641,9 @@ export default function ext({ translator, shouldHide, senseNavigation }) {
                 },
               },
             },
-            presentation: stylingPanelEnabled ? getStylingPanelDefinition() : undefined,
+            presentation: stylingPanelEnabled
+              ? getStylingPanelDefinition({ flags: shouldHide, theme, translator })
+              : undefined,
           },
         },
       },

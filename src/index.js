@@ -75,6 +75,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator, shouldHide, senseNavigation }),
+    ext: ext({ translator, shouldHide, senseNavigation, theme: anything.sense?.theme }),
   };
 }
