@@ -393,6 +393,15 @@ describe("style-formatter", () => {
           expect(text.children[1].textContent).toEqual("Button");
           expect(button.children[0].style.fontSize).toEqual("10.50px");
         });
+
+        it("should hide label when showLabel is false", () => {
+          style.showLabel = false;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.style.height).toEqual("1px");
+          expect(text.style.width).toEqual("1px");
+          expect(text.style.overflow).toEqual("hidden");
+        });
       });
 
       describe("relative", () => {

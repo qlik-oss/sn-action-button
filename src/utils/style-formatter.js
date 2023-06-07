@@ -61,7 +61,6 @@ export default {
     const textSpan = document.createElement("span");
     textSpan.textContent = label;
     font.style && font.style.underline && (textSpan.style.textDecoration = "underline");
-
     text.appendChild(textSpan);
     // icon
     const hasIcon = isSense && icon.useIcon && icon.iconType !== "";
