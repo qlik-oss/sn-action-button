@@ -44,7 +44,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: cimg/node:20.2.0-browsers
+      - image: cimg/node:20.3.0-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -101,7 +101,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: cimg/node:20.2.0
+      - image: cimg/node:20.3.0
     steps:
       - attach_workspace:
           at: ~/action-button
