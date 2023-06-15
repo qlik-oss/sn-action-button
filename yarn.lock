@@ -3036,7 +3036,7 @@
   optionalDependencies:
     fsevents "2.3.2"
 
-"@qlik/eslint-config@^0.4.3":
+"@qlik/eslint-config@0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@qlik/eslint-config/-/eslint-config-0.4.3.tgz#baba9880535ed42aafbe44dd773defad1c2b5d40"
   integrity sha512-41pdSILOn6aQ+y/uIl0JUAqMPi40ePaHD0Ljh+bBQF3X0RRyK+e2DtD7nbv3AQgwY1U4yqGfngCb0daI/fxj9w==
@@ -3061,7 +3061,7 @@
     svelte "^3.59.1"
     typescript "^5.1.3"
 
-"@qlik/prettier-config@^0.1.3":
+"@qlik/prettier-config@0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@qlik/prettier-config/-/prettier-config-0.1.3.tgz#07392e0a4c8f7340221632657a137d0b79497a31"
   integrity sha512-8eqJYHS39Q4NvSs7r3laMS5jymXDO0o5Z03O3KflfCMzfBoZ6R2BMFbTzmiHuoN60qH9IGnSBClNf0jcqTHvcA==

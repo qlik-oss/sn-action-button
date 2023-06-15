@@ -1,7 +1,7 @@
 // playwright.config.ts
-import { PlaywrightTestConfig, devices } from "@playwright/test";
+import { devices } from "@playwright/test";
 
-const config: PlaywrightTestConfig = {
+const config = {
   use: {
     // Run the browser in headless mode
     // headless: false,
