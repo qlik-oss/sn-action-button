@@ -162,9 +162,9 @@ describe("actions", () => {
 
     it("should call clearAllButThis", async () => {
       const actionObject = actions.find((action) => action.value === "clearAllButThis");
-      await actionObject.getActionCall({ app, qStateName, field, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.clearAllButThis).toHaveBeenCalledWith(softLock);
+      expect(fieldObject.clearAllButThis).toHaveBeenCalledWith(false);
     });
 
     it("should NOT call clearAllButThis when no field", async () => {
@@ -204,9 +204,9 @@ describe("actions", () => {
 
     it("should call toggleSelect", async () => {
       const actionObject = actions.find((action) => action.value === "toggleSelect");
-      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field, value })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.toggleSelect).toHaveBeenCalledWith(value, softLock);
+      expect(fieldObject.toggleSelect).toHaveBeenCalledWith(value, false);
     });
 
     it("should NOT call toggleSelect when no field", async () => {
@@ -233,8 +233,8 @@ describe("actions", () => {
 
     it("should call selectMatchingValues", async () => {
       const actionObject = actions.find((action) => action.value === "selectMatchingValues");
-      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
-      expect(fieldObject.select).toHaveBeenCalledWith(value, false, softLock);
+      await actionObject.getActionCall({ app, qStateName, field, value })();
+      expect(fieldObject.select).toHaveBeenCalledWith(value, false, false);
     });
 
     it("should NOT call selectMatchingValues when no field", async () => {
@@ -274,9 +274,9 @@ describe("actions", () => {
 
     it("should call selectPossible", async () => {
       const actionObject = actions.find((action) => action.value === "selectPossible");
-      await actionObject.getActionCall({ app, qStateName, field, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.selectPossible).toHaveBeenCalledWith(softLock);
+      expect(fieldObject.selectPossible).toHaveBeenCalledWith(false);
     });
 
     it("should NOT call selectPossible when no field", async () => {
