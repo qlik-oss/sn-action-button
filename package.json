@@ -37,9 +37,9 @@
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve",
+    "test:e2e": "playwright test",
     "test:local:rendering": "./test/rendering/scripts/run-rendering-test.sh",
     "test:local:update:screenshots": "./test/rendering/scripts/update-screenshots.sh",
-    "test:rendering": "playwright test",
     "test:unit": "jest",
     "preversion": "yarn build",
     "version": "yarn spec && git add api-specifications"
