@@ -90,6 +90,7 @@ export const setTextFontSize = (text, font, textFontSize, hasIcon) => {
 
 const setFontSizeBehaviorStyle = (button, text, textSpan) => {
   text.offsetWidth <= button.clientWidth ? (textSpan.style.overflow = "visible") : (textSpan.style.overflow = "hidden");
+  text.children[0].style.marginRight = `${trimDecimal(text.offsetWidth * 0.04)}px`;
 };
 
 export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) => {
