@@ -1,4 +1,4 @@
-import { setTextFontSize } from "../style-utils";
+import { setFontSizeBehaviorStyle, setTextFontSize } from "../style-utils";
 
 describe("setTextFontSize function", () => {
   let text;
@@ -50,5 +50,42 @@ describe("setTextFontSize function", () => {
     font.style.italic = false;
     setTextFontSize(text, font, textFontSize, hasIcon);
     expect(text.style.fontSize).toBe("11.04px");
+  });
+});
+
+describe("setFontSizeBehaviorStyle function", () => {
+  let button;
+  let text;
+  let textSpan;
+  let hasIcon;
+
+  beforeEach(() => {
+    button = {};
+    text = {
+      style: { fontSize: "12px" },
+      offsetWidth: "30",
+      children: [
+        {
+          style: { marginRight: "0px" },
+        },
+        {
+          style: { marginRight: "0px" },
+        },
+      ],
+    };
+    textSpan = document.createElement("span");
+    hasIcon = true;
+  });
+
+  it("should set margins with icon", () => {
+    setFontSizeBehaviorStyle(button, text, textSpan, hasIcon);
+    expect(text.children[0].style.marginRight).toBe("1.20px");
+    expect(text.children[1].style.marginRight).toBe("0px");
+  });
+
+  it("should not set margins without icon", () => {
+    hasIcon = false;
+    setFontSizeBehaviorStyle(button, text, textSpan, hasIcon);
+    expect(text.children[0].style.marginRight).toBe("0px");
   });
 });
