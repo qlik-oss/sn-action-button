@@ -123,7 +123,8 @@ describe("style-formatter", () => {
     });
 
     it("should keep the image url but not show it when the mode changes from media to none", () => {
-      const { backgroundImageMode } = getStyleEditorDefinition().items.backgroundOptions.items.backgroundImage.items;
+      const { backgroundImageMode } = getStyleEditorDefinition({ flags: {}, theme: {}, translator: {} }).items
+        .backgroundOptions.items.backgroundImage.items;
 
       style.background.useImage = false;
       style.background.mode = "media";
@@ -392,6 +393,15 @@ describe("style-formatter", () => {
           expect(text.children[0].style.textDecoration).toEqual("none");
           expect(text.children[1].textContent).toEqual("Button");
           expect(button.children[0].style.fontSize).toEqual("10.50px");
+        });
+
+        it("should hide label when showLabel is false", () => {
+          style.showLabel = false;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.style.height).toEqual("1px");
+          expect(text.style.width).toEqual("1px");
+          expect(text.style.overflow).toEqual("hidden");
         });
       });
 

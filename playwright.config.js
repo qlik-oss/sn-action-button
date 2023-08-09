@@ -1,7 +1,7 @@
 // playwright.config.ts
-import { PlaywrightTestConfig, devices } from "@playwright/test";
+import { devices } from "@playwright/test";
 
-const config: PlaywrightTestConfig = {
+const config = {
   use: {
     // Run the browser in headless mode
     // headless: false,
@@ -10,8 +10,7 @@ const config: PlaywrightTestConfig = {
   },
   // Look for test files in the "test/rendering" directory, relative to this configuration file
   testDir: "test/rendering",
-  testMatch: /.*\.render\.ts/,
-  outputDir: "./test/rendering/artifacts/",
+  testMatch: /.*\.render\.js/,
   reporter: [
     ["list"],
     [
