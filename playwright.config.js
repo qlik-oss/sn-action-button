@@ -11,7 +11,6 @@ const config = {
   // Look for test files in the "test/rendering" directory, relative to this configuration file
   testDir: "test/rendering",
   testMatch: /.*\.render\.js/,
-  outputDir: "./test/rendering/artifacts/",
   reporter: [
     ["list"],
     [

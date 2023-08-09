@@ -21,4 +21,5 @@ coverage
 test/rendering/artifacts
 test/rendering/test-report
 test/rendering/state.json
+test-results
 *darwin.png
