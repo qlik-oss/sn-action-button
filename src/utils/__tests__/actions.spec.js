@@ -70,7 +70,19 @@ describe("actions", () => {
         getVariableByName: jest.fn(() => Promise.resolve(variableObject)),
         lockAll: jest.fn(),
         unlockAll: jest.fn(),
-        getBookmarkList: () => [{ qData: { title: "findMyBookmark" }, qInfo: { qId: "myBookmarkId" } }],
+        clearAllSoftPatches: jest.fn(),
+        getBookmarkList: () => [
+          {
+            qData: { title: "findMyBookmark" },
+            qInfo: { qId: "myBookmarkId" },
+            qMeta: { isExtended: false },
+          },
+          {
+            qData: { title: "findMyBookmarkExtended" },
+            qInfo: { qId: "myBookmarkExtendedId" },
+            qMeta: { isExtended: true },
+          },
+        ],
         evaluate: () => "43850;43881",
         doReload: jest.fn(() => true),
         doSave: jest.fn(),
@@ -118,6 +130,18 @@ describe("actions", () => {
       expect(app.applyBookmark).toHaveBeenCalledWith("myBookmarkId");
     });
 
+    it("should call clearallsoftpatches if bookmark is extended", async () => {
+      const actionObj = actions.find((action) => action.value === "applyBookmark");
+      await actionObj.getActionCall({ app, bookmark: "myBookmarkExtendedId" })();
+      expect(app.clearAllSoftPatches).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call clearallsoftpatches if bookmark is not extended", async () => {
+      const actionObj = actions.find((action) => action.value === "applyBookmark");
+      await actionObj.getActionCall({ app, bookmark: "myBookmarkId" })();
+      expect(app.clearAllSoftPatches).toHaveBeenCalledTimes(0);
+    });
+
     it("should call back", async () => {
       const actionObject = actions.find((action) => action.value === "back");
       await actionObject.getActionCall({ app })();
@@ -138,9 +162,9 @@ describe("actions", () => {
 
     it("should call clearAllButThis", async () => {
       const actionObject = actions.find((action) => action.value === "clearAllButThis");
-      await actionObject.getActionCall({ app, qStateName, field, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.clearAllButThis).toHaveBeenCalledWith(softLock);
+      expect(fieldObject.clearAllButThis).toHaveBeenCalledWith(false);
     });
 
     it("should NOT call clearAllButThis when no field", async () => {
@@ -180,9 +204,9 @@ describe("actions", () => {
 
     it("should call toggleSelect", async () => {
       const actionObject = actions.find((action) => action.value === "toggleSelect");
-      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field, value })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.toggleSelect).toHaveBeenCalledWith(value, softLock);
+      expect(fieldObject.toggleSelect).toHaveBeenCalledWith(value, false);
     });
 
     it("should NOT call toggleSelect when no field", async () => {
@@ -209,8 +233,8 @@ describe("actions", () => {
 
     it("should call selectMatchingValues", async () => {
       const actionObject = actions.find((action) => action.value === "selectMatchingValues");
-      await actionObject.getActionCall({ app, qStateName, field, value, softLock })();
-      expect(fieldObject.select).toHaveBeenCalledWith(value, false, softLock);
+      await actionObject.getActionCall({ app, qStateName, field, value })();
+      expect(fieldObject.select).toHaveBeenCalledWith(value, false, false);
     });
 
     it("should NOT call selectMatchingValues when no field", async () => {
@@ -250,9 +274,9 @@ describe("actions", () => {
 
     it("should call selectPossible", async () => {
       const actionObject = actions.find((action) => action.value === "selectPossible");
-      await actionObject.getActionCall({ app, qStateName, field, softLock })();
+      await actionObject.getActionCall({ app, qStateName, field })();
       expect(app.getField).toHaveBeenCalledWith(field, qStateName);
-      expect(fieldObject.selectPossible).toHaveBeenCalledWith(softLock);
+      expect(fieldObject.selectPossible).toHaveBeenCalledWith(false);
     });
 
     it("should NOT call selectPossible when no field", async () => {

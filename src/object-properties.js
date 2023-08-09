@@ -62,6 +62,7 @@ const properties = {
    */
   style: {
     label: DEFAULTS.LABEL,
+    showLabel: true,
     font: {
       fontFamily: DEFAULTS.FONT_FAMILY,
       useColorExpression: false,
@@ -142,6 +143,7 @@ const properties = {
  * Holds styling options
  * @typedef {object} Style
  * @property {string=} [label='Button'] - The text displayed on the button
+ * @property {boolean=} [showLabel=true] - If the label should be shown or hidden
  * @property {Font=} font - Styling for the label
  * @property {Background=} background - Styling for background, including image
  * @property {Border=} border - Styling for border
@@ -175,7 +177,7 @@ const properties = {
  * @property {object=} url.qStaticContentUrlDef
  * @property {string=} url.qStaticContentUrlDef.qUrl - URL represented as a string
  * @property {('topLeft'|'centerLeft'|'bottomLeft'|'topCenter'|'centerCenter'|'bottomCenter'|'topRight'|'centerRight'|'bottomRight'|'top-left'|'center-left'|'bottom-left'|'top-center'|'center-center'|'top-right'|'center-right'|'bottom-right')} [position='center-center'] - Image position
- * @property {('auto'|'alwaysFit'|'fitWidth'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill')=} [size='auto'] - Size of the image, relative to the button
+ * @property {('auto'|'alwaysFit'|'fitWidth'|'fitHeight'|'fill'|'alwaysFill'|'stretchFit')=} [size='auto'] - Size of the image, relative to the button
  */
 
 /**

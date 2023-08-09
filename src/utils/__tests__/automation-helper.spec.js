@@ -201,5 +201,14 @@ describe("automation helper", () => {
       const result = createSnackbar(message, false, true).innerHTML;
       expect(prettier.format(result.trim(), { parser: "html" })).toMatchSnapshot();
     });
+    test("should create snackbar and encode message string to prevent XSS attacks", () => {
+      const msg = {
+        message: "<script>alert('XSS attack!');</script>",
+      };
+      const expectedMessage = "&lt;script&gt;alert('XSS attack!');&lt;/script&gt;";
+      const snackbar = createSnackbar(msg, true, false);
+      const snackbarText = snackbar.querySelector(".sn-action-button-snackbar-text").innerHTML;
+      expect(snackbarText).toEqual(expectedMessage);
+    });
   });
 });

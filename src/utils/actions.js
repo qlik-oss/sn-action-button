@@ -33,6 +33,10 @@ const actions = [
       ({ app, bookmark }) =>
       async () => {
         const bookMarks = await app.getBookmarkList();
+        const findBmWithID = bookMarks.find((bm) => bm.qInfo.qId === bookmark);
+        if (findBmWithID?.qData?.qBookmark?.qPatches?.length > 0 || findBmWithID?.qMeta?.isExtended) {
+          await app.clearAllSoftPatches?.();
+        }
         const findBm = bookMarks.find((bm) => bm.qData.title === bookmark);
         bookmark && (await app.applyBookmark((findBm && findBm.qInfo && findBm.qInfo.qId) || bookmark));
       },
@@ -76,14 +80,15 @@ const actions = [
     translation: "Object.ActionButton.ClearAllButThis",
     group: "selection",
     getActionCall:
-      ({ app, qStateName, field, softLock }) =>
+      ({ app, qStateName, field }) =>
       async () => {
         if (field) {
           const fieldObj = await app.getField(field, qStateName);
+          const softLock = false;
           await fieldObj.clearAllButThis(softLock);
         }
       },
-    requiredInput: ["field", "softLock"],
+    requiredInput: ["field"],
   },
   {
     value: "clearField",
@@ -134,14 +139,15 @@ const actions = [
     translation: "Object.ActionButton.SelectMatchingValues",
     group: "selection",
     getActionCall:
-      ({ app, qStateName, field, value, softLock }) =>
+      ({ app, qStateName, field, value }) =>
       async () => {
         if (field && value) {
           const fieldObj = await app.getField(field, qStateName);
+          const softLock = false;
           await fieldObj.select(value, false, softLock);
         }
       },
-    requiredInput: ["field", "value", "softLock"],
+    requiredInput: ["field", "value"],
   },
   {
     value: "selectAlternative",
@@ -178,29 +184,31 @@ const actions = [
     translation: "Object.ActionButton.SelectPossibleValues",
     group: "selection",
     getActionCall:
-      ({ app, qStateName, field, softLock }) =>
+      ({ app, qStateName, field }) =>
       async () => {
         if (field) {
           const fieldObj = await app.getField(field, qStateName);
+          const softLock = false;
           await fieldObj.selectPossible(softLock);
         }
       },
     hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
-    requiredInput: ["field", "softLock"],
+    requiredInput: ["field"],
   },
   {
     value: "toggleSelect",
     translation: "Object.ActionButton.ToggleFieldSelection",
     group: "selection",
     getActionCall:
-      ({ app, qStateName, field, value, softLock }) =>
+      ({ app, qStateName, field, value }) =>
       async () => {
         if (field && value) {
           const fieldObj = await app.getField(field, qStateName);
+          const softLock = false;
           await fieldObj.toggleSelect(value, softLock);
         }
       },
-    requiredInput: ["field", "value", "softLock"],
+    requiredInput: ["field", "value"],
   },
   {
     value: "lockAll",

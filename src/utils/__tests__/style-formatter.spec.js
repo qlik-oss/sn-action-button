@@ -123,7 +123,8 @@ describe("style-formatter", () => {
     });
 
     it("should keep the image url but not show it when the mode changes from media to none", () => {
-      const { backgroundImageMode } = getStyleEditorDefinition().items.backgroundOptions.items.backgroundImage.items;
+      const { backgroundImageMode } = getStyleEditorDefinition({ flags: {}, theme: {}, translator: {} }).items
+        .backgroundOptions.items.backgroundImage.items;
 
       style.background.useImage = false;
       style.background.mode = "media";
@@ -324,7 +325,7 @@ describe("style-formatter", () => {
           styleFormatter.createLabelAndIcon({ theme, button, style });
           const text = button.children[0];
           expect(text.children[0].textContent).toEqual("Button");
-          expect(text.style.whiteSpace).toEqual("pre");
+          expect(text.style.whiteSpace).toEqual("nowrap");
           expect(text.style.fontFamily).toEqual("Source Sans Pro");
           expect(text.style.fontSize).toEqual("11.50px");
           expect(text.style.display).toEqual("flex");
@@ -333,11 +334,10 @@ describe("style-formatter", () => {
         });
 
         it("should set fontSize and styling", () => {
-          expect(style.font.sizeBehavior).toBe("responsive");
           styleFormatter.createLabelAndIcon({ theme, button, style });
           const text = button.children[0];
           expect(text.children[0].textContent).toEqual("Button");
-          expect(text.style.whiteSpace).toEqual("pre");
+          expect(text.style.whiteSpace).toEqual("nowrap");
           expect(text.style.fontFamily).toEqual("Source Sans Pro");
           expect(text.style.fontSize).toEqual("11.50px");
           expect(text.style.display).toEqual("flex");
@@ -394,6 +394,15 @@ describe("style-formatter", () => {
           expect(text.children[1].textContent).toEqual("Button");
           expect(button.children[0].style.fontSize).toEqual("10.50px");
         });
+
+        it("should hide label when showLabel is false", () => {
+          style.showLabel = false;
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.style.height).toEqual("1px");
+          expect(text.style.width).toEqual("1px");
+          expect(text.style.overflow).toEqual("hidden");
+        });
       });
 
       describe("relative", () => {
@@ -409,11 +418,12 @@ describe("style-formatter", () => {
           button.clientHeight = 200;
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[1].style.fontSize).toBe("25px");
+          expect(button.children[0].children[0].style.overflow).toEqual("visible");
         });
 
         it("adjusts font size to the size of the button and text length is not considered", () => {
-          expect(style.font.size).toBe(0.5);
           style.font.sizeBehavior = "relative";
+          expect(style.font.size).toBe(0.5);
           button.clientWidth = 100;
           button.clientHeight = 50;
           styleFormatter.createLabelAndIcon({ theme, button, style });
@@ -427,6 +437,22 @@ describe("style-formatter", () => {
           };
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[1].style.fontSize).toBe("12.5px");
+        });
+
+        it("should calculate correct font size when behavior is relative", () => {
+          style.font.sizeBehavior = "relative";
+          button.appendChild = (child) => {
+            child.setAttribute = jest.fn();
+            child.offsetHeight = 400;
+            child.offsetWidth = 400;
+            button.children.push(child);
+          };
+          style.label =
+            "a very very very very very very very very very very very very very very very very very very very very long title";
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          expect(button.children[0].style.fontSize).toEqual("12.5px");
+          expect(button.children[0].children[0].style.textOverflow).toEqual("ellipsis");
+          expect(button.children[0].children[0].style.overflow).toEqual("hidden");
         });
       });
 
