@@ -2187,20 +2187,20 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
-"@playwright/test@1.37.0":
-  version "1.37.0"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.37.0.tgz#5b3b60dabaabc0d5d3021fb5a5bb8250b424c71d"
-  integrity sha512-181WBLk4SRUyH1Q96VZl7BP6HcK0b7lbdeKisn3N/vnjitk+9HbdlFz/L5fey05vxaAhldIDnzo8KUoy8S3mmQ==
+"@playwright/test@1.37.1":
+  version "1.37.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.37.1.tgz#e7f44ae0faf1be52d6360c6bbf689fd0057d9b6f"
+  integrity sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==
   dependencies:
     "@types/node" "*"
-    playwright-core "1.37.0"
+    playwright-core "1.37.1"
   optionalDependencies:
     fsevents "2.3.2"
 
-"@qlik/eslint-config@0.4.13":
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/@qlik/eslint-config/-/eslint-config-0.4.13.tgz#dd54268b2a15bc9155a6b455d2241adf8c10332c"
-  integrity sha512-9pir3udtOOk6Bt3uOo2bS+rqrq/tPVJ1PnCkWkO+urJ6OF3RIIDLFSqFqL9NIIWLJjfjD8QMN2JeuRdgUfX4ZA==
+"@qlik/eslint-config@0.4.14":
+  version "0.4.14"
+  resolved "https://registry.yarnpkg.com/@qlik/eslint-config/-/eslint-config-0.4.14.tgz#efada9a130642f6a13ca40bccc568e2ce988cf0a"
+  integrity sha512-HgaHj+wz1zQ8MiJAIEaETfnuP0BLeu+9y62vlbwB3liebQcoqvVulLj8ocircscVNo7jkjKx/znH2R9Z7aD+0g==
   dependencies:
     "@typescript-eslint/eslint-plugin" "6.3.0"
     "@typescript-eslint/parser" "6.3.0"
@@ -8724,10 +8724,10 @@ pkg-dir@4.2.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.37.0:
-  version "1.37.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.37.0.tgz#a0a009b840076706452e29aab0efe0ebf5d45ab1"
-  integrity sha512-1c46jhTH/myQw6sesrcuHVtLoSNfJv8Pfy9t3rs6subY7kARv0HRw5PpyfPYPpPtQvBOmgbE6K+qgYUpj81LAA==
+playwright-core@1.37.1:
+  version "1.37.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.37.1.tgz#cb517d52e2e8cb4fa71957639f1cd105d1683126"
+  integrity sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==
 
 portfinder@1.0.32:
   version "1.0.32"
@@ -9179,10 +9179,10 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.0.tgz#701996ceefa253507923a0e864c17ab421c04a7c"
   integrity sha512-rLSBxJjP+4DQOgcJAx6RZHT2he2pkhQdSnofG5VWyVl6GRq/K02ISOuOLcsMOrtKDIJb8JN2zm3FFzWNbezdPw==
 
-qlik-chart-modules@0.57.0:
-  version "0.57.0"
-  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.57.0.tgz#dd31a5f702c8d030693cd740ccace2e6de97464c"
-  integrity sha512-GYnOFKIKSZUeeEz1yLuNeReQ2D9OKJ9GATIpTdCJVvPwKGi9/kntsPI7YmMPZSnV3XnhkWSKkgc99RmfNJdHsw==
+qlik-chart-modules@0.59.0:
+  version "0.59.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.59.0.tgz#2bffe8ebdbef5dc0316907933c1061e2fe1bfac7"
+  integrity sha512-ErnAjpIugAUzXPnRS4l+rxQghmMjd67Q3FeFyWVWT2WCZDMjsOw4a3hSUIN3h5OOwtzSBmw3jxdDqL8DmTMDjw==
 
 qs@6.10.3:
   version "6.10.3"
