@@ -669,6 +669,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
       snapshot: !1,
       viewData: !1,
       quickMobile: !0,
+      fullscreen: !1
     },
   };
 }
