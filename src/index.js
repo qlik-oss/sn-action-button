@@ -14,6 +14,7 @@ import ext from "./ext";
 import properties from "./object-properties";
 
 import { renderButton } from "./components/action-button";
+import useLoadImage from "./hooks/use-load-image";
 
 export default function supernova(env) {
   const {
@@ -47,6 +48,7 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const app = useApp();
       const constraints = useConstraints();
+      const isBackgroundLoaded = useLoadImage(layout, app);
 
       const cleanup = renderButton({
         element,
@@ -57,13 +59,14 @@ export default function supernova(env) {
         senseNavigation,
         multiUserAutomation,
         translator,
+        isBackgroundLoaded,
       });
 
       useEffect(
         () => () => {
           cleanup();
         },
-        [element]
+        [element, isBackgroundLoaded]
       );
 
       useImperativeHandle(
