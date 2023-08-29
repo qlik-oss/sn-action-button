@@ -664,12 +664,12 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
     importProperties,
     exportProperties: null,
     support: {
-      export: !1,
-      exportData: !1,
-      snapshot: !1,
-      viewData: !1,
-      quickMobile: !0,
-      fullscreen: !1
+      export: false,
+      exportData: false,
+      snapshot: false,
+      viewData: false,
+      quickMobile: true,
+      fullscreen: false,
     },
   };
 }
