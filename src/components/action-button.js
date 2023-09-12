@@ -18,7 +18,7 @@ export const renderButton = ({
   element,
   multiUserAutomation,
   translator,
-  isBackgroundLoaded,
+  imageUrl,
 }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
@@ -30,9 +30,9 @@ export const renderButton = ({
     disabled,
     theme,
     element,
-    app,
-    isBackgroundLoaded,
+    imageUrl,
   });
+
   button.setAttribute("style", formattedStyles);
   button.setAttribute("tabindex", "-1");
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });

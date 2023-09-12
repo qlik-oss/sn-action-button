@@ -2,12 +2,11 @@ import DEFAULTS from "../style-defaults";
 import colorUtils from "./color-utils";
 import luiIcons from "./lui-icons";
 import { adjustFontSizeBehavior, backgroundPosition, backgroundSize } from "./style-utils";
-import { getImageUrl } from "./url-utils";
 
 const formatProperty = (path, setting) => `${path}: ${setting};`;
 
 export default {
-  getStyles({ style = {}, disabled, theme, element, app, isBackgroundLoaded }) {
+  getStyles({ style = {}, disabled, theme, element, imageUrl }) {
     let styles =
       "width: 100%;height: 100%;transition: transform .1s ease-in-out;position: absolute;bottom: 0;left: 0; top: 0;right: 0;margin: auto;";
     const { font = {}, background = {}, border = {} } = style;
@@ -24,11 +23,9 @@ export default {
     styles += formatProperty("background-color", backgroundColor);
 
     // backgroundImage
-    if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
-      const bgUrl = background.url.qStaticContentUrl.qUrl;
-      if (bgUrl && isBackgroundLoaded) {
-        const imgUrl = getImageUrl(bgUrl, app);
-        styles += formatProperty("background-image", `url('${imgUrl}')`);
+    if (background.useImage || background.mode === "media") {
+      if (imageUrl) {
+        styles += formatProperty("background-image", `url('${imageUrl}')`);
         styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
         styles += formatProperty(
           "background-position",

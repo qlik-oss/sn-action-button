@@ -9,12 +9,11 @@ import {
   useTheme,
 } from "@nebula.js/stardust";
 
+import { renderButton } from "./components/action-button";
 import data from "./data";
 import ext from "./ext";
-import properties from "./object-properties";
-
-import { renderButton } from "./components/action-button";
 import useLoadImage from "./hooks/use-load-image";
+import properties from "./object-properties";
 
 export default function supernova(env) {
   const {
@@ -48,25 +47,28 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const app = useApp();
       const constraints = useConstraints();
-      const isBackgroundLoaded = useLoadImage(layout, app);
+      const imageUrl = useLoadImage(layout, app);
 
-      const cleanup = renderButton({
-        element,
-        layout,
-        constraints,
-        theme,
-        app,
-        senseNavigation,
-        multiUserAutomation,
-        translator,
-        isBackgroundLoaded,
-      });
+      let cleanup;
+      useEffect(() => {
+        cleanup = renderButton({
+          element,
+          layout,
+          constraints,
+          theme,
+          app,
+          senseNavigation,
+          multiUserAutomation,
+          translator,
+          imageUrl,
+        });
+      }, [imageUrl]);
 
       useEffect(
         () => () => {
           cleanup();
         },
-        [element, isBackgroundLoaded]
+        [element]
       );
 
       useImperativeHandle(
