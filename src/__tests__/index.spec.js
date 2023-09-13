@@ -50,8 +50,19 @@ describe("index", () => {
     });
     const c = create(result.component, {
       element: thisElement,
-      layout: "layout",
+      layout: {
+        style: {
+          background: {
+            url: {
+              aStaticContentUrl: {
+                qUrl: "",
+              },
+            },
+          },
+        },
+      },
       constraints: "constraints",
+      imageUrl: null,
     });
 
     await c.update();
@@ -59,13 +70,24 @@ describe("index", () => {
     expect(thisElement.appendChild).toHaveBeenCalled();
     expect(renderSpy).toHaveBeenCalledWith({
       element: thisElement,
-      layout: "layout",
+      layout: {
+        style: {
+          background: {
+            url: {
+              aStaticContentUrl: {
+                qUrl: "",
+              },
+            },
+          },
+        },
+      },
       app: undefined,
       constraints: "constraints",
       theme: undefined,
       senseNavigation: "nav",
       multiUserAutomation: true,
       translator,
+      imageUrl: null,
     });
   });
 });

@@ -1,5 +1,4 @@
 /* eslint-disable prefer-destructuring */
-import { waitFor } from "@testing-library/react";
 import defaultValues from "../../__tests__/default-button-props";
 import { getStyleEditorDefinition } from "../../styling-panel-definition";
 import styleFormatter from "../style-formatter";
@@ -111,7 +110,6 @@ describe("style-formatter", () => {
       imageUrl = await new Promise((resolve) => {
         setTimeout(() => resolve(`https://localhost${someUrl}`), 1000);
       });
-      await waitFor(() => expect(imageUrl).toBe(`https://localhost${someUrl}`));
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app, imageUrl });
       expect(formattedStyle.includes(`background-image: url('${imageUrl}')`)).toBe(true);
       expect(formattedStyle.includes("background-size: auto auto")).toBe(true);
