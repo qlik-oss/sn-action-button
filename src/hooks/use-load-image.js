@@ -20,7 +20,7 @@ const useLoadImage = (layout, app) => {
       return imgSrc.src;
     }
     return null;
-  }, [layout, app]);
+  }, [url, app]);
   return imageUrl;
 };
 

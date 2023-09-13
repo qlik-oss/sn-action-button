@@ -123,10 +123,7 @@ describe("style-formatter", () => {
       style.background.useImage = false;
       style.background.mode = "media";
       style.background.url.qStaticContentUrl = { qUrl: someUrl };
-      imageUrl = await new Promise((reject) => {
-        setTimeout(() => reject(undefined), 500);
-      });
-      await waitFor(() => expect(imageUrl).toBe(undefined));
+      imageUrl = undefined;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app, imageUrl });
       expect(formattedStyle.includes(`background-image: url('${imageUrl}')`)).toBe(false);
       expect(formattedStyle.includes("background-size: auto auto")).toBe(false);
@@ -168,10 +165,7 @@ describe("style-formatter", () => {
 
     it("should return no settings when url is missing", async () => {
       style.background.useImage = true;
-      imageUrl = await new Promise((reject) => {
-        setTimeout(() => reject(undefined), 500);
-      });
-      await waitFor(() => expect(imageUrl).toBe(undefined));
+      imageUrl = undefined;
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, app, imageUrl });
       expect(formattedStyle.includes("background-image:")).toBe(false);
       expect(formattedStyle.includes("background-size:")).toBe(false);
