@@ -91,6 +91,7 @@
     "@playwright/test": "1.37.1",
     "@qlik/eslint-config": "0.4.17",
     "@qlik/prettier-config": "0.3.0",
+    "@testing-library/react": "^14.0.0",
     "babel-plugin-istanbul": "6.1.1",
     "eslint": "8.49.0",
     "fs-extra": "11.1.1",
@@ -102,6 +103,8 @@
     "mocha-junit-reporter": "2.2.1",
     "prettier": "2.8.8",
     "qlik-chart-modules": "0.59.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "scriptappy-from-jsdoc": "0.7.0",
     "shx": "0.3.4",
     "yargs": "17.7.2"
@@ -115,10 +118,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "systemjs": "dist/sn-action-button.systemjs.js",
-  "dependencies": {
-    "@testing-library/react": "^14.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  }
+  "systemjs": "dist/sn-action-button.systemjs.js"
 }
