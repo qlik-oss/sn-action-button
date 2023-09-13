@@ -23,16 +23,14 @@ export default {
     styles += formatProperty("background-color", backgroundColor);
 
     // backgroundImage
-    if (background.useImage || background.mode === "media") {
-      if (imageUrl) {
-        styles += formatProperty("background-image", `url('${imageUrl}')`);
-        styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
-        styles += formatProperty(
-          "background-position",
-          backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
-        );
-        styles += formatProperty("background-repeat", "no-repeat");
-      }
+    if ((background.useImage || background.mode === "media") && imageUrl) {
+      styles += formatProperty("background-image", `url('${imageUrl}')`);
+      styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+      styles += formatProperty(
+        "background-position",
+        backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+      );
+      styles += formatProperty("background-repeat", "no-repeat");
     }
 
     // border
