@@ -18,7 +18,6 @@ export const renderButton = ({
   element,
   multiUserAutomation,
   translator,
-  imageUrl,
 }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
@@ -30,7 +29,7 @@ export const renderButton = ({
     disabled,
     theme,
     element,
-    imageUrl,
+    app,
   });
 
   button.setAttribute("style", formattedStyles);

@@ -47,22 +47,18 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const app = useApp();
       const constraints = useConstraints();
-      const imageUrl = useLoadImage(layout, app);
+      useLoadImage(layout);
 
-      let cleanup;
-      useEffect(() => {
-        cleanup = renderButton({
-          element,
-          layout,
-          constraints,
-          theme,
-          app,
-          senseNavigation,
-          multiUserAutomation,
-          translator,
-          imageUrl,
-        });
-      }, [imageUrl]);
+      const cleanup = renderButton({
+        element,
+        layout,
+        constraints,
+        theme,
+        app,
+        senseNavigation,
+        multiUserAutomation,
+        translator,
+      });
 
       useEffect(
         () => () => {
