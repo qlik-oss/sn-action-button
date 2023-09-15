@@ -35,7 +35,7 @@ describe("index", () => {
     },
   };
 
-  it("should render supernova", async () => {
+  it("should render supernova twice", async () => {
     const translator = { get: () => "fakeTranslation" };
     const result = supernova({
       anything: {
@@ -50,22 +50,44 @@ describe("index", () => {
     });
     const c = create(result.component, {
       element: thisElement,
-      layout: "layout",
+      layout: {
+        style: {
+          background: {
+            url: {
+              aStaticContentUrl: {
+                qUrl: "/media/Logo/qlik.png",
+              },
+            },
+          },
+        },
+      },
       constraints: "constraints",
     });
 
-    await c.update();
-
-    expect(thisElement.appendChild).toHaveBeenCalled();
-    expect(renderSpy).toHaveBeenCalledWith({
+    const value = {
       element: thisElement,
-      layout: "layout",
+      layout: {
+        style: {
+          background: {
+            url: {
+              aStaticContentUrl: {
+                qUrl: "/media/Logo/qlik.png",
+              },
+            },
+          },
+        },
+      },
       app: undefined,
       constraints: "constraints",
       theme: undefined,
       senseNavigation: "nav",
       multiUserAutomation: true,
       translator,
-    });
+    };
+
+    await c.update();
+
+    expect(thisElement.appendChild).toHaveBeenCalled();
+    expect(renderSpy).toHaveBeenNthCalledWith(2, value);
   });
 });
