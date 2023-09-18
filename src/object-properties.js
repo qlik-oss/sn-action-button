@@ -1,7 +1,7 @@
 import DEFAULTS from "./style-defaults";
 
 /**
- * @extends {GenericObjectProperties}
+ * @extends {EngineAPI.GenericObjectProperties}
  * @entry
  */
 

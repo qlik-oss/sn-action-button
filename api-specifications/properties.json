@@ -12,7 +12,7 @@
     "properties": {
       "extends": [
         {
-          "type": "GenericObjectProperties"
+          "type": "EngineAPI.GenericObjectProperties"
         }
       ],
       "kind": "object",
