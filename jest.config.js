@@ -1,5 +1,6 @@
 module.exports = {
-  testEnvironment: "jsdom",
+  testEnvironment: "jest-environment-jsdom",
+  // testEnvironment: "jsdom",
   testRegex: "src/.+\\.(test|spec)\\.[jt]sx?$",
   coverageThreshold: {
     global: {
@@ -12,5 +13,5 @@ module.exports = {
     "src/utils/lui-icons",
     "src/style-defaults",
   ],
-  collectCoverageFrom: ["src/**"],
+  collectCoverageFrom: ["src/**", "**/*.ts*"],
 };

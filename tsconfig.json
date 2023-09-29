@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "allowJs": true
+  },
+  "extends": "@qlik/tsconfig/react.json",
+  "include": ["src"]
+}
