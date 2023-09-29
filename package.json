@@ -101,7 +101,7 @@
     "lint-staged": "14.0.1",
     "mocha-junit-reporter": "2.2.1",
     "prettier": "2.8.8",
-    "qlik-chart-modules": "0.61.0",
+    "qlik-chart-modules": "0.59.0",
     "shx": "0.3.4",
     "yargs": "17.7.2"
   },
