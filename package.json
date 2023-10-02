@@ -45,7 +45,7 @@
   "lint-staged": {
     "*.{js, jsx, ts, tsx}": [
       "eslint --cache --fix",
-      "prettier --check 'src/**'"
+      "prettier --check src/**'"
     ],
     "*.{json,css,md}": [
       "yarn format"
@@ -58,9 +58,7 @@
     },
     "extends": [
       "@qlik/eslint-config",
-      "@qlik/eslint-config/jest",
-      "@qlik/eslint-config-react/typescript",
-      "@qlik/eslint-config-react/jest"
+      "@qlik/eslint-config/jest"
     ],
     "rules": {
       "no-bitwise": 0,
@@ -78,8 +76,6 @@
   "dependencies": {
     "@types/jest": "^29.5.5",
     "@types/node": "^20.7.1",
-    "@types/react": "^18.2.23",
-    "@types/react-dom": "^18.2.8",
     "jest-environment-jsdom": "^29.7.0",
     "typescript": "^5.2.2"
   },
@@ -98,7 +94,6 @@
     "@nebula.js/test-utils": "0.6.0",
     "@playwright/test": "1.38.0",
     "@qlik/eslint-config": "0.4.18",
-    "@qlik/eslint-config-react": "0.1.0",
     "@qlik/prettier-config": "0.3.0",
     "@qlik/tsconfig": "0.1.6",
     "@scriptappy/cli": "0.10.0",
