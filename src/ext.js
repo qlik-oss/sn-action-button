@@ -80,6 +80,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
                   defaultValue: "",
                   dropdownOnly: true,
                   options: async (action, hyperCubeHandler) => {
+                    console.log("🚀 ~ file: ext.js:83 ~ options: ~ hyperCubeHandler:", hyperCubeHandler);
                     const bms = await hyperCubeHandler.app.getBookmarkList();
                     return bms.map((bookmark) => ({
                       label: bookmark.qData.title,
@@ -201,6 +202,33 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
                     }));
                   },
                 },
+                chartId: {
+                  type: "string",
+                  ref: "navigation.chart",
+                  translation: "properties.chart",
+                  expression: "optional",
+                  show: (data) => checkShowNavigation(data, "chartId"),
+                },
+                chart: {
+                  type: "string",
+                  ref: "navigation.chart",
+                  translation: "properties.chart",
+                  component: "expression-with-dropdown",
+                  expressionType: "StringExpression",
+                  show: (data) => checkShowNavigation(data, "chart"),
+                  options: async (action, hyperCubeHandler) => {
+                    const sheetId = senseNavigation.getCurrentSheetId();
+                    const sheet = await hyperCubeHandler.app.getObject(sheetId);
+                    console.log("🚀 ~ file: ext.js:222 ~ options: ~ sheet:", sheet);
+                    const layout = await sheet.getLayout();
+                    const { cells } = layout;
+                    console.log("🚀 ~ file: ext.js:224 ~ options: ~ cells:", cells);
+                    return cells.map((chart) => ({
+                      value: chart.name,
+                      label: chart.name,
+                    }));
+                  },
+                },
                 story: {
                   type: "string",
                   ref: "navigation.story",
@@ -237,6 +265,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
                   translation: "ExpressionEditor.SetExpresions.OdagAppLinks",
                   options: async (action, hyperCubeHandler) => {
                     const odagLinks = await senseNavigation.getOdagLinks(hyperCubeHandler.app);
+
                     return odagLinks
                       .filter((link) => link.properties.type === "odaglink")
                       .map((odagLink) => ({

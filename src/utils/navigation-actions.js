@@ -52,7 +52,18 @@ const navigationActions = [
     },
     requiredInput: [],
   },
+  // '''''''''''''''''''
+  {
+    translation: "Object.ActionButton.GoToChart",
+    value: "goToChart",
+    navigationCall: async ({ senseNavigation, chart }) => {
+      chart && (await senseNavigation.goToChart(chart));
+    },
+    // TODO replace by searchable dropdown
+    requiredInput: ["chart"],
+  },
 
+  // '''''''''''''''''
   {
     translation: "Object.ActionButton.GoToASheet",
     value: "goToSheet",
