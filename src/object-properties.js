@@ -1,4 +1,4 @@
-import DEFAULTS from "./style-defaults";
+import DEFAULTS from "./style-defaults.ts";
 
 /**
  * @extends {EngineAPI.GenericObjectProperties}

@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 import defaultValues from "../../__tests__/default-button-props";
 import { getStyleEditorDefinition } from "../../styling-panel-definition";
-import styleFormatter from "../style-formatter";
+import styleFormatter from "../style-formatter.ts";
 
 describe("style-formatter", () => {
   describe("getStyles", () => {

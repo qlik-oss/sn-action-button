@@ -1,6 +1,6 @@
 import allActions from "../utils/actions";
 import navigationActions from "../utils/navigation-actions";
-import styleFormatter from "../utils/style-formatter";
+import styleFormatter from "../utils/style-formatter.ts";
 
 export const runActions = async (actionList) => {
   for (let i = 0; i < actionList.length; i++) {

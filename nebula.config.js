@@ -60,6 +60,7 @@ module.exports = {
     ],
   },
   build: {
+    typescript: true,
     replacementStrings: {
       "process.env.PACKAGE_VERSION": JSON.stringify(version),
     },

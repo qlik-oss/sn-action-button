@@ -1,5 +1,5 @@
 /* eslint-disable no-cond-assign */
-import DEFAULTS from "../style-defaults";
+import DEFAULTS from "../style-defaults.ts";
 import CSSColors from "./css-colors";
 
 const colorUtils = {

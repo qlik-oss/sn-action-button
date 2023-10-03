@@ -1,4 +1,4 @@
-import styleDefaults from "./style-defaults";
+import styleDefaults from "./style-defaults.ts";
 import { getStylingPanelDefinition } from "./styling-panel-definition";
 import actions, { checkShowAction, getActionsList } from "./utils/actions";
 import getAutomationProps from "./utils/automation-props";

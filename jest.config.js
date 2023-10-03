@@ -10,7 +10,7 @@ module.exports = {
     "src/__tests__/default-button-props.js",
     "src/data.js",
     "src/utils/lui-icons",
-    "src/style-defaults",
+    "src/style-defaults.ts",
   ],
   collectCoverageFrom: ["src/**", "**/*.ts*"],
 };

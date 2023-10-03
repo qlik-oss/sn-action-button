@@ -1,5 +1,5 @@
 import { fontResolver as createFontResolver } from "qlik-chart-modules";
-import styleDefaults from "./style-defaults";
+import styleDefaults from "./style-defaults.ts";
 import propertyResolver from "./utils/property-resolver";
 import { colorOptions, sizeBehaviorOptions, toggleOptions } from "./utils/style-utils";
 

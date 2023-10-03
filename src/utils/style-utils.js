@@ -1,4 +1,4 @@
-import DEFAULTS from "../style-defaults";
+import DEFAULTS from "../style-defaults.ts";
 
 export const backgroundSize = {
   auto: "auto auto",
