@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "allowJs": true
+    "outDir": "./dist"
   },
-  "extends": "@qlik/tsconfig.json",
-  "include": ["src"]
+  "extends": "@qlik/tsconfig/recommended.json",
+  "exclude": ["node_modules", "./dist"]
 }
