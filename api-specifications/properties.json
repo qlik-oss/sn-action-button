@@ -1,9 +1,9 @@
 {
-  "scriptappy": "1.0.0",
+  "scriptappy": "1.1.0",
   "info": {
     "name": "@nebula.js/sn-action-button:properties",
     "description": "Action button generic object definition",
-    "version": "1.37.0",
+    "version": "1.37.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -12,17 +12,43 @@
     "properties": {
       "extends": [
         {
-          "type": "qae.GenericObjectProperties"
+          "type": "EngineAPI.GenericObjectProperties"
         }
       ],
       "kind": "object",
       "entries": {
-        "actions": {
-          "description": "List of actions, performed in this order",
-          "kind": "array",
-          "items": {
-            "type": "#/definitions/Action"
-          }
+        "version": {
+          "description": "Current version of this generic object definition.",
+          "type": "string"
+        },
+        "showTitles": {
+          "description": "Show title for the visualization",
+          "optional": true,
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Visualization title",
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "subtitle": {
+          "description": "Visualization subtitle",
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "footnote": {
+          "description": "Visualization footnote",
+          "optional": true,
+          "defaultValue": "",
+          "type": "string"
+        },
+        "useEnabledCondition": {
+          "description": "Controlling if the button should use an expression to determine if it is enabled or not",
+          "defaultValue": false,
+          "type": "boolean"
         },
         "enabledCondition": {
           "description": "Number or expression evaluating to number, 0 means disabling the button",
@@ -35,49 +61,22 @@
             {
               "type": "#/definitions/EnabledExpression"
             }
-          ],
-          "type": "any"
+          ]
         },
-        "footnote": {
-          "description": "Visualization footnote",
-          "optional": true,
-          "defaultValue": "",
-          "type": "string"
+        "actions": {
+          "description": "List of actions, performed in this order",
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/Action"
+          }
         },
         "navigation": {
           "description": "Navigation action to move to new sheet/URL, performed after all other actions",
           "type": "#/definitions/NavigationAction"
         },
-        "showTitles": {
-          "description": "Show title for the visualization",
-          "optional": true,
-          "defaultValue": true,
-          "type": "boolean"
-        },
         "style": {
           "description": "All styling options",
           "type": "#/definitions/Style"
-        },
-        "subtitle": {
-          "description": "Visualization subtitle",
-          "optional": true,
-          "defaultValue": "",
-          "type": "string"
-        },
-        "title": {
-          "description": "Visualization title",
-          "optional": true,
-          "defaultValue": "",
-          "type": "string"
-        },
-        "useEnabledCondition": {
-          "description": "Controlling if the button should use an expression to determine if it is enabled or not",
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "version": {
-          "description": "Current version of this generic object definition.",
-          "type": "string"
         }
       }
     }
@@ -85,430 +84,738 @@
   "definitions": {
     "Action": {
       "description": "Defines what action to perform and options for that action type.",
-      "kind": "object",
-      "entries": {
-        "actionLabel": {
-          "description": "Label for reference",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "actionType": {
-          "description": "The type of action",
-          "optional": true,
-          "defaultValue": "''",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'applyBookmark'"
-            },
-            {
-              "kind": "literal",
-              "value": "'back'"
-            },
-            {
-              "kind": "literal",
-              "value": "'forward'"
-            },
-            {
-              "kind": "literal",
-              "value": "'clearAll'"
-            },
-            {
-              "kind": "literal",
-              "value": "'clearAllButThis'"
-            },
-            {
-              "kind": "literal",
-              "value": "'clearField'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectAll'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectValues'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectMatchingValues'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectAlternative'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectExcluded'"
-            },
-            {
-              "kind": "literal",
-              "value": "'selectPossible'"
-            },
-            {
-              "kind": "literal",
-              "value": "'toggleSelect'"
-            },
-            {
-              "kind": "literal",
-              "value": "'lockAll'"
-            },
-            {
-              "kind": "literal",
-              "value": "'lockField'"
-            },
-            {
-              "kind": "literal",
-              "value": "'unlockAll'"
-            },
-            {
-              "kind": "literal",
-              "value": "'unlockField'"
-            },
-            {
-              "kind": "literal",
-              "value": "'setVariable'"
-            },
-            {
-              "kind": "literal",
-              "value": "'doReload'"
-            },
-            {
-              "kind": "literal",
-              "value": "'executeAutomation'"
-            },
-            {
-              "kind": "literal",
-              "value": "'refreshDynamicViews'"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "actionLabel": {
+            "description": "Label for reference",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "actionType": {
+            "description": "The type of action",
+            "optional": true,
+            "defaultValue": "''",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'applyBookmark'"
+              },
+              {
+                "kind": "literal",
+                "value": "'back'"
+              },
+              {
+                "kind": "literal",
+                "value": "'forward'"
+              },
+              {
+                "kind": "literal",
+                "value": "'clearAll'"
+              },
+              {
+                "kind": "literal",
+                "value": "'clearAllButThis'"
+              },
+              {
+                "kind": "literal",
+                "value": "'clearField'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectAll'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectValues'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectMatchingValues'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectAlternative'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectExcluded'"
+              },
+              {
+                "kind": "literal",
+                "value": "'selectPossible'"
+              },
+              {
+                "kind": "literal",
+                "value": "'toggleSelect'"
+              },
+              {
+                "kind": "literal",
+                "value": "'lockAll'"
+              },
+              {
+                "kind": "literal",
+                "value": "'lockField'"
+              },
+              {
+                "kind": "literal",
+                "value": "'unlockAll'"
+              },
+              {
+                "kind": "literal",
+                "value": "'unlockField'"
+              },
+              {
+                "kind": "literal",
+                "value": "'setVariable'"
+              },
+              {
+                "kind": "literal",
+                "value": "'doReload'"
+              },
+              {
+                "kind": "literal",
+                "value": "'executeAutomation'"
+              },
+              {
+                "kind": "literal",
+                "value": "'refreshDynamicViews'"
+              }
+            ]
+          },
+          "bookmark": {
+            "description": "ID of bookmark, required for type 'applyBookmark'",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "field": {
+            "description": "Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "softLock": {
+            "description": "Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "value": {
+            "description": "To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "variable": {
+            "description": "Name of variable. Required for type 'setVariable'",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "partial": {
+            "description": "Set to true if you want to do a partial reload.",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "automation": {
+            "description": "Item ID of the automation (the id field returned from /api/v1/items?resourceType=automations)",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationId": {
+            "description": "ID of the automation (the id field from /api/v1/automations OR the id field from /api/v1/automations)",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationPostData": {
+            "description": "Set to true to include the current selections in the automation. Defaults to false",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "automationTriggered": {
+            "description": "Set to true when the automation should use the triggered run mode. Defaults to false",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "automationTriggeredText": {
+            "description": "Helper text when using the triggered run mode. Defaults to false",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationExecutionToken": {
+            "description": "Token used when using the triggered run mode",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationShowNotification": {
+            "description": "Set to true when an automation should return a notification when finished running. Defaults to false",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "automationNotificationDuration": {
+            "description": "The amount of time in seconds that a notification should remain visible after running an automation",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationNotificationDurationHelp": {
+            "description": "Helper text when enabling notifications",
+            "optional": true,
+            "defaultValue": "''",
+            "type": "string"
+          },
+          "automationOpenLinkSameWindow": {
+            "description": "Set to true if you want links from notifications to be opened in the same tab",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "NavigationAction": {
+      "description": "Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.",
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "action": {
+            "description": "Name of navigation action",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'nextSheet'"
+              },
+              {
+                "kind": "literal",
+                "value": "'prevSheet'"
+              },
+              {
+                "kind": "literal",
+                "value": "'firstSheet'"
+              },
+              {
+                "kind": "literal",
+                "value": "'lastSheet'"
+              },
+              {
+                "kind": "literal",
+                "value": "'goToSheet'"
+              },
+              {
+                "kind": "literal",
+                "value": "'goToSheetById'"
+              },
+              {
+                "kind": "literal",
+                "value": "'goToSheetById'"
+              },
+              {
+                "kind": "literal",
+                "value": "'goToStory'"
+              },
+              {
+                "kind": "literal",
+                "value": "'openWebsite'"
+              },
+              {
+                "kind": "literal",
+                "value": "'odagLink'"
+              },
+              {
+                "kind": "literal",
+                "value": "'openChainedApp'"
+              }
+            ]
+          },
+          "appId": {
+            "description": "app ID. Required for 'openChainedApp'",
+            "optional": true,
+            "type": "string"
+          },
+          "sheet": {
+            "description": "sheet ID. Required for 'goToSheet' and 'goToSheetById'",
+            "optional": true,
+            "type": "string"
+          },
+          "story": {
+            "description": "Story ID. Required for 'goToStory'",
+            "optional": true,
+            "type": "string"
+          },
+          "websiteUrl": {
+            "description": "URL for website. required for 'openWebsite'",
+            "optional": true,
+            "type": "string"
+          },
+          "sameWindow": {
+            "description": "Set to true to open in same window/tab. Required for 'openWebsite'",
+            "optional": true,
+            "type": "boolean"
+          },
+          "odagLink": {
+            "description": "ODAG link name. Required for 'odagLink'",
+            "optional": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Style": {
+      "description": "Holds styling options",
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "label": {
+            "description": "The text displayed on the button",
+            "optional": true,
+            "defaultValue": "'Button'",
+            "type": "string"
+          },
+          "showLabel": {
+            "description": "If the label should be shown or hidden",
+            "optional": true,
+            "defaultValue": true,
+            "type": "boolean"
+          },
+          "font": {
+            "description": "Styling for the label",
+            "optional": true,
+            "type": "#/definitions/Font"
+          },
+          "background": {
+            "description": "Styling for background, including image",
+            "optional": true,
+            "type": "#/definitions/Background"
+          },
+          "border": {
+            "description": "Styling for border",
+            "optional": true,
+            "type": "#/definitions/Border"
+          },
+          "icon": {
+            "description": "Styling for icon",
+            "optional": true,
+            "type": "#/definitions/Icon"
+          }
+        }
+      }
+    },
+    "Font": {
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "fontFamily": {
+            "description": "Font Family of the label",
+            "optional": true,
+            "defaultValue": "'Source Sans Pro'",
+            "type": "string"
+          },
+          "useColorExpression": {
+            "description": "Set to true to use color expression",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "color": {
+            "description": "Color defined by index or hex code, needed if useColorExpression is false",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "colorExpression": {
+            "description": "Color defined by expression, needed if useColorExpression is true",
+            "optional": true,
+            "type": "#/definitions/ColorExpression"
+          },
+          "size": {
+            "description": "Relative[] size of label, must be greater than 0 and 1 fills the entire button",
+            "optional": true,
+            "defaultValue": 0.5,
+            "type": "number"
+          },
+          "sizeFixed": {
+            "description": "Fixed size of the label in pixels. Must be bigger than 5. Only active when sizeBehavior is fixed.",
+            "optional": true,
+            "defaultValue": 20,
+            "type": "number"
+          },
+          "align": {
+            "description": "Horizontal alignment",
+            "optional": true,
+            "defaultValue": "'center'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'left'"
+              },
+              {
+                "kind": "literal",
+                "value": "'center'"
+              },
+              {
+                "kind": "literal",
+                "value": "'right'"
+              }
+            ]
+          },
+          "style": {
+            "description": "Additional style options",
+            "optional": true,
+            "kind": "object",
+            "entries": {
+              "bold": {
+                "description": "Bold text",
+                "optional": true,
+                "defaultValue": true,
+                "type": "boolean"
+              },
+              "italic": {
+                "description": "Italic text",
+                "optional": true,
+                "defaultValue": false,
+                "type": "boolean"
+              },
+              "underline": {
+                "description": "Underlined text",
+                "optional": true,
+                "defaultValue": false,
+                "type": "boolean"
+              }
             }
-          ],
-          "type": "string"
-        },
-        "bookmark": {
-          "description": "ID of bookmark, required for type 'applyBookmark'",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "field": {
-          "description": "Name of field. Required for types 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible', 'toggleSelect', 'lockField' and 'unlockField'",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "softLock": {
-          "description": "Set to true to ignore locked field(s). Required for types 'clearAll', 'clearAllButThis', 'clearField', 'selectAll', 'selectValues', 'selectMatchingValues', 'selectAlternative', 'selectExcluded', 'selectPossible' and 'toggleSelect'",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "value": {
-          "description": "To select certain values in a field or set a variable. Required for types 'selectValues', 'selectMatchingValues', 'toggleSelect' and 'setVariable'",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "variable": {
-          "description": "Name of variable. Required for type 'setVariable'",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "partial": {
-          "description": "Set to true if you want to do a partial reload.",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "automation": {
-          "description": "Item ID of the automation (the id field returned from /api/v1/items?resourceType=automations)",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationId": {
-          "description": "ID of the automation (the id field from /api/v1/automations OR the id field from /api/v1/automations)",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationPostData": {
-          "description": "Set to true to include the current selections in the automation. Defaults to false",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "automationTriggered": {
-          "description": "Set to true when the automation should use the triggered run mode. Defaults to false",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "automationTriggeredText": {
-          "description": "Helper text when using the triggered run mode. Defaults to false",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationExecutionToken": {
-          "description": "Token used when using the triggered run mode",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationShowNotification": {
-          "description": "Set to true when an automation should return a notification when finished running. Defaults to false",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "automationNotificationDuration": {
-          "description": "The amount of time in seconds that a notification should remain visible after running an automation",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationNotificationDurationHelp": {
-          "description": "Helper text when enabling notifications",
-          "optional": true,
-          "defaultValue": "''",
-          "type": "string"
-        },
-        "automationOpenLinkSameWindow": {
-          "description": "Set to true if you want links from notifications to be opened in the same tab",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
+          },
+          "sizeBehavior": {
+            "description": "Setting to determine how the fontsize of the label is calculated.",
+            "optional": true,
+            "defaultValue": "'responsive'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'responsive'"
+              },
+              {
+                "kind": "literal",
+                "value": "'relative'"
+              },
+              {
+                "kind": "literal",
+                "value": "'fixed'"
+              }
+            ]
+          }
         }
       }
     },
     "Background": {
-      "kind": "object",
-      "entries": {
-        "useColorExpression": {
-          "description": "Set to true to use color expression",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "color": {
-          "description": "Color defined by index or hex code, needed if useColorExpression is false",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
-        },
-        "colorExpression": {
-          "description": "Color defined by expression, needed if useColorExpression is true",
-          "optional": true,
-          "type": "#/definitions/ColorExpression"
-        },
-        "mode": {
-          "description": "Toggles the background image, set to media to show the image",
-          "optional": true,
-          "defaultValue": "'none'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'none'"
-            },
-            {
-              "kind": "literal",
-              "value": "'media'"
-            }
-          ],
-          "type": "string"
-        },
-        "useImage": {
-          "description": "Set to true to show background image",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "url": {
-          "description": "Contains the URL for the background image",
-          "optional": true,
-          "kind": "object",
-          "entries": {
-            "qStaticContentUrlDef": {
-              "optional": true,
-              "kind": "object",
-              "entries": {
-                "qUrl": {
-                  "description": "URL represented as a string",
-                  "optional": true,
-                  "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "useColorExpression": {
+            "description": "Set to true to use color expression",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "color": {
+            "description": "Color defined by index or hex code, needed if useColorExpression is false",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "colorExpression": {
+            "description": "Color defined by expression, needed if useColorExpression is true",
+            "optional": true,
+            "type": "#/definitions/ColorExpression"
+          },
+          "mode": {
+            "description": "Toggles the background image, set to media to show the image",
+            "optional": true,
+            "defaultValue": "'none'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'none'"
+              },
+              {
+                "kind": "literal",
+                "value": "'media'"
+              }
+            ]
+          },
+          "useImage": {
+            "description": "Set to true to show background image",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "url": {
+            "description": "Contains the URL for the background image",
+            "optional": true,
+            "kind": "object",
+            "entries": {
+              "qStaticContentUrlDef": {
+                "optional": true,
+                "kind": "object",
+                "entries": {
+                  "qUrl": {
+                    "description": "URL represented as a string",
+                    "optional": true,
+                    "type": "string"
+                  }
                 }
               }
             }
+          },
+          "position": {
+            "description": "Image position",
+            "optional": true,
+            "defaultValue": "'center-center'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'topLeft'"
+              },
+              {
+                "kind": "literal",
+                "value": "'centerLeft'"
+              },
+              {
+                "kind": "literal",
+                "value": "'bottomLeft'"
+              },
+              {
+                "kind": "literal",
+                "value": "'topCenter'"
+              },
+              {
+                "kind": "literal",
+                "value": "'centerCenter'"
+              },
+              {
+                "kind": "literal",
+                "value": "'bottomCenter'"
+              },
+              {
+                "kind": "literal",
+                "value": "'topRight'"
+              },
+              {
+                "kind": "literal",
+                "value": "'centerRight'"
+              },
+              {
+                "kind": "literal",
+                "value": "'bottomRight'"
+              },
+              {
+                "kind": "literal",
+                "value": "'top-left'"
+              },
+              {
+                "kind": "literal",
+                "value": "'center-left'"
+              },
+              {
+                "kind": "literal",
+                "value": "'bottom-left'"
+              },
+              {
+                "kind": "literal",
+                "value": "'top-center'"
+              },
+              {
+                "kind": "literal",
+                "value": "'center-center'"
+              },
+              {
+                "kind": "literal",
+                "value": "'top-right'"
+              },
+              {
+                "kind": "literal",
+                "value": "'center-right'"
+              },
+              {
+                "kind": "literal",
+                "value": "'bottom-right'"
+              }
+            ]
+          },
+          "size": {
+            "description": "Size of the image, relative to the button",
+            "optional": true,
+            "defaultValue": "'auto'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'auto'"
+              },
+              {
+                "kind": "literal",
+                "value": "'alwaysFit'"
+              },
+              {
+                "kind": "literal",
+                "value": "'fitWidth'"
+              },
+              {
+                "kind": "literal",
+                "value": "'fitHeight'"
+              },
+              {
+                "kind": "literal",
+                "value": "'fill'"
+              },
+              {
+                "kind": "literal",
+                "value": "'alwaysFill'"
+              },
+              {
+                "kind": "literal",
+                "value": "'stretchFit'"
+              }
+            ]
           }
-        },
-        "position": {
-          "description": "Image position",
-          "optional": true,
-          "defaultValue": "'center-center'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'topLeft'"
-            },
-            {
-              "kind": "literal",
-              "value": "'centerLeft'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottomLeft'"
-            },
-            {
-              "kind": "literal",
-              "value": "'topCenter'"
-            },
-            {
-              "kind": "literal",
-              "value": "'centerCenter'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottomCenter'"
-            },
-            {
-              "kind": "literal",
-              "value": "'topRight'"
-            },
-            {
-              "kind": "literal",
-              "value": "'centerRight'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottomRight'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottom-left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'top-right'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center-right'"
-            },
-            {
-              "kind": "literal",
-              "value": "'bottom-right'"
-            }
-          ],
-          "type": "string"
-        },
-        "size": {
-          "description": "Size of the image, relative to the button",
-          "optional": true,
-          "defaultValue": "'auto'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'auto'"
-            },
-            {
-              "kind": "literal",
-              "value": "'alwaysFit'"
-            },
-            {
-              "kind": "literal",
-              "value": "'fitWidth'"
-            },
-            {
-              "kind": "literal",
-              "value": "'fitHeight'"
-            },
-            {
-              "kind": "literal",
-              "value": "'fill'"
-            },
-            {
-              "kind": "literal",
-              "value": "'alwaysFill'"
-            },
-            {
-              "kind": "literal",
-              "value": "'stretchFit'"
-            }
-          ],
-          "type": "string"
         }
       }
     },
     "Border": {
-      "kind": "object",
-      "entries": {
-        "useBorder": {
-          "description": "Set to true to use border expression",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "width": {
-          "description": "Relative width, 0 is no border and 1 make the border fill the entire button",
-          "optional": true,
-          "defaultValue": 0,
-          "type": "number"
-        },
-        "radius": {
-          "description": "Relative border radius, 0 is no rounding and 1 will make the short side a half circle",
-          "optional": true,
-          "defaultValue": 0,
-          "type": "number"
-        },
-        "useColorExpression": {
-          "description": "Set to true to use color expression",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "color": {
-          "description": "Color defined by index or hex code, needed if useColorExpression is false",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
-        },
-        "colorExpression": {
-          "description": "Color defined by expression, needed if useColorExpression is true",
-          "optional": true,
-          "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "useBorder": {
+            "description": "Set to true to use border expression",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "width": {
+            "description": "Relative width, 0 is no border and 1 make the border fill the entire button",
+            "optional": true,
+            "defaultValue": 0,
+            "type": "number"
+          },
+          "radius": {
+            "description": "Relative border radius, 0 is no rounding and 1 will make the short side a half circle",
+            "optional": true,
+            "defaultValue": 0,
+            "type": "number"
+          },
+          "useColorExpression": {
+            "description": "Set to true to use color expression",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "color": {
+            "description": "Color defined by index or hex code, needed if useColorExpression is false",
+            "optional": true,
+            "type": "#/definitions/PaletteColor"
+          },
+          "colorExpression": {
+            "description": "Color defined by expression, needed if useColorExpression is true",
+            "optional": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Icon": {
+      "description": "Icons are only available inside Qlik Sense",
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "useIcon": {
+            "description": "Set to true to show icon, default is false",
+            "optional": true,
+            "defaultValue": false,
+            "type": "boolean"
+          },
+          "iconType": {
+            "description": "holds the name of the icon",
+            "optional": true,
+            "kind": "object",
+            "entries": {
+              "value": {
+                "description": "name of icon",
+                "optional": true,
+                "defaultValue": "''",
+                "type": "string"
+              }
+            }
+          },
+          "position": {
+            "description": "Defines which side of the label the icon will be",
+            "optional": true,
+            "defaultValue": "'left'",
+            "kind": "union",
+            "items": [
+              {
+                "kind": "literal",
+                "value": "'left'"
+              },
+              {
+                "kind": "literal",
+                "value": "'right'"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PaletteColor": {
+      "description": "Color information structure. Holds the actual color and index in palette.",
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "color": {
+            "description": "Color as hex string (only used if index: -1)",
+            "optional": true,
+            "type": "string"
+          },
+          "index": {
+            "description": "Index in palette",
+            "optional": true,
+            "type": "number"
+          }
         }
       }
     },
     "ColorExpression": {
       "description": "Format for using color expressions",
-      "kind": "object",
-      "entries": {
-        "qStringExpression": {
-          "kind": "object",
-          "entries": {
-            "qExpr": {
-              "description": "expression that resolves to a supported color format",
-              "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "qStringExpression": {
+            "kind": "object",
+            "entries": {
+              "qExpr": {
+                "description": "expression that resolves to a supported color format",
+                "type": "string"
+              }
             }
           }
         }
@@ -516,305 +823,19 @@
     },
     "EnabledExpression": {
       "description": "Format for setting if the button is enabled/disabled with an expression",
-      "kind": "object",
-      "entries": {
-        "qStringExpression": {
-          "kind": "object",
-          "entries": {
-            "qExpr": {
-              "description": "expression that resolves to a number",
-              "type": "string"
+      "kind": "alias",
+      "items": {
+        "kind": "object",
+        "entries": {
+          "qStringExpression": {
+            "kind": "object",
+            "entries": {
+              "qExpr": {
+                "description": "expression that resolves to a number",
+                "type": "string"
+              }
             }
           }
-        }
-      }
-    },
-    "Font": {
-      "kind": "object",
-      "entries": {
-        "fontFamily": {
-          "description": "Font Family of the label",
-          "optional": true,
-          "defaultValue": "'Source Sans Pro'",
-          "type": "string"
-        },
-        "useColorExpression": {
-          "description": "Set to true to use color expression",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "color": {
-          "description": "Color defined by index or hex code, needed if useColorExpression is false",
-          "optional": true,
-          "type": "#/definitions/PaletteColor"
-        },
-        "colorExpression": {
-          "description": "Color defined by expression, needed if useColorExpression is true",
-          "optional": true,
-          "type": "#/definitions/ColorExpression"
-        },
-        "size": {
-          "description": "Relative[] size of label, must be greater than 0 and 1 fills the entire button",
-          "optional": true,
-          "defaultValue": 0.5,
-          "type": "number"
-        },
-        "sizeFixed": {
-          "description": "Fixed size of the label in pixels. Must be bigger than 5. Only active when sizeBehavior is fixed.",
-          "optional": true,
-          "defaultValue": 20,
-          "type": "number"
-        },
-        "align": {
-          "description": "Horizontal alignment",
-          "optional": true,
-          "defaultValue": "'center'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'center'"
-            },
-            {
-              "kind": "literal",
-              "value": "'right'"
-            }
-          ],
-          "type": "string"
-        },
-        "style": {
-          "description": "Additional style options",
-          "optional": true,
-          "kind": "object",
-          "entries": {
-            "bold": {
-              "description": "Bold text",
-              "optional": true,
-              "defaultValue": true,
-              "type": "boolean"
-            },
-            "italic": {
-              "description": "Italic text",
-              "optional": true,
-              "defaultValue": false,
-              "type": "boolean"
-            },
-            "underline": {
-              "description": "Underlined text",
-              "optional": true,
-              "defaultValue": false,
-              "type": "boolean"
-            }
-          }
-        },
-        "sizeBehavior": {
-          "description": "Setting to determine how the fontsize of the label is calculated.",
-          "optional": true,
-          "defaultValue": "'responsive'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'responsive'"
-            },
-            {
-              "kind": "literal",
-              "value": "'relative'"
-            },
-            {
-              "kind": "literal",
-              "value": "'fixed'"
-            }
-          ],
-          "type": "string"
-        }
-      }
-    },
-    "Icon": {
-      "description": "Icons are only available inside Qlik Sense",
-      "kind": "object",
-      "entries": {
-        "useIcon": {
-          "description": "Set to true to show icon, default is false",
-          "optional": true,
-          "defaultValue": false,
-          "type": "boolean"
-        },
-        "iconType": {
-          "description": "holds the name of the icon",
-          "optional": true,
-          "kind": "object",
-          "entries": {
-            "value": {
-              "description": "name of icon",
-              "optional": true,
-              "defaultValue": "''",
-              "type": "string"
-            }
-          }
-        },
-        "position": {
-          "description": "Defines which side of the label the icon will be",
-          "optional": true,
-          "defaultValue": "'left'",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'left'"
-            },
-            {
-              "kind": "literal",
-              "value": "'right'"
-            }
-          ],
-          "type": "string"
-        }
-      }
-    },
-    "NavigationAction": {
-      "description": "Defines a navigation action to perform after the other actions. Note that when the sn-action-button is used outside Qlik Sense you can only use the 'openWebsite' action.",
-      "kind": "object",
-      "entries": {
-        "action": {
-          "description": "Name of navigation action",
-          "kind": "union",
-          "items": [
-            {
-              "kind": "literal",
-              "value": "'nextSheet'"
-            },
-            {
-              "kind": "literal",
-              "value": "'prevSheet'"
-            },
-            {
-              "kind": "literal",
-              "value": "'firstSheet'"
-            },
-            {
-              "kind": "literal",
-              "value": "'lastSheet'"
-            },
-            {
-              "kind": "literal",
-              "value": "'goToSheet'"
-            },
-            {
-              "kind": "literal",
-              "value": "'goToSheetById'"
-            },
-            {
-              "kind": "literal",
-              "value": "'goToSheetById'"
-            },
-            {
-              "kind": "literal",
-              "value": "'goToStory'"
-            },
-            {
-              "kind": "literal",
-              "value": "'openWebsite'"
-            },
-            {
-              "kind": "literal",
-              "value": "'odagLink'"
-            },
-            {
-              "kind": "literal",
-              "value": "'openChainedApp'"
-            }
-          ],
-          "type": "string"
-        },
-        "appId": {
-          "description": "app ID. Required for 'openChainedApp'",
-          "optional": true,
-          "type": "string"
-        },
-        "sheet": {
-          "description": "sheet ID. Required for 'goToSheet' and 'goToSheetById'",
-          "optional": true,
-          "type": "string"
-        },
-        "story": {
-          "description": "Story ID. Required for 'goToStory'",
-          "optional": true,
-          "type": "string"
-        },
-        "websiteUrl": {
-          "description": "URL for website. required for 'openWebsite'",
-          "optional": true,
-          "type": "string"
-        },
-        "sameWindow": {
-          "description": "Set to true to open in same window/tab. Required for 'openWebsite'",
-          "optional": true,
-          "type": "boolean"
-        },
-        "odagLink": {
-          "description": "ODAG link name. Required for 'odagLink'",
-          "optional": true,
-          "type": "string"
-        }
-      }
-    },
-    "PaletteColor": {
-      "description": "Color information structure. Holds the actual color and index in palette.",
-      "kind": "object",
-      "entries": {
-        "color": {
-          "description": "Color as hex string (only used if index: -1)",
-          "optional": true,
-          "type": "string"
-        },
-        "index": {
-          "description": "Index in palette",
-          "optional": true,
-          "type": "number"
-        }
-      }
-    },
-    "Style": {
-      "description": "Holds styling options",
-      "kind": "object",
-      "entries": {
-        "label": {
-          "description": "The text displayed on the button",
-          "optional": true,
-          "defaultValue": "'Button'",
-          "type": "string"
-        },
-        "showLabel": {
-          "description": "If the label should be shown or hidden",
-          "optional": true,
-          "defaultValue": true,
-          "type": "boolean"
-        },
-        "font": {
-          "description": "Styling for the label",
-          "optional": true,
-          "type": "#/definitions/Font"
-        },
-        "background": {
-          "description": "Styling for background, including image",
-          "optional": true,
-          "type": "#/definitions/Background"
-        },
-        "border": {
-          "description": "Styling for border",
-          "optional": true,
-          "type": "#/definitions/Border"
-        },
-        "icon": {
-          "description": "Styling for icon",
-          "optional": true,
-          "type": "#/definitions/Icon"
         }
       }
     }

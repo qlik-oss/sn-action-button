@@ -31,6 +31,7 @@ export const renderButton = ({
     element,
     app,
   });
+
   button.setAttribute("style", formattedStyles);
   button.setAttribute("tabindex", "-1");
   styleFormatter.createLabelAndIcon({ button, theme, style, isSense });

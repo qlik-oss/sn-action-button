@@ -9,11 +9,11 @@ import {
   useTheme,
 } from "@nebula.js/stardust";
 
+import { renderButton } from "./components/action-button";
 import data from "./data";
 import ext from "./ext";
+import useLoadImage from "./hooks/use-load-image";
 import properties from "./object-properties";
-
-import { renderButton } from "./components/action-button";
 
 export default function supernova(env) {
   const {
@@ -47,6 +47,7 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const app = useApp();
       const constraints = useConstraints();
+      useLoadImage(layout);
 
       const cleanup = renderButton({
         element,
