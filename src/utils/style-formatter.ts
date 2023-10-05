@@ -1,12 +1,19 @@
 import { stardust } from "@nebula.js/stardust";
 import DEFAULTS from "../style-defaults";
 import type { Style } from "../types";
-import colorUtils from "./color-utils.js";
 import luiIcons from "./lui-icons.js";
-import { adjustFontSizeBehavior, backgroundPosition, backgroundSize } from "./style-utils.js";
-import { getImageUrl } from "./url-utils.js";
+import {
+  adjustFontSizeBehavior,
+  backgroundPosition,
+  backgroundSize,
+  getBackgroundStyle,
+  getBorderStyle,
+  getFontStyle,
+  setIconStyle,
+  setLabelSpan,
+} from "./style-utils.js";
 
-const formatProperty = (path: string, setting: string | number) => `${path}: ${setting};`;
+const formatProperty = (path: string, setting: number | string) => `${path}: ${setting};`;
 
 export default {
   getStyles({
@@ -27,48 +34,9 @@ export default {
     const { font, background, border } = style ?? {};
     // enable
     styles += disabled ? formatProperty("opacity", 0.4) : formatProperty("cursor", "pointer");
-    // font
-    if (font) {
-      styles += formatProperty("color", colorUtils.getColor(font, DEFAULTS.FONT_COLOR.color, theme));
-      const fontStyle = font.style || DEFAULTS.FONT_STYLE;
-      fontStyle.bold && (styles += formatProperty("font-weight", "bold"));
-      fontStyle.italic && (styles += formatProperty("font-style", "italic"));
-    }
-    let backgroundColor: string = "none";
-    // background
-    if (background) {
-      const primaryColor = theme.getDataColorSpecials().primary;
-      backgroundColor = colorUtils.getColor(background, primaryColor, theme);
-      styles += formatProperty("background-color", backgroundColor);
-      // backgroundImage
-      if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
-        let bgUrl = background.url.qStaticContentUrl.qUrl;
-        if (bgUrl) {
-          bgUrl = getImageUrl(bgUrl, app);
-          styles += formatProperty("background-image", `url('${bgUrl}')`);
-          styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
-          styles += formatProperty(
-            "background-position",
-            backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
-          );
-          styles += formatProperty("background-repeat", "no-repeat");
-        }
-      }
-    }
-    // border
-    if (border?.useBorder) {
-      const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
-      const borderColor = colorUtils.getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
-      const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
-      styles += formatProperty("border", `${borderSize}px solid ${borderColor}`);
-      styles += formatProperty(
-        "border-radius",
-        `${((border.radius || DEFAULTS.BORDER_RADIUS) * lengthShortSide) / 2}px`
-      );
-    } else {
-      styles += "border: none;";
-    }
-
+    styles += getFontStyle(font, DEFAULTS.FONT_COLOR.color, theme);
+    styles += getBackgroundStyle(background, theme, app, formatProperty);
+    styles += getBorderStyle(element, background, border, theme, formatProperty);
     return styles;
   },
   createLabelAndIcon({
@@ -87,22 +55,15 @@ export default {
     const text = document.createElement("text");
     text.style.whiteSpace = "nowrap";
     text.style.fontFamily = style?.font?.fontFamily || theme.getStyle("", "", "fontFamily") || DEFAULTS.FONT_FAMILY;
-    // label
-    const textSpan = document.createElement("span");
-    textSpan.textContent = label;
-    textSpan.style.whiteSpace = "nowrap";
-    textSpan.style.textOverflow = "ellipsis";
-    font?.style && font.style.underline && (textSpan.style.textDecoration = "underline");
+    const textSpan = setLabelSpan(label, font);
     text.appendChild(textSpan);
+
     // icon
     const hasIcon = isSense && icon?.useIcon && icon.iconType !== "";
     if (hasIcon) {
-      const iconSpan = document.createElement("span");
-      const iconType = luiIcons.find((iconObj) => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
-      iconSpan.style.textDecoration = "none";
-      iconSpan.style.fontSize = "inherit";
-      iconSpan.setAttribute("class", `lui-icon lui-icon--${iconType ? iconType.value : ""}`);
-      icon.position === "right" ? text.appendChild(iconSpan) : text.insertBefore(iconSpan, textSpan);
+      let iconSpan: HTMLElement;
+      iconSpan = setIconStyle(luiIcons, icon);
+      icon?.position === "right" ? text.appendChild(iconSpan) : text.insertBefore(iconSpan, textSpan);
     }
     button.innerHTML = "";
     button.appendChild(text);
