@@ -1,3 +1,4 @@
+import { stardust } from "@nebula.js/stardust";
 type Color = {
   index: number;
   color: string;
@@ -10,24 +11,24 @@ type FontStyle = {
 };
 type FontSizeBehavior = "responsive" | "fluid" | "fixed";
 type BkgImageSize = "auto" | "alwaysFit" | "fitWidth" | "fitHeight" | "stretchFit" | "alwaysFill";
-type Position =
-  | "topLeft"
-  | "centerLeft"
-  | "bottomLeft"
-  | "topCenter"
-  | "centerCenter"
-  | "bottomCenter"
-  | "topRight"
-  | "centerRight"
-  | "bottomRight"
-  | "top-left"
-  | "center-left"
-  | "bottom-left"
-  | "top-center"
-  | "center-center"
-  | "top-right"
-  | "center-right"
-  | "bottom-right";
+// type Position =
+//   | "topLeft"
+//   | "centerLeft"
+//   | "bottomLeft"
+//   | "topCenter"
+//   | "centerCenter"
+//   | "bottomCenter"
+//   | "topRight"
+//   | "centerRight"
+//   | "bottomRight"
+//   | "top-left"
+//   | "center-left"
+//   | "bottom-left"
+//   | "top-center"
+//   | "center-center"
+//   | "top-right"
+//   | "center-right"
+//   | "bottom-right";
 
 export interface Font {
   fontFamily: string;
@@ -42,21 +43,21 @@ export interface Font {
 }
 
 export interface Background {
-  useColorExpression: boolean;
-  color: Color;
-  colorExpression: string;
-  mode: "none" | "media";
-  useImage: boolean;
-  url: {
-    qStaticContentUrlDef: {
+  useColorExpression?: boolean;
+  color?: Color;
+  colorExpression?: string;
+  mode?: "none" | "media";
+  useImage?: boolean;
+  url?: {
+    qStaticContentUrlDef?: {
       qUrl: string;
     };
-    qStaticContentUrl: {
+    qStaticContentUrl?: {
       qUrl: string;
     };
   };
-  size: BkgImageSize;
-  position: Position; // Add all the positions
+  size?: BkgImageSize;
+  position?: string; // Add all the positions
 }
 
 export interface Border {
@@ -82,4 +83,14 @@ export interface Style {
   background?: Background;
   border?: Border;
   icon?: Icon;
+}
+
+export interface ButtonLayout extends EngineAPI.IGenericObjectLayout {
+  style: Style;
+}
+
+export interface Galaxy {
+  flags: stardust.Flags;
+  theme: stardust.Theme;
+  translator: stardust.Translator;
 }

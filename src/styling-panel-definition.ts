@@ -1,9 +1,10 @@
 import { fontResolver as createFontResolver } from "qlik-chart-modules";
-import styleDefaults from "./style-defaults.ts";
-import propertyResolver from "./utils/property-resolver";
-import { colorOptions, sizeBehaviorOptions, toggleOptions } from "./utils/style-utils";
+import styleDefaults from "./style-defaults.js";
+import type { ButtonLayout, Galaxy } from "./types";
+import propertyResolver from "./utils/property-resolver.js";
+import { colorOptions, sizeBehaviorOptions, toggleOptions } from "./utils/style-utils.js";
 
-export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
+export const getStyleEditorDefinition = ({ flags, theme, translator }: Galaxy) => {
   const fontResolver = createFontResolver({
     theme,
     translator,
@@ -63,7 +64,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 max: 1,
                 step: 0.01,
                 defaultValue: 0.5,
-                show: (data) => !(propertyResolver.getValue(data, "style.font.sizeBehavior") === "fixed"),
+                show: (data: ButtonLayout) => !(propertyResolver.getValue(data, "style.font.sizeBehavior") === "fixed"),
               },
               fontSizeFixed: {
                 type: "number",
@@ -73,7 +74,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 min: 5,
                 defaultValue: 20,
                 option: "optional",
-                show: (data) => propertyResolver.getValue(data, "style.font.sizeBehavior") === "fixed",
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.font.sizeBehavior") === "fixed",
               },
               fontColor: {
                 items: {
@@ -93,7 +94,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                     defaultValue: styleDefaults.FONT_COLOR,
                     disabledNone: true,
                     width: 12,
-                    show: (data) => !propertyResolver.getValue(data, "style.font.useColorExpression"),
+                    show: (data: ButtonLayout) => !propertyResolver.getValue(data, "style.font.useColorExpression"),
                   },
                   colorExpression: {
                     type: "string",
@@ -101,7 +102,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                     ref: "style.font.colorExpression",
                     translation: "Common.Expression",
                     expression: "optional",
-                    show: (data) => propertyResolver.getValue(data, "style.font.useColorExpression"),
+                    show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.font.useColorExpression"),
                   },
                 },
               },
@@ -129,7 +130,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 ref: "style.background.colorExpression",
                 translation: "Common.Expression",
                 expression: "optional",
-                show: (data) => propertyResolver.getValue(data, "style.background.useColorExpression"),
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.background.useColorExpression"),
               },
               colorPicker: {
                 type: "object",
@@ -139,7 +140,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 disableNone: false,
                 defaultValue: styleDefaults.COLOR,
                 dualOutput: true,
-                show: (data) => !propertyResolver.getValue(data, "style.background.useColorExpression"),
+                show: (data: ButtonLayout) => !propertyResolver.getValue(data, "style.background.useColorExpression"),
               },
             },
           },
@@ -160,17 +161,17 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                     translation: "MediaLibrary.Header",
                   },
                 ],
-                change(data) {
+                change(data: ButtonLayout) {
                   const bgImageComp = data.style.background;
-                  if (!bgImageComp) data.style.background = { qStaticContentUrlDef: {} };
-                  if (!bgImageComp.url) data.style.background.url = {};
+                  // if (!bgImageComp) data.style.background = { qStaticContentUrlDef: {} };
+                  if (data.style.background && !bgImageComp?.url) data.style.background.url = {};
                 },
               },
               MediaLibrary: {
                 component: "media-library-button",
                 ref: "style.background.url",
                 translation: "MediaLibrary.Header",
-                show: (data) => propertyResolver.getValue(data, "style.background.mode") === "media",
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.background.mode") === "media",
               },
               imageSize: {
                 component: "dropdown",
@@ -202,11 +203,11 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                     translation: "properties.backgroundImage.sizeAlwaysFill",
                   },
                 ],
-                change: (data) => {
-                  if (propertyResolver.getValue(data, "style.background.position"))
+                change: (data: ButtonLayout) => {
+                  if (data.style.background && propertyResolver.getValue(data, "style.background.position"))
                     data.style.background.position = styleDefaults.BGIMAGE_POSITION;
                 },
-                show: (data) =>
+                show: (data: ButtonLayout) =>
                   propertyResolver.getValue(data, "style.background.mode") === "media" &&
                   !!propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl"),
               },
@@ -215,7 +216,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 ref: "style.background.position",
                 translation: "properties.backgroundImage.position",
                 defaultValue: styleDefaults.BGIMAGE_POSITION,
-                show: (data) =>
+                show: (data: ButtonLayout) =>
                   propertyResolver.getValue(data, "style.background.mode") === "media" &&
                   propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl") &&
                   propertyResolver.getValue(data, "style.background.size") !== "stretchFit",
@@ -247,7 +248,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 min: 0,
                 max: 1,
                 step: 0.01,
-                show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.border.useBorder"),
               },
               borderWidth: {
                 type: "number",
@@ -257,7 +258,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 min: 0,
                 max: 0.5,
                 step: 0.005,
-                show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.border.useBorder"),
               },
               colorDropdown: {
                 type: "string",
@@ -265,7 +266,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 ref: "style.border.useColorExpression",
                 translation: "properties.border.color",
                 options: colorOptions,
-                show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
+                show: (data: ButtonLayout) => propertyResolver.getValue(data, "style.border.useBorder"),
               },
               colorPicker: {
                 type: "object",
@@ -275,7 +276,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 defaultValue: styleDefaults.COLOR,
                 disableNone: false,
                 dualOutput: true,
-                show: (data) =>
+                show: (data: ButtonLayout) =>
                   propertyResolver.getValue(data, "style.border.useBorder") &&
                   !propertyResolver.getValue(data, "style.border.useColorExpression"),
               },
@@ -284,7 +285,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
                 component: "input-field-expression",
                 ref: "style.border.colorExpression",
                 translation: "Common.Expression",
-                show: (data) =>
+                show: (data: ButtonLayout) =>
                   propertyResolver.getValue(data, "style.border.useBorder") &&
                   propertyResolver.getValue(data, "style.border.useColorExpression"),
                 expression: "optional",
@@ -297,7 +298,7 @@ export const getStyleEditorDefinition = ({ flags, theme, translator }) => {
   };
 };
 
-export const getStylingPanelDefinition = (opt) => ({
+export const getStylingPanelDefinition = (opt: Galaxy) => ({
   type: "items",
   grouped: false,
   translation: "properties.presentation",
