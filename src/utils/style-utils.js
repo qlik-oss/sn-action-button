@@ -126,7 +126,6 @@ export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) =>
 };
 
 export const getFontStyle = (font, fontColor, theme, formatProperty) => {
-  if (!font) return undefined;
   let styles = "";
   styles = formatProperty("color", colorUtils.getColor(font, fontColor, theme));
   const fontStyle = font.style || DEFAULTS.FONT_STYLE;
@@ -141,7 +140,6 @@ export const getBackgroundColor = (background, theme) => {
 };
 
 export const getBackgroundImage = (background, app, formatProperty) => {
-  if (!background) return undefined;
   let styles = "";
   if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
     let bgUrl = background.url.qStaticContentUrl.qUrl;
