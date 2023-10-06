@@ -41,6 +41,13 @@ describe("style-formatter", () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
       expect(formattedStyle).toEqual(defaultStyle);
     });
+
+    it("should return default with empty style object", () => {
+      style = {};
+      const formattedStyle = styleFormatter.getStyles({ style, disabled, theme, element, app });
+      expect(formattedStyle).toEqual(defaultStyle);
+    });
+
     // enable
     it("should have set opacity and cursor for disabled button", () => {
       const formattedStyle = styleFormatter.getStyles({ style, disabled: true, theme, element, app });
@@ -345,6 +352,19 @@ describe("style-formatter", () => {
           expect(text.style.justifyContent).toEqual("center");
         });
 
+        it("should set fontSize and styling when the style is an empty object", () => {
+          style = {};
+          styleFormatter.createLabelAndIcon({ theme, button, style });
+          const text = button.children[0];
+          expect(text.children[0].textContent).toEqual("Button");
+          expect(text.style.whiteSpace).toEqual("nowrap");
+          expect(text.style.fontFamily).toEqual("Source Sans Pro");
+          expect(text.style.fontSize).toEqual("11.50px");
+          expect(text.style.display).toEqual("flex");
+          expect(text.style.alignItems).toEqual("center");
+          expect(text.style.justifyContent).toEqual("center");
+        });
+
         it("should set fontSize to 8px for small font sizes", () => {
           button.appendChild = (child) => {
             child.setAttribute = jest.fn();
@@ -354,6 +374,7 @@ describe("style-formatter", () => {
           };
           styleFormatter.createLabelAndIcon({ theme, button, style });
           expect(button.children[0].style.fontSize).toEqual("8px");
+          expect(button.children[0].children[0].style.overflow).toEqual("hidden");
         });
 
         it("should set fontSize when text offsetWidth is bigger than button", () => {

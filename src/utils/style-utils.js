@@ -134,18 +134,18 @@ export const getFontStyle = (font, fontColor, theme, formatProperty) => {
   return styles;
 };
 
-export const getBackgroundColor = (background, theme) => {
+const getBackgroundColor = (background, theme) => {
   const primaryColor = theme.getDataColorSpecials().primary;
   return colorUtils.getColor(background, primaryColor, theme);
 };
 
-export const getBackgroundImage = (background, app, formatProperty) => {
-  let styles = "";
+export const getBackgroundStyle = (background, theme, app, formatProperty) => {
+  let styles = formatProperty("background-color", getBackgroundColor(background, theme));
   if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
     let bgUrl = background.url.qStaticContentUrl.qUrl;
     if (bgUrl) {
       bgUrl = getImageUrl(bgUrl, app);
-      styles = formatProperty("background-image", `url('${bgUrl}')`);
+      styles += formatProperty("background-image", `url('${bgUrl}')`);
       styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
       styles += formatProperty(
         "background-position",

@@ -1,11 +1,3 @@
-// export const defaultFontStyle = {
-//   fontFamily: "Source Sans Pro",
-//   userColorExpression: false,
-//   color: { index: -1, color: "#ffffff" },
-//   colorExpression: "",
-//   size:
-// };
-
 export default {
   LABEL: "Button",
   FONT_SIZE: 0.5,
