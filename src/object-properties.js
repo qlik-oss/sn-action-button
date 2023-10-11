@@ -132,7 +132,8 @@ const properties = {
  * @typedef {object} NavigationAction
  * @property {'nextSheet'|'prevSheet'|'firstSheet'|'lastSheet'|'goToSheet'|'goToSheetById'|'goToSheetById'|'goToStory'|'openWebsite'|'odagLink'|'openChainedApp'} action - Name of navigation action
  * @property {string=} appId - app ID. Required for 'openChainedApp'
- * @property {string=} sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'
+ * @property {string=} sheet - sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'
+ * @property {string=} chart - chart - chart ID. Required for 'goToSheet' and specify the chart
  * @property {string=} story - Story ID. Required for 'goToStory'
  * @property {string=} websiteUrl - URL for website. required for 'openWebsite'
  * @property {boolean=} sameWindow - Set to true to open in same window/tab. Required for 'openWebsite'

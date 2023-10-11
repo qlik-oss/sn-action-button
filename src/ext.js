@@ -201,6 +201,13 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
                     }));
                   },
                 },
+                chart: {
+                  type: "string",
+                  expression: "optional",
+                  ref: "navigation.chart",
+                  translation: "properties.chartPicker.chart",
+                  show: (data) => checkShowNavigation(data, "sheet", "chart"),
+                },
                 story: {
                   type: "string",
                   ref: "navigation.story",

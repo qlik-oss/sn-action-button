@@ -347,7 +347,12 @@
             "type": "string"
           },
           "sheet": {
-            "description": "sheet ID. Required for 'goToSheet' and 'goToSheetById'",
+            "description": "sheet - sheet ID. Required for 'goToSheet' and 'goToSheetById'",
+            "optional": true,
+            "type": "string"
+          },
+          "chart": {
+            "description": "chart - chart ID. Required for 'goToSheet' and specify the chart",
             "optional": true,
             "type": "string"
           },
