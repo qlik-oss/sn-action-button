@@ -47,7 +47,7 @@ describe("navigation actions", () => {
     it("should call goToSheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
       await navigationObject.navigationCall({ senseNavigation, sheet });
-      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet);
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet, "");
     });
     it("should NOT call goToSheet when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
