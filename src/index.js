@@ -26,6 +26,7 @@ export default function supernova(env) {
   const isUnsupportedFeature = anything.sense?.isUnsupportedFeature;
   const shouldHide = { isEnabled, isFeatureBlacklisted, isUnsupportedFeature };
   const multiUserAutomation = isEnabled?.("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
+  const isChartNavigation = isEnabled?.("ACTION_BUTTON_IM_4975_CHART_NAVIGATION");
   const senseNavigation = sense?.navigation;
   properties.style.label = sense ? translator.get("Object.ActionButton") : "Button";
 
@@ -76,6 +77,6 @@ export default function supernova(env) {
         [element]
       );
     },
-    ext: ext({ translator, shouldHide, senseNavigation, theme: anything.sense?.theme }),
+    ext: ext({ translator, shouldHide, senseNavigation, theme: anything.sense?.theme, isChartNavigation }),
   };
 }

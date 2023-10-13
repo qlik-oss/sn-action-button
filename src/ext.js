@@ -21,7 +21,7 @@ const getAutomations = async () => {
   }
   return automationsList;
 };
-export default function ext({ translator, shouldHide, senseNavigation, theme }) {
+export default function ext({ translator, shouldHide, senseNavigation, theme, isChartNavigation }) {
   const multiUserAutomation =
     shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
   const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON");
@@ -206,7 +206,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme }) 
                   expression: "optional",
                   ref: "navigation.chart",
                   translation: "properties.chartPicker.chart",
-                  show: (data) => checkShowNavigation(data, "sheet", "chart"),
+                  show: (data) => isChartNavigation ? checkShowNavigation(data, "sheet", "chart") : false,
                 },
                 story: {
                   type: "string",
