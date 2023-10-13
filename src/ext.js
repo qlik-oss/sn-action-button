@@ -206,7 +206,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                   expression: "optional",
                   ref: "navigation.chart",
                   translation: "properties.chartPicker.chart",
-                  show: (data) => isChartNavigation ? checkShowNavigation(data, "sheet", "chart") : false,
+                  show: (data) => (isChartNavigation ? checkShowNavigation(data, "chart") : false),
                 },
                 story: {
                   type: "string",

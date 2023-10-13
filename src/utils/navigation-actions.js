@@ -58,6 +58,7 @@ const navigationActions = [
     navigationCall: async ({ senseNavigation, sheet, chart = "" }) => {
       sheet && (await senseNavigation.goToSheet(sheet, chart));
     },
+    // TODO replace by searchable dropdown
     requiredInput: ["sheet", "chart"],
   },
   {
