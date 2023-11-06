@@ -203,10 +203,12 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                 },
                 chart: {
                   type: "string",
-                  expression: "optional",
                   ref: "navigation.chart",
+                  component: "expression-with-dropdown",
+                  expressionType: "StringExpression",
                   translation: "properties.chartPicker.chart",
                   show: (data) => (isGoToChartEnabled ? checkShowNavigation(data, "chart") : false),
+                  // options:
                 },
                 story: {
                   type: "string",
