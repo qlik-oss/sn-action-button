@@ -11,7 +11,7 @@ const imagePromise = (url) =>
   });
 
 const useLoadImage = (layout) => {
-  const { url } = layout.style.background;
+  const url = layout.style?.background?.url ?? undefined;
   usePromise(async () => {
     if (url?.qStaticContentUrl?.qUrl) {
       await imagePromise(url?.qStaticContentUrl?.qUrl);
