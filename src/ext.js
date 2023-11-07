@@ -201,14 +201,12 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                     }));
                   },
                 },
-                chart: {
+                chartId: {
                   type: "string",
-                  ref: "navigation.chart",
-                  component: "expression-with-dropdown",
-                  expressionType: "StringExpression",
-                  translation: "properties.chartPicker.chart",
-                  show: (data) => (isGoToChartEnabled ? checkShowNavigation(data, "chart") : false),
-                  // options:
+                  expression: "optional",
+                  ref: "navigation.chartId",
+                  translation: "properties.chartPicker.chartId",
+                  show: (data) => (isGoToChartEnabled ? checkShowNavigation(data, "chartId") : false),
                 },
                 story: {
                   type: "string",

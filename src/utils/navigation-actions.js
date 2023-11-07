@@ -55,11 +55,11 @@ const navigationActions = [
   {
     translation: "Object.ActionButton.GoToASheet",
     value: "goToSheet",
-    navigationCall: async ({ senseNavigation, sheet, chart = "" }) => {
-      sheet && (await senseNavigation.goToSheet(sheet, chart));
+    navigationCall: async ({ senseNavigation, sheet, chartId }) => {
+      sheet && (await senseNavigation.goToSheet(sheet, chartId));
     },
     // TODO replace by searchable dropdown
-    requiredInput: ["sheet", "chart"],
+    requiredInput: ["sheet", "chartId"],
   },
   {
     translation: "Object.ActionButton.GoToSheetById",
