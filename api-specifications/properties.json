@@ -351,6 +351,11 @@
             "optional": true,
             "type": "string"
           },
+          "chartId": {
+            "description": "chart ID. Required for 'goToSheet' and highlighting the chart",
+            "optional": true,
+            "type": "string"
+          },
           "story": {
             "description": "Story ID. Required for 'goToStory'",
             "optional": true,
