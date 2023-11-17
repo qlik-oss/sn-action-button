@@ -103,6 +103,7 @@
     "prettier": "2.8.8",
     "qlik-chart-modules": "0.59.0",
     "shx": "0.3.4",
+    "typescript": "5.2.2",
     "yargs": "17.7.2"
   },
   "peerDependencies": {
