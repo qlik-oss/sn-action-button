@@ -90,15 +90,15 @@ const navigationActions = [
           const isEmail = urlHasEmailProtocol(url);
           let target = "";
           if (isEmail) {
-            window.open(url, target);
+            window.open(url, target, "noopener");
           }
           if (sameWindow) {
             target = inIframe() ? "_parent" : "_self";
-            window.open(`${protocol}${url}`, target);
+            window.open(`${protocol}${url}`, target, "noopener");
           }
           if (!isEmail && !sameWindow) {
             const encoded = encodeUrl(url);
-            window.open(`${protocol}${encoded}`, target);
+            window.open(`${protocol}${encoded}`, target, "noopener");
           }
         }
       } catch (error) {
@@ -121,7 +121,7 @@ const navigationActions = [
       const url = `../sense/app/${encodeURIComponent(appId)}/sheet/${encodeURIComponent(
         sheet
       )}/tempselectionstate/${encodeURIComponent(tempBookmark)}`;
-      window.open(url, target);
+      window.open(url, target, "noopener");
     },
     requiredInput: ["sameWindow", "appId", "sheetId"],
   },
