@@ -48,7 +48,7 @@ export default function supernova(env) {
       const layout = useStaleLayout();
       const app = useApp();
       const constraints = useConstraints();
-      useLoadImage(layout);
+      useLoadImage(layout, app);
 
       const cleanup = renderButton({
         element,
