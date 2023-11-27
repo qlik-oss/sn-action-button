@@ -1,6 +1,6 @@
 {
   "module": "esm/index.js",
   "peerDependencies": {
-    "@nebula.js/stardust": "^4.7.0"
+    "@nebula.js/stardust": "^4.8.0"
   }
 }
