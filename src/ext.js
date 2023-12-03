@@ -203,10 +203,18 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                 },
                 chartId: {
                   type: "string",
-                  expression: "optional",
                   ref: "navigation.chartId",
                   translation: "properties.chartPicker.chartId",
+                  component: "expression-with-dropdown",
+                  expressionType: "StringExpression",
                   show: (data) => (isGoToChartEnabled ? checkShowNavigation(data, "chartId") : false),
+                  options: async (data, action, hyperCubeHandler) => {
+                    const sheetId = data.navigation.sheet;
+                    const object = sheetId && (await hyperCubeHandler.app.getObject(sheetId));
+                    return object.properties.cells.map((cell) => ({
+                      value: cell.name,
+                    }));
+                  },
                 },
                 story: {
                   type: "string",
