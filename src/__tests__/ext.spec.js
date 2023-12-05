@@ -113,7 +113,7 @@ describe("ext", () => {
         },
       },
     ];
-    const chartIds = {
+    const sheet = {
       properties: {
         cells: [
           {
@@ -153,7 +153,7 @@ describe("ext", () => {
         getVariableList: () => variables,
         getSheetList: () => sheets,
         getStoryList: () => stories,
-        getObject: () => chartIds,
+        getObject: () => sheet,
       },
     };
 
