@@ -113,6 +113,21 @@ describe("ext", () => {
         },
       },
     ];
+    const chartIds = {
+      properties: {
+        cells: [
+          {
+            name: "chart-01",
+          },
+          {
+            name: "chart-02",
+          },
+          {
+            name: "chart-03",
+          },
+        ],
+      },
+    };
     const stories = [
       {
         qMeta: {
@@ -138,6 +153,7 @@ describe("ext", () => {
         getVariableList: () => variables,
         getSheetList: () => sheets,
         getStoryList: () => stories,
+        getObject: () => chartIds,
       },
     };
 
@@ -195,9 +211,30 @@ describe("ext", () => {
       expect(options).toHaveLength(1);
       expect(options).toStrictEqual(odagLinks);
     });
+
     it("Should return an array with all sheets", async () => {
       options = await navigationItems.sheet.options(null, handler);
       expect(options).toHaveLength(2);
+    });
+
+    it("Should return an array with all chart ids", async () => {
+      data = {
+        navigation: {
+          sheet: "sheetId",
+        },
+      };
+      options = await navigationItems.chartId.options(data, null, handler);
+      expect(options).toHaveLength(3);
+    });
+
+    it("Should not return an array with all chart ids if the sheet id is not defined", async () => {
+      data = {
+        navigation: {
+          sheet: undefined,
+        },
+      };
+      options = await navigationItems.chartId.options(data, null, handler);
+      expect(options).toBe(undefined);
     });
 
     it("Should return an array with all stories", async () => {
