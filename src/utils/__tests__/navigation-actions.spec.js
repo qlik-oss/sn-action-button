@@ -9,6 +9,7 @@ import navigationActions, {
 describe("navigation actions", () => {
   let senseNavigation;
   const sheet = "sheetIdHere";
+  const chartId = "chartId";
   const story = "storyIdHere";
   const websiteUrl = "https://myUrlHere";
   const mailtoUrl = "mailto:me@example";
@@ -48,6 +49,11 @@ describe("navigation actions", () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
       await navigationObject.navigationCall({ senseNavigation, sheet });
       expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet, undefined);
+    });
+    it("should call goToSheet with chartId", async () => {
+      const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
+      await navigationObject.navigationCall({ senseNavigation, sheet, chartId });
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet, chartId);
     });
     it("should NOT call goToSheet when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
@@ -228,6 +234,10 @@ describe("navigation actions", () => {
       data.navigation.action = "notAnAction";
       const result = checkShowNavigation(data, "sheet");
       expect(result).toBeUndefined();
+    });
+    it("should return true when chartId should be shown", () => {
+      const result = checkShowNavigation(data, "chartId");
+      expect(result).toBe(true);
     });
     it("should return false when field not in required input", () => {
       const result = checkShowNavigation(data, "websiteUrl");
