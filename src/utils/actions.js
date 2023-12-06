@@ -165,6 +165,24 @@ const actions = [
     requiredInput: ["field", "softLock"],
   },
   {
+    value: "cyclicGroup",
+    translation: "Object.ActionButton.CyclicGroup",
+    group: "selection",
+    getActionCall:
+      ({ cyclicGroupDimensionId, app }) =>
+      async () => {
+        const model = await app.getDimension(cyclicGroupDimensionId);
+        const props = await model.getProperties();
+        if (props.qDim.qFieldDefs && props.qDim.qFieldDefs.length > 1) {
+          const first = props.qDim.qFieldDefs.shift();
+          props.qDim.qFieldDefs.push(first);
+          model.setProperties(props);
+        }
+      },
+    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    requiredInput: ["cyclicGroupsDimensions"],
+  },
+  {
     value: "selectExcluded",
     translation: "Object.ActionButton.SelectExcluded",
     group: "selection",
