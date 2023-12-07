@@ -166,21 +166,27 @@ const actions = [
   },
   {
     value: "cyclicGroup",
-    translation: "Object.ActionButton.CyclicGroup",
+    translation: "Dimensions.Dialog.Type.CyclicGroup",
     group: "selection",
     getActionCall:
-      ({ cyclicGroupDimensionId, app }) =>
+      ({ cyclicGroupId, indexStepper, app }) =>
       async () => {
-        const model = await app.getDimension(cyclicGroupDimensionId);
+        const model = await app.getDimension(cyclicGroupId);
         const props = await model.getProperties();
         if (props.qDim.qFieldDefs && props.qDim.qFieldDefs.length > 1) {
-          const first = props.qDim.qFieldDefs.shift();
-          props.qDim.qFieldDefs.push(first);
-          model.setProperties(props);
+          if (indexStepper === 1) {
+            const first = props.qDim.qFieldDefs.shift();
+            props.qDim.qFieldDefs.push(first);
+            model.setProperties(props);
+          } else {
+            const last = props.qDim.qFieldDefs.pop();
+            props.qDim.qFieldDefs.unshift(last);
+            model.setProperties(props);
+          }
         }
       },
     hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
-    requiredInput: ["cyclicGroupsDimensions"],
+    requiredInput: ["cyclicGroup", "indexStepper"],
   },
   {
     value: "selectExcluded",
