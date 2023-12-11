@@ -172,18 +172,7 @@ const actions = [
       ({ cyclicGroupId, indexStepper, app }) =>
       async () => {
         const model = await app.getDimension(cyclicGroupId);
-        const props = await model.getProperties();
-        if (props.qDim.qFieldDefs && props.qDim.qFieldDefs.length > 1) {
-          if (indexStepper === 1) {
-            const first = props.qDim.qFieldDefs.shift();
-            props.qDim.qFieldDefs.push(first);
-            model.setProperties(props);
-          } else {
-            const last = props.qDim.qFieldDefs.pop();
-            props.qDim.qFieldDefs.unshift(last);
-            model.setProperties(props);
-          }
-        }
+        await model.stepCycle(indexStepper);
       },
     hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
     requiredInput: ["cyclicGroup", "indexStepper"],
