@@ -39,7 +39,7 @@ describe("action button", () => {
     });
 
     it("should not act on click when 'active' constraint is enabled", async () => {
-      defaults.constraints = { active: true };
+      defaults.interactions = { active: false };
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(button.setAttribute).not.toHaveBeenCalledWith("disabled", true);
@@ -108,9 +108,9 @@ describe("action button", () => {
       expect(defaults.element.firstElementChild.style.transform).toEqual("");
     });
     it("should not scale nor reset scale when in edit mode", async () => {
-      defaults.constraints = {
-        passive: true,
-        active: true,
+      defaults.interactions = {
+        passive: false,
+        active: false,
       };
       renderButton(defaults);
       defaults.element.firstElementChild.style = { transform: "" };

@@ -33,7 +33,7 @@ const defaultValues = () => ({
     getBookmarkList: () => [],
     storeTempSelectionState: () => "tempBookmarkId",
   },
-  constraints: {},
+  interactions: { active: true },
   senseNavigation: {},
 });
 
