@@ -48,6 +48,10 @@ const properties = {
    */
   actions: [],
   /**
+   * Boolean to determine the parallel evaluation of expression. Set to true if you want the expression to be evaluated between the actions (instead of upfront).
+   */
+  runtimeExpressionEvaluation: false,
+  /**
    * Navigation action to move to new sheet/URL, performed after all other actions
    * @type {NavigationAction}
    */

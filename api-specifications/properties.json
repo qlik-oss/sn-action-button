@@ -70,6 +70,11 @@
             "type": "#/definitions/Action"
           }
         },
+        "runtimeExpressionEvaluation": {
+          "description": "Boolean to determine the parallel evaluation of expression. Set to true if you want the expression to be evaluated between the actions (instead of upfront).",
+          "kind": "literal",
+          "value": false
+        },
         "navigation": {
           "description": "Navigation action to move to new sheet/URL, performed after all other actions",
           "type": "#/definitions/NavigationAction"

@@ -35,127 +35,138 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
           translation: "Object.ActionButton.ActionsAndNavigation",
           grouped: true,
           items: {
-            actions: {
-              type: "array",
-              translation: "Object.ActionButton.Actions",
-              ref: "actions",
-              itemTitleRef: (data) => {
-                if (data.actionLabel) {
-                  return data.actionLabel;
-                }
-                // If actionType exists but it's not found in the actions list,
-                // the action is invalid for the current version of the button
-                const fallbackTitle = data.actionType
-                  ? "Object.ActionButton.InvalidAction"
-                  : "Object.ActionButton.NewAction";
-                const action = actions.find((act) => data.actionType === act.value);
-                return translator.get((action && action.translation) || fallbackTitle);
-              },
-              allowAdd: true,
-              allowRemove: true,
-              allowMove: true,
-              addTranslation: "Object.ActionButton.AddAction",
+            actionArray: {
+              type: "items",
               items: {
-                label: {
-                  component: "string",
-                  ref: "actionLabel",
-                  translation: "Common.Label",
-                  expression: "optional",
-                  defaultValue: "",
-                },
-                actionType: {
-                  type: "string",
-                  ref: "actionType",
-                  component: "expression-with-dropdown",
-                  translation: "Object.ActionButton.Action",
-                  defaultValue: "",
-                  options: getActionsList(shouldHide),
-                  dropdownOnly: true,
-                },
-                bookmark: {
-                  type: "string",
-                  ref: "bookmark",
-                  component: "expression-with-dropdown",
-                  translation: "ExpressionEditor.SetExpresions.Bookmark",
-                  defaultValue: "",
-                  dropdownOnly: true,
-                  options: async (action, hyperCubeHandler) => {
-                    const bms = await hyperCubeHandler.app.getBookmarkList();
-                    return bms.map((bookmark) => ({
-                      label: bookmark.qData.title,
-                      value: bookmark.qInfo.qId,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, "bookmark"),
-                },
-                field: {
-                  type: "string",
-                  ref: "field",
-                  component: "expression-with-dropdown",
-                  translation: "Common.Field",
-                  defaultValue: "",
-                  dropdownOnly: true,
-                  options: async (action, hyperCubeHandler) => {
-                    const fields = await hyperCubeHandler.app.getFieldList();
-                    return fields.map((field) => ({
-                      label: field.qName,
-                      value: field.qName,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, "field"),
-                },
-                variable: {
-                  type: "string",
-                  ref: "variable",
-                  component: "expression-with-dropdown",
-                  translation: "Common.Variable",
-                  defaultValue: "",
-                  expressionType: "StringExpression",
-                  options: async (action, hyperCubeHandler) => {
-                    const variables = await hyperCubeHandler.app.getVariableList();
-                    return variables
-                      .filter((v) => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
-                      .map((v) => ({
-                        label: v.qName,
-                        value: v.qName,
-                      }));
-                  },
-                  show: (data) => checkShowAction(data, "variable"),
-                },
-                showSystemVariables: {
+                actionExecution: {
                   type: "boolean",
-                  ref: "showSystemVariables",
-                  translation: "ExpressionEditor.SystemVariables",
-                  defaultValue: false,
-                  show: (data) => checkShowAction(data, "variable"),
+                  ref: "runtimeExpressionEvaluation",
+                  translation: "Runtime evaluation",
+                  show: shouldHide.isEnabled("IM_ACTION_BUTTON_SEQUENTIAL_EVALUATION"),
                 },
-                softLock: {
-                  type: "boolean",
-                  ref: "softLock",
-                  translation: "Object.ActionButton.Softlock",
-                  defaultValue: false,
-                  show: (data) => checkShowAction(data, "softLock"),
-                },
-                value: {
-                  type: "string",
-                  ref: "value",
-                  component: "string",
-                  translation: "properties.value",
-                  expression: "optional",
-                  show: (data) => checkShowAction(data, "value"),
-                },
-                partial: {
-                  type: "boolean",
-                  ref: "partial",
-                  translation: "Object.ActionButton.Partial",
-                  defaultValue: false,
-                  show: (data) => checkShowAction(data, "partial"),
-                },
-                automationProps: {
-                  type: "items",
-                  grouped: false,
-                  items: getAutomationProps(multiUserAutomation, getAutomations),
-                  show: (data) => checkShowAction(data, "automation"),
+                actions: {
+                  type: "array",
+                  translation: "Object.ActionButton.Actions",
+                  ref: "actions",
+                  itemTitleRef: (data) => {
+                    if (data.actionLabel) {
+                      return data.actionLabel;
+                    }
+                    // If actionType exists but it's not found in the actions list,
+                    // the action is invalid for the current version of the button
+                    const fallbackTitle = data.actionType
+                      ? "Object.ActionButton.InvalidAction"
+                      : "Object.ActionButton.NewAction";
+                    const action = actions.find((act) => data.actionType === act.value);
+                    return translator.get((action && action.translation) || fallbackTitle);
+                  },
+                  allowAdd: true,
+                  allowRemove: true,
+                  allowMove: true,
+                  addTranslation: "Object.ActionButton.AddAction",
+                  items: {
+                    label: {
+                      component: "string",
+                      ref: "actionLabel",
+                      translation: "Common.Label",
+                      expression: "optional",
+                      defaultValue: "",
+                    },
+                    actionType: {
+                      type: "string",
+                      ref: "actionType",
+                      component: "expression-with-dropdown",
+                      translation: "Object.ActionButton.Action",
+                      defaultValue: "",
+                      options: getActionsList(shouldHide),
+                      dropdownOnly: true,
+                    },
+                    bookmark: {
+                      type: "string",
+                      ref: "bookmark",
+                      component: "expression-with-dropdown",
+                      translation: "ExpressionEditor.SetExpresions.Bookmark",
+                      defaultValue: "",
+                      dropdownOnly: true,
+                      options: async (action, hyperCubeHandler) => {
+                        const bms = await hyperCubeHandler.app.getBookmarkList();
+                        return bms.map((bookmark) => ({
+                          label: bookmark.qData.title,
+                          value: bookmark.qInfo.qId,
+                        }));
+                      },
+                      show: (data) => checkShowAction(data, "bookmark"),
+                    },
+                    field: {
+                      type: "string",
+                      ref: "field",
+                      component: "expression-with-dropdown",
+                      translation: "Common.Field",
+                      defaultValue: "",
+                      dropdownOnly: true,
+                      options: async (action, hyperCubeHandler) => {
+                        const fields = await hyperCubeHandler.app.getFieldList();
+                        return fields.map((field) => ({
+                          label: field.qName,
+                          value: field.qName,
+                        }));
+                      },
+                      show: (data) => checkShowAction(data, "field"),
+                    },
+                    variable: {
+                      type: "string",
+                      ref: "variable",
+                      component: "expression-with-dropdown",
+                      translation: "Common.Variable",
+                      defaultValue: "",
+                      expressionType: "StringExpression",
+                      options: async (action, hyperCubeHandler) => {
+                        const variables = await hyperCubeHandler.app.getVariableList();
+                        return variables
+                          .filter((v) => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
+                          .map((v) => ({
+                            label: v.qName,
+                            value: v.qName,
+                          }));
+                      },
+                      show: (data) => checkShowAction(data, "variable"),
+                    },
+                    showSystemVariables: {
+                      type: "boolean",
+                      ref: "showSystemVariables",
+                      translation: "ExpressionEditor.SystemVariables",
+                      defaultValue: false,
+                      show: (data) => checkShowAction(data, "variable"),
+                    },
+                    softLock: {
+                      type: "boolean",
+                      ref: "softLock",
+                      translation: "Object.ActionButton.Softlock",
+                      defaultValue: false,
+                      show: (data) => checkShowAction(data, "softLock"),
+                    },
+                    value: {
+                      type: "string",
+                      ref: "value",
+                      component: "string",
+                      translation: "properties.value",
+                      expression: "optional",
+                      show: (data) => checkShowAction(data, "value"),
+                    },
+                    partial: {
+                      type: "boolean",
+                      ref: "partial",
+                      translation: "Object.ActionButton.Partial",
+                      defaultValue: false,
+                      show: (data) => checkShowAction(data, "partial"),
+                    },
+                    automationProps: {
+                      type: "items",
+                      grouped: false,
+                      items: getAutomationProps(multiUserAutomation, getAutomations),
+                      show: (data) => checkShowAction(data, "automation"),
+                    },
+                  },
                 },
               },
             },
