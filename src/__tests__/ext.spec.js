@@ -20,7 +20,7 @@ describe("ext", () => {
       ]),
   };
   const props = ext({ translator, shouldHide, senseNavigation });
-  const actionItems = props.definition.items.actions.items.actions.items;
+  const actionItems = props.definition.items.actions.items.actionArray.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
   const { font, background, border, icon } = props.definition.items.settings.items;
 
@@ -29,7 +29,7 @@ describe("ext", () => {
   });
 
   describe("itemTitleRef", () => {
-    const { itemTitleRef } = props.definition.items.actions.items.actions;
+    const { itemTitleRef } = props.definition.items.actions.items.actionArray.items.actions;
 
     beforeEach(() => {
       data = {
