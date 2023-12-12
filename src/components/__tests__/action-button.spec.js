@@ -1,7 +1,7 @@
 import defaultValues from "../../__tests__/default-button-props";
 import { renderButton, runActions } from "../action-button";
 
-let actionList;
+let actionCallList;
 let button;
 let defaults;
 
@@ -159,12 +159,12 @@ describe("action button", () => {
   });
   describe("runActions", () => {
     beforeEach(() => {
-      actionList = [jest.fn(), jest.fn()];
+      actionCallList = [jest.fn(), jest.fn()];
     });
     it("should call all functions in array", async () => {
-      await runActions(actionList);
-      expect(actionList[0]).toHaveBeenCalledTimes(1);
-      expect(actionList[1]).toHaveBeenCalledTimes(1);
+      await runActions({ actionCallList, layout: defaults.layout });
+      expect(actionCallList[0]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[1]).toHaveBeenCalledTimes(1);
     });
   });
 });
