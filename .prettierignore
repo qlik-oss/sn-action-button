@@ -14,7 +14,7 @@ node_modules
 properties.json
 LICENSE
 sn-action-button-ext/
-*.lock
+pnpm-lock.yaml
 *.html
 *.snap
 *.png

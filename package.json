@@ -33,7 +33,7 @@
     "lint": "eslint .",
     "prepack": "./tools/prepare-sn-pack.js",
     "prepare": "husky install",
-    "prepublishOnly": "NODE_ENV=production yarn run build && yarn spec",
+    "prepublishOnly": "NODE_ENV=production pnpm run build && pnpm spec",
     "sense": "nebula sense",
     "spec": "sy from-jsdoc -c ./spec-configs/props.conf.js",
     "start": "nebula serve",
@@ -49,7 +49,7 @@
       "prettier --check src/**'"
     ],
     "*.{json,css,md}": [
-      "yarn format"
+      "pnpm format"
     ]
   },
   "prettier": "@qlik/prettier-config",

@@ -15,6 +15,6 @@ playwrightVersion=$(npm list @playwright/test | awk '{print $2}' | cut -d "@" -f
 docker run -d --name sn-action-button-playwright --rm --network host -v $(pwd):/work/ -w /work/ -it mcr.microsoft.com/playwright:v$playwrightVersion-focal
 
 # The actual generate/update the reference screenshots is running from the machine running this shell script
-docker exec sn-action-button-playwright /bin/sh -c "yarn test:rendering --update-snapshots"
+docker exec sn-action-button-playwright /bin/sh -c "pnpm test:rendering --update-snapshots"
 
 docker stop sn-action-button-playwright
