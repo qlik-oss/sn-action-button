@@ -22,13 +22,13 @@ To capture the same screenshot on the same operating system both locally and on 
 If you've updated the UI, you need to run the update-screenshots.sh script:
 
     # Install dependencies
-    yarn --frozen-lockfile
+    pnpm --frozen-lockfile
 
     # Build nebula.js visualization
-    yarn build
+    pnpm build
 
     chmod 777 ./test/rendering/commands/update-screenshots.sh
-    yarn test:local:update:screenshots
+    pnpm test:local:update:screenshots
 
 It will spin up a docker container with playwright and enable us to emulate our CI server for updating the reference screenshots. The `--update-snapshots` will generate new screenshots for you.
 
