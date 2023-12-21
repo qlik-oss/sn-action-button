@@ -576,7 +576,7 @@ describe("actions", () => {
         isEnabled: jest.fn().mockReturnValue(true),
       };
       const result = getActionsList(shouldHide);
-      expect(result.length).toBe(20);
+      expect(result.length).toBe(21);
     });
     it("should return all but not feature blacklisted navigations", () => {
       const shouldHide = {
@@ -585,7 +585,7 @@ describe("actions", () => {
         isEnabled: jest.fn().mockReturnValue(true),
       };
       const result = getActionsList(shouldHide);
-      expect(result.length).toBe(13);
+      expect(result.length).toBe(14);
     });
     it("should return all", () => {
       const shouldHide = {
@@ -594,7 +594,7 @@ describe("actions", () => {
         isEnabled: jest.fn().mockReturnValue(true),
       };
       const result = getActionsList(shouldHide);
-      expect(result.length).toBe(21);
+      expect(result.length).toBe(22);
     });
   });
 });
