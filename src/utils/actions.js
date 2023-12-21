@@ -174,7 +174,7 @@ const actions = [
         const model = await app.getDimension(cyclicGroupId);
         await model.stepCycle(indexStepper);
       },
-    hide: ({ isFeatureBlacklisted }) => isFeatureBlacklisted?.("advancedSelectionOptions"),
+    hide: ({ isEnabled }) => !isEnabled("PS_21223_CYCLIC_GROUPS"),
     requiredInput: ["cyclicGroup", "indexStepper"],
   },
   {
