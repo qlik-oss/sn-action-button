@@ -61,7 +61,7 @@ describe("index", () => {
           },
         },
       },
-      constraints: "constraints",
+      interactions: "interactions",
     });
 
     const value = {
@@ -78,7 +78,7 @@ describe("index", () => {
         },
       },
       app: undefined,
-      constraints: "constraints",
+      interactions: "interactions",
       theme: undefined,
       senseNavigation: "nav",
       multiUserAutomation: true,

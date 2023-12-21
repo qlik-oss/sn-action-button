@@ -1,9 +1,9 @@
 import {
   useApp,
-  useConstraints,
   useEffect,
   useElement,
   useImperativeHandle,
+  useInteractionState,
   useMemo,
   useStaleLayout,
   useTheme,
@@ -47,13 +47,13 @@ export default function supernova(env) {
 
       const layout = useStaleLayout();
       const app = useApp();
-      const constraints = useConstraints();
+      const interactions = useInteractionState();
       useLoadImage(layout, app);
 
       const cleanup = renderButton({
         element,
         layout,
-        constraints,
+        interactions,
         theme,
         app,
         senseNavigation,
