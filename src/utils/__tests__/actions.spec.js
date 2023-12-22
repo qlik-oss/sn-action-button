@@ -353,6 +353,14 @@ describe("actions", () => {
       expect(app.doSave).toHaveBeenCalledTimes(0);
     });
 
+    it("should do step cycle", async () => {
+      const actionObject = actions.find((action) => action.value === "cyclicGroup");
+      const stepCycle = jest.fn();
+      app.getDimension = () => ({ stepCycle });
+      await actionObject.getActionCall({ app, partial: true })();
+      expect(stepCycle).toHaveBeenCalledTimes(1);
+    });
+
     it("should call executeAutomation when automationTriggered is true", async () => {
       inputs = [];
       const appId = "fakeAppId";

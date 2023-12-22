@@ -146,6 +146,44 @@ describe("ext", () => {
         },
       },
     ];
+    const dimensions = [
+      {
+        qInfo: {
+          qId: "mHsTwF",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "cyclic",
+        },
+        qData: {
+          grouping: "C",
+        },
+      },
+      {
+        qInfo: {
+          qId: "GNHRZQ",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "single",
+        },
+        qData: {
+          grouping: "N",
+        },
+      },
+      {
+        qInfo: {
+          qId: "fb8b9972-e894-4ea1-a4d9-452d8f791672",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "Drill-down",
+        },
+        qData: {
+          grouping: "H",
+        },
+      },
+    ];
     const handler = {
       app: {
         getBookmarkList: () => bookmarks,
@@ -154,6 +192,7 @@ describe("ext", () => {
         getSheetList: () => sheets,
         getStoryList: () => stories,
         getObject: () => sheet,
+        getDimensionList: () => dimensions,
       },
     };
 
@@ -184,6 +223,18 @@ describe("ext", () => {
       expect(options).toHaveLength(2);
     });
 
+    it("Should return only cyclic group dimensions", async () => {
+      options = await actionItems.cyclicGroup.options(null, handler);
+      expect(options).toHaveLength(1);
+      expect(options[0].label).toEqual("cyclic");
+    });
+
+    it("Should return forward and backward option", async () => {
+      options = await actionItems.indexStepper.options();
+      expect(options).toHaveLength(2);
+      expect(options[0].value).toEqual(1);
+      expect(options[1].value).toEqual(-1);
+    });
     it("Should return an array with all automations", async () => {
       const automationId = "automationId";
       const automationName = "fakeAutomationName";
