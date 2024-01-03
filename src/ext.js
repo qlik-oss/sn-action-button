@@ -104,6 +104,43 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                   },
                   show: (data) => checkShowAction(data, "field"),
                 },
+                cyclicGroup: {
+                  type: "string",
+                  ref: "cyclicGroupId",
+                  component: "expression-with-dropdown",
+                  translation: "Common.Dimension",
+                  defaultValue: "",
+                  dropdownOnly: true,
+                  options: async (action, hyperCubeHandler) => {
+                    const dimensions = await hyperCubeHandler.app.getDimensionList();
+                    return dimensions
+                      .filter((dim) => dim.qData.grouping === "C")
+                      .map((dim) => ({
+                        label: dim.qMeta.title,
+                        value: dim.qInfo.qId,
+                      }));
+                  },
+                  show: (data) => checkShowAction(data, "cyclicGroup"),
+                },
+                indexStepper: {
+                  type: "string",
+                  ref: "indexStepper",
+                  component: "expression-with-dropdown",
+                  translation: "Object.ActionButton.Step",
+                  defaultValue: 1,
+                  dropdownOnly: true,
+                  options: async () => [
+                    {
+                      translation: "Object.ActionButton.Forward",
+                      value: 1,
+                    },
+                    {
+                      translation: "Object.ActionButton.Backward",
+                      value: -1,
+                    },
+                  ],
+                  show: (data) => checkShowAction(data, "indexStepper"),
+                },
                 variable: {
                   type: "string",
                   ref: "variable",
