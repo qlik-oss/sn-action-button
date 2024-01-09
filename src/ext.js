@@ -1,4 +1,3 @@
-import styleDefaults from "./style-defaults";
 import { getStylingPanelDefinition } from "./styling-panel-definition";
 import actions, { checkShowAction, getActionsList } from "./utils/actions";
 import getAutomationProps from "./utils/automation-props";
@@ -6,7 +5,7 @@ import importProperties from "./utils/conversion";
 import luiIcons from "./utils/lui-icons";
 import { checkShowNavigation, getNavigationsList } from "./utils/navigation-actions";
 import propertyResolver from "./utils/property-resolver";
-import { colorOptions, toggleOptions } from "./utils/style-utils";
+import { toggleOptions } from "./utils/style-utils";
 
 let automationsList = null;
 
@@ -24,7 +23,6 @@ const getAutomations = async () => {
 export default function ext({ translator, shouldHide, senseNavigation, theme, isGoToChartEnabled }) {
   const multiUserAutomation =
     shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1855_AUTOMATIONS_MULTI_USER");
-  const stylingPanelEnabled = shouldHide.isEnabled && shouldHide.isEnabled("SENSECLIENT_IM_1525_STYLINGPANEL_BUTTON");
   return {
     definition: {
       type: "items",
@@ -368,300 +366,6 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                 },
               },
             },
-            font: {
-              grouped: true,
-              type: "items",
-              translation: "properties.font",
-              items: {
-                sizeAndColor: {
-                  type: "items",
-                  items: {
-                    fontSize: {
-                      component: "slider",
-                      type: "number",
-                      ref: "style.font.size",
-                      translation: "properties.fontSize",
-                      min: 0.2,
-                      max: 1,
-                      step: 0.01,
-                    },
-                    useFontColorExpression: {
-                      ref: "style.font.useColorExpression",
-                      type: "boolean",
-                      translation: "properties.fontColor",
-                      component: "dropdown",
-                      options: colorOptions,
-                    },
-                    colorPicker: {
-                      component: "color-picker",
-                      type: "object",
-                      ref: "style.font.color",
-                      translation: "properties.color",
-                      dualOutput: true,
-                      show: (data) => !propertyResolver.getValue(data, "style.font.useColorExpression"),
-                    },
-                    colorExpression: {
-                      component: "string",
-                      type: "string",
-                      ref: "style.font.colorExpression",
-                      translation: "Common.Expression",
-                      expression: "optional",
-                      show: (data) => propertyResolver.getValue(data, "style.font.useColorExpression"),
-                    },
-                  },
-                },
-                stylingAndAlign: {
-                  type: "items",
-                  items: {
-                    fontStyling: {
-                      component: "item-selection-list",
-                      type: "string",
-                      ref: "style.font.style",
-                      translation: "properties.textStyle",
-                      horizontal: true,
-                      multipleSelect: true,
-                      items: [
-                        {
-                          component: "icon-item",
-                          icon: "bold",
-                          value: "bold",
-                          translation: "Common.bold",
-                          labelPlacement: "bottom",
-                        },
-                        {
-                          component: "icon-item",
-                          icon: "italic",
-                          value: "italic",
-                          translation: "Common.italic",
-                          labelPlacement: "bottom",
-                        },
-                        {
-                          component: "icon-item",
-                          icon: "underline",
-                          value: "underline",
-                          translation: "Common.underline",
-                          labelPlacement: "bottom",
-                        },
-                      ],
-                    },
-                    textAlign: {
-                      component: "item-selection-list",
-                      type: "string",
-                      ref: "style.font.align",
-                      translation: "properties.Alignment",
-                      horizontal: true,
-                      items: [
-                        {
-                          component: "icon-item",
-                          icon: "align_left",
-                          value: "left",
-                          translation: "properties.dock.left",
-                          labelPlacement: "bottom",
-                        },
-                        {
-                          component: "icon-item",
-                          icon: "align_center",
-                          value: "center",
-                          translation: "Common.Center",
-                          labelPlacement: "bottom",
-                        },
-                        {
-                          component: "icon-item",
-                          icon: "align_right",
-                          value: "right",
-                          translation: "properties.dock.right",
-                          labelPlacement: "bottom",
-                        },
-                      ],
-                    },
-                  },
-                },
-              },
-              show: !stylingPanelEnabled,
-            },
-            background: {
-              grouped: true,
-              type: "items",
-              translation: "properties.background",
-              items: {
-                backgroundColor: {
-                  type: "items",
-                  items: {
-                    useColorExpression: {
-                      ref: "style.background.useColorExpression",
-                      type: "boolean",
-                      translation: "AppDetails.SheetBackgroundColor",
-                      component: "dropdown",
-                      options: colorOptions,
-                    },
-                    colorPicker: {
-                      component: "color-picker",
-                      type: "object",
-                      ref: "style.background.color",
-                      translation: "properties.color",
-                      dualOutput: true,
-                      show: (data) => !propertyResolver.getValue(data, "style.background.useColorExpression"),
-                    },
-                    colorExpression: {
-                      component: "string",
-                      type: "string",
-                      ref: "style.background.colorExpression",
-                      translation: "Common.Expression",
-                      expression: "optional",
-                      show: (data) => propertyResolver.getValue(data, "style.background.useColorExpression"),
-                    },
-                  },
-                },
-                backgroundImage: {
-                  type: "items",
-                  items: {
-                    useBackgroundImage: {
-                      ref: "style.background.useImage",
-                      type: "boolean",
-                      translation: "properties.backgroundImage.use",
-                      component: "switch",
-                      options: toggleOptions,
-                    },
-                    backgroundUrl: {
-                      ref: "style.background.url.qStaticContentUrlDef.qUrl",
-                      layoutRef: "style.background.url.qStaticContentUrl.qUrl",
-                      schemaIgnore: true,
-                      translation: "Common.Image",
-                      tooltip: { select: "properties.media.select", remove: "properties.media.removeBackground" },
-                      type: "string",
-                      component: "media",
-                      show(data) {
-                        return propertyResolver.getValue(data, "style.background.useImage");
-                      },
-                    },
-                    backgroundSize: {
-                      ref: "style.background.size",
-                      translation: "properties.backgroundImage.size",
-                      type: "string",
-                      component: "dropdown",
-                      defaultValue: styleDefaults.BACKGROUND_SIZE,
-                      options: [
-                        {
-                          value: "auto",
-                          translation: "properties.backgroundImage.originalSize",
-                        },
-                        {
-                          value: "alwaysFit",
-                          translation: "properties.backgroundImage.sizeAlwaysFit",
-                        },
-                        {
-                          value: "fitWidth",
-                          translation: "properties.backgroundImage.sizeFitWidth",
-                        },
-                        {
-                          value: "fitHeight",
-                          translation: "properties.backgroundImage.sizeFitHeight",
-                        },
-                        {
-                          value: "fill",
-                          translation: "properties.backgroundImage.sizeStretch",
-                        },
-                        {
-                          value: "alwaysFill",
-                          translation: "properties.backgroundImage.sizeAlwaysFill",
-                        },
-                      ],
-                      show(data) {
-                        return (
-                          propertyResolver.getValue(data, "style.background.useImage") &&
-                          !!propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl")
-                        );
-                      },
-                    },
-                    backgroundPosition: {
-                      ref: "style.background.position",
-                      translation: "Common.Position",
-                      type: "string",
-                      component: "align-matrix",
-                      show(data) {
-                        return (
-                          propertyResolver.getValue(data, "style.background.useImage") &&
-                          propertyResolver.getValue(data, "style.background.url.qStaticContentUrlDef.qUrl") &&
-                          propertyResolver.getValue(data, "style.background.size") !== "fill"
-                        );
-                      },
-                      currentSize(data) {
-                        return propertyResolver.getValue(data, "style.background.size");
-                      },
-                    },
-                  },
-                },
-              },
-              show: !stylingPanelEnabled,
-            },
-            border: {
-              type: "items",
-              grouped: true,
-              translation: "properties.border",
-              items: {
-                borderSettings: {
-                  type: "items",
-                  items: {
-                    useBorder: {
-                      ref: "style.border.useBorder",
-                      type: "boolean",
-                      translation: "properties.border.use",
-                      component: "switch",
-                      options: toggleOptions,
-                    },
-                    borderRadius: {
-                      component: "slider",
-                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
-                      translation: "properties.border.radius",
-                      type: "number",
-                      ref: "style.border.radius",
-                      min: 0,
-                      max: 1,
-                      step: 0.01,
-                    },
-                    borderWidth: {
-                      component: "slider",
-                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
-                      type: "number",
-                      ref: "style.border.width",
-                      translation: "properties.border.width",
-                      min: 0,
-                      max: 0.5,
-                      step: 0.005,
-                    },
-                    colorDropdown: {
-                      type: "string",
-                      show: (data) => propertyResolver.getValue(data, "style.border.useBorder"),
-                      component: "dropdown",
-                      translation: "properties.border.color",
-                      ref: "style.border.useColorExpression",
-                      options: colorOptions,
-                    },
-                    colorPicker: {
-                      component: "color-picker",
-                      type: "object",
-                      ref: "style.border.color",
-                      translation: "properties.color",
-                      dualOutput: true,
-                      show: (data) =>
-                        propertyResolver.getValue(data, "style.border.useBorder") &&
-                        !propertyResolver.getValue(data, "style.border.useColorExpression"),
-                    },
-                    colorExpression: {
-                      component: "string",
-                      type: "string",
-                      ref: "style.border.colorExpression",
-                      translation: "Common.Expression",
-                      show: (data) =>
-                        propertyResolver.getValue(data, "style.border.useBorder") &&
-                        propertyResolver.getValue(data, "style.border.useColorExpression"),
-                      expression: "optional",
-                    },
-                  },
-                },
-              },
-              show: !stylingPanelEnabled,
-            },
             icon: {
               type: "items",
               grouped: true,
@@ -706,9 +410,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                 },
               },
             },
-            presentation: stylingPanelEnabled
-              ? getStylingPanelDefinition({ flags: shouldHide, theme, translator })
-              : undefined,
+            presentation: getStylingPanelDefinition({ flags: shouldHide, theme, translator }),
           },
         },
       },
