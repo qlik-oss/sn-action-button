@@ -9,6 +9,7 @@ import navigationActions, {
 describe("navigation actions", () => {
   let senseNavigation;
   const sheet = "sheetIdHere";
+  const chartId = "chartId";
   const story = "storyIdHere";
   const websiteUrl = "https://myUrlHere";
   const mailtoUrl = "mailto:me@example";
@@ -47,7 +48,12 @@ describe("navigation actions", () => {
     it("should call goToSheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
       await navigationObject.navigationCall({ senseNavigation, sheet });
-      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet);
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet, undefined);
+    });
+    it("should call goToSheet with chartId", async () => {
+      const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
+      await navigationObject.navigationCall({ senseNavigation, sheet, chartId });
+      expect(senseNavigation.goToSheet).toHaveBeenCalledWith(sheet, chartId);
     });
     it("should NOT call goToSheet when no sheet", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "goToSheet");
@@ -82,12 +88,12 @@ describe("navigation actions", () => {
     it("should call openWebsite with defaults", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({ websiteUrl, sameWindow: false });
-      expect(global.open).toHaveBeenCalledWith(websiteUrl, "");
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, "", "noopener");
     });
     it("should call openWebsite and add http://", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({ websiteUrl: "myWebsite", sameWindow: false });
-      expect(global.open).toHaveBeenCalledWith("http://myWebsite", "");
+      expect(global.open).toHaveBeenCalledWith("http://myWebsite", "", "noopener");
     });
     it("should call openWebsite and expect encoded result with https:// protocol", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
@@ -97,7 +103,8 @@ describe("navigation actions", () => {
       });
       expect(global.open).toHaveBeenCalledWith(
         "https://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5&myOtherParam=2%C2%B45%25%E2%82%AC",
-        ""
+        "",
+        "noopener"
       );
     });
     it("should call openWebsite and expect encoded result with http:// protocol", async () => {
@@ -108,7 +115,8 @@ describe("navigation actions", () => {
       });
       expect(global.open).toHaveBeenCalledWith(
         "http://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5&myOtherParam=2%C2%B45%25%E2%82%AC",
-        ""
+        "",
+        "noopener"
       );
     });
     it("should call openWebsite and expect encoded result without http:// protocol", async () => {
@@ -119,13 +127,14 @@ describe("navigation actions", () => {
       });
       expect(global.open).toHaveBeenCalledWith(
         "http://mozilla.org/?x=%C3%A4%C3%A1%C3%B6%C3%A5&myOtherParam=2%C2%B45%25%E2%82%AC",
-        ""
+        "",
+        "noopener"
       );
     });
     it("should call openWebsite in same window", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
-      expect(global.open).toHaveBeenCalledWith(websiteUrl, "_self");
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, "_self", "noopener");
     });
     it("should call openWebsite in parent", async () => {
       const { top } = window;
@@ -133,13 +142,13 @@ describe("navigation actions", () => {
       window.top = {};
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({ websiteUrl, sameWindow: true });
-      expect(global.open).toHaveBeenCalledWith(websiteUrl, "_parent");
+      expect(global.open).toHaveBeenCalledWith(websiteUrl, "_parent", "noopener");
       window.top = top;
     });
     it("should call mailto", async () => {
       const navigationObject = navigationActions.find((navigation) => navigation.value === "openWebsite");
       await navigationObject.navigationCall({ websiteUrl: mailtoUrl, sameWindow: false });
-      expect(global.open).toHaveBeenCalledWith(mailtoUrl, "");
+      expect(global.open).toHaveBeenCalledWith(mailtoUrl, "", "noopener");
     });
     describe("sheets with show conditions", () => {
       it("should call lastSheet feature flag is on", async () => {
@@ -160,7 +169,8 @@ describe("navigation actions", () => {
         await navigationObject.navigationCall({ app, sameWindow: false, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
           `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
-          ""
+          "",
+          "noopener"
         );
       });
       it("should call storeTempSelectionState and open url in same window", async () => {
@@ -168,7 +178,8 @@ describe("navigation actions", () => {
         await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
           `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
-          "_self"
+          "_self",
+          "noopener"
         );
       });
       it("should call storeTempSelectionState and open url in parent window", async () => {
@@ -179,7 +190,8 @@ describe("navigation actions", () => {
         await navigationObject.navigationCall({ app, sameWindow: true, appId, sheet });
         expect(global.open).toHaveBeenCalledWith(
           `../sense/app/${appId}/sheet/${sheet}/tempselectionstate/tempBookmarkId`,
-          "_parent"
+          "_parent",
+          "noopener"
         );
         window.top = top;
       });
@@ -222,6 +234,10 @@ describe("navigation actions", () => {
       data.navigation.action = "notAnAction";
       const result = checkShowNavigation(data, "sheet");
       expect(result).toBeUndefined();
+    });
+    it("should return true when chartId should be shown", () => {
+      const result = checkShowNavigation(data, "chartId");
+      expect(result).toBe(true);
     });
     it("should return false when field not in required input", () => {
       const result = checkShowNavigation(data, "websiteUrl");

@@ -1,7 +1,7 @@
 # sn-action-button
 
-[![CircleCI](https://circleci.com/gh/qlik-oss/sn-action-button.svg?style=svg)](https://circleci.com/gh/qlik-oss/sn-action-button)
-[![Coverage Status](https://coveralls.io/repos/github/qlik-oss/sn-action-button/badge.svg)](https://coveralls.io/github/qlik-oss/sn-action-button)
+[![Maintainability](https://api.codeclimate.com/v1/badges/df18f3e17820bd27f1ba/maintainability)](https://codeclimate.com/github/qlik-oss/sn-action-button/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/df18f3e17820bd27f1ba/test_coverage)](https://codeclimate.com/github/qlik-oss/sn-action-button/test_coverage)
 
 Action button supernova for nebula.js
 

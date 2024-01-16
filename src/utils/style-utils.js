@@ -1,4 +1,6 @@
 import DEFAULTS from "../style-defaults";
+import colorUtils from "./color-utils";
+import { getImageUrl } from "./url-utils";
 
 export const backgroundSize = {
   auto: "auto auto",
@@ -121,4 +123,66 @@ export const adjustFontSizeBehavior = (button, font, text, textSpan, hasIcon) =>
     const textFontSize = adjustedFontSize * (font.size || DEFAULTS.FONT_SIZE);
     setTextFontSize(text, font, textFontSize, hasIcon);
   }
+};
+
+export const getFontStyle = (font, fontColor, theme, formatProperty) => {
+  let styles = "";
+  styles = formatProperty("color", colorUtils.getColor(font, fontColor, theme));
+  const fontStyle = font.style || DEFAULTS.FONT_STYLE;
+  fontStyle.bold && (styles += formatProperty("font-weight", "bold"));
+  fontStyle.italic && (styles += formatProperty("font-style", "italic"));
+  return styles;
+};
+
+const getBackgroundColor = (background, theme) => {
+  const primaryColor = theme.getDataColorSpecials().primary;
+  return colorUtils.getColor(background, primaryColor, theme);
+};
+
+export const getBackgroundStyle = (background, theme, app, formatProperty) => {
+  let styles = formatProperty("background-color", getBackgroundColor(background, theme));
+  if ((background.useImage || background.mode === "media") && background.url.qStaticContentUrl) {
+    let bgUrl = background.url.qStaticContentUrl.qUrl;
+    if (bgUrl) {
+      bgUrl = getImageUrl(bgUrl, app);
+      styles += formatProperty("background-image", `url('${bgUrl}')`);
+      styles += formatProperty("background-size", backgroundSize[background.size || DEFAULTS.BACKGROUND_SIZE]);
+      styles += formatProperty(
+        "background-position",
+        backgroundPosition[background.position || DEFAULTS.BACKGROUND_POSITION]
+      );
+      styles += formatProperty("background-repeat", "no-repeat");
+    }
+  }
+  return styles;
+};
+
+export const getBorderStyle = (element, background, border, theme, formatProperty) => {
+  if (!border.useBorder) return "border: none;";
+  let styles = "";
+  const backgroundColor = getBackgroundColor(background, theme);
+  const lengthShortSide = Math.min(element.offsetWidth, element.offsetHeight);
+  const borderColor = colorUtils.getColor(border, colorUtils.getFadedColor(backgroundColor), theme);
+  const borderSize = ((border.width || DEFAULTS.BORDER_WIDTH) * lengthShortSide) / 2;
+  styles = formatProperty("border", `${borderSize}px solid ${borderColor}`);
+  styles += formatProperty("border-radius", `${((border.radius || DEFAULTS.BORDER_RADIUS) * lengthShortSide) / 2}px`);
+  return styles;
+};
+
+export const setLabelSpan = (label, font) => {
+  const textSpan = document.createElement("span");
+  textSpan.textContent = label;
+  textSpan.style.whiteSpace = "nowrap";
+  textSpan.style.textOverflow = "ellipsis";
+  font?.style && font.style.underline && (textSpan.style.textDecoration = "underline");
+  return textSpan;
+};
+
+export const setIconStyle = (luiIcons, icon) => {
+  const iconSpan = document.createElement("span");
+  const iconType = luiIcons.find((iconObj) => iconObj.label === icon.iconType || iconObj.value === icon.iconType);
+  iconSpan.style.textDecoration = "none";
+  iconSpan.style.fontSize = "inherit";
+  iconSpan.setAttribute("class", `lui-icon lui-icon--${iconType ? iconType.value : ""}`);
+  return iconSpan;
 };
