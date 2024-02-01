@@ -40,7 +40,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                   type: "boolean",
                   ref: "runtimeExpressionEvaluation",
                   translation: "Object.ActionButton.RuntimeExpressionEvaluation",
-                  show: shouldHide.isEnabled("IM_ACTION_BUTTON_SEQUENTIAL_EVALUATION"),
+                  show: shouldHide.isEnabled("IM-5699_RUNTIME_EXPRESSION_EVALUATION"),
                 },
                 actions: {
                   type: "array",
