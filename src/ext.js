@@ -36,114 +36,11 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
             actionArray: {
               type: "items",
               items: {
-                label: {
-                  component: "string",
-                  ref: "actionLabel",
-                  translation: "Common.Label",
-                  expression: "optional",
-                  defaultValue: "",
-                },
-                actionType: {
-                  type: "string",
-                  ref: "actionType",
-                  component: "expression-with-dropdown",
-                  translation: "Object.ActionButton.Action",
-                  defaultValue: "",
-                  options: getActionsList(shouldHide),
-                  dropdownOnly: true,
-                },
-                bookmark: {
-                  type: "string",
-                  ref: "bookmark",
-                  component: "expression-with-dropdown",
-                  translation: "ExpressionEditor.SetExpresions.Bookmark",
-                  defaultValue: "",
-                  dropdownOnly: true,
-                  options: async (action, hyperCubeHandler) => {
-                    const bms = await hyperCubeHandler.app.getBookmarkList();
-                    return bms.map((bookmark) => ({
-                      label: bookmark.qData.title,
-                      value: bookmark.qInfo.qId,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, "bookmark"),
-                },
-                field: {
-                  type: "string",
-                  ref: "field",
-                  component: "expression-with-dropdown",
-                  translation: "Common.Field",
-                  defaultValue: "",
-                  dropdownOnly: true,
-                  options: async (action, hyperCubeHandler) => {
-                    const fields = await hyperCubeHandler.app.getFieldList();
-                    return fields.map((field) => ({
-                      label: field.qName,
-                      value: field.qName,
-                    }));
-                  },
-                  show: (data) => checkShowAction(data, "field"),
-                },
-                cyclicGroup: {
-                  type: "string",
-                  ref: "cyclicGroupId",
-                  component: "expression-with-dropdown",
-                  translation: "Common.Dimension",
-                  defaultValue: "",
-                  dropdownOnly: true,
-                  options: async (action, hyperCubeHandler) => {
-                    const dimensions = await hyperCubeHandler.app.getDimensionList();
-                    return dimensions
-                      .filter((dim) => dim.qData.grouping === "C")
-                      .map((dim) => ({
-                        label: dim.qMeta.title,
-                        value: dim.qInfo.qId,
-                      }));
-                  },
-                  show: (data) => checkShowAction(data, "cyclicGroup"),
-                },
-                indexStepper: {
-                  type: "string",
-                  ref: "indexStepper",
-                  component: "expression-with-dropdown",
-                  translation: "Object.ActionButton.Step",
-                  defaultValue: 1,
-                  dropdownOnly: true,
-                  options: async () => [
-                    {
-                      translation: "Object.ActionButton.Forward",
-                      value: 1,
-                    },
-                    {
-                      translation: "Object.ActionButton.Backward",
-                      value: -1,
-                    },
-                  ],
-                  show: (data) => checkShowAction(data, "indexStepper"),
-                },
-                variable: {
-                  type: "string",
-                  ref: "variable",
-                  component: "expression-with-dropdown",
-                  translation: "Common.Variable",
-                  defaultValue: "",
-                  expressionType: "StringExpression",
-                  options: async (action, hyperCubeHandler) => {
-                    const variables = await hyperCubeHandler.app.getVariableList();
-                    return variables
-                      .filter((v) => !v.qIsReserved || (v.qIsReserved && action.showSystemVariables))
-                      .map((v) => ({
-                        label: v.qName,
-                        value: v.qName,
-                      }));
-                  },
-                  show: (data) => checkShowAction(data, "variable"),
-                },
-                showSystemVariables: {
+                actionExecution: {
                   type: "boolean",
                   ref: "runtimeExpressionEvaluation",
                   translation: "Runtime evaluation",
-                  show: shouldHide.isEnabled("IM-5699_RUNTIME_EXPRESSION_EVALUATION"),
+                  show: shouldHide.isEnabled("IM_ACTION_BUTTON_SEQUENTIAL_EVALUATION"),
                 },
                 actions: {
                   type: "array",
@@ -266,6 +163,43 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                       grouped: false,
                       items: getAutomationProps(multiUserAutomation, getAutomations),
                       show: (data) => checkShowAction(data, "automation"),
+                    },
+                    cyclicGroup: {
+                      type: "string",
+                      ref: "cyclicGroupId",
+                      component: "expression-with-dropdown",
+                      translation: "Common.Dimension",
+                      defaultValue: "",
+                      dropdownOnly: true,
+                      options: async (action, hyperCubeHandler) => {
+                        const dimensions = await hyperCubeHandler.app.getDimensionList();
+                        return dimensions
+                          .filter((dim) => dim.qData.grouping === "C")
+                          .map((dim) => ({
+                            label: dim.qMeta.title,
+                            value: dim.qInfo.qId,
+                          }));
+                      },
+                      show: (data) => checkShowAction(data, "cyclicGroup"),
+                    },
+                    indexStepper: {
+                      type: "string",
+                      ref: "indexStepper",
+                      component: "expression-with-dropdown",
+                      translation: "Object.ActionButton.Step",
+                      defaultValue: 1,
+                      dropdownOnly: true,
+                      options: async () => [
+                        {
+                          translation: "Object.ActionButton.Forward",
+                          value: 1,
+                        },
+                        {
+                          translation: "Object.ActionButton.Backward",
+                          value: -1,
+                        },
+                      ],
+                      show: (data) => checkShowAction(data, "indexStepper"),
                     },
                   },
                 },
