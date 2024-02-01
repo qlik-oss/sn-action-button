@@ -39,7 +39,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                 actionExecution: {
                   type: "boolean",
                   ref: "runtimeExpressionEvaluation",
-                  translation: "Runtime evaluation",
+                  translation: "Object.ActionButton.RuntimeExpressionEvaluation",
                   show: shouldHide.isEnabled("IM_ACTION_BUTTON_SEQUENTIAL_EVALUATION"),
                 },
                 actions: {
