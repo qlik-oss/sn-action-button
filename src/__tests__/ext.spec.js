@@ -22,7 +22,16 @@ describe("ext", () => {
   const props = ext({ translator, shouldHide, senseNavigation });
   const actionItems = props.definition.items.actions.items.actionArray.items.actions.items;
   const navigationItems = props.definition.items.actions.items.navigation.items;
-  const { font, background, border, icon } = props.definition.items.settings.items;
+  const { icon } = props.definition.items.settings.items;
+  const {
+    labelSection,
+    backgroundOptions: {
+      items: { backgroundColor, backgroundImage },
+    },
+    backgroundBorder: {
+      items: { backgroundBorderItem },
+    },
+  } = props.definition.items.settings.items.presentation.items.styleEditor.items;
 
   it("should return properties object", () => {
     expect(props).toBeInstanceOf(Object);
@@ -146,6 +155,44 @@ describe("ext", () => {
         },
       },
     ];
+    const dimensions = [
+      {
+        qInfo: {
+          qId: "mHsTwF",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "cyclic",
+        },
+        qData: {
+          grouping: "C",
+        },
+      },
+      {
+        qInfo: {
+          qId: "GNHRZQ",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "single",
+        },
+        qData: {
+          grouping: "N",
+        },
+      },
+      {
+        qInfo: {
+          qId: "fb8b9972-e894-4ea1-a4d9-452d8f791672",
+          qType: "dimension",
+        },
+        qMeta: {
+          title: "Drill-down",
+        },
+        qData: {
+          grouping: "H",
+        },
+      },
+    ];
     const handler = {
       app: {
         getBookmarkList: () => bookmarks,
@@ -154,6 +201,7 @@ describe("ext", () => {
         getSheetList: () => sheets,
         getStoryList: () => stories,
         getObject: () => sheet,
+        getDimensionList: () => dimensions,
       },
     };
 
@@ -184,6 +232,18 @@ describe("ext", () => {
       expect(options).toHaveLength(2);
     });
 
+    it("Should return only cyclic group dimensions", async () => {
+      options = await actionItems.cyclicGroup.options(null, handler);
+      expect(options).toHaveLength(1);
+      expect(options[0].label).toEqual("cyclic");
+    });
+
+    it("Should return forward and backward option", async () => {
+      options = await actionItems.indexStepper.options();
+      expect(options).toHaveLength(2);
+      expect(options[0].value).toEqual(1);
+      expect(options[1].value).toEqual(-1);
+    });
     it("Should return an array with all automations", async () => {
       const automationId = "automationId";
       const automationName = "fakeAutomationName";
@@ -387,95 +447,80 @@ describe("ext", () => {
     });
     // font
     it("should return false for expression and true for picker when font.useColorExpression is false", () => {
-      const resultExpression = font.items.sizeAndColor.items.colorExpression.show(data);
-      const resultPicker = font.items.sizeAndColor.items.colorPicker.show(data);
+      const resultExpression = labelSection.items.labelItem.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = labelSection.items.labelItem.items.fontColor.items.colorPicker.show(data);
       expect(resultExpression).toBe(false);
       expect(resultPicker).toBe(true);
     });
 
     it("should return true for expression and false for picker when font.useColorExpression is true", () => {
       data.style.font.useColorExpression = true;
-      const resultExpression = font.items.sizeAndColor.items.colorExpression.show(data);
-      const resultPicker = font.items.sizeAndColor.items.colorPicker.show(data);
+      const resultExpression = labelSection.items.labelItem.items.fontColor.items.colorExpression.show(data);
+      const resultPicker = labelSection.items.labelItem.items.fontColor.items.colorPicker.show(data);
       expect(resultExpression).toBe(true);
       expect(resultPicker).toBe(false);
     });
 
     it("should return false for expression and true for picker when background.useColorExpression is false", () => {
-      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
-      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      const resultExpression = backgroundColor.items.colorExpression.show(data);
+      const resultPicker = backgroundColor.items.colorPicker.show(data);
       expect(resultExpression).toBe(false);
       expect(resultPicker).toBe(true);
     });
     // background
     it("should return true for expression and false for picker when background.useColorExpression is true", () => {
       data.style.background.useColorExpression = true;
-      const resultExpression = background.items.backgroundColor.items.colorExpression.show(data);
-      const resultPicker = background.items.backgroundColor.items.colorPicker.show(data);
+      const resultExpression = backgroundColor.items.colorExpression.show(data);
+      const resultPicker = backgroundColor.items.colorPicker.show(data);
       expect(resultExpression).toBe(true);
       expect(resultPicker).toBe(false);
     });
 
-    it("should return true when background image is used", () => {
-      data.style.background.useImage = true;
-      const result = background.items.backgroundImage.items.backgroundUrl.show(data);
-      expect(result).toBe(true);
-    });
-
-    it("should return false for backgroundSize when background image is not used", () => {
-      const result = background.items.backgroundImage.items.backgroundUrl.show(data);
-      expect(result).toBe(false);
-    });
-
-    it("should return true when backgroundSize is used", () => {
-      data.style.background.useImage = true;
-      const result = background.items.backgroundImage.items.backgroundSize.show(data);
-      expect(result).toBe(true);
-    });
-
-    it("should return false for backgroundSize when useImage is false", () => {
-      const result = background.items.backgroundImage.items.backgroundSize.show(data);
+    it("should return false for imageSize when no image option is set", () => {
+      const result = backgroundImage.items.imageSize.show(data);
       expect(result).toBe(false);
     });
 
     it("should return false for backgroundSize when no qUrl", () => {
       data.style.background.url.qStaticContentUrlDef = undefined;
-      const result = background.items.backgroundImage.items.backgroundSize.show(data);
+      const result = backgroundImage.items.imageSize.show(data);
       expect(result).toBe(false);
     });
 
     it("should return true for backgroundPosition", () => {
-      data.style.background.useImage = true;
-      const result = background.items.backgroundImage.items.backgroundPosition.show(data);
+      data.style.background.mode = "media";
+      data.style.background.url.qStaticContentUrlDef.qUrl = "=someUrl";
+      const result = backgroundImage.items.position.show(data);
       expect(result).toBe(true);
     });
 
     it("should return false for backgroundPosition when no background image is used", () => {
-      const result = background.items.backgroundImage.items.backgroundPosition.show(data);
+      const result = backgroundImage.items.position.show(data);
       expect(result).toBe(false);
     });
 
-    it("should return false for backgroundPosition when no background image size is fill", () => {
-      data.style.background.useImage = true;
-      data.style.background.size = "fill";
-      const result = background.items.backgroundImage.items.backgroundPosition.show(data);
+    it("should return false for backgroundPosition when no background image size is stretchFit", () => {
+      data.style.background.mode = "media";
+      data.style.background.url.qStaticContentUrlDef.qUrl = "=someUrl";
+      data.style.background.size = "stretchFit";
+      const result = backgroundImage.items.position.show(data);
       expect(result).toBe(false);
     });
     // border
     it("should show all border settings when border is used", () => {
       data.style.border.useBorder = true;
-      const resultRadius = border.items.borderSettings.items.borderRadius.show(data);
-      const resultWidth = border.items.borderSettings.items.borderWidth.show(data);
-      const resultDropdown = border.items.borderSettings.items.colorDropdown.show(data);
+      const resultRadius = backgroundBorderItem.items.borderRadius.show(data);
+      const resultWidth = backgroundBorderItem.items.borderWidth.show(data);
+      const resultDropdown = backgroundBorderItem.items.colorDropdown.show(data);
       expect(resultRadius).toBe(true);
       expect(resultWidth).toBe(true);
       expect(resultDropdown).toBe(true);
     });
 
     it("should show no border settings when border is not used", () => {
-      const resultRadius = border.items.borderSettings.items.borderRadius.show(data);
-      const resultWidth = border.items.borderSettings.items.borderWidth.show(data);
-      const resultDropdown = border.items.borderSettings.items.colorDropdown.show(data);
+      const resultRadius = backgroundBorderItem.items.borderRadius.show(data);
+      const resultWidth = backgroundBorderItem.items.borderWidth.show(data);
+      const resultDropdown = backgroundBorderItem.items.colorDropdown.show(data);
       expect(resultRadius).toBe(false);
       expect(resultWidth).toBe(false);
       expect(resultDropdown).toBe(false);
@@ -483,8 +528,8 @@ describe("ext", () => {
 
     it("should show borderColor when no expression is used", () => {
       data.style.border.useBorder = true;
-      const borderColor = border.items.borderSettings.items.colorPicker.show(data);
-      const borderColorExpression = border.items.borderSettings.items.colorExpression.show(data);
+      const borderColor = backgroundBorderItem.items.colorPicker.show(data);
+      const borderColorExpression = backgroundBorderItem.items.colorExpression.show(data);
       expect(borderColor).toBe(true);
       expect(borderColorExpression).toBe(false);
     });
@@ -492,8 +537,8 @@ describe("ext", () => {
     it("should show borderColorExpression when expression is used", () => {
       data.style.border.useBorder = true;
       data.style.border.useColorExpression = true;
-      const borderColor = border.items.borderSettings.items.colorPicker.show(data);
-      const borderColorExpression = border.items.borderSettings.items.colorExpression.show(data);
+      const borderColor = backgroundBorderItem.items.colorPicker.show(data);
+      const borderColorExpression = backgroundBorderItem.items.colorExpression.show(data);
       expect(borderColor).toBe(false);
       expect(borderColorExpression).toBe(true);
     });
@@ -511,14 +556,6 @@ describe("ext", () => {
       const resultPosition = icon.items.iconSettings.items.iconPosition.show(data);
       expect(resultType).toBe(false);
       expect(resultPosition).toBe(false);
-    });
-  });
-
-  describe("currentSize", () => {
-    it("should return current size", () => {
-      data = JSON.parse(JSON.stringify(objectProperties));
-      const result = background.items.backgroundImage.items.backgroundPosition.currentSize(data);
-      expect(result).toEqual("auto");
     });
   });
 });
