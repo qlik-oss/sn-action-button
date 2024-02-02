@@ -71,7 +71,7 @@
           }
         },
         "runtimeExpressionEvaluation": {
-          "description": "Boolean to determine the parallel evaluation of expression. Set to true if you want the expression to be evaluated between the actions (instead of upfront).",
+          "description": "Boolean to determine the timing for evaluating expressions. Set to true if you want the expression to be evaluated before each action (instead of evaluating all when button is pressed).",
           "kind": "literal",
           "value": false
         },
