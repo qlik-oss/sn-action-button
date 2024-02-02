@@ -125,8 +125,8 @@ const actions = [
     getActionCall:
       ({ app, qStateName, field, value, softLock }) =>
       async (overrideValue) => {
-        const useValue = overrideValue || value;
-        if (field && useValue) {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const fieldInfo = await app.getFieldDescription(field);
           const valueList = await getValueList(app, useValue, fieldInfo.qTags.includes("$date"));
@@ -142,8 +142,8 @@ const actions = [
     getActionCall:
       ({ app, qStateName, field, value }) =>
       async (overrideValue) => {
-        const useValue = overrideValue || value;
-        if (field && useValue) {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const softLock = false;
           await fieldObj.select(useValue, false, softLock);
@@ -217,8 +217,8 @@ const actions = [
     getActionCall:
       ({ app, qStateName, field, value }) =>
       async (overrideValue) => {
-        const useValue = overrideValue || value;
-        if (field && useValue) {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const softLock = false;
           await fieldObj.toggleSelect(useValue, softLock);
@@ -287,9 +287,9 @@ const actions = [
     getActionCall:
       ({ app, variable, value }) =>
       async (overrideValue, overrideVariable) => {
-        const useValue = overrideValue || value;
-        const useVariable = overrideVariable || variable;
-        if (useVariable && useValue) {
+        const useValue = overrideValue ?? value;
+        const useVariable = overrideVariable ?? variable;
+        if (useVariable !== undefined && useValue !== undefined) {
           try {
             const variableObj = await app.getVariableByName(useVariable);
             await variableObj.setStringValue(useValue);

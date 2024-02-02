@@ -9,10 +9,10 @@ export const runActions = async ({ actionCallList, model, layout, app }) => {
     for (let i = 0; i < actionCallList.length; i++) {
       const overrideValue =
         properties.actions[i].value?.qStringExpression?.qExpr &&
-        (await app.evaluate(properties.actions[i].value?.qStringExpression?.qExpr));
+        (await app.evaluate(properties.actions[i].value.qStringExpression.qExpr));
       const overrideVariable =
         properties.actions[i].variable?.qStringExpression?.qExpr &&
-        (await app.evaluate(properties.actions[i].variable?.qStringExpression?.qExpr));
+        (await app.evaluate(properties.actions[i].variable.qStringExpression.qExpr));
       await actionCallList[i](overrideValue, overrideVariable);
     }
   } else {
