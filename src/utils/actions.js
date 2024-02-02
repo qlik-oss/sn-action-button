@@ -289,7 +289,7 @@ const actions = [
       async (overrideValue, overrideVariable) => {
         const useValue = overrideValue ?? value;
         const useVariable = overrideVariable ?? variable;
-        if (useVariable !== undefined && useValue !== undefined) {
+        if (useVariable) {
           try {
             const variableObj = await app.getVariableByName(useVariable);
             await variableObj.setStringValue(useValue);
