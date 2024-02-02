@@ -178,10 +178,14 @@ describe("action button", () => {
     });
   });
   describe("runActions", () => {
-    const actions = [{ value: { qStringExpression: { qExpr: "someExpression" } } }, {}];
+    const actions = [
+      { value: { qStringExpression: { qExpr: "someExpression" } } },
+      {},
+      { variable: { qStringExpression: { qExpr: "variableExpression" } } },
+    ];
     let model;
     beforeEach(() => {
-      actionCallList = [jest.fn(), jest.fn()];
+      actionCallList = [jest.fn(), jest.fn(), jest.fn()];
       app = { evaluate: jest.fn().mockReturnValue("Evaluated Expression") };
       model = { getProperties: jest.fn().mockReturnValue({ actions }) };
     });
@@ -202,8 +206,13 @@ describe("action button", () => {
         model,
       });
       expect(actionCallList[0]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[0]).toHaveBeenCalledWith("Evaluated Expression", undefined);
       expect(actionCallList[1]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[1]).toHaveBeenCalledWith(undefined, undefined);
+      expect(actionCallList[2]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[2]).toHaveBeenCalledWith(undefined, "Evaluated Expression");
       expect(app.evaluate).toHaveBeenCalledWith("someExpression");
+      expect(app.evaluate).toHaveBeenCalledWith("variableExpression");
     });
   });
 });
