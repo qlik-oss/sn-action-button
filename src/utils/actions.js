@@ -124,11 +124,12 @@ const actions = [
     group: "selection",
     getActionCall:
       ({ app, qStateName, field, value, softLock }) =>
-      async () => {
-        if (field && value) {
+      async (overrideValue) => {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const fieldInfo = await app.getFieldDescription(field);
-          const valueList = await getValueList(app, value, fieldInfo.qTags.includes("$date"));
+          const valueList = await getValueList(app, useValue, fieldInfo.qTags.includes("$date"));
           await fieldObj.selectValues(valueList, false, softLock);
         }
       },
@@ -140,11 +141,12 @@ const actions = [
     group: "selection",
     getActionCall:
       ({ app, qStateName, field, value }) =>
-      async () => {
-        if (field && value) {
+      async (overrideValue) => {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const softLock = false;
-          await fieldObj.select(value, false, softLock);
+          await fieldObj.select(useValue, false, softLock);
         }
       },
     requiredInput: ["field", "value"],
@@ -214,11 +216,12 @@ const actions = [
     group: "selection",
     getActionCall:
       ({ app, qStateName, field, value }) =>
-      async () => {
-        if (field && value) {
+      async (overrideValue) => {
+        const useValue = overrideValue ?? value;
+        if (field) {
           const fieldObj = await app.getField(field, qStateName);
           const softLock = false;
-          await fieldObj.toggleSelect(value, softLock);
+          await fieldObj.toggleSelect(useValue, softLock);
         }
       },
     requiredInput: ["field", "value"],
@@ -283,11 +286,13 @@ const actions = [
     group: "variables",
     getActionCall:
       ({ app, variable, value }) =>
-      async () => {
-        if (variable && value) {
+      async (overrideValue, overrideVariable) => {
+        const useValue = overrideValue ?? value;
+        const useVariable = overrideVariable ?? variable;
+        if (useVariable) {
           try {
-            const variableObj = await app.getVariableByName(variable);
-            await variableObj.setStringValue(value);
+            const variableObj = await app.getVariableByName(useVariable);
+            await variableObj.setStringValue(useValue);
           } catch (e) {
             // no-op
           }

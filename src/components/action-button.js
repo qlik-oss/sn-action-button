@@ -1,11 +1,22 @@
+/* eslint-disable no-await-in-loop */
 import allActions from "../utils/actions";
 import navigationActions from "../utils/navigation-actions";
 import styleFormatter from "../utils/style-formatter";
 
-export const runActions = async (actionList) => {
-  for (let i = 0; i < actionList.length; i++) {
-    // eslint-disable-next-line no-await-in-loop
-    await actionList[i]();
+export const runActions = async ({ actionCallList, model, layout, app }) => {
+  const properties = await model.getProperties();
+  for (let i = 0; i < actionCallList.length; i++) {
+    if (layout.runtimeExpressionEvaluation) {
+      const overrideValue =
+        properties.actions[i].value?.qStringExpression?.qExpr &&
+        (await app.evaluate(properties.actions[i].value.qStringExpression.qExpr));
+      const overrideVariable =
+        properties.actions[i].variable?.qStringExpression?.qExpr &&
+        (await app.evaluate(properties.actions[i].variable.qStringExpression.qExpr));
+      await actionCallList[i](overrideValue, overrideVariable);
+    } else {
+      await actionCallList[i]();
+    }
   }
 };
 
@@ -18,6 +29,7 @@ export const renderButton = ({
   element,
   multiUserAutomation,
   translator,
+  model,
 }) => {
   const isSense = !!senseNavigation;
   const button = element.firstElementChild;
@@ -42,20 +54,21 @@ export const renderButton = ({
       const { actions } = layout;
       actions.forEach((action) => {
         const actionObj = allActions.find((act) => act.value === action.actionType);
-        actionObj &&
-          actionCallList.push(
-            actionObj.getActionCall({
-              app,
-              qStateName,
-              ...action,
-              senseNavigation,
-              multiUserAutomation,
-              translator,
-            })
-          );
+        actionObj
+          ? actionCallList.push(
+              actionObj.getActionCall({
+                app,
+                qStateName,
+                ...action,
+                senseNavigation,
+                multiUserAutomation,
+                translator,
+              })
+            )
+          : actionCallList.push(() => {});
       });
       button.setAttribute("disabled", true);
-      await runActions(actionCallList);
+      await runActions({ actionCallList, model, layout, app });
       if (senseNavigation && !senseNavigation.getCurrentStoryId()) {
         const navigationObject = navigation && navigationActions.find((nav) => nav.value === navigation.action);
         if (senseNavigation && navigationObject && typeof navigationObject.navigationCall === "function") {

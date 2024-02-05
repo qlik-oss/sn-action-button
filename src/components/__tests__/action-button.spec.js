@@ -1,9 +1,10 @@
 import defaultValues from "../../__tests__/default-button-props";
 import { renderButton, runActions } from "../action-button";
 
-let actionList;
+let actionCallList;
 let button;
 let defaults;
+let app;
 
 describe("action button", () => {
   describe("renderButton", () => {
@@ -23,6 +24,8 @@ describe("action button", () => {
         goToSheet: jest.fn(),
         getCurrentStoryId: () => false,
       };
+      defaults.model = { getProperties: jest.fn() };
+      defaults.app.evaluate = jest.fn();
     });
     it("should render action button", () => {
       renderButton(defaults);
@@ -156,15 +159,60 @@ describe("action button", () => {
       expect(button.removeAttribute).toHaveBeenCalledWith("disabled");
       expect(defaults.senseNavigation.openOdagPopup).toHaveBeenCalledTimes(1);
     });
+
+    it("should handle missing actions", async () => {
+      const actions = [
+        { actionType: "missing", value: { qStringExpression: { qExpr: "missingExpression" } } },
+        { actionType: "back", value: { qStringExpression: { qExpr: "missingExpression" } } },
+      ];
+      defaults.layout = {
+        runtimeExpressionEvaluation: true,
+        actions,
+      };
+      defaults.app.back = jest.fn();
+      defaults.model = { getProperties: jest.fn().mockReturnValue({ actions }) };
+      renderButton(defaults);
+      await defaults.element.firstElementChild.onclick();
+      expect(defaults.app.back).toHaveBeenCalled();
+      expect(defaults.app.evaluate).toHaveBeenCalledTimes(2);
+    });
   });
   describe("runActions", () => {
+    const actions = [
+      { value: { qStringExpression: { qExpr: "someExpression" } } },
+      {},
+      { variable: { qStringExpression: { qExpr: "variableExpression" } } },
+    ];
+    let model;
     beforeEach(() => {
-      actionList = [jest.fn(), jest.fn()];
+      actionCallList = [jest.fn(), jest.fn(), jest.fn()];
+      app = { evaluate: jest.fn().mockReturnValue("Evaluated Expression") };
+      model = { getProperties: jest.fn().mockReturnValue({ actions }) };
     });
     it("should call all functions in array", async () => {
-      await runActions(actionList);
-      expect(actionList[0]).toHaveBeenCalledTimes(1);
-      expect(actionList[1]).toHaveBeenCalledTimes(1);
+      await runActions({ actionCallList, layout: {}, model, app });
+      expect(actionCallList[0]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[1]).toHaveBeenCalledTimes(1);
+      expect(app.evaluate).not.toHaveBeenCalled();
+    });
+
+    it("should evaluate expressions when runtimeExpressionEvaluation is true", async () => {
+      await runActions({
+        actionCallList,
+        layout: {
+          runtimeExpressionEvaluation: true,
+        },
+        app,
+        model,
+      });
+      expect(actionCallList[0]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[0]).toHaveBeenCalledWith("Evaluated Expression", undefined);
+      expect(actionCallList[1]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[1]).toHaveBeenCalledWith(undefined, undefined);
+      expect(actionCallList[2]).toHaveBeenCalledTimes(1);
+      expect(actionCallList[2]).toHaveBeenCalledWith(undefined, "Evaluated Expression");
+      expect(app.evaluate).toHaveBeenCalledWith("someExpression");
+      expect(app.evaluate).toHaveBeenCalledWith("variableExpression");
     });
   });
 });

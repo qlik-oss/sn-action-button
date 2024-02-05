@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useInteractionState,
   useMemo,
+  useModel,
   useStaleLayout,
   useTheme,
 } from "@nebula.js/stardust";
@@ -46,6 +47,7 @@ export default function supernova(env) {
       }, []);
 
       const layout = useStaleLayout();
+      const model = useModel();
       const app = useApp();
       const interactions = useInteractionState();
       useLoadImage(layout, app);
@@ -59,6 +61,7 @@ export default function supernova(env) {
         senseNavigation,
         multiUserAutomation,
         translator,
+        model,
       });
 
       useEffect(
