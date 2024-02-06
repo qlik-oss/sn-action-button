@@ -71,7 +71,8 @@
         {
           "devDependencies": true
         }
-      ]
+      ],
+      "jest/unbound-method": 0
     }
   },
   "devDependencies": {
