@@ -165,17 +165,17 @@ const actions = [
     requiredInput: ["field", "softLock"],
   },
   {
-    value: "cyclicGroup",
-    translation: "Dimensions.Dialog.Type.CyclicGroup",
+    value: "cyclicDimension",
+    translation: "Object.ActionButton.CyclicDimension",
     group: "selection",
     getActionCall:
-      ({ cyclicGroupId, indexStepper, app }) =>
+      ({ cyclicDimensionId, indexStepper, app }) =>
       async () => {
-        const model = await app.getDimension(cyclicGroupId);
+        const model = await app.getDimension(cyclicDimensionId);
         await model.stepCycle(indexStepper);
       },
     hide: ({ isEnabled }) => !isEnabled("PS_21223_CYCLIC_GROUPS"),
-    requiredInput: ["cyclicGroup", "indexStepper"],
+    requiredInput: ["cyclicDimension", "indexStepper"],
   },
   {
     value: "selectExcluded",

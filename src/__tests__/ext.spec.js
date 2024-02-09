@@ -233,7 +233,7 @@ describe("ext", () => {
     });
 
     it("Should return only cyclic group dimensions", async () => {
-      options = await actionItems.cyclicGroup.options(null, handler);
+      options = await actionItems.cyclicDimension.options(null, handler);
       expect(options).toHaveLength(1);
       expect(options[0].label).toEqual("cyclic");
     });
