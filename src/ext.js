@@ -164,9 +164,9 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                       items: getAutomationProps(multiUserAutomation, getAutomations),
                       show: (data) => checkShowAction(data, "automation"),
                     },
-                    cyclicGroup: {
+                    cyclicDimension: {
                       type: "string",
-                      ref: "cyclicGroupId",
+                      ref: "cyclicDimensionId",
                       component: "expression-with-dropdown",
                       translation: "Common.Dimension",
                       defaultValue: "",
@@ -180,7 +180,7 @@ export default function ext({ translator, shouldHide, senseNavigation, theme, is
                             value: dim.qInfo.qId,
                           }));
                       },
-                      show: (data) => checkShowAction(data, "cyclicGroup"),
+                      show: (data) => checkShowAction(data, "cyclicDimension"),
                     },
                     indexStepper: {
                       type: "string",

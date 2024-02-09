@@ -354,7 +354,7 @@ describe("actions", () => {
     });
 
     it("should do step cycle", async () => {
-      const actionObject = actions.find((action) => action.value === "cyclicGroup");
+      const actionObject = actions.find((action) => action.value === "cyclicDimension");
       const stepCycle = jest.fn();
       app.getDimension = () => ({ stepCycle });
       await actionObject.getActionCall({ app, partial: true })();
