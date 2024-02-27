@@ -1,0 +1,20 @@
+name: Build
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run api compliance
+        uses: qlik-oss/sn-gh-workflows/actions/api-governance@jnl/api_governance
+        with:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SPECIFICATION_PATH: api-specifications/properties.json
+          APICULTURIST_GITHUB: ${{ secrets.APICULTURIST_GITHUB }}
+          APICULTURIST_S3: ${{ secrets.APICULTURIST_S3 }}
+          APICULTURIST_TOKEN: ${{ secrets.APICULTURIST_TOKEN }}
+          TAG: ${{ inputs.tag }}
