@@ -1,4 +1,4 @@
-name: Build
+name: Api Compliance
 on:
   workflow_dispatch:
     inputs:
@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
       - name: Run api compliance
         uses: qlik-oss/sn-gh-workflows/actions/api-governance@jnl/api_governance
         with:
