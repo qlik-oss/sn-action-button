@@ -1,5 +1,7 @@
 
 
+## [1.41.4](https://github.com/qlik-oss/sn-action-button/compare/v1.41.3...v1.41.4) (2024-02-29)
+
 ## [1.41.3](https://github.com/qlik-oss/sn-action-button/compare/v1.41.0...v1.41.3) (2024-02-27)
 
 
