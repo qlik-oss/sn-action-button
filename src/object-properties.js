@@ -16,7 +16,7 @@ const properties = {
    * Show title for the visualization
    * @type {boolean=}
    */
-  showTitles: true,
+  showTitless: true,
   /**
    * Visualization title
    * @type {string=}
