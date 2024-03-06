@@ -109,7 +109,7 @@
     "yargs": "17.7.2"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=4.x"
+    "@nebula.js/stardust": "^4.11.0"
   },
   "engines": {
     "node": ">=16"
