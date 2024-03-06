@@ -7,7 +7,7 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "depTypeList": ["engines"],
+      "matchDepTypes": ["engines", "peerDependencies"],
       "enabled": false
     }
   ]
