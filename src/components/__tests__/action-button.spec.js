@@ -24,7 +24,7 @@ describe("action button", () => {
         goToSheet: jest.fn(),
         getCurrentStoryId: () => false,
       };
-      defaults.model = { getProperties: jest.fn() };
+      defaults.model = { getEffectiveProperties: jest.fn() };
       defaults.app.evaluate = jest.fn();
     });
     it("should render action button", () => {
@@ -170,7 +170,7 @@ describe("action button", () => {
         actions,
       };
       defaults.app.back = jest.fn();
-      defaults.model = { getProperties: jest.fn().mockReturnValue({ actions }) };
+      defaults.model = { getEffectiveProperties: jest.fn().mockReturnValue({ actions }) };
       renderButton(defaults);
       await defaults.element.firstElementChild.onclick();
       expect(defaults.app.back).toHaveBeenCalled();
@@ -187,7 +187,7 @@ describe("action button", () => {
     beforeEach(() => {
       actionCallList = [jest.fn(), jest.fn(), jest.fn()];
       app = { evaluate: jest.fn().mockReturnValue("Evaluated Expression") };
-      model = { getProperties: jest.fn().mockReturnValue({ actions }) };
+      model = { getEffectiveProperties: jest.fn().mockReturnValue({ actions }) };
     });
     it("should call all functions in array", async () => {
       await runActions({ actionCallList, layout: {}, model, app });

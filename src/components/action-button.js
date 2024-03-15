@@ -4,7 +4,7 @@ import navigationActions from "../utils/navigation-actions";
 import styleFormatter from "../utils/style-formatter";
 
 export const runActions = async ({ actionCallList, model, layout, app }) => {
-  const properties = await model.getProperties();
+  const properties = await model.getEffectiveProperties();
   for (let i = 0; i < actionCallList.length; i++) {
     if (layout.runtimeExpressionEvaluation) {
       const overrideValue =
