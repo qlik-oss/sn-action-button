@@ -1,5 +1,12 @@
 
 
+## [1.41.5](https://github.com/qlik-oss/sn-action-button/compare/v1.41.4...v1.41.5) (2024-03-15)
+
+
+### Bug Fixes
+
+* use effective properties runtime evaluation ([#480](https://github.com/qlik-oss/sn-action-button/issues/480)) ([c77bee3](https://github.com/qlik-oss/sn-action-button/commit/c77bee33e85f3d284cd60ff00261ed3c60292434))
+
 ## [1.41.4](https://github.com/qlik-oss/sn-action-button/compare/v1.41.3...v1.41.4) (2024-02-29)
 
 ## [1.41.3](https://github.com/qlik-oss/sn-action-button/compare/v1.41.0...v1.41.3) (2024-02-27)
